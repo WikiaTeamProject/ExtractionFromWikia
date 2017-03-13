@@ -1,7 +1,7 @@
 package wikiaStatistics.sam;
 
 /**
- * Created by D060249 on 13.03.2017.
+ * Created by Jan Portisch on 13.03.2017.
  */
 public class Main {
 
