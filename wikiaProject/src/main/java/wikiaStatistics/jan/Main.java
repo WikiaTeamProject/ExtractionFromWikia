@@ -26,7 +26,6 @@ public class Main {
         InputStream inputStream;
         BufferedReader bReader;
 
-
         StringBuffer generatedURL = new StringBuffer("http://www.wikia.com/api/v1/Wikis/Details?ids=1");
         // create URL
         for(int i = 2; i <= 80; i++){
