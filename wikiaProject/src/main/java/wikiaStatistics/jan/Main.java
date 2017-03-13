@@ -1,12 +1,12 @@
 package wikiaStatistics.jan;
 
+
 /**
- * Created by Jan Portisch on 13.03.2017.
+ * Created by D060249 on 13.03.2017.
  */
 public class Main {
 
     public static void main(String[] args) {
-
         
     }
 
