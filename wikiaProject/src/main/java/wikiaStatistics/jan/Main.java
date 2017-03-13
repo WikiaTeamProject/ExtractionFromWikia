@@ -39,7 +39,7 @@ public class Main {
             startingID++; // increment startingID because the first ID was already used in the initial URL creation
             startingIDbefore = startingID;
 
-            // there will always be 50 IDs in one query
+            // there will always be 50 IDs in one query; 50 turned out to be very stable but I did not evaluate an optimal number. Higher would be better for performance. (jan)
             while(startingID < startingIDbefore + 49) {
                 generatedURL.append("%2C+" + Integer.toString(startingID));
                 startingID++;
