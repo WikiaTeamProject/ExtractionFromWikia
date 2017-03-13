@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/ExtractionFromWikia.iml" filepath="$PROJECT_DIR$/.idea/ExtractionFromWikia.iml" />
-      <module fileurl="file://$PROJECT_DIR$/JavaModule/JavaModule.iml" filepath="$PROJECT_DIR$/JavaModule/JavaModule.iml" />
     </modules>
   </component>
 </project>
