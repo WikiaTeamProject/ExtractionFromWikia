@@ -132,6 +132,8 @@ public class URLExtractor {
 
                     // get all ids of wikis in items
                     String[] ids = JSONObject.getNames(items);
+
+                    // the if is required to avoid null pointer exceptions
                     if (ids != null) {
                         logger.info(Thread.currentThread().getName() + ": Number of Wikis: " + ids.length + " in iteration: " + numberOfIterations++);
 
