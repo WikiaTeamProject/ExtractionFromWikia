@@ -19,7 +19,7 @@ public class URLExtractor {
         // please enter the path where you want to save the result CSV file
         String filePath = "C://Users/D060249/Documents/Mannheim/Semester 2/Team Project/wikis.csv";
 
-        Thread t1 = new Thread(new URLGetter(filePath, 1000000), "Thread 1");
+        Thread t1 = new Thread(new URLGetter(filePath,249400, 1000000), "Thread 1");
         t1.start();
     }
 
@@ -132,14 +132,16 @@ public class URLExtractor {
 
                     // get all ids of wikis in items
                     String[] ids = JSONObject.getNames(items);
-                    logger.info(Thread.currentThread().getName() + ": Number of Wikis: " + ids.length + " in iteration: " + numberOfIterations++);
+                    if (ids != null) {
+                        logger.info(Thread.currentThread().getName() + ": Number of Wikis: " + ids.length + " in iteration: " + numberOfIterations++);
 
-                    for (String id : ids) {
-                        // map json string with infos of one wiki to java object
-                        ExpandedWikiaItem wiki = mapper.readValue(items.getJSONObject(id).toString(), ExpandedWikiaItem.class);
-                        bufferedWriter.write(wiki.toString().replace("\n", "").replace("\r", "") + "\n"); // line breaks have to be deleted
+                        for (String id : ids) {
+                            // map json string with infos of one wiki to java object
+                            ExpandedWikiaItem wiki = mapper.readValue(items.getJSONObject(id).toString(), ExpandedWikiaItem.class);
+                            bufferedWriter.write(wiki.toString().replace("\n", "").replace("\r", "") + "\n"); // line breaks have to be deleted
 
-                        logger.info(id);
+                            logger.info(id);
+                        }
                     }
 
                 } catch (MalformedURLException mue) {
