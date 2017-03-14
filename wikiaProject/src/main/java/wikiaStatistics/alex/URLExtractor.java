@@ -17,7 +17,7 @@ public class URLExtractor {
 
 
     public static void main(String[] args) {
-        String filePath = "/Users/alexandrahofmann/Documents/Master Uni MA/2. Semester/Team Project/wikis.csv";
+        String filePath = "C://Users/D060249/Documents/Mannheim/Semester 2/Team Project/wikis.csv";
 
         Thread t1 = new Thread(new URLGetter(filePath), "Thread 1");
 
@@ -29,7 +29,7 @@ public class URLExtractor {
     // runnable that calls the URLs
     private static class URLGetter implements Runnable {
 
-        private static final int UPPER_LIMIT = 10000; // the server will be queried up to this number
+        private static final int UPPER_LIMIT = 100; // the server will be queried up to this number
 
         private int startingID = 1; // this is the ID with which the current query starts
         private int startingIDbefore; // this is the ID with which the previous query started
@@ -65,7 +65,7 @@ public class URLExtractor {
 
             try {
                 bufferedWriter = new BufferedWriter(new FileWriter(new File(filepath)));
-                bufferedWriter.write(ExpandedWikiaItem.getHeader() + "\n");
+                bufferedWriter.write(ExpandedWikiaItem.getHeader() + "\n"); // just the header line for the CSV file
             } catch (IOException e1) {
                 logger.severe(Thread.currentThread().getName() + ": The provided path for the file does not work.");
                 e1.printStackTrace();
@@ -117,7 +117,7 @@ public class URLExtractor {
                     for (String id : ids) {
                         // map json string with infos of one wiki to java object
                         ExpandedWikiaItem wiki = mapper.readValue(items.getJSONObject(id).toString(), ExpandedWikiaItem.class);
-                        bufferedWriter.write(wiki.toString() + "\n");
+                        bufferedWriter.write(wiki.toString().replace("\n", "").replace("\r", "") + "\n"); // line breaks have to be deleted
 
                         logger.info(id);
                     }
@@ -127,7 +127,6 @@ public class URLExtractor {
                 } catch (IOException ioe) {
                     logger.severe(ioe.toString());
                 }
-
 
             }
             try {
