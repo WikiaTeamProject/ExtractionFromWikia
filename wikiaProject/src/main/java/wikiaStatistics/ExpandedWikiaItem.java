@@ -214,7 +214,7 @@ public class ExpandedWikiaItem {
                 ";" + lang +
                 ";" + hub +
                 ";" + topic +
-                ";" + desc +
+                ";" + desc.replace(";", "") +
                 ";" + stats +
                 ";" + original_dimensions +
                 ";" + image +
