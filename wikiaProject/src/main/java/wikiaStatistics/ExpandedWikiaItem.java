@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 /**
  * Created by alexandrahofmann on 14.03.17.
+ * This is a class on which wikia JSON responses are mapped.
  */
 public class ExpandedWikiaItem {
 
