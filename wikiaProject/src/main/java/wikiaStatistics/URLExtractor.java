@@ -19,7 +19,7 @@ public class URLExtractor {
         // please enter the path where you want to save the result CSV file
         String filePath = "C://Users/D060249/Documents/Mannheim/Semester 2/Team Project/wikis2.csv";
 
-        Thread t1 = new Thread(new URLGetter(filePath,750752, 1000000), "Thread 1");
+        Thread t1 = new Thread(new URLGetter(filePath,750752, 750900), "Thread 1");
         t1.start();
     }
 
@@ -140,7 +140,7 @@ public class URLExtractor {
                         for (String id : ids) {
                             // map json string with infos of one wiki to java object
                             ExpandedWikiaItem wiki = mapper.readValue(items.getJSONObject(id).toString(), ExpandedWikiaItem.class);
-                            bufferedWriter.write(wiki.toString().replace("\n", "").replace("\r", "")); // line breaks have to be deleted
+                            bufferedWriter.write(wiki.toString().replace("\n", "").replace("\r", "") + "\n"); // line breaks have to be deleted
 
                             logger.info(id);
                         }
