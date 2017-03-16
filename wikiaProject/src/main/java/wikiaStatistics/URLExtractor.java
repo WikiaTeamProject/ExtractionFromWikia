@@ -29,13 +29,24 @@ public class URLExtractor {
         Thread t3 = new Thread(new URLGetter(filePath3,1000000, 1500000), "Thread 3");
         Thread t4 = new Thread(new URLGetter(filePath4,1500000, 2000000), "Thread 4");
 
-        //t1.start();
-        //t2.start();
-        //t3.start();
-        //t4.start();
+        // t1.start();
+        // t2.start();
+        // t3.start();
+        // t4.start();
 
         logger.info("Download process finished.");
         logger.info("Concatenating files...");
+
+        // wait until all threads are finished before merging files
+        try {
+            t1.join();
+            t2.join();
+            t3.join();
+            t4.join();
+        } catch(InterruptedException ie){
+            logger.severe(ie.toString());
+        }
+
         WikiaStatisticsTools.mergeFiles(filePath1, filePath2, filePath3, filePath4);
     }
 
