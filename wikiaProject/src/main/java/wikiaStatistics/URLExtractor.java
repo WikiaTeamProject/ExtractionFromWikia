@@ -16,11 +16,27 @@ public class URLExtractor {
 
     public static void main(String[] args) {
 
-        // please enter the path where you want to save the result CSV file
-        String filePath = "C://Users/D060249/Documents/Mannheim/Semester 2/Team Project/wikis2.csv";
+        Logger logger = Logger.getLogger("wikiaStatisticsMain");
 
-        Thread t1 = new Thread(new URLGetter(filePath,750752, 750900), "Thread 1");
-        t1.start();
+        // files will be saved in the 'results' directory;
+        String filePath1 = "./results/wikiaStatistics/individualFiles/p1_wikis_1_to_500000.csv";
+        String filePath2 = "./results/wikiaStatistics/individualFiles/p2_wikis_500000_to_1000000.csv";
+        String filePath3 = "./results/wikiaStatistics/individualFiles/p3_wikis_1000000_to_1500000.csv";
+        String filePath4 = "./results/wikiaStatistics/individualFiles/p4_wikis_1500000_to_2000000.csv";
+
+        Thread t1 = new Thread(new URLGetter(filePath1,1, 500000), "Thread 1");
+        Thread t2 = new Thread(new URLGetter(filePath2,500000, 1000000), "Thread 2");
+        Thread t3 = new Thread(new URLGetter(filePath3,1000000, 1500000), "Thread 3");
+        Thread t4 = new Thread(new URLGetter(filePath4,1500000, 2000000), "Thread 4");
+
+        //t1.start();
+        //t2.start();
+        //t3.start();
+        //t4.start();
+
+        logger.info("Download process finished.");
+        logger.info("Concatenating files...");
+        WikiaStatisticsTools.mergeFiles(filePath1, filePath2, filePath3, filePath4);
     }
 
 
@@ -141,8 +157,7 @@ public class URLExtractor {
                             // map json string with infos of one wiki to java object
                             ExpandedWikiaItem wiki = mapper.readValue(items.getJSONObject(id).toString(), ExpandedWikiaItem.class);
                             bufferedWriter.write(wiki.toString().replace("\n", "").replace("\r", "") + "\n"); // line breaks have to be deleted
-
-                            logger.info(id);
+                            // logger.info(id); // leads to a lot of output on the console
                         }
                     }
 
