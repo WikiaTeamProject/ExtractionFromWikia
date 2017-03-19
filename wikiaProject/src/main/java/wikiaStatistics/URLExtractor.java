@@ -4,6 +4,9 @@ import org.json.JSONObject;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.*;
@@ -47,7 +50,17 @@ public class URLExtractor {
             logger.severe(ie.toString());
         }
 
-        WikiaStatisticsTools.mergeFiles(filePath1, filePath2, filePath3, filePath4);
+        // WikiaStatisticsTools.mergeFiles(filePath1, filePath2, filePath3, filePath4);
+        try {
+            HashMap<String, Integer> result = WikiaStatisticsTools.getDifferentLanguages(new File("./results/wikiaStatistics.csv"));
+            for (Map.Entry<String, Integer> entry: result.entrySet()) {
+                System.out.println(entry.getKey() + " : " + entry.getValue());
+            }
+
+        } catch (FileNotFoundException fnfe){
+            logger.severe(fnfe.toString());
+        }
+
     }
 
 
