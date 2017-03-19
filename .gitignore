@@ -4,3 +4,6 @@
 
 # Mac-specific
 .DS_Store
+
+# exclude target folder
+/wikiaProject/target/
