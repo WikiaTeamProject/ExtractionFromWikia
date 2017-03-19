@@ -54,6 +54,10 @@ public class URLExtractor {
         try {
             HashMap<String, Integer> result = WikiaStatisticsTools.getDifferentLanguages(new File("./results/wikiaStatistics.csv"));
             for (Map.Entry<String, Integer> entry: result.entrySet()) {
+                if(entry.getValue() < 10){
+                    // skip entries with less that 10 occurrences
+                    continue;
+                }
                 System.out.println(entry.getKey() + " : " + entry.getValue());
             }
 

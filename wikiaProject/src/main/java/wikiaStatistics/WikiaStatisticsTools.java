@@ -85,7 +85,12 @@ public class WikiaStatisticsTools {
                             logger.info("New language detected: " + tokens[1].substring(7,9));
                         }
 
-                    } else if (tokens[1].charAt(10) == '.') {
+                    }
+
+
+                    // language seems to be only 2 characters long
+                    /**
+                    else if (tokens[1].charAt(10) == '.') {
                         // 3-character language
 
                         if (result.containsKey((tokens[1].substring(7, 10)))) {
@@ -97,7 +102,10 @@ public class WikiaStatisticsTools {
                             result.put(tokens[1].substring(7, 10), 1);
                             logger.info("New language detected: " + tokens[1].substring(7,10));
                         }
-                    } else {
+                    }
+                     **/
+
+                    else {
                         if(result.containsKey("en")){
                             result.put("en", result.get("en") + 1);
                         } else {
