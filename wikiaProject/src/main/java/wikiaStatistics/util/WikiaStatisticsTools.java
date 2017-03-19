@@ -1,7 +1,5 @@
 package wikiaStatistics.util;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
-
 import java.io.*;
 import java.util.HashMap;
 import java.util.logging.Logger;

@@ -49,7 +49,7 @@ public class URLExtractor {
         // WikiaStatisticsTools.mergeFiles(filePath1, filePath2, filePath3, filePath4);
 
         try {
-            HashMap<String, Integer> result = WikiaStatisticsTools.getDifferentLanguages(new File("./results/wikiaAllOverview.csv"));
+            HashMap<String, Integer> result = WikiaStatisticsTools.getDifferentLanguages(new File("./wikiaProject/src/main/resources/wikiaAllOverview.csv"));
             for (Map.Entry<String, Integer> entry: result.entrySet()) {
                 if(entry.getValue() < 10){
                     // skip entries with less that 10 occurrences
