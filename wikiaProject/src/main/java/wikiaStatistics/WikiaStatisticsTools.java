@@ -51,6 +51,8 @@ public class WikiaStatisticsTools {
                 }
 
             }
+
+            bufferedWriter.close();
         } catch (IOException ioe) {
             logger.severe(ioe.toString());
         }
@@ -114,11 +116,13 @@ public class WikiaStatisticsTools {
                     }
                 }
 
-            }
+            } // end of while loop
+
+            bufferedReader.close();
+
         } catch (IOException ioe) {
             logger.severe(ioe.toString());
         }
-
         return result;
     }
 
