@@ -60,13 +60,18 @@ public class WikiaStatisticsTools {
 
     public static HashMap<String, Integer> getDifferentLanguages(File inputFile) throws FileNotFoundException {
         String[] tokens;
+        int articles = 0;
+        int pages = 0;
         HashMap<String, Integer> result = new HashMap<String, Integer>();
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(inputFile));
             String readLine;
+            // ignore header line
+            bufferedReader.readLine();
             while ((readLine = bufferedReader.readLine()) != null) {
                 tokens = readLine.split(";");
 
+                // tokens[1] refers to the url row
                 if (tokens[1].length() > 11) {
 
                     logger.info("Processing: " + tokens[1]);
@@ -113,7 +118,21 @@ public class WikiaStatisticsTools {
                     }
                 }
 
+
+                try {
+                    //tokens[11]: number of articles
+                    articles += Integer.parseInt(tokens[11]);
+                    //tokens[12]: number of pages
+                    pages += Integer.parseInt(tokens[12]);
+
+                } catch (NumberFormatException ne) {
+                    logger.warning("Articles/pages of URL " + tokens[1] + " do not include an integer value.");
+                }
+
             } // end of while loop
+
+            System.out.println("Number of articles: " + articles);
+            System.out.println("Number of pages: " + pages);
 
             bufferedReader.close();
 
