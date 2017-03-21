@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * This is a class on which wikia JSON responses are mapped.
  */
-
 public class WikiaStats {
 
     @JsonProperty("users")
@@ -53,6 +52,11 @@ public class WikiaStats {
                 ";" + discussions;
     }
 
+    /**
+     * Creates a Header String with all variables for a csv file
+     *
+     * @return header string
+     */
     public static String getHeader() {
         return  "users" +
                 ";articles" +

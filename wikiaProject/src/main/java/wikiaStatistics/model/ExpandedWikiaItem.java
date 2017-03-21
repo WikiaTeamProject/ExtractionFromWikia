@@ -223,6 +223,11 @@ public class ExpandedWikiaItem {
                 ";" + wordmark;
     }
 
+    /**
+     * Creates a Header String with all variables for a csv file
+     *
+     * @return header string
+     */
     public static String getHeader() {
         return  "id" +
                 ";url" +

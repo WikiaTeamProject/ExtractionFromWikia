@@ -18,7 +18,6 @@ import java.util.logging.Logger;
  * This class queries the wikia API from the lowerIdLimit up to the upperIdLimit.
  * This class is optimized for multi-threading.
  */
-
 public class URLGetter implements Runnable {
 
         private int lowerIdLimit; // the server will be queried starting with this id

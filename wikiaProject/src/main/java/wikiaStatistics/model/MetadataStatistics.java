@@ -9,7 +9,9 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
+/**
+ * A class for the structure of a statistics object with various information.
+ */
 public class MetadataStatistics {
 
     private HashMap<String, Integer> languageCounts;
@@ -19,8 +21,14 @@ public class MetadataStatistics {
     private Logger logger = Logger.getLogger(getClass().getName());
 
 
+    /**
+     * Constructor
+     * Initialize variables
+     */
     public MetadataStatistics() {
         this.languageCounts = initializeHashMap();
+        this.numberOfArticles = 0;
+        this.numberOfPages = 0;
     }
 
 
@@ -48,6 +56,7 @@ public class MetadataStatistics {
         this.numberOfPages = numberOfPages;
     }
 
+
     @Override
     public String toString() {
         return "MetadataStatistics: \n" +
@@ -56,6 +65,11 @@ public class MetadataStatistics {
                 "Number of pages = " + numberOfPages;
     }
 
+    /**
+     * Initialize the language HashMap with language codes of 'wikiaLanguageCodes' file and occurrence of zero
+     *
+     * @return initialized HashMap
+     */
     private HashMap<String, Integer> initializeHashMap() {
         BufferedReader bufferedReader;
         String readLine;
@@ -80,6 +94,11 @@ public class MetadataStatistics {
         return languageCounts;
     }
 
+    /**
+     * Limits number of language codes returned according to the specified occurrence (how many wikis exist for a code)
+     *
+     * @param occurrences
+     */
     public void limitTopLanguages(int occurrences) {
         HashMap<String, Integer> limitedLanguages = new HashMap<String, Integer>();
 

@@ -1,9 +1,9 @@
 package wikiaStatistics.util;
 
 import wikiaStatistics.model.MetadataStatistics;
-
 import java.io.*;
 import java.util.logging.Logger;
+
 
 /**
  * A class for helper methods.
@@ -58,7 +58,13 @@ public class WikiaStatisticsTools {
     }
 
 
-    public static MetadataStatistics getMetadataStatistics(File inputFile) throws FileNotFoundException {
+    /**
+     * Creates a MetadataStatistics object with variables including statistics
+     *
+     * @param inputFile
+     * @return created MetadataStatistics object
+     */
+    public static MetadataStatistics getMetadataStatistics(File inputFile) {
         String[] tokens;
         String possibleLanguageCode;
         MetadataStatistics statistics = new MetadataStatistics();
@@ -86,12 +92,10 @@ public class WikiaStatisticsTools {
 
                     // find out if it is an actual language code
                     if (statistics.getLanguageCounts().containsKey(possibleLanguageCode)) {
-
                         // count +1 for this language code
                         statistics.getLanguageCounts().put(possibleLanguageCode, statistics.getLanguageCounts().get(possibleLanguageCode) + 1);
 
                     } else {
-
                         // if no specific language code exists, count +1 for english
                         statistics.getLanguageCounts().put("en", statistics.getLanguageCounts().get("en") + 1);
 
@@ -100,7 +104,6 @@ public class WikiaStatisticsTools {
                     // count number of overall articles (tokens[11]) and pages (tokens[12])
                     try {
                         statistics.setNumberOfArticles(statistics.getNumberOfArticles() + Integer.parseInt(tokens[11]));
-
                         statistics.setNumberOfPages(statistics.getNumberOfPages() + Integer.parseInt(tokens[12]));
 
                     } catch (NumberFormatException ne) {

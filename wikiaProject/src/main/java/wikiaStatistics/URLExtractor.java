@@ -3,11 +3,12 @@ package wikiaStatistics;
 import wikiaStatistics.controller.URLGetter;
 import wikiaStatistics.model.MetadataStatistics;
 import wikiaStatistics.util.WikiaStatisticsTools;
-
 import java.util.logging.Logger;
 import java.io.*;
 
-
+/**
+ * This class represents the application to download metadata of all Wikia wikis and receive statistics.
+ */
 public class URLExtractor {
 
 
@@ -46,15 +47,9 @@ public class URLExtractor {
 
         // WikiaStatisticsTools.mergeFiles(filePath1, filePath2, filePath3, filePath4);
 
-        try {
-
-            MetadataStatistics statistics = WikiaStatisticsTools.getMetadataStatistics(new File("./wikiaProject/src/main/resources/wikiaAllOverview.csv"));
-            statistics.limitTopLanguages(1000);
-            System.out.println(statistics);
-
-        } catch (FileNotFoundException fnfe){
-            logger.severe(fnfe.toString());
-        }
+        MetadataStatistics statistics = WikiaStatisticsTools.getMetadataStatistics(new File("./wikiaProject/src/main/resources/wikiaAllOverview.csv"));
+        statistics.limitTopLanguages(1000);
+        System.out.println(statistics);
 
     }
 
