@@ -11,7 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * A class for the structure of a statistics object with various information.
+ * This class represents a statistics object with various information.
  */
 public class MetadataStatistics {
 

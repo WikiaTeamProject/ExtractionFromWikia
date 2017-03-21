@@ -15,7 +15,7 @@ public class WikiaStatisticsTools {
 
 
     /**
-     * Merges multiple files into one (which is saved as wikiaAllOverview.csv in resources)
+     * Merges multiple files into one (which is saved as wikiaAllOverview.csv in the specified directory)
      *
      * @param filePaths
      */
@@ -23,7 +23,7 @@ public class WikiaStatisticsTools {
 
         String directoryPath = ResourceBundle.getBundle("config").getString("directory");
 
-        File resultFile = new File(directoryPath + "/files/wikiaAllOverview.csv");
+        File resultFile = new File(directoryPath + "/wikiaAllOverview.csv");
         File f;
         int fileNumber = 0;
         BufferedReader bufferedReader;
@@ -65,16 +65,16 @@ public class WikiaStatisticsTools {
     /**
      * Creates a MetadataStatistics object with variables including statistics
      *
-     * @param inputFile
      * @return created MetadataStatistics object
      */
-    public static MetadataStatistics getMetadataStatistics(File inputFile) {
+    public static MetadataStatistics getMetadataStatistics() {
         String[] tokens;
         String possibleLanguageCode;
         MetadataStatistics statistics = new MetadataStatistics();
+        String directoryPath = ResourceBundle.getBundle("config").getString("directory");
 
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(inputFile));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(directoryPath + "/wikiaAllOverview.csv")));
             String readLine;
 
             // ignore header line

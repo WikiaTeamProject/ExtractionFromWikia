@@ -202,25 +202,47 @@ public class ExpandedWikiaItem {
         this.wordmark = wordmark;
     }
 
+
     @Override
     public String toString() {
+        if (headline != null)
+            headline = headline.replace(";", ",");
+
+        if (domain != null)
+            domain = domain.replace(";",",");
+
+        if (name != null)
+            name = name.replace(";",",");
+
+        if (title != null)
+            title = title.replace(";",",");
+
+        if (hub != null)
+            hub = hub.replace(";", ",");
+
+        if (topic != null)
+            topic = topic.replace(";",",");
+
+        if (desc != null)
+            desc.replace(";",",");
+
         return id +
                 ";" + url +
-                ";" + domain.replace(";","") +
-                ";" + name.replace(";","") +
-                ";" + headline.replace(";","") +
-                ";" + title.replace(";","") +
+                ";" + domain +
+                ";" + name +
+                ";" + headline +
+                ";" + title +
                 ";" + lang +
-                ";" + hub.replace(";","") +
-                ";" + topic.replace(";","") +
-                ";" + desc.replace(";","")  +
+                ";" + hub +
+                ";" + topic +
+                ";" + desc +
                 ";" + stats  +
                 ";" + original_dimensions +
                 ";" + image +
-                ";" + Arrays.toString(flags).replace(";","")  +
+                ";" + Arrays.toString(flags) +
                 ";" + wam_score +
-                ";" + Arrays.toString(topUsers).replace(";","")  +
-                ";" + wordmark.replace(";","") ;
+                ";" + Arrays.toString(topUsers) +
+                ";" + wordmark;
     }
 
     /**
