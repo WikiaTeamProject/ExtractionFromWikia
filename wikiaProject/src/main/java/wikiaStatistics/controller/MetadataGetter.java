@@ -23,7 +23,7 @@ public class MetadataGetter implements Runnable {
         private int startingIDbefore; // this is the ID with which the previous query started
         private int numberOfIterations = 1; // just a counter to calculate how many iterations were completed
 
-        private String filepath;
+        private String filepath; //Path to the file where the queried results will be saved in CSV format.
         private String responseLine;
         private StringBuffer completeResponse;
         private StringBuffer generatedURL;

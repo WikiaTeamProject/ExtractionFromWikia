@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  */
 public class MetadataStatistics {
 
-    private HashMap<String, Integer> languageCounts;
+    private HashMap<String, Integer> languageCounts; // For mapping language (key) to the number of wikis in that language (value)
     private int numberOfArticles;
     private int numberOfPages;
 
