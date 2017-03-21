@@ -115,6 +115,28 @@ public class WikiaStatisticsTools {
                     }
                 }
 
+                // add hub
+                if(!tokens[7].equalsIgnoreCase("null") || !tokens[7].equalsIgnoreCase("")  || tokens[7] != null ){
+                    if(statistics.getHubCounts().containsKey(tokens[7])){
+                        // key already in store, increment by 1
+                        statistics.getHubCounts().put(tokens[7], statistics.getHubCounts().get(tokens[7])  + 1 );
+                    } else {
+                        // key not in store, initialize
+                        statistics.getHubCounts().put(tokens[7], 1);
+                    }
+                }
+
+               // add topic
+                if(!tokens[8].equalsIgnoreCase("null") || !tokens[8].equalsIgnoreCase("") || tokens[8] != null ){
+                    if(statistics.getTopicCounts().containsKey(tokens[8])){
+                        // key already in store, increment by 1
+                        statistics.getTopicCounts().put(tokens[8], statistics.getTopicCounts().get(tokens[8])  + 1 );
+                    } else {
+                        // key not in store, initialize
+                        statistics.getTopicCounts().put(tokens[8], 1);
+                    }
+                }
+
             } // end of while loop
 
             bufferedReader.close();

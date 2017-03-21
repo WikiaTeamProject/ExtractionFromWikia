@@ -16,6 +16,8 @@ import java.util.logging.Logger;
 public class MetadataStatistics {
 
     private HashMap<String, Integer> languageCounts; // For mapping language (key) to the number of wikis in that language (value)
+    private HashMap<String, Integer> topicCounts;
+    private HashMap<String, Integer> hubCounts;
     private int numberOfArticles;
     private int numberOfPages;
 
@@ -28,14 +30,22 @@ public class MetadataStatistics {
      */
     public MetadataStatistics() {
         this.languageCounts = initializeHashMap();
+        topicCounts = new HashMap<String, Integer>();
+        hubCounts = new HashMap<String, Integer>();
         this.numberOfArticles = 0;
         this.numberOfPages = 0;
     }
 
 
+    public HashMap<String, Integer> getHubCounts() {
+        return hubCounts;
+    }
+
     public HashMap<String, Integer> getLanguageCounts() {
         return languageCounts;
     }
+
+    public HashMap<String, Integer> getTopicCounts() { return topicCounts; }
 
     public void setLanguageCounts(HashMap<String, Integer> languageCounts) {
         this.languageCounts = languageCounts;
@@ -57,17 +67,28 @@ public class MetadataStatistics {
         this.numberOfPages = numberOfPages;
     }
 
+    public void setTopicCounts(HashMap<String, Integer> topicCounts) {
+        this.topicCounts = topicCounts;
+    }
+
+    public void setHubCounts(HashMap<String, Integer> topicCounts) {
+        this.hubCounts = hubCounts;
+    }
+
 
     @Override
     public String toString() {
         return "MetadataStatistics: \n" +
                 "Languages = " + languageCounts + "\n" +
                 "Number of articles = " + numberOfArticles + "\n" +
-                "Number of pages = " + numberOfPages;
+                "Number of pages = " + numberOfPages + "\n" +
+                "Hubs = " + hubCounts + "\n" +
+                "Topics = " + topicCounts + "\n";
     }
 
     /**
-     * Initialize the language HashMap with language codes of 'wikiaLanguageCodes' file and occurrence of zero
+     * Initialize the language HashMap with language codes of 'wikiaLanguageCodes' file and occurrence of zero.
+     * Called by constructor.
      *
      * @return initialized HashMap
      */
