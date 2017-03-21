@@ -41,7 +41,7 @@ public class URLGetter implements Runnable {
 
         private ObjectMapper mapper;
 
-        public Logger logger = Logger.getLogger(getClass().getName());
+        Logger logger = Logger.getLogger(getClass().getName());
 
 
         /**

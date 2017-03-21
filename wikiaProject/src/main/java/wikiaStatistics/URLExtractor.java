@@ -1,10 +1,9 @@
 package wikiaStatistics;
 
 import wikiaStatistics.controller.URLGetter;
+import wikiaStatistics.model.MetadataStatistics;
 import wikiaStatistics.util.WikiaStatisticsTools;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Logger;
 import java.io.*;
 
@@ -14,10 +13,9 @@ public class URLExtractor {
 
     public static void main(String[] args) {
 
-        Logger logger = Logger.getLogger("URLExtractor");
+        Logger logger = Logger.getLogger(URLExtractor.class.getName());
 
         // files will be saved in the 'resources' directory
-
         String filePath1 = "./wikiaProject/src/main/resources/wikiaOverviewIndividualFiles/p1_wikis_1_to_500000.csv";
         String filePath2 = "./wikiaProject/src/main/resources/wikiaOverviewIndividualFiles/p2_wikis_500000_to_1000000.csv";
         String filePath3 = "./wikiaProject/src/main/resources/wikiaOverviewIndividualFiles/p3_wikis_1000000_to_1500000.csv";
@@ -49,14 +47,10 @@ public class URLExtractor {
         // WikiaStatisticsTools.mergeFiles(filePath1, filePath2, filePath3, filePath4);
 
         try {
-            HashMap<String, Integer> result = WikiaStatisticsTools.getDifferentLanguages(new File("./wikiaProject/src/main/resources/wikiaAllOverview.csv"));
-            for (Map.Entry<String, Integer> entry: result.entrySet()) {
-                if(entry.getValue() < 1000){
-                    // skip entries with less than 1000 occurrences
-                    continue;
-                }
-                System.out.println(entry.getKey() + " : " + entry.getValue());
-            }
+
+            MetadataStatistics statistics = WikiaStatisticsTools.getMetadataStatistics(new File("./wikiaProject/src/main/resources/wikiaAllOverview.csv"));
+            statistics.limitTopLanguages(1000);
+            System.out.println(statistics);
 
         } catch (FileNotFoundException fnfe){
             logger.severe(fnfe.toString());

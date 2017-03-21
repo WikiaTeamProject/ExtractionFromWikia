@@ -1,7 +1,8 @@
 package wikiaStatistics.util;
 
+import wikiaStatistics.model.MetadataStatistics;
+
 import java.io.*;
-import java.util.HashMap;
 import java.util.logging.Logger;
 
 /**
@@ -9,8 +10,7 @@ import java.util.logging.Logger;
  */
 public class WikiaStatisticsTools {
 
-
-    private static Logger logger = Logger.getLogger("WikiaStatisticsTools");
+    private static Logger logger = Logger.getLogger(WikiaStatisticsTools.class.getName());
 
 
     /**
@@ -58,88 +58,65 @@ public class WikiaStatisticsTools {
     }
 
 
-    public static HashMap<String, Integer> getDifferentLanguages(File inputFile) throws FileNotFoundException {
+    public static MetadataStatistics getMetadataStatistics(File inputFile) throws FileNotFoundException {
         String[] tokens;
-        int articles = 0;
-        int pages = 0;
-        HashMap<String, Integer> result = new HashMap<String, Integer>();
+        String possibleLanguageCode;
+        MetadataStatistics statistics = new MetadataStatistics();
+
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(inputFile));
             String readLine;
+
             // ignore header line
             bufferedReader.readLine();
+
+            // read wiki metadata information one after another
             while ((readLine = bufferedReader.readLine()) != null) {
                 tokens = readLine.split(";");
 
-                // tokens[1] refers to the url row
-                if (tokens[1].length() > 11) {
+                logger.info("Processing: " + tokens[1]);
 
-                    logger.info("Processing: " + tokens[1]);
+                // count language codes, default english
 
+                // tokens[1] refers to the url row, url has to contain at least one dot
+                if (tokens[1].indexOf(".") != -1) {
 
-                    if (tokens[1].charAt(9) == '.') {
-                        // 2-character language
-                        if (result.containsKey((tokens[1].substring(7, 9)))) {
-                            // language has occurred before -> increment count by one
-                            result.put(tokens[1].substring(7, 9), result.get(tokens[1].substring(7, 9) ) + 1);
-                            logger.info("Language detected: " + tokens[1].substring(7,9));
-                        } else {
-                            // first occurrence of language
-                            result.put(tokens[1].substring(7, 9), 1);
-                            logger.info("New language detected: " + tokens[1].substring(7,9));
-                        }
+                    // retrieve string between "http://" and first dot as possible language code
+                    possibleLanguageCode = tokens[1].substring(7, tokens[1].indexOf("."));
+
+                    // find out if it is an actual language code
+                    if (statistics.getLanguageCounts().containsKey(possibleLanguageCode)) {
+
+                        // count +1 for this language code
+                        statistics.getLanguageCounts().put(possibleLanguageCode, statistics.getLanguageCounts().get(possibleLanguageCode) + 1);
+
+                    } else {
+
+                        // if no specific language code exists, count +1 for english
+                        statistics.getLanguageCounts().put("en", statistics.getLanguageCounts().get("en") + 1);
 
                     }
 
+                    // count number of overall articles (tokens[11]) and pages (tokens[12])
+                    try {
+                        statistics.setNumberOfArticles(statistics.getNumberOfArticles() + Integer.parseInt(tokens[11]));
 
-                    // language seems to be only 2 characters long
-                    /**
-                    else if (tokens[1].charAt(10) == '.') {
-                        // 3-character language
+                        statistics.setNumberOfPages(statistics.getNumberOfPages() + Integer.parseInt(tokens[12]));
 
-                        if (result.containsKey((tokens[1].substring(7, 10)))) {
-                            // language has occurred before -> increment count by one
-                            result.put(tokens[1].substring(7, 10), result.get(tokens[1].substring(7, 10)) + 1);
-                            logger.info("Language detected: " + tokens[1].substring(7,10));
-                        } else {
-                            // first occurrence of language
-                            result.put(tokens[1].substring(7, 10), 1);
-                            logger.info("New language detected: " + tokens[1].substring(7,10));
-                        }
+                    } catch (NumberFormatException ne) {
+                        logger.warning("Articles/pages of URL " + tokens[1] + " do not include an integer value.");
                     }
-                     **/
-
-                    else {
-                        if(result.containsKey("en")){
-                            result.put("en", result.get("en") + 1);
-                        } else {
-                            result.put("en", 1);
-                        }
-                    }
-                }
-
-
-                try {
-                    //tokens[11]: number of articles
-                    articles += Integer.parseInt(tokens[11]);
-                    //tokens[12]: number of pages
-                    pages += Integer.parseInt(tokens[12]);
-
-                } catch (NumberFormatException ne) {
-                    logger.warning("Articles/pages of URL " + tokens[1] + " do not include an integer value.");
                 }
 
             } // end of while loop
-
-            System.out.println("Number of articles: " + articles);
-            System.out.println("Number of pages: " + pages);
 
             bufferedReader.close();
 
         } catch (IOException ioe) {
             logger.severe(ioe.toString());
         }
-        return result;
+
+        return statistics;
     }
 
 }
