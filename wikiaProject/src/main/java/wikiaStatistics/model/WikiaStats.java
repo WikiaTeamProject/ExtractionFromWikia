@@ -44,8 +44,8 @@ public class WikiaStats {
         return  users +
                 ";" + articles +
                 ";" + pages +
-                ";"  + admins +
-                ";"  + activeUsers +
+                ";" + admins +
+                ";" + activeUsers +
                 ";" + edits +
                 ";" + videos +
                 ";" + images +

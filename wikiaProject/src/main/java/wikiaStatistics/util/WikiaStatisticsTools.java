@@ -2,6 +2,7 @@ package wikiaStatistics.util;
 
 import wikiaStatistics.model.MetadataStatistics;
 import java.io.*;
+import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 
@@ -19,7 +20,10 @@ public class WikiaStatisticsTools {
      * @param filePaths
      */
     public static void mergeFiles(String... filePaths) {
-        File resultFile = new File("./wikiaProject/src/main/resources/wikiaAllOverview.csv");
+
+        String directoryPath = ResourceBundle.getBundle("config").getString("directory");
+
+        File resultFile = new File(directoryPath + "/files/wikiaAllOverview.csv");
         File f;
         int fileNumber = 0;
         BufferedReader bufferedReader;

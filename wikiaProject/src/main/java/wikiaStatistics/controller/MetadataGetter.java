@@ -127,7 +127,7 @@ public class MetadataGetter implements Runnable {
                         for (String id : ids) {
                             // map json string with infos of one wiki to java object
                             ExpandedWikiaItem wiki = mapper.readValue(items.getJSONObject(id).toString(), ExpandedWikiaItem.class);
-                            bufferedWriter.write(wiki.toString().replace(";",",").replace("\n", "").replace("\r", "") + "\n"); // line breaks have to be deleted
+                            bufferedWriter.write(wiki.toString().replace("\n", "").replace("\r", "") + "\n"); // line breaks have to be deleted
                             // logger.info(id); // leads to a lot of output on the console
                         }
                     }

@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -76,8 +77,10 @@ public class MetadataStatistics {
         String[] tokens;
         HashMap<String, Integer> languageCounts = new HashMap<String, Integer>();
 
+        String directoryPath = ResourceBundle.getBundle("config").getString("directory");
+
         try {
-            bufferedReader = new BufferedReader(new FileReader("./wikiaProject/src/main/resources/wikiaLanguageCodes.csv"));
+            bufferedReader = new BufferedReader(new FileReader("./wikiaProject/src/main/resources/files/wikiaLanguageCodes.csv"));
 
             while ((readLine = bufferedReader.readLine()) != null) {
                 tokens = readLine.split(";");

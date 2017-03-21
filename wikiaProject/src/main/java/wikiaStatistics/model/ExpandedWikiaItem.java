@@ -206,21 +206,21 @@ public class ExpandedWikiaItem {
     public String toString() {
         return id +
                 ";" + url +
-                ";" + domain +
-                ";" + name +
-                ";" + headline +
-                ";" + title +
+                ";" + domain.replace(";","") +
+                ";" + name.replace(";","") +
+                ";" + headline.replace(";","") +
+                ";" + title.replace(";","") +
                 ";" + lang +
-                ";" + hub +
-                ";" + topic +
-                ";" + desc +
-                ";" + stats +
+                ";" + hub.replace(";","") +
+                ";" + topic.replace(";","") +
+                ";" + desc.replace(";","")  +
+                ";" + stats  +
                 ";" + original_dimensions +
                 ";" + image +
-                ";" + Arrays.toString(flags) +
+                ";" + Arrays.toString(flags).replace(";","")  +
                 ";" + wam_score +
-                ";" + Arrays.toString(topUsers) +
-                ";" + wordmark;
+                ";" + Arrays.toString(topUsers).replace(";","")  +
+                ";" + wordmark.replace(";","") ;
     }
 
     /**
