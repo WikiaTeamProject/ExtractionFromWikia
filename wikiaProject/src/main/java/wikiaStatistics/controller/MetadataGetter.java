@@ -3,14 +3,11 @@ package wikiaStatistics.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
 import wikiaStatistics.model.ExpandedWikiaItem;
-import wikiaStatistics.util.WikiaStatisticsTools;
 
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,7 +15,7 @@ import java.util.logging.Logger;
  * This class queries the wikia API from the lowerIdLimit up to the upperIdLimit.
  * This class is optimized for multi-threading.
  */
-public class URLGetter implements Runnable {
+public class MetadataGetter implements Runnable {
 
         private int lowerIdLimit; // the server will be queried starting with this id
         private int upperIdLimit; // the server will be queried up to this id
@@ -49,7 +46,7 @@ public class URLGetter implements Runnable {
          * @param lowerIdLimit ID that will be used for starting the queries. Must be positive. Must be at least 1.
          * @param upperIdLimit Upper Limit of IDs up to which will be queried. Must be positive. Must be larger than 1.
          */
-        public URLGetter(String filePath, int lowerIdLimit, int upperIdLimit) {
+        public MetadataGetter(String filePath, int lowerIdLimit, int upperIdLimit) {
             logger.setLevel(Level.FINEST);
             this.lowerIdLimit = Math.min(1, Math.abs(lowerIdLimit)); // just to be sure that the parameter is legitimate
             startingID = lowerIdLimit;
@@ -63,7 +60,7 @@ public class URLGetter implements Runnable {
          * @param filePath Path to the file where the queried results will be saved in CSV format.
          * @param upperIdLimit Upper Limit of IDs up to which will be queried. Must be positive. Must be larger than 1.
          */
-        public URLGetter(String filePath, int upperIdLimit) {
+        public MetadataGetter(String filePath, int upperIdLimit) {
             this(filePath, 1, upperIdLimit);
         }
 

@@ -1,6 +1,6 @@
 package wikiaStatistics;
 
-import wikiaStatistics.controller.URLGetter;
+import wikiaStatistics.controller.MetadataGetter;
 import wikiaStatistics.model.MetadataStatistics;
 import wikiaStatistics.util.WikiaStatisticsTools;
 import java.util.logging.Logger;
@@ -9,12 +9,12 @@ import java.io.*;
 /**
  * This class represents the application to download metadata of all Wikia wikis and receive statistics.
  */
-public class URLExtractor {
+public class wikiaStatisticsApplication {
 
 
     public static void main(String[] args) {
 
-        Logger logger = Logger.getLogger(URLExtractor.class.getName());
+        Logger logger = Logger.getLogger(wikiaStatisticsApplication.class.getName());
 
         // files will be saved in the 'resources' directory
         String filePath1 = "./wikiaProject/src/main/resources/wikiaOverviewIndividualFiles/p1_wikis_1_to_500000.csv";
@@ -22,10 +22,10 @@ public class URLExtractor {
         String filePath3 = "./wikiaProject/src/main/resources/wikiaOverviewIndividualFiles/p3_wikis_1000000_to_1500000.csv";
         String filePath4 = "./wikiaProject/src/main/resources/wikiaOverviewIndividualFiles/p4_wikis_1500000_to_2000000.csv";
 
-        Thread t1 = new Thread(new URLGetter(filePath1,1, 500000), "Thread 1");
-        Thread t2 = new Thread(new URLGetter(filePath2,500000, 1000000), "Thread 2");
-        Thread t3 = new Thread(new URLGetter(filePath3,1000000, 1500000), "Thread 3");
-        Thread t4 = new Thread(new URLGetter(filePath4,1500000, 2000000), "Thread 4");
+        Thread t1 = new Thread(new MetadataGetter(filePath1,1, 500000), "Thread 1");
+        Thread t2 = new Thread(new MetadataGetter(filePath2,500000, 1000000), "Thread 2");
+        Thread t3 = new Thread(new MetadataGetter(filePath3,1000000, 1500000), "Thread 3");
+        Thread t4 = new Thread(new MetadataGetter(filePath4,1500000, 2000000), "Thread 4");
 
 //         t1.start();
         // t2.start();
