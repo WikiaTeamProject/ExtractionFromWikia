@@ -4,6 +4,8 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -22,7 +24,7 @@ public class WikiaDumpDownloader implements Runnable {
         String filePath = directoryPath + "/wikiaOverviewIndividualFiles/p1_wikis_1_to_500000.csv";
         File f = new File(filePath);
 
-        Thread t1 = new Thread(new WikiaDumpDownloader(f, 1, 5));
+        Thread t1 = new Thread(new WikiaDumpDownloader(f, 1, 100));
         t1.run();
 
     }
@@ -122,16 +124,14 @@ public class WikiaDumpDownloader implements Runnable {
                         if (matcher.find()) {
                             pathToFileToDownload = matcher.group(0);
 
-                            // TODO: Write 7zip extractor...
-
-                            // saveGzipRemoteFile(pathToFileToDownload);
+                            saveRemoteFile(pathToFileToDownload);
                         } else {
                             regExToFindURL = "http:.*gz";
                             pattern = Pattern.compile(regExToFindURL);
                             matcher = pattern.matcher(readLineFromURL);
                             if (matcher.find()) {
                                 pathToFileToDownload = matcher.group(0);
-                                saveGzipRemoteFile(pathToFileToDownload);
+                                saveRemoteFile(pathToFileToDownload);
                             }
                         }
 
@@ -154,7 +154,6 @@ public class WikiaDumpDownloader implements Runnable {
                 fileReader.close();
             } catch (IOException ioe) {
                 logger.severe(ioe.toString());
-                urlReader.close();
             }
             urlReader.close();
 
@@ -167,19 +166,15 @@ public class WikiaDumpDownloader implements Runnable {
     } // end of run method
 
 
-
     /**
      * This method will save the file which is specified through the parameter in /resources/files/wikiaDumps
-     *
      * @param pathToRemoteFile the URL to the file
      */
-    private void saveGzipRemoteFile(String pathToRemoteFile) {
-        BufferedReader remoteReader;
-        BufferedWriter fileWriter;
-        URL url;
-        URLConnection urlConnection;
-        String readLine;
+    private void saveRemoteFile (String pathToRemoteFile) {
 
+        URL url;
+        FileOutputStream fos;
+        ReadableByteChannel rbc;
 
         // use regex to get the correct file name
         String fileName = "";
@@ -192,54 +187,28 @@ public class WikiaDumpDownloader implements Runnable {
 
         // create target file
         File targetFile = new File(directoryPath + "/wikiaDumps/" + fileName);
-
-
-        /**
-         *
-         *  GZIPOutputStream zip = new GZIPOutputStream(
-         new FileOutputStream(new File("tmp.zip")));
-
-         writer = new BufferedWriter(
-         new OutputStreamWriter(zip, "UTF-8"));
-         *
-         */
-
+        logger.info("Writing file " + fileName);
 
         try {
             url = new URL(pathToRemoteFile);
-            urlConnection = url.openConnection();
+            rbc = Channels.newChannel(url.openStream());
+            fos = new FileOutputStream(targetFile);
+            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 
-            // set up compressed reader
-            GZIPInputStream gzipInputStream = new GZIPInputStream(urlConnection.getInputStream());
-            remoteReader = new BufferedReader(new InputStreamReader(gzipInputStream, "UTF-8"));
-
-            // set up compressed writer
-            GZIPOutputStream gzipOutputStream = new GZIPOutputStream(new FileOutputStream(targetFile));
-            fileWriter = new BufferedWriter(new OutputStreamWriter(gzipOutputStream, "UTF-8"));
-            logger.info("Writing file " + fileName);
-
-            // write process
-            while((readLine = remoteReader.readLine()) != null) {
-                fileWriter.write(readLine + "\n");
-            }
-
-            fileWriter.flush();
-
-            // closing reader and writer
+            // closing streams
             try {
-                remoteReader.close();
-            } catch (IOException ioe) {
-                fileWriter.close();
+                fos.close();
+            } catch(IOException ioe) {
+                logger.severe(ioe.toString());
             }
-            fileWriter.close();
+            rbc.close();
 
-        } catch (MalformedURLException mue){
+        } catch (MalformedURLException mue) {
             logger.severe(mue.toString());
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             logger.severe(ioe.toString());
         }
 
-    }
-
+    } // end of method "saveRemoteFile"
 
 }
