@@ -1,12 +1,15 @@
 package wikiaDumpDownload;
 
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * Created by Jan Portisch on 25.03.2017.
@@ -19,7 +22,7 @@ public class WikiaDumpDownloader implements Runnable {
         String filePath = directoryPath + "/wikiaOverviewIndividualFiles/p1_wikis_1_to_500000.csv";
         File f = new File(filePath);
 
-        Thread t1 = new Thread(new WikiaDumpDownloader(f, 1, 10));
+        Thread t1 = new Thread(new WikiaDumpDownloader(f, 1, 5));
         t1.run();
 
     }
@@ -89,6 +92,15 @@ public class WikiaDumpDownloader implements Runnable {
 
             processFile:
             while ((readLineFromFile = fileReader.readLine()) != null) {
+
+                // check whether the specified end line was reached (endAtLine) -> yes: leave loop; no: continue
+                if (!this.downloadAllWikis) {
+                    if (fileReader.getLineNumber() >= endAtLine) {
+                        break processFile;
+                    }
+                }
+
+
                 tokens = readLineFromFile.split(";");
 
                 queryLink = tokens[1] + "wiki/Special:Statistics";
@@ -109,34 +121,42 @@ public class WikiaDumpDownloader implements Runnable {
                         matcher = pattern.matcher(readLineFromURL);
                         if (matcher.find()) {
                             pathToFileToDownload = matcher.group(0);
-                            saveRemoteFile(pathToFileToDownload);
+
+                            // TODO: Write 7zip extractor...
+
+                            // saveGzipRemoteFile(pathToFileToDownload);
                         } else {
                             regExToFindURL = "http:.*gz";
                             pattern = Pattern.compile(regExToFindURL);
                             matcher = pattern.matcher(readLineFromURL);
                             if (matcher.find()) {
                                 pathToFileToDownload = matcher.group(0);
-                                saveRemoteFile(pathToFileToDownload);
+                                saveGzipRemoteFile(pathToFileToDownload);
                             }
                         }
 
                         // a download link was found -> continue with the next URL from the file
                         continue processFile;
 
-
                     }
 
-                }
+
+                } // end of URL line reader loop
+
+            } // end of file writer loop
 
 
-                // check whether the specified end line was reached (endAtLine) -> yes: leave loop; no: continue
-                if (!this.downloadAllWikis) {
-                    if (fileReader.getLineNumber() == endAtLine) {
-                        break processFile;
-                    }
-                }
+            logger.info("Download was finished.");
 
+
+            // closing readers
+            try {
+                fileReader.close();
+            } catch (IOException ioe) {
+                logger.severe(ioe.toString());
+                urlReader.close();
             }
+            urlReader.close();
 
         } catch (FileNotFoundException fnfe) {
             logger.severe(fnfe.toString());
@@ -147,14 +167,18 @@ public class WikiaDumpDownloader implements Runnable {
     } // end of run method
 
 
+
     /**
      * This method will save the file which is specified through the parameter in /resources/files/wikiaDumps
      *
      * @param pathToRemoteFile the URL to the file
      */
-    private void saveRemoteFile(String pathToRemoteFile) {
+    private void saveGzipRemoteFile(String pathToRemoteFile) {
         BufferedReader remoteReader;
-        BufferedWriter remoteWriter;
+        BufferedWriter fileWriter;
+        URL url;
+        URLConnection urlConnection;
+        String readLine;
 
 
         // use regex to get the correct file name
@@ -165,11 +189,56 @@ public class WikiaDumpDownloader implements Runnable {
         if (matcher.find()) {
             fileName = matcher.group(0);
         }
-        ;
+
+        // create target file
+        File targetFile = new File(directoryPath + "/wikiaDumps/" + fileName);
 
 
-        File targetFile = new File(directoryPath + fileName);
-        System.out.println(fileName);
+        /**
+         *
+         *  GZIPOutputStream zip = new GZIPOutputStream(
+         new FileOutputStream(new File("tmp.zip")));
+
+         writer = new BufferedWriter(
+         new OutputStreamWriter(zip, "UTF-8"));
+         *
+         */
+
+
+        try {
+            url = new URL(pathToRemoteFile);
+            urlConnection = url.openConnection();
+
+            // set up compressed reader
+            GZIPInputStream gzipInputStream = new GZIPInputStream(urlConnection.getInputStream());
+            remoteReader = new BufferedReader(new InputStreamReader(gzipInputStream, "UTF-8"));
+
+            // set up compressed writer
+            GZIPOutputStream gzipOutputStream = new GZIPOutputStream(new FileOutputStream(targetFile));
+            fileWriter = new BufferedWriter(new OutputStreamWriter(gzipOutputStream, "UTF-8"));
+            logger.info("Writing file " + fileName);
+
+            // write process
+            while((readLine = remoteReader.readLine()) != null) {
+                fileWriter.write(readLine + "\n");
+            }
+
+            fileWriter.flush();
+
+            // closing reader and writer
+            try {
+                remoteReader.close();
+            } catch (IOException ioe) {
+                fileWriter.close();
+            }
+            fileWriter.close();
+
+        } catch (MalformedURLException mue){
+            logger.severe(mue.toString());
+        } catch(IOException ioe) {
+            logger.severe(ioe.toString());
+        }
+
     }
 
 
