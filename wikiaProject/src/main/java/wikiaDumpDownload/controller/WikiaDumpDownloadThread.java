@@ -91,7 +91,6 @@ public class WikiaDumpDownloadThread implements Runnable {
 
             processFile:
             while ((readLineFromFile = fileReader.readLine()) != null) {
-                wikis++;
 
                 // check whether the specified end line was reached (endAtLine) -> yes: leave loop; no: continue
                 if (!this.downloadAllWikis) {
@@ -99,6 +98,7 @@ public class WikiaDumpDownloadThread implements Runnable {
                         break processFile;
                     }
                 }
+                wikis++;
 
                 tokens = readLineFromFile.split(";");
 
