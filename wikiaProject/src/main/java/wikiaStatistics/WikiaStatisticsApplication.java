@@ -1,20 +1,16 @@
 package wikiaStatistics;
 
-import wikiaStatistics.controller.MetadataGetterImpl;
+import wikiaStatistics.controller.MetadataThreadImpl;
 import wikiaStatistics.model.MetadataStatistics;
 import wikiaStatistics.util.WikiaStatisticsTools;
 
-/**
- * This class represents the application to download metadata of all Wikia wikis and receive statistics.
- *
- * Please specify the directory for the downloaded files in resources > config.properties
- */
-public class wikiaStatisticsApplication {
+
+public class WikiaStatisticsApplication {
 
     public static void main(String[] args) {
 
         // metadata will be downloaded and files saved in the specified directory
-        MetadataGetterImpl.downloadWikiaMetadata();
+        MetadataThreadImpl.downloadWikiaMetadata();
 
         // statistics of the extracted wikis will be performed
         MetadataStatistics statistics = WikiaStatisticsTools.getMetadataStatistics();

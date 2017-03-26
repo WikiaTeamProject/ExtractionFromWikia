@@ -9,11 +9,11 @@ import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 /**
- * This class represents the implementation of MetadataGetter threads.
+ * This class represents the implementation of MetadataThread threads.
  */
-public class MetadataGetterImpl {
+public class MetadataThreadImpl {
 
-    private static Logger logger = Logger.getLogger(MetadataGetterImpl.class.getName());
+    private static Logger logger = Logger.getLogger(MetadataThreadImpl.class.getName());
 
 
     public static void downloadWikiaMetadata() {
@@ -36,10 +36,10 @@ public class MetadataGetterImpl {
         String filePath3 = directoryPath + "/wikiaOverviewIndividualFiles/p3_wikis_1000000_to_1500000.csv";
         String filePath4 = directoryPath + "/wikiaOverviewIndividualFiles/p4_wikis_1500000_to_2000000.csv";
 
-        Thread t1 = new Thread(new MetadataGetter(filePath1,1, 500000), "Thread 1");
-        Thread t2 = new Thread(new MetadataGetter(filePath2,500000, 1000000), "Thread 2");
-        Thread t3 = new Thread(new MetadataGetter(filePath3,1000000, 1500000), "Thread 3");
-        Thread t4 = new Thread(new MetadataGetter(filePath4,1500000, 2000000), "Thread 4");
+        Thread t1 = new Thread(new MetadataThread(filePath1,1, 500000), "Thread 1");
+        Thread t2 = new Thread(new MetadataThread(filePath2,500000, 1000000), "Thread 2");
+        Thread t3 = new Thread(new MetadataThread(filePath3,1000000, 1500000), "Thread 3");
+        Thread t4 = new Thread(new MetadataThread(filePath4,1500000, 2000000), "Thread 4");
 
         t1.start();
         t2.start();
