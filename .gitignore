@@ -5,5 +5,11 @@
 # Mac-specific
 .DS_Store
 
-# exclude target folder
+# target folder
 /wikiaProject/target/
+
+# exclude latest overview of wikia wikis metadata, only save locally
+/wikiaProject/src/main/resources/files/*
+
+# include language codes
+!/wikiaProject/src/main/resources/files/wikiaLanguageCodes.csv
