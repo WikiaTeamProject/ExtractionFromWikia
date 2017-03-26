@@ -1,8 +1,12 @@
 package wikiaDumpDownload;
 
 import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Jan Portisch on 25.03.2017.
@@ -28,7 +32,11 @@ public class WikiaDumpDownloader implements Runnable {
 
     // internal variables
     private Logger logger = Logger.getLogger(WikiaDumpDownloader.class.getName());
-    private LineNumberReader lineReader;
+    private LineNumberReader fileReader;
+    private BufferedReader urlReader;
+    private URL url;
+    private URLConnection urlConnection;
+    private String directoryPath = ResourceBundle.getBundle("config").getString("directory");
 
 
     /**
@@ -62,29 +70,68 @@ public class WikiaDumpDownloader implements Runnable {
     public void run() {
 
         try {
-            lineReader = new LineNumberReader(new FileReader(fileToReadFrom));
+            fileReader = new LineNumberReader(new FileReader(fileToReadFrom));
 
-            String readLine;
-            String[] tokens;
+            String readLineFromFile;
+            String readLineFromURL;
+            String regExToFindURL; // regex used to filter the download URL
+            String[] tokens; // contains the tokens from the CSV file
+            String queryLink; // contains the link where the downloadlink can be found e.g. "http://babylon5.wikia.com/wiki/Special:Statistics"
+            String pathToFileToDownload = ""; // contains the path where the XML can be downloaded e.g. "http://s3.amazonaws.com/wikia_xml_dumps/b/ba/babylon5_pages_current.xml.7z"
+            Pattern pattern; // for regex search
+            Matcher matcher; // for regex search
 
             // jump to line
-            lineReader.readLine();
-            while (lineReader.getLineNumber() < beginAtLine - 1) {
-                lineReader.readLine();
+            fileReader.readLine();
+            while (fileReader.getLineNumber() < beginAtLine - 1) {
+                fileReader.readLine();
             }
 
             processFile:
-            while ((readLine = lineReader.readLine()) != null) {
-                tokens = readLine.split(";");
-                System.out.println(tokens[1]);
+            while ((readLineFromFile = fileReader.readLine()) != null) {
+                tokens = readLineFromFile.split(";");
 
-                // TODO: !!! Continue here !!!
+                queryLink = tokens[1] + "wiki/Special:Statistics";
+                logger.info("Processing: " + queryLink);
 
+                url = new URL(queryLink);
+                urlConnection = url.openConnection();
+
+                // read from URL object
+                urlReader = new BufferedReader(new InputStreamReader((urlConnection.getInputStream())));
+
+                while ((readLineFromURL = urlReader.readLine()) != null) {
+
+                    if (readLineFromURL.contains("wikia_xml_dumps")) {
+
+                        regExToFindURL = "http:.*7z"; // correct regex (unmasked): http:.*7z
+                        pattern = Pattern.compile(regExToFindURL);
+                        matcher = pattern.matcher(readLineFromURL);
+                        if (matcher.find()) {
+                            pathToFileToDownload = matcher.group(0);
+                            saveRemoteFile(pathToFileToDownload);
+                        } else {
+                            regExToFindURL = "http:.*gz";
+                            pattern = Pattern.compile(regExToFindURL);
+                            matcher = pattern.matcher(readLineFromURL);
+                            if (matcher.find()) {
+                                pathToFileToDownload = matcher.group(0);
+                                saveRemoteFile(pathToFileToDownload);
+                            }
+                        }
+
+                        // a download link was found -> continue with the next URL from the file
+                        continue processFile;
+
+
+                    }
+
+                }
 
 
                 // check whether the specified end line was reached (endAtLine) -> yes: leave loop; no: continue
                 if (!this.downloadAllWikis) {
-                    if (lineReader.getLineNumber() == endAtLine) {
+                    if (fileReader.getLineNumber() == endAtLine) {
                         break processFile;
                     }
                 }
@@ -97,5 +144,33 @@ public class WikiaDumpDownloader implements Runnable {
             logger.severe(ioe.toString());
         }
 
+    } // end of run method
+
+
+    /**
+     * This method will save the file which is specified through the parameter in /resources/files/wikiaDumps
+     *
+     * @param pathToRemoteFile the URL to the file
+     */
+    private void saveRemoteFile(String pathToRemoteFile) {
+        BufferedReader remoteReader;
+        BufferedWriter remoteWriter;
+
+
+        // use regex to get the correct file name
+        String fileName = "";
+        String regEx = "(?<=\\/)[^\\/]*$"; // correct regex (unmasked): (?<=\/)[^\/]*$
+        Pattern pattern = Pattern.compile(regEx);
+        Matcher matcher = pattern.matcher(pathToRemoteFile);
+        if (matcher.find()) {
+            fileName = matcher.group(0);
+        }
+        ;
+
+
+        File targetFile = new File(directoryPath + fileName);
+        System.out.println(fileName);
     }
+
+
 }
