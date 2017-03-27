@@ -36,6 +36,9 @@ public class WikiaDumpDownloadThread implements Runnable {
     private int wikis = 0;
     private StringBuffer buffer = new StringBuffer();
 
+    private File dumpsDownloadedgz;
+    private File dumpsDownloaded7z;
+
 
     /**
      * Constructor
@@ -45,8 +48,7 @@ public class WikiaDumpDownloadThread implements Runnable {
      * @param endAtLine      end processing the document at the specified line (including the specified line); cannot be less than 3
      */
     public WikiaDumpDownloadThread(File fileToReadFrom, int beginAtLine, int endAtLine) {
-        this.downloadAllWikis = false;
-        this.fileToReadFrom = fileToReadFrom;
+        this(false, fileToReadFrom);
 
         // make sure beginning line is at least 2 (because of header line)
         this.beginAtLine = Math.max(beginAtLine, 2);
@@ -60,8 +62,18 @@ public class WikiaDumpDownloadThread implements Runnable {
      * @param fileToReadFrom read the URLs from the specified file
      */
     public WikiaDumpDownloadThread(File fileToReadFrom) {
-        this.downloadAllWikis = true;
+        this(true, fileToReadFrom);
+    }
+
+    private WikiaDumpDownloadThread(boolean downloadAllWikis, File fileToReadFrom) {
         this.fileToReadFrom = fileToReadFrom;
+        this.downloadAllWikis = downloadAllWikis;
+
+        // create target file and create directory if it does not exist yet
+        File dumps = createDirectory(new File(directoryPath + "/wikiaDumps/"));
+        File dumpsDownloaded = createDirectory(new File(dumps.getPath() + "/downloaded"));
+        dumpsDownloadedgz = createDirectory(new File(dumpsDownloaded.getPath() + "/gz"));
+        dumpsDownloaded7z = createDirectory(new File(dumpsDownloaded.getPath() + "/7z"));
     }
 
 
@@ -188,17 +200,13 @@ public class WikiaDumpDownloadThread implements Runnable {
             fileName = matcher.group(0);
         }
 
-        // create target file and create directory if it does not exist yet
-        File file = new File(directoryPath + "/wikiaDumps/");
-        if (!file.isDirectory()) {
-            try {
-                Files.createDirectory(file.toPath());
-            } catch (IOException e) {
-                logger.severe(e.toString());
-            }
-        }
+        File targetFile;
 
-        File targetFile = new File(directoryPath + "/wikiaDumps/" + fileName);
+        if(fileName.endsWith("gz")) {
+            targetFile = new File(dumpsDownloadedgz.getPath() + "/" + fileName);
+        } else {
+            targetFile = new File(dumpsDownloaded7z.getPath() + "/" + fileName);
+        }
         logger.info("Writing file " + fileName);
 
         try {
@@ -248,6 +256,17 @@ public class WikiaDumpDownloadThread implements Runnable {
         }
 
 
+    }
+
+    private File createDirectory(File file) {
+        if (!file.isDirectory()) {
+            try {
+                Files.createDirectory(file.toPath());
+            } catch (IOException e) {
+                logger.severe(e.toString());
+            }
+        }
+        return file;
     }
 
 }

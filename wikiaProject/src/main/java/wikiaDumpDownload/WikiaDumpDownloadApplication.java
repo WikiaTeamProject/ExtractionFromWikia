@@ -13,7 +13,7 @@ public class WikiaDumpDownloadApplication {
 
     public static void main(String[] args) {
 
-        WikiaDumpDownloadThreadImpl.downloadWikiaDumps(10);
+        WikiaDumpDownloadThreadImpl.downloadWikiaDumps(15);
 
     }
 
