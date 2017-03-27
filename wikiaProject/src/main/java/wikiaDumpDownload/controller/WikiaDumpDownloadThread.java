@@ -82,6 +82,7 @@ public class WikiaDumpDownloadThread implements Runnable {
             String pathToFileToDownload = ""; // contains the path where the XML can be downloaded e.g. "http://s3.amazonaws.com/wikia_xml_dumps/b/ba/babylon5_pages_current.xml.7z"
             Pattern pattern; // for regex search
             Matcher matcher; // for regex search
+            StringBuffer urlsNotWorking = new StringBuffer("URLs not working:" + "\n");
 
             // jump to line
             fileReader.readLine();
@@ -105,11 +106,19 @@ public class WikiaDumpDownloadThread implements Runnable {
                 queryLink = tokens[1] + "wiki/Special:Statistics";
                 logger.info("Processing: " + queryLink);
 
-                url = new URL(queryLink);
-                urlConnection = url.openConnection();
 
-                // read from URL object
-                urlReader = new BufferedReader(new InputStreamReader((urlConnection.getInputStream())));
+                url = new URL(queryLink);
+
+                try {
+                    urlConnection = url.openConnection();
+
+                    // read from URL object
+                    urlReader = new BufferedReader(new InputStreamReader((urlConnection.getInputStream())));
+
+                } catch(IOException ioe) {
+                    urlsNotWorking.append(queryLink + "\n");
+                }
+
 
                 while ((readLineFromURL = urlReader.readLine()) != null) {
 
@@ -145,13 +154,10 @@ public class WikiaDumpDownloadThread implements Runnable {
             } // end of file writer loop
             saveSizeToFile();
             logger.info("Download finished. Downloaded " + downloaded + " of " + wikis + " wikis.");
+            logger.info(urlsNotWorking.toString());
 
             // closing readers
-            try {
-                fileReader.close();
-            } catch (IOException ioe) {
-                logger.severe(ioe.toString());
-            }
+            fileReader.close();
             urlReader.close();
 
         } catch (FileNotFoundException fnfe) {
@@ -192,16 +198,16 @@ public class WikiaDumpDownloadThread implements Runnable {
             }
         }
 
-//        File targetFile = new File(directoryPath + "/wikiaDumps/" + fileName);
-//        logger.info("Writing file " + fileName);
+        File targetFile = new File(directoryPath + "/wikiaDumps/" + fileName);
+        logger.info("Writing file " + fileName);
 
         try {
             url = new URL(pathToRemoteFile);
             URLConnection connection = url.openConnection();
-//            InputStream inputStream = connection.getInputStream();
-//            rbc = Channels.newChannel(inputStream);
-//            fos = new FileOutputStream(targetFile);
-//            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+            InputStream inputStream = connection.getInputStream();
+            rbc = Channels.newChannel(inputStream);
+            fos = new FileOutputStream(targetFile);
+            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 
             int size = connection.getContentLength();
             logger.info("Size of file: " + (size / 1024) + " KB.");
@@ -210,12 +216,12 @@ public class WikiaDumpDownloadThread implements Runnable {
 
             // closing streams
             connection.getInputStream().close();
-//            try {
-//                fos.close();
-//            } catch(IOException ioe) {
-//                logger.severe(ioe.toString());
-//            }
-//            rbc.close();
+            try {
+                fos.close();
+            } catch(IOException ioe) {
+                logger.severe(ioe.toString());
+            }
+            rbc.close();
 
         } catch (MalformedURLException mue) {
             logger.severe(mue.toString());
