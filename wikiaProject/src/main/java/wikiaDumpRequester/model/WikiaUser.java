@@ -1,51 +1,51 @@
-package wikiaStatistics.util;
+package wikiaDumpRequester.model;
+
+import wikiaStatistics.util.WikiaStatisticsTools;
+
 import java.io.BufferedReader;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.PrintStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ResourceBundle;
+import java.util.logging.Logger;
 
 /**
  * A class to represent Wikia User Entity
  */
-public class WikiaUser{
+public class WikiaUser {
 
-    private string userName;
-    private string userPassword;
+    private String userName;
+    private String userPassword;
     private static Logger logger = Logger.getLogger(WikiaStatisticsTools.class.getName());
 
-    public wikiaUser(string userName,string userPassword){
+    public WikiaUser(String userName, String userPassword){
         this.userName=userName;
         this.userPassword=userPassword;
     }
 
-    public string getUserName(){
+    public String getUserName(){
         return this.userName;
     }
 
-    public string getUserPassword(){
+    public String getUserPassword(){
         return this.userPassword;
     }
 
-    public void setUserName(string userName){
+    public void setUserName(String userName){
         this.userName=userName;
     }
 
-    public void setUserPassword(string userPassword){
+    public void setUserPassword(String userPassword){
        this.userPassword=userPassword;
     }
 
     public String getAccessToken(){
 
-        string accessTokenURL=ResourceBundle.getBundle("config").getString(accessTokenURL);
-        string responseMessage="";
-        string responseMessageLine="";
-        string userAccessToken="";
+        String accessTokenURL=ResourceBundle.getBundle("config").getString("accessTokenURL");
+        String responseMessage="";
+        String responseMessageLine="";
+        String userAccessToken="";
         URL accessTokenRequestURL=null;
         URLConnection accessTokenRequestConnection=null;
         OutputStreamWriter accessTokenRequestMessageWriter=null;
@@ -57,7 +57,7 @@ public class WikiaUser{
             accessTokenRequestURL = new URL(accessTokenURL);
 
             //get connection
-            accessTokenRequestConnection = url.openConnection();
+            accessTokenRequestConnection = accessTokenRequestURL.openConnection();
 
             accessTokenRequestConnection.setDoOutput(true);
 
@@ -67,7 +67,7 @@ public class WikiaUser{
 
             responseMessageReader= new BufferedReader(new InputStreamReader(accessTokenRequestConnection.getInputStream()));
 
-            while ((responseMessageLine = reader.readLine()) != null) {
+            while ((responseMessageLine = responseMessageReader.readLine()) != null) {
 
                 //append each line to response message
                 responseMessage+= responseMessageLine;
@@ -85,6 +85,6 @@ public class WikiaUser{
             logger.severe(ex.toString());
         }
 
-        return access_token;
+        return userAccessToken;
     }
 }
