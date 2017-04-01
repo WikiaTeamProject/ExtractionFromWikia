@@ -42,7 +42,7 @@ public class WikiaUser{
 
     public String getAccessToken(){
 
-        string accessTokenURL=ResourceBundle.getBundle("config").getString("https://services.wikia.com/auth/token");
+        string accessTokenURL=ResourceBundle.getBundle("config").getString(accessTokenURL);
         string responseMessage="";
         string responseMessageLine="";
         string userAccessToken="";
