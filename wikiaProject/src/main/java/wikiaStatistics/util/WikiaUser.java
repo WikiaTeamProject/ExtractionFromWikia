@@ -11,7 +11,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 /**
- * A class to response Wikia User Entity
+ * A class to represent Wikia User Entity
  */
 public class WikiaUser{
 
