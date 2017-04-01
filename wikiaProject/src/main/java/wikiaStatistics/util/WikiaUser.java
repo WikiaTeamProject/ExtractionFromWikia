@@ -1,3 +1,4 @@
+package wikiaStatistics.util;
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -41,7 +42,7 @@ public class WikiaUser{
 
     public String getAccessToken(){
 
-        string accessTokenURL="https://services.wikia.com/auth/token";
+        string accessTokenURL=ResourceBundle.getBundle("config").getString("https://services.wikia.com/auth/token");
         string responseMessage="";
         string responseMessageLine="";
         string userAccessToken="";
