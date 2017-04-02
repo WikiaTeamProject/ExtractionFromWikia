@@ -5,6 +5,8 @@ import wikiaStatistics.util.WikiaStatisticsTools;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
@@ -14,6 +16,10 @@ import java.util.logging.Logger;
 public class MetadataThreadImpl {
 
     private static Logger logger = Logger.getLogger(MetadataThreadImpl.class.getName());
+
+    private static Thread[] threads = new Thread[40];
+    private static ArrayList<String> filePaths = new ArrayList<String>();
+
 
 
     public static void downloadWikiaMetadata() {
@@ -31,27 +37,27 @@ public class MetadataThreadImpl {
         }
 
         // files will be saved in the newly created subdirectory
-        String filePath1 = directoryPath + "/wikiaOverviewIndividualFiles/p1_wikis_1_to_500000.csv";
-        String filePath2 = directoryPath + "/wikiaOverviewIndividualFiles/p2_wikis_500000_to_1000000.csv";
-        String filePath3 = directoryPath + "/wikiaOverviewIndividualFiles/p3_wikis_1000000_to_1500000.csv";
-        String filePath4 = directoryPath + "/wikiaOverviewIndividualFiles/p4_wikis_1500000_to_2000000.csv";
 
-        Thread t1 = new Thread(new MetadataThread(filePath1,1, 500000), "Thread 1");
-        Thread t2 = new Thread(new MetadataThread(filePath2,500000, 1000000), "Thread 2");
-        Thread t3 = new Thread(new MetadataThread(filePath3,1000000, 1500000), "Thread 3");
-        Thread t4 = new Thread(new MetadataThread(filePath4,1500000, 2000000), "Thread 4");
+        int lowerIdLimit = 0;
+        int upperIdLimit = 50000;
 
-        t1.start();
-        t2.start();
-        t3.start();
-        t4.start();
+        for (int i = 0; i < threads.length; i++) {
+
+            String filePath = directoryPath + "/wikiaOverviewIndividualFiles/wikis_" + lowerIdLimit + "_to_" + upperIdLimit +".csv";
+            filePaths.add(filePath);
+            threads[i] =  new Thread(new MetadataThread(filePath, lowerIdLimit, upperIdLimit), "Thread " + i);
+
+            lowerIdLimit += 50000;
+            upperIdLimit += 50000;
+
+            threads[i].start();
+        }
 
         // wait until all threads are finished before merging files
         try {
-            t1.join();
-            t2.join();
-            t3.join();
-            t4.join();
+            for (Thread t: threads) {
+                t.join();
+            }
 
             logger.info("Download process finished.");
             logger.info("Concatenating files...");
@@ -60,7 +66,7 @@ public class MetadataThreadImpl {
             logger.severe(ie.toString());
         }
 
-        WikiaStatisticsTools.mergeFiles(filePath1, filePath2, filePath3, filePath4);
+        WikiaStatisticsTools.mergeFiles(filePaths);
 
     }
 

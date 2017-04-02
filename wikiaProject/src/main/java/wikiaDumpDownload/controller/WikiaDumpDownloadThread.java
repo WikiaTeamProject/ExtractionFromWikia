@@ -7,6 +7,7 @@ import java.net.URLConnection;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -19,62 +20,79 @@ import java.util.regex.Pattern;
  */
 public class WikiaDumpDownloadThread implements Runnable {
 
+    private static final Logger logger = Logger.getLogger(WikiaDumpDownloadThread.class.getName());
+
     // variables with getters and setters
-    private boolean downloadAllWikis; // indicates whether all wikis shall be downloaded
+    private boolean downloadAllWikis; // indicates whether all wikis shall be downloadedFiles
     private int beginAtLine; // start processing the document at the specified line
     private int endAtLine;  // end processing the document at the specified line
-    private File fileToReadFrom; // file from which will be read
+    private String pathToReadFrom; // filepath from which file will be read
 
     // internal variables
-    private Logger logger = Logger.getLogger(this.getClass().getName());
-    private LineNumberReader fileReader;
-    private BufferedReader urlReader;
-    private URL url;
-    private URLConnection urlConnection;
-    private String directoryPath = ResourceBundle.getBundle("config").getString("directory");
-    private int downloaded = 0;
-    private int wikis = 0;
-    private StringBuffer buffer = new StringBuffer();
-
+    private String directoryPath;
+    private int downloadedFiles;
+    private int wikis;
+    private StringBuffer buffer;
+    private StringBuffer urlsNotWorking;
     private File dumpsDownloadedgz;
     private File dumpsDownloaded7z;
+    private String dumpSizeFilePath;
+
+    private static final String[] REGEX = {"http:.*current\\.xml\\.gz", "http:.*current\\.xml\\.7z"}; // unmasked regex "http:.*current\.xml\.7z"
 
 
     /**
-     * Constructor
-     *
-     * @param fileToReadFrom read the URLs from the specified file
-     * @param beginAtLine    start processing the document at the specified line; cannot be less than 2
-     * @param endAtLine      end processing the document at the specified line (including the specified line); cannot be less than 3
+     * Main Constructor - main constructor for initialization -> private
+     * @param downloadAllWikis
+     * @param pathToReadFrom
      */
-    public WikiaDumpDownloadThread(File fileToReadFrom, int beginAtLine, int endAtLine) {
-        this(false, fileToReadFrom);
-
-        // make sure beginning line is at least 2 (because of header line)
-        this.beginAtLine = Math.max(beginAtLine, 2);
-        this.endAtLine = Math.max(endAtLine, 3);
-    }
-
-
-    /**
-     * Constructor
-     *
-     * @param fileToReadFrom read the URLs from the specified file
-     */
-    public WikiaDumpDownloadThread(File fileToReadFrom) {
-        this(true, fileToReadFrom);
-    }
-
-    private WikiaDumpDownloadThread(boolean downloadAllWikis, File fileToReadFrom) {
-        this.fileToReadFrom = fileToReadFrom;
+    private WikiaDumpDownloadThread(boolean downloadAllWikis, String pathToReadFrom) {
+        this.pathToReadFrom = pathToReadFrom;
         this.downloadAllWikis = downloadAllWikis;
 
-        // create target file and create directory if it does not exist yet
+        this.directoryPath = ResourceBundle.getBundle("config").getString("directory");
+        this.downloadedFiles = 0;
+        this.wikis = 0;
+        this.buffer = new StringBuffer();
+
+        // create target directories if they do not exist yet
         File dumps = createDirectory(new File(directoryPath + "/wikiaDumps/"));
         File dumpsDownloaded = createDirectory(new File(dumps.getPath() + "/downloaded"));
         dumpsDownloadedgz = createDirectory(new File(dumpsDownloaded.getPath() + "/gz"));
         dumpsDownloaded7z = createDirectory(new File(dumpsDownloaded.getPath() + "/7z"));
+
+        this.urlsNotWorking = new StringBuffer();
     }
+
+
+    /**
+     * Constructor
+     *
+     * @param pathToReadFrom read the URLs from the specified file
+     * @param beginAtLine    start processing the document at the specified line; cannot be less than 2
+     * @param endAtLine      end processing the document at the specified line (including the specified line); cannot be less than 3
+     */
+    public WikiaDumpDownloadThread(String pathToReadFrom, int beginAtLine, int endAtLine) {
+        this(false, pathToReadFrom);
+
+        // make sure beginning line is at least 1 (because of header line - 0)
+        this.beginAtLine = Math.max(beginAtLine, 1);
+        this.endAtLine = Math.max(endAtLine, 1);
+    }
+
+
+    /**
+     * Constructor
+     *
+     * @param pathToReadFrom read the URLs from the specified file
+     */
+    public WikiaDumpDownloadThread(String pathToReadFrom, String dumpSizeFilePath) {
+        this(true, pathToReadFrom);
+        // beginning line is 1 (because of header line - 0)
+        this.beginAtLine = 1;
+        this.dumpSizeFilePath = dumpSizeFilePath;
+    }
+
 
 
     /**
@@ -82,95 +100,67 @@ public class WikiaDumpDownloadThread implements Runnable {
      */
     public void run() {
 
+        ArrayList<String> urls = getUrls(pathToReadFrom);
+
+        for(String url : urls) {
+            downloadDump(url);
+        }
+        logger.info("Download finished. Downloaded " + downloadedFiles + " of " + wikis + " wikis.");
+
+        saveSizeToFile();
+
+        if (urlsNotWorking.length() == 0) {
+            logger.info("No URLs that did not work after retries");
+        } else {
+            logger.info("URLs that did not work for downloading after retries:\n" + urlsNotWorking.toString());
+        }
+    }
+
+
+    /**
+     * Retrieve URLs from csv files with wikis
+     *
+     * @param filePath
+     * @return
+     */
+    private ArrayList<String> getUrls(String filePath) {
+        LineNumberReader fileReader;
+        String line;
+        String[] tokens;
+        ArrayList<String> urls = new ArrayList<String>();
+
+        // create file with specified file path
+        File file = new File(filePath);
+
+        // read lines of file
         try {
+            fileReader = new LineNumberReader(new FileReader(file));
 
-            fileReader = new LineNumberReader(new FileReader(fileToReadFrom));
-
-            String readLineFromFile;
-            String readLineFromURL;
-            String regExToFindURL; // regex used to filter the download URL
-            String[] tokens; // contains the tokens from the CSV file
-            String queryLink; // contains the link where the downloadlink can be found e.g. "http://babylon5.wikia.com/wiki/Special:Statistics"
-            String pathToFileToDownload = ""; // contains the path where the XML can be downloaded e.g. "http://s3.amazonaws.com/wikia_xml_dumps/b/ba/babylon5_pages_current.xml.7z"
-            Pattern pattern; // for regex search
-            Matcher matcher; // for regex search
-            StringBuffer urlsNotWorking = new StringBuffer("URLs not working:" + "\n");
-
-            // jump to line
+            // ignore header line
             fileReader.readLine();
-            while (fileReader.getLineNumber() < beginAtLine - 1) {
+            while (fileReader.getLineNumber() < beginAtLine) {
                 fileReader.readLine();
             }
 
-            processFile:
-            while ((readLineFromFile = fileReader.readLine()) != null) {
+            while ((line = fileReader.readLine()) != null) {
 
                 // check whether the specified end line was reached (endAtLine) -> yes: leave loop; no: continue
                 if (!this.downloadAllWikis) {
-                    if (fileReader.getLineNumber() >= endAtLine) {
-                        break processFile;
+                    if (fileReader.getLineNumber() > endAtLine + 1) {
+                        break;
                     }
                 }
                 wikis++;
 
-                tokens = readLineFromFile.split(";");
+                // split line into tokens
+                tokens = line.split(";");
 
-                queryLink = tokens[1] + "wiki/Special:Statistics";
-                logger.info("Processing: " + queryLink);
+                // add url to urls list
+                urls.add(tokens[1] + "wiki/Special:Statistics");
+            }
 
-
-                url = new URL(queryLink);
-
-                try {
-                    urlConnection = url.openConnection();
-
-                    // read from URL object
-                    urlReader = new BufferedReader(new InputStreamReader((urlConnection.getInputStream())));
-
-                } catch(IOException ioe) {
-                    urlsNotWorking.append(queryLink + "\n");
-                }
-
-
-                while ((readLineFromURL = urlReader.readLine()) != null) {
-
-                    if (readLineFromURL.contains("wikia_xml_dumps")) {
-
-                        regExToFindURL = "http:.*7z"; // correct regex (unmasked): http:.*7z
-                        pattern = Pattern.compile(regExToFindURL);
-                        matcher = pattern.matcher(readLineFromURL);
-                        if (matcher.find()) {
-                            pathToFileToDownload = matcher.group(0);
-
-                            saveRemoteFile(pathToFileToDownload);
-                        } else {
-                            regExToFindURL = "http:.*gz";
-                            pattern = Pattern.compile(regExToFindURL);
-                            matcher = pattern.matcher(readLineFromURL);
-                            if (matcher.find()) {
-                                pathToFileToDownload = matcher.group(0);
-                                saveRemoteFile(pathToFileToDownload);
-                            }
-                        }
-
-                        // a download link was found -> continue with the next URL from the file
-                        continue processFile;
-
-                    }
-
-                } // end of URL line reader loop
-
-                buffer.append(queryLink + ";-" + "\n");
-                logger.info("No wikia dump exists for wiki: " + queryLink);
-
-            } // end of file writer loop
-            saveSizeToFile();
-            logger.info("Download finished. Downloaded " + downloaded + " of " + wikis + " wikis.");
-            logger.info(urlsNotWorking.toString());
-
-            // closing readers
+            // close stream
             fileReader.close();
-            urlReader.close();
 
         } catch (FileNotFoundException fnfe) {
             logger.severe(fnfe.toString());
@@ -178,18 +168,142 @@ public class WikiaDumpDownloadThread implements Runnable {
             logger.severe(ioe.toString());
         }
 
-    } // end of run method
+        return urls;
+    }
 
+
+    /**
+     * Check if dump exists for wiki and save the file to the specified directory
+     *
+     * @param url
+     */
+    private void downloadDump(String url) {
+        boolean foundDump = false;
+        URL query;
+        URLConnection connection;
+        BufferedReader urlReader;
+        String readLineFromURL;
+        String pathToFileToDownload;
+
+
+        logger.info("Processing: " + url);
+
+        try {
+
+            query = new URL(url);
+            connection = query.openConnection();
+            urlReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+            while ((readLineFromURL = urlReader.readLine()) != null && !foundDump) {
+
+                if (readLineFromURL.contains("wikia_xml_dumps")) {
+
+                    pathToFileToDownload = findRegexInLine(REGEX, readLineFromURL);
+                    if (!pathToFileToDownload.isEmpty()) {
+                        getConnectionToRemoteFileAndSave(pathToFileToDownload);
+                    }
+
+                    foundDump = true;
+                }
+            }
+
+            if (!foundDump) {
+                logger.info("No wikia dump exists for wiki: " + url);
+                buffer.append(url + ";-" + "\n");
+            }
+
+            // close stream
+            urlReader.close();
+
+
+        } catch (MalformedURLException murle) {
+            logger.severe(murle.toString());
+        } catch (IOException ioe) {
+            logger.severe(ioe.toString());
+        }
+    }
+
+
+    /**
+     * Check if one of the REGEX constants matches the specified line
+     *
+     * @param regEx
+     * @param line
+     * @return
+     */
+    private String findRegexInLine(String[] regEx, String line) {
+        Pattern pattern;
+        Matcher matcher;
+        String pathToFileToDownload = ""; // contains the path where the XML can be downloadedFiles e.g. "http://s3.amazonaws.com/wikia_xml_dumps/b/ba/babylon5_pages_current.xml.7z"
+
+        for (String x : regEx) {
+            pattern = Pattern.compile(x);
+            matcher = pattern.matcher(line);
+            if (matcher.find()) {
+                pathToFileToDownload = matcher.group(0);
+                return pathToFileToDownload;
+            }
+        }
+
+        return pathToFileToDownload;
+    }
 
     /**
      * This method will save the file to the directory wikiaDumps of the specified directory in config.properties
      * @param pathToRemoteFile the URL to the file
      */
-    private void saveRemoteFile (String pathToRemoteFile) {
-
+    private void getConnectionToRemoteFileAndSave(String pathToRemoteFile) {
+        int retry = 0;
+        boolean downloaded = false;
         URL url;
+
+
+        // retry download up to 5 times
+        while (retry < 5 && !downloaded) {
+
+            try {
+                retry++;
+
+                url = new URL(pathToRemoteFile);
+                URLConnection connection = url.openConnection();
+                int size = connection.getContentLength();
+                logger.info("Size of file: " + (size / 1024) + " KB.");
+                buffer.append(pathToRemoteFile + ";" + (size / 1024) + "\n");
+                downloadedFiles++;
+
+//                saveFile(connection, pathToRemoteFile);
+
+                // closing streams
+                connection.getInputStream().close();
+
+                // successfully downloadedFiles - do not retry
+                downloaded = true;
+
+            } catch (MalformedURLException mue) {
+                logger.severe(mue.toString());
+            } catch (IOException ioe) {
+                logger.severe(ioe.toString());
+            }
+        }
+
+        if (!downloaded) {
+            urlsNotWorking.append(pathToRemoteFile);
+        }
+
+    }
+
+    /**
+     * Save dump file to specified directory
+     *
+     * @param connection
+     * @param pathToRemoteFile
+     */
+    private void saveFile(URLConnection connection, String pathToRemoteFile) {
         FileOutputStream fos;
         ReadableByteChannel rbc;
+        File targetFile;
+        InputStream inputStream = null;
+
 
         // use regex to get the correct file name
         String fileName = "";
@@ -200,48 +314,36 @@ public class WikiaDumpDownloadThread implements Runnable {
             fileName = matcher.group(0);
         }
 
-        File targetFile;
-
-        if(fileName.endsWith("gz")) {
-            targetFile = new File(dumpsDownloadedgz.getPath() + "/" + fileName);
-        } else {
+        if (fileName.endsWith("7z")) {
             targetFile = new File(dumpsDownloaded7z.getPath() + "/" + fileName);
+        } else {
+            targetFile = new File(dumpsDownloadedgz.getPath() + "/" + fileName);
         }
         logger.info("Writing file " + fileName);
 
+
         try {
-            url = new URL(pathToRemoteFile);
-            URLConnection connection = url.openConnection();
-            InputStream inputStream = connection.getInputStream();
+            inputStream = connection.getInputStream();
             rbc = Channels.newChannel(inputStream);
             fos = new FileOutputStream(targetFile);
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 
-            int size = connection.getContentLength();
-            logger.info("Size of file: " + (size / 1024) + " KB.");
-            buffer.append(fileName + ";" + (size/1024) + "\n");
-            downloaded++;
-
-            // closing streams
-            connection.getInputStream().close();
-            try {
-                fos.close();
-            } catch(IOException ioe) {
-                logger.severe(ioe.toString());
-            }
+            fos.close();
             rbc.close();
 
-        } catch (MalformedURLException mue) {
-            logger.severe(mue.toString());
-        } catch (IOException ioe) {
-            logger.severe(ioe.toString());
+        } catch (FileNotFoundException fnfe) {
+            logger.severe(fnfe.toString());
+        } catch (IOException e) {
+            logger.severe(e.toString());
         }
-
 
     }
 
+    /**
+     * Save size of dump file (saved in buffer) to csv, also includes urls which do not have a dump
+     */
     private void saveSizeToFile() {
-        File file = new File(directoryPath + "/wikiaDumpsSizes.csv");
+        File file = new File(this.dumpSizeFilePath);
         logger.info("Writing file " + file.getName());
 
         try {
@@ -251,13 +353,17 @@ public class WikiaDumpDownloadThread implements Runnable {
             bufferedWriter.close();
 
         } catch (IOException e) {
-
             logger.severe(e.toString());
         }
 
-
     }
 
+    /**
+     * Create directory if file is not a directory yet (mainly needed for OSX environment)
+     *
+     * @param file
+     * @return
+     */
     private File createDirectory(File file) {
         if (!file.isDirectory()) {
             try {

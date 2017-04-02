@@ -2,6 +2,7 @@ package wikiaStatistics.util;
 
 import wikiaStatistics.model.MetadataStatistics;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
@@ -19,7 +20,7 @@ public class WikiaStatisticsTools {
      *
      * @param filePaths
      */
-    public static void mergeFiles(String... filePaths) {
+    public static void mergeFiles(ArrayList<String> filePaths) {
 
         String directoryPath = ResourceBundle.getBundle("config").getString("directory");
 
