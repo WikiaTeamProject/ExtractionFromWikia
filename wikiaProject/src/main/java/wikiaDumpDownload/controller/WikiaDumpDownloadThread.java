@@ -123,7 +123,7 @@ public class WikiaDumpDownloadThread implements Runnable {
      * @param filePath
      * @return
      */
-    private ArrayList<String> getUrls(String filePath) {
+    public ArrayList<String> getUrls(String filePath) {
         LineNumberReader fileReader;
         String line;
         String[] tokens;
@@ -271,6 +271,7 @@ public class WikiaDumpDownloadThread implements Runnable {
                 buffer.append(pathToRemoteFile + ";" + (size / 1024) + "\n");
                 downloadedFiles++;
 
+                // comment in if you want do actually download the files
 //                saveFile(connection, pathToRemoteFile);
 
                 // closing streams
@@ -305,7 +306,7 @@ public class WikiaDumpDownloadThread implements Runnable {
         InputStream inputStream = null;
 
 
-        // use regex to get the correct file name
+        // use regex to get the correct file name (without / and so on)
         String fileName = "";
         String regEx = "(?<=\\/)[^\\/]*$"; // correct regex (unmasked): (?<=\/)[^\/]*$
         Pattern pattern = Pattern.compile(regEx);
