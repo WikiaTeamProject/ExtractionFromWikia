@@ -73,7 +73,7 @@ public class WikiaUser {
                 responseMessage+= responseMessageLine;
             }
 
-            System.out.print(responseMessage);
+            logger.info(responseMessage);
 
             //parse response message to get access token
             userAccessToken = responseMessage.substring(responseMessage.indexOf(":") + 2, responseMessage.indexOf(",") - 1);

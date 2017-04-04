@@ -13,3 +13,6 @@
 
 # include language codes
 !/wikiaProject/src/main/resources/files/wikiaLanguageCodes.csv
+
+# exclude the properties file for reasons of security (passwords etc.)
+*.properties

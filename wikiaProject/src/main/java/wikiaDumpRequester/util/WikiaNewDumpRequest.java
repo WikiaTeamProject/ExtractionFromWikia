@@ -1,12 +1,14 @@
 package wikiaDumpRequester.util;
 
 import wikiaStatistics.util.WikiaStatisticsTools;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Logger;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+
 
 
 public class WikiaNewDumpRequest {
@@ -14,23 +16,24 @@ public class WikiaNewDumpRequest {
     private static Logger logger = Logger.getLogger(WikiaStatisticsTools.class.getName());
 
     /**
+     * This method requests a dump for the given URL.
      * @param accessToken : access token received from Wikia for respective access credentials
      * @param WikiaURL : URL of Wikia Wiki Statistics page , e.g : http://gameofthrones.wikia.com/wiki/Special:Statistics
      */
-    public void RequestNewWikiaDump(String accessToken,String WikiaURL){
+    public void RequestNewWikiaDump(String accessToken,String WikiaURL) throws IOException{
         try {
-                //Initialize URL object
-                URL url = new URL(WikiaURL);
+            //Initialize URL object
+            URL url = new URL(WikiaURL);
 
-                HttpURLConnection newDumpRequestConnection = (HttpURLConnection) url.openConnection();
-                newDumpRequestConnection.setDoOutput(true);
-                newDumpRequestConnection.setRequestMethod("POST");
+            HttpURLConnection newDumpRequestConnection = (HttpURLConnection) url.openConnection();
+            newDumpRequestConnection.setDoOutput(true);
+            newDumpRequestConnection.setRequestMethod("POST");
 
-                //Pass access token as cookie in HTTP request
-                newDumpRequestConnection.setRequestProperty("Cookie", "access_token=" + accessToken);
+            //Pass access token as cookie in HTTP request
+            newDumpRequestConnection.setRequestProperty("Cookie", "access_token=" + accessToken);
 
-               //Get response stream
-                OutputStreamWriter requestMessage = new OutputStreamWriter(newDumpRequestConnection.getOutputStream());
+            //Get response stream
+            OutputStreamWriter requestMessage = new OutputStreamWriter(newDumpRequestConnection.getOutputStream());
 
 
                 /*
@@ -48,13 +51,12 @@ public class WikiaNewDumpRequest {
                 //debug code ends here
                 */
 
-                logger.info("HTTP Response Code : " + newDumpRequestConnection.getResponseCode() +
-                        "HTTP Response Message :  " + newDumpRequestConnection.getResponseMessage() );
+            logger.info("HTTP Response Code : " + newDumpRequestConnection.getResponseCode() +
+                             "HTTP Response Message :  " + newDumpRequestConnection.getResponseMessage());
 
-                requestMessage.close();
-        }
-        catch(Exception ex){
-            logger.severe(ex.toString());
+            requestMessage.close();
+        } catch(MalformedURLException mue){
+            logger.severe(mue.toString());
         }
     }
 
