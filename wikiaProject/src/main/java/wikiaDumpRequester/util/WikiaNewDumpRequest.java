@@ -3,17 +3,15 @@ package wikiaDumpRequester.util;
 import wikiaStatistics.util.WikiaStatisticsTools;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Logger;
 
 
-
 public class WikiaNewDumpRequest {
 
-    private static Logger logger = Logger.getLogger(WikiaStatisticsTools.class.getName());
+    private static Logger logger = Logger.getLogger(WikiaNewDumpRequest.class.getName());
 
     /**
      * This method requests a dump for the given URL.

@@ -19,10 +19,12 @@ public class WikiaUser {
     private String userPassword;
     private static Logger logger = Logger.getLogger(WikiaStatisticsTools.class.getName());
 
+
     public WikiaUser(String userName, String userPassword){
         this.userName=userName;
         this.userPassword=userPassword;
     }
+
 
     public String getUserName(){
         return this.userName;
@@ -52,12 +54,12 @@ public class WikiaUser {
         BufferedReader responseMessageReader=null;
 
         try {
-
             //Intialize URL
             accessTokenRequestURL = new URL(accessTokenURL);
 
             //get connection
             accessTokenRequestConnection = accessTokenRequestURL.openConnection();
+//            accessTokenRequestConnection.setConnectTimeout(600000);
 
             accessTokenRequestConnection.setDoOutput(true);
 

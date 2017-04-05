@@ -10,12 +10,10 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
-/**
- * Created by D060249 on 04.04.2017.
- */
+
 public class WikiaDumpDownloadExecutor {
 
-    private static Logger logger = Logger.getLogger("WikiaDumpRequesterApplication");
+    private static Logger logger = Logger.getLogger(WikiaDumpDownloadExecutor.class.getName());
 
     private static ArrayList<String> urlsThatDidNotWork;
 
