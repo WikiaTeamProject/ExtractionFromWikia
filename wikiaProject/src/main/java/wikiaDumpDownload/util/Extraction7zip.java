@@ -1,6 +1,6 @@
 package wikiaDumpDownload.util;
 
 
-public class extraction7zip {
+public class Extraction7zip {
 
 }
