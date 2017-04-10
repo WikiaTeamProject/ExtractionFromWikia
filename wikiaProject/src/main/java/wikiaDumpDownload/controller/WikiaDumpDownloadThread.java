@@ -272,7 +272,7 @@ public class WikiaDumpDownloadThread implements Runnable {
                 downloadedFiles++;
 
                 // comment in if you want do actually download the files
-//                saveFile(connection, pathToRemoteFile);
+                saveFile(connection, pathToRemoteFile);
 
                 // closing streams
                 connection.getInputStream().close();
