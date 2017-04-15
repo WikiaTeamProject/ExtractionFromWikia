@@ -8,7 +8,7 @@ public class WikiaDumpRequesterApplication {
 
 
     public static void main(String[] args) {
-        WikiaDumpDownloadExecutor.requestDumpsForAllWikis(3);
+        WikiaDumpDownloadExecutor.requestDumpsForAllWikis();
     }
 
 

@@ -12,7 +12,6 @@ import java.util.logging.Logger;
 public class WikiaDumpDownloadThreadImpl  {
 
     private static Logger logger = Logger.getLogger(WikiaDumpDownloadThreadImpl.class.getName());
-
     private static Thread[] threads = new Thread[40];
 
 

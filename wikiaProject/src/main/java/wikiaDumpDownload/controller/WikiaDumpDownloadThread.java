@@ -37,6 +37,8 @@ public class WikiaDumpDownloadThread implements Runnable {
     private File dumpsDownloadedgz;
     private File dumpsDownloaded7z;
     private String dumpSizeFilePath;
+    private static int totalNumberOfFilesProcessed = 0; // class counter to output progress
+    private static int totalNumberOfFilesToBeProcessed = 0; // class variable
 
     private static final String[] REGEX = {"http:.*current\\.xml\\.gz", "http:.*current\\.xml\\.7z"}; // unmasked regex "http:.*current\.xml\.7z"
 
@@ -47,6 +49,28 @@ public class WikiaDumpDownloadThread implements Runnable {
      * @param pathToReadFrom
      */
     private WikiaDumpDownloadThread(boolean downloadAllWikis, String pathToReadFrom) {
+
+        // initialize static counter to display progress
+        if(totalNumberOfFilesToBeProcessed == 0) {
+            String directoryPath = ResourceBundle.getBundle("config").getString("directory");
+            String filePath = directoryPath + "/wikiaAllOverview.csv";
+            File f = new File(filePath);
+
+            // make sure that the file exists
+            if(f.exists()){
+                try {
+                    LineNumberReader lnr = new LineNumberReader(new FileReader(f));
+                    lnr.skip(Long.MAX_VALUE);
+
+                    // set the total number of lines
+                    totalNumberOfFilesToBeProcessed = lnr.getLineNumber(); //Add 1 because line index starts at 0
+                    lnr.close();
+                } catch (IOException ioe){
+                    System.out.println(ioe);
+                }
+            }
+        }
+
         this.pathToReadFrom = pathToReadFrom;
         this.downloadAllWikis = downloadAllWikis;
 
@@ -121,7 +145,7 @@ public class WikiaDumpDownloadThread implements Runnable {
      * Retrieve URLs from csv files with wikis
      *
      * @param filePath
-     * @return
+     * @return an array list with all urls to the statistics pages of all wikia wikis
      */
     public ArrayList<String> getUrls(String filePath) {
         LineNumberReader fileReader;
@@ -211,6 +235,8 @@ public class WikiaDumpDownloadThread implements Runnable {
                 logger.info("No wikia dump exists for wiki: " + url);
                 buffer.append(url + ";-" + "\n");
             }
+
+            System.out.println(++totalNumberOfFilesProcessed + " out of " + totalNumberOfFilesToBeProcessed + " processed.");
 
             // close stream
             urlReader.close();
