@@ -1,6 +1,7 @@
 package utils;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.ArrayList;
 
 /**
@@ -26,8 +27,16 @@ public class Utils {
      *
      * @param filePath
      */
-    public static void createDirectory(String filePath) {
-
+    public static File createDirectory(String filePath) {
+        File file = new File(filePath);
+        if (!file.isDirectory()) {
+            try {
+                Files.createDirectory(file.toPath());
+            } catch (IOException e) {
+                throw new RuntimeException();
+            }
+        }
+        return file;
     }
 
 
