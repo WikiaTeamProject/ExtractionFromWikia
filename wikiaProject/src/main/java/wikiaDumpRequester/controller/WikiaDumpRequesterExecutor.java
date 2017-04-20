@@ -11,9 +11,9 @@ import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 
-public class WikiaDumpDownloadExecutor {
+public class WikiaDumpRequesterExecutor {
 
-    private static Logger logger = Logger.getLogger(WikiaDumpDownloadExecutor.class.getName());
+    private static Logger logger = Logger.getLogger(WikiaDumpRequesterExecutor.class.getName());
     private static ArrayList<String> urlsThatDidNotWork;
 
 
