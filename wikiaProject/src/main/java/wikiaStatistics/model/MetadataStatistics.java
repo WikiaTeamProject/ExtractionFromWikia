@@ -10,6 +10,12 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.PrintWriter;
+import java.util.HashMap;
+
 /**
  * This class represents a statistics object with various information.
  */
@@ -137,4 +143,88 @@ public class MetadataStatistics {
 
         this.setLanguageCounts(limitedLanguages);
     }
+
+
+    /**
+     *
+     * @param wikisFilePath
+     */
+
+    public void extractLanguageCodeForAllWikis(String wikisFilePath) {
+        try {
+            File wikisFilesFolder = new File(wikisFilePath);
+
+            //get list of wikis in a folder
+            File[] listOfFiles = wikisFilesFolder.listFiles();
+
+
+            //result variable
+            String wikisLanguageCode = "";
+
+            //intialize header for CSV file
+            wikisLanguageCode += "Wikia_Name,Language_Codes" + "\n";
+
+
+            for (int i = 0; i < listOfFiles.length; i++) {
+
+                if (listOfFiles[i].isFile()) {
+
+                    String line = "";
+                    String fileContents = "";
+                    String languageCode = "";
+                    int lineNumber = 0;
+
+
+                    FileReader fr = new FileReader(listOfFiles[i].getAbsolutePath());
+                    BufferedReader br = new BufferedReader(fr);
+
+                    while ((line = br.readLine()) != null && lineNumber <= 10) {
+
+                        fileContents += line;
+                        lineNumber++;
+
+                    }
+
+
+                    languageCode = fileContents.substring(fileContents.indexOf("xml:lang=") + 10, fileContents.indexOf(">", fileContents.indexOf("xml:lang=") + 10) - 1);
+
+                    //System.out.println(listOfFiles[i].getName() + "," + language_code);
+
+                    wikisLanguageCode += listOfFiles[i].getName() + "," + languageCode + "\n";
+
+                    br.close();
+                    fr.close();
+
+                }
+            }
+        } catch (Exception exception) {
+            logger.log(Level.SEVERE, exception.getMessage());
+        }
+    }
+
+    /**
+     *
+     * @param fileContents
+     */
+    public void writeResultToFile(String fileContents){
+
+        String directoryPath = ResourceBundle.getBundle("config").getString("directory");
+        String filePath = directoryPath + "/wikislanguages.csv";
+
+        try{
+            //Initialize file Writer Objects
+            PrintWriter fileWriter = new PrintWriter(filePath, "UTF-8");
+
+            //Write contents to file
+            fileWriter.write(fileContents);
+
+            //Close file Writer
+            fileWriter.close();
+        }
+        catch(Exception exception){
+
+            logger.log(Level.SEVERE, exception.getMessage());
+        }
+    }
+
 }
