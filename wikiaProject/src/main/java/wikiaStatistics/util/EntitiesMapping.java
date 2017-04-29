@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,11 +22,15 @@ public class EntitiesMapping {
      * @param pathToExtractedFiles
      */
     public void extractWikiaDbpediaEntitiesMapping(String pathToExtractedFiles){
+
+
+        String targetNameSpace= ResourceBundle.getBundle("config").getString("targetnamespace");
+
+        HashSet<String> entitiesMapping=new HashSet<String>();
+
         try{
 
             File extractedFilesPath = new File(pathToExtractedFiles);
-
-            String targetNameSpace= ResourceBundle.getBundle("config").getString("targetnamespace");
 
             //get list of extracted files in a folder
             File[] listOfFiles = extractedFilesPath.listFiles();
@@ -50,7 +56,9 @@ public class EntitiesMapping {
                         if(!line.trim().toLowerCase().startsWith("#") || !line.trim().toLowerCase().startsWith("#")) {
                             dbPediaNameSpace = line.trim().substring(0, line.indexOf(" "));
 
-                            mappingFileContents += dbPediaNameSpace.replace("dbpedia.org", targetNameSpace) + "<owl:As>" + dbPediaNameSpace + "\n";
+                            mappingFileContents = dbPediaNameSpace.replace("dbpedia.org", targetNameSpace) + "<owl:As>" + dbPediaNameSpace + "\n";
+
+                            entitiesMapping.add(mappingFileContents);
                         }
 
                     }
@@ -62,7 +70,7 @@ public class EntitiesMapping {
 
 
             //Write Contents to Mapping File
-            writeContentsToMappingFile(mappingFileContents);
+            writeContentsToMappingFile(entitiesMapping);
 
         }
         catch(Exception exception){
@@ -70,24 +78,27 @@ public class EntitiesMapping {
         }
     }
 
-
-
     /**
      *
-     * @param fileContents
+     * @param entitiesMapping
      */
-    public void writeContentsToMappingFile(String fileContents){
+    public void writeContentsToMappingFile(HashSet<String> entitiesMapping){
 
         String directoryPath = ResourceBundle.getBundle("config").getString("directory");
         String mappingFileName=ResourceBundle.getBundle("config").getString("mappingfilename");
         String filePath = directoryPath + "/"+mappingFileName;
+        Iterator<String> entitiesMappingIterator;
 
         try{
             //Initialize file Writer Objects
             PrintWriter fileWriter = new PrintWriter(filePath, "UTF-8");
 
-            //Write contents to file
-            fileWriter.write(fileContents);
+            entitiesMappingIterator=entitiesMapping.iterator();
+
+            while(entitiesMappingIterator.hasNext()) {
+                //Write contents to file
+                fileWriter.write(entitiesMappingIterator.next());
+            }
 
             //Close file Writer
             fileWriter.close();
