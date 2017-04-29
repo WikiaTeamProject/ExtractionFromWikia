@@ -8,8 +8,10 @@ public class WikiaDumpRequesterApplication {
 
 
     public static void main(String[] args) {
+        //System.setProperty("http.proxyHost", "proxy.wdf.sap.corp");
+        //System.setProperty("http.proxyPort", "8080");
 
-        WikiaDumpRequesterExecutor.requestDumpsForAllWikis(1);
+        WikiaDumpRequesterExecutor.requestDumpsForAllWikis(200000);
 
     }
 
