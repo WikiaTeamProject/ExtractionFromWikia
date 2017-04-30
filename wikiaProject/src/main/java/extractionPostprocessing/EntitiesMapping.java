@@ -1,4 +1,6 @@
-package wikiaStatistics.util;
+package extractionPostprocessing;
+
+import wikiaStatistics.util.WikiaStatisticsTools;
 
 import java.io.BufferedReader;
 import java.io.File;
