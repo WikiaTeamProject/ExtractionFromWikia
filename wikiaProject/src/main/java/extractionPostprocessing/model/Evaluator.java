@@ -5,13 +5,14 @@ package extractionPostprocessing.model;
  */
 public class Evaluator {
 
-    private double falseNegatives;
-    private double falsePositives;
-    private double truePositives;
-    private double trueNegatives;
+    private int falseNegatives;
+    private int falsePositives;
+    private int truePositives;
+    private int trueNegatives;
 
-    public Evaluator(double falseNegatives,double falsePositives,
-                     double truePositives,double trueNegatives){
+
+    public Evaluator(int falseNegatives,int falsePositives,
+                     int truePositives,int trueNegatives){
 
         this.falseNegatives=falseNegatives;
         this.falsePositives=falsePositives;
@@ -20,34 +21,34 @@ public class Evaluator {
 
     }
 
-    public double getFalseNegatives(){
+    public int getFalseNegatives(){
         return this.falseNegatives;
     }
 
-    public double getFalsePositives(){
+    public int getFalsePositives(){
         return this.falsePositives;
     }
 
-    public double getTruePositives(){
+    public int getTruePositives(){
         return this.truePositives;
     }
-    public double getTrueNegatives(){
-        return this.trueNegatives;
-    }
 
-    public void setFalseNegatives(double falseNegatives ){
+    public int getTrueNegatives(){
+        return this.trueNegatives;}
+
+    public void setFalseNegatives(int falseNegatives ){
         this.falseNegatives=falseNegatives;
     }
 
-    public void setFalsePositives(double falsePositives){
+    public void setFalsePositives(int falsePositives){
         this.falsePositives=falsePositives;
     }
 
-    public void setTruePositives(double truePositives){
+    public void setTruePositives(int truePositives){
         this.truePositives=truePositives;
     }
 
-    public void setTrueNegatives(double trueNegatives){
+    public void setTrueNegatives(int trueNegatives){
         this.trueNegatives=trueNegatives;
     }
 
