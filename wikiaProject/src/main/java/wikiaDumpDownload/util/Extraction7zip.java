@@ -21,19 +21,21 @@ public class Extraction7zip {
      */
     public Extraction7zip() {
         directoryPath = ResourceBundle.getBundle("config").getString("directory");
-        directoryExtracted = directoryPath + "/wikiaDumps/downloaded/extracted7z";
+        directoryExtracted = directoryPath + "/wikiaDumps/extracted7z";
         Utils.createDirectory(directoryExtracted);
     }
 
 
     /**
      * Receives a filepath of a 7zip file as input string and extracts it into the wikiaDumps/extracted7z folder
-     * @param fileName fileName of 7Zip file to extract
+     * @param compressedFile 7Zip file to extract.
      * @return true if extraction was successful, else false.
      */
-    public boolean extract7ZipFile(String fileName) {
+    public boolean extract7ZipFile(File compressedFile) {
 
         try {
+
+            String fileName = compressedFile.getAbsolutePath();
 
             // make sure the file really is a .7z file:
             if(! (fileName.endsWith(".7z")) ){
@@ -41,16 +43,20 @@ public class Extraction7zip {
                 return false;
             }
 
-            SevenZFile sevenZFile = new SevenZFile(new File(fileName));
+            SevenZFile sevenZFile = new SevenZFile(compressedFile);
             SevenZArchiveEntry zipContents = sevenZFile.getNextEntry();
             File extractedFile=null;
             FileOutputStream fileStream=null;
             byte[] extractedFileContents=null;
+            String extractedFileName="";
 
             while (zipContents != null) {
-                String extractedFileName = fileName.substring(0,fileName.indexOf(".7z"));
+                extractedFileName = fileName.substring(0,fileName.indexOf(".7z"));
+
+                // a windows user requires the \\
+                // if this is different on a mac, write an if condition but do not just change the Strings!
                 extractedFile = new File(extractedFileName.replace("\\wikiaDumps\\downloaded\\7z\\",
-                                                                   "\\wikiaDumps\\downloaded\\extracted7z\\"));
+                                                                   "\\wikiaDumps\\extracted7z\\"));
                 if (!extractedFile.exists()) {
                     extractedFile.createNewFile();
                 }
@@ -65,6 +71,7 @@ public class Extraction7zip {
             }
             sevenZFile.close();
 
+            logger.info("File saved: " + extractedFileName);
             logger.info("The file was extracted successfully.");
             return true;
         }
@@ -74,6 +81,16 @@ public class Extraction7zip {
         }
 
     }
+
+    /**
+     * Extracts a 7zip file.
+     * @param pathToFile Path to the file to be compressed.
+     * @return true if extraction was successful, else false.
+     */
+    public boolean extract7ZipFile(String pathToFile){
+        return extract7ZipFile(new File(pathToFile));
+    }
+
 
     /**
      * Unzips all 7zip files of the wikiaDumps/downloaded/7zip folder into the wikiaDumps/extracted7z folder
