@@ -6,16 +6,21 @@
 .DS_Store
 
 # target folder
-/wikiaProject/target/
+/wikiaProject/target/*
 
 # exclude latest overview of wikia wikis metadata, only save locally
-/wikiaProject/src/main/resources/files/*
-
-# include language codes
-!/wikiaProject/src/main/resources/files/wikiaLanguageCodes.csv
+/wikiaProject/src/main/resources/files/wikiaDumps/*
+/wikiaProject/src/main/resources/files/wikiaOverviewIndividualDumpSizes/*
+/wikiaProject/src/main/resources/files/wikiaOverviewIndividualFiles/*
 
 # exclude the properties file for reasons of security (passwords etc.)
 *.properties
 
-# include properties template
+# exclude csv files
+*.csv
+
+# include language codes
+!/wikiaProject/src/main/resources/files/wikiaLanguageCodes.csv
+
+# include templates
 !/wikiaProject/src/main/resources/files/templates/template_extraction_default.properties
