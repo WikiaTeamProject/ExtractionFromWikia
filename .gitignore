@@ -16,3 +16,6 @@
 
 # exclude the properties file for reasons of security (passwords etc.)
 *.properties
+
+# include properties template
+!/wikiaProject/src/main/resources/files/templates/template_extraction_default.properties
