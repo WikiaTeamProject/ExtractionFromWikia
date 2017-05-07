@@ -11,7 +11,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by Jan Portisch on 29.04.2017.
  * This class can extract bz2 files.
  */
 public class ExtractionBz2 {
