@@ -1,6 +1,10 @@
 package extractionPostprocessing;
 
+import extractionPostprocessing.util.MappingsEvaluation;
 import utils.ExtractionBz2;
+
+import java.io.File;
+import java.util.ResourceBundle;
 
 
 public class ExtractionPostprocessingApplication {
@@ -22,6 +26,26 @@ public class ExtractionPostprocessingApplication {
 
         ExtractionBz2.extractExtractorResultFiles(testFile3, newFile3);
          **/
+
+        String pathToRootDirectory = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
+        File root = new File(pathToRootDirectory);
+
+        if (root.isDirectory()) {
+            for (File directory : root.listFiles()) {
+                if (directory.isDirectory()) {
+
+                    // unzip all bz2 files
+                    ExtractionBz2.extractExtractorResultFiles(directory.getAbsolutePath(), directory.getAbsolutePath());
+                }
+            }
+        }
+
+        // create one mapping file out of all extracted files for each wiki
+        EntitiesMapping.extractAllWikiaDbpediaEntitiesMapping();
+
+        // evaluate manual mappings with created mappings
+        MappingsEvaluation.evaluateAllMappings();
+
 
     }
 

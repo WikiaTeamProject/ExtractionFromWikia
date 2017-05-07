@@ -23,7 +23,7 @@ public class Extractor {
     private String extractionDefaultPropertiesFilePath;
 
 
-    public Extractor(){
+    public Extractor() {
 
         // get the path to the dbpedia extraction framework
         String filepath = ResourceBundle.getBundle("config").getString("pathToExtractionFramework");
@@ -38,9 +38,9 @@ public class Extractor {
 
 
     /**
-     * Method creates the required file strucutre for the extraction.
+     * Method creates the required file structure for the extraction.
      */
-    private void createExtractionFileStructureForWiki(File wikiFile){
+    private void createExtractionFileStructureForWiki(File wikiFile) {
 
     }
 
@@ -49,7 +49,7 @@ public class Extractor {
      * @see Extractor#createExtractionFileStructureForWiki(File)
      * @param pathToWiki
      */
-    private void createExtractionFileStructureForWiki(String pathToWiki){
+    private void createExtractionFileStructureForWiki(String pathToWiki) {
         createExtractionFileStructureForWiki(new File(pathToWiki));
     }
 
@@ -57,7 +57,7 @@ public class Extractor {
     /**
      * Method will generate a properties file and save it within the dbpedia extraction framework
      */
-    private void generateAndSavePropertiesFile(String baseDirectory, String source){
+    private void generateAndSavePropertiesFile(String baseDirectory, String source) {
         // TODO: Implement
     }
 
@@ -70,10 +70,10 @@ public class Extractor {
     private boolean checkPrerequisites(){
 
         // check if path to dbpedia extraction framework is valid
-        if(extractionFrameworkDirectory.exists()){
+        if (extractionFrameworkDirectory.exists()) {
 
             // check whether specified path is a directory
-            if(!extractionFrameworkDirectory.isDirectory()){
+            if (!extractionFrameworkDirectory.isDirectory()) {
                 logger.severe("Filepath to dbpedia extraction framework is not a directory!" +
                                     "Link to the root directory!");
                 return false;
