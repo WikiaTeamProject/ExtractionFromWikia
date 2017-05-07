@@ -21,26 +21,36 @@ public class Extraction7zip {
      */
     public Extraction7zip() {
         directoryPath = ResourceBundle.getBundle("config").getString("directory");
-        directoryExtracted = directoryPath + "/wikiaDumps/extracted7z";
+        directoryExtracted = directoryPath + "\\wikiaDumps\\extracted7z\\";
         Utils.createDirectory(directoryExtracted);
     }
 
 
     /**
-     * Receives a filepath of a 7zip file as input string and extracts it into the wikiaDumps/extracted7z folder
-     * @param compressedFile 7Zip file to extract.
-     * @return true if extraction was successful, else false.
+     * Extracts the specified .7z file to the target directory.
+     * @param compressedFile The compressed file.
+     * @param targetDirectory The directory where the extracted file is to be saved.
+     * @return
      */
-    public boolean extract7ZipFile(File compressedFile) {
-
+    public boolean extract7ZipFile(File compressedFile, File targetDirectory){
         try {
 
-            String fileName = compressedFile.getAbsolutePath();
+            String fileName = compressedFile.getName();
 
             // make sure the file really is a .7z file:
             if(! (fileName.endsWith(".7z")) ){
                 logger.severe("Not a .7z file.");
                 return false;
+            }
+
+            // make sure the target directory exists
+            if(targetDirectory.exists()){
+                if(!targetDirectory.isDirectory()){
+                    logger.severe("Target directory not a directory.");
+                    return false;
+                }
+            } else {
+                targetDirectory.mkdir();
             }
 
             SevenZFile sevenZFile = new SevenZFile(compressedFile);
@@ -55,8 +65,7 @@ public class Extraction7zip {
 
                 // a windows user requires the \\
                 // if this is different on a mac, write an if condition but do not just change the Strings!
-                extractedFile = new File(extractedFileName.replace("\\wikiaDumps\\downloaded\\7z\\",
-                                                                   "\\wikiaDumps\\extracted7z\\"));
+                extractedFile = new File(targetDirectory.getPath() + "\\" + extractedFileName);
                 if (!extractedFile.exists()) {
                     extractedFile.createNewFile();
                 }
@@ -72,14 +81,38 @@ public class Extraction7zip {
             sevenZFile.close();
 
             logger.info("File saved: " + extractedFileName);
-            logger.info("The file was extracted successfully.");
+            logger.info("The file was extracted successfully as " + extractedFile.getAbsolutePath() + ".");
             return true;
         }
         catch(Exception ex){
             logger.severe("The file could not be downloaded. " + ex.toString());
             return false;
         }
+    }
 
+    // convenience overload
+    public boolean extract7ZipFile(String compressedFile, String targetDirectory) {
+        return extract7ZipFile(new File(compressedFile), new File(targetDirectory));
+    }
+
+    // convenience overload
+    public boolean extract7ZipFile(File compressedFile, String targetDirectory) {
+        return extract7ZipFile(compressedFile, new File(targetDirectory));
+    }
+
+    // convenience overload
+    public boolean extract7ZipFile(String compressedFile, File targetDirectory) {
+        return extract7ZipFile(new File(compressedFile), targetDirectory);
+    }
+
+
+    /**
+     * Receives a filepath of a 7zip file as input string and extracts it into the wikiaDumps/extracted7z folder
+     * @param compressedFile 7Zip file to extract.
+     * @return true if extraction was successful, else false.
+     */
+    public boolean extract7ZipFileIntoDesignatedFolder(File compressedFile) {
+        return extract7ZipFile(compressedFile, new File(directoryExtracted));
     }
 
     /**
@@ -87,8 +120,8 @@ public class Extraction7zip {
      * @param pathToFile Path to the file to be compressed.
      * @return true if extraction was successful, else false.
      */
-    public boolean extract7ZipFile(String pathToFile){
-        return extract7ZipFile(new File(pathToFile));
+    public boolean extract7ZipFileIntoDesignatedFolder(String pathToFile){
+        return extract7ZipFileIntoDesignatedFolder(new File(pathToFile));
     }
 
 
@@ -96,13 +129,13 @@ public class Extraction7zip {
      * Unzips all 7zip files of the wikiaDumps/downloaded/7zip folder into the wikiaDumps/extracted7z folder
      *
      */
-    public void extractAll7ZipFiles() {
+    public void extractAll7ZipFilesIntoDesignatedFolder() {
         String folder7z = directoryPath + "/wikiaDumps/downloaded/7z";
         File folder = new File(folder7z);
 
         for (File file7z : folder.listFiles()) {
             logger.info("Extraction for following 7z file is started: " + file7z.getAbsolutePath());
-            extract7ZipFile(file7z.getAbsolutePath());
+            extract7ZipFileIntoDesignatedFolder(file7z.getAbsolutePath());
         }
     }
 

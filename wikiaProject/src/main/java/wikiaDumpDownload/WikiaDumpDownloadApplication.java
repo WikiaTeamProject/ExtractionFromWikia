@@ -19,7 +19,7 @@ public class WikiaDumpDownloadApplication {
 //        WikiaDumpDownloadThreadImpl.downloadWikiaDumps();
 
         Extraction7zip extractor = new Extraction7zip();
-        extractor.extractAll7ZipFiles();
+        extractor.extractAll7ZipFilesIntoDesignatedFolder();
 
     }
 
