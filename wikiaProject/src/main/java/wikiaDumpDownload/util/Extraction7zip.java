@@ -21,7 +21,7 @@ public class Extraction7zip {
      */
     public Extraction7zip() {
         directoryPath = ResourceBundle.getBundle("config").getString("directory");
-        directoryExtracted = directoryPath + "\\wikiaDumps\\extracted7z\\";
+        directoryExtracted = directoryPath + "/wikiaDumps/extracted7z/";
         Utils.createDirectory(directoryExtracted);
     }
 
@@ -63,9 +63,7 @@ public class Extraction7zip {
             while (zipContents != null) {
                 extractedFileName = fileName.substring(0,fileName.indexOf(".7z"));
 
-                // a windows user requires the \\
-                // if this is different on a mac, write an if condition but do not just change the Strings!
-                extractedFile = new File(targetDirectory.getPath() + "\\" + extractedFileName);
+                extractedFile = new File(targetDirectory.getPath() + "/" + extractedFileName);
                 if (!extractedFile.exists()) {
                     extractedFile.createNewFile();
                 }
