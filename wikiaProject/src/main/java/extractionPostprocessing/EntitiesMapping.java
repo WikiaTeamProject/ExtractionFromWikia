@@ -71,9 +71,11 @@ public class EntitiesMapping {
                         if (!line.trim().toLowerCase().startsWith("#") || !line.trim().toLowerCase().startsWith("#")) {
                             dbPediaNameSpace = line.trim().substring(0, line.indexOf(" "));
 
-                            mappingFileContents = dbPediaNameSpace.replace("dbpedia.org", targetNameSpace) + "<owl:As>" + dbPediaNameSpace + "\n";
+                            if(!dbPediaNameSpace.toLowerCase().contains("wikipedia.org")) {
+                                mappingFileContents = dbPediaNameSpace.replace("dbpedia.org", targetNameSpace) + "<owl:As>" + dbPediaNameSpace + "\n";
 
-                            entitiesMapping.add(mappingFileContents);
+                                entitiesMapping.add(mappingFileContents);
+                            }
                         }
 
                     }
