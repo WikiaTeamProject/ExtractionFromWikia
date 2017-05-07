@@ -1,7 +1,5 @@
 package extractionPostprocessing;
 
-import wikiaStatistics.util.WikiaStatisticsTools;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -12,12 +10,10 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Created by Samresh Kumar on 4/28/2017.
- */
+
 public class EntitiesMapping {
 
-    private static Logger logger = Logger.getLogger(WikiaStatisticsTools.class.getName());
+    private static Logger logger = Logger.getLogger(EntitiesMapping.class.getName());
 
     /**
      *

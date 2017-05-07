@@ -15,11 +15,10 @@ import java.util.logging.Logger;
  * - The wikia wikis that shall be extracted were already downloaded and can be found in
  *   /src/main/resources/files/wikiDumps.downloaded
  *
- * Created by Jan Portisch on 04.05.2017.
  */
 public class Extractor {
 
-    private Logger logger = Logger.getLogger(Extractor.class.getName());
+    private static Logger logger = Logger.getLogger(Extractor.class.getName());
     private File extractionFrameworkDirectory;
     private String extractionDefaultPropertiesFilePath;
 

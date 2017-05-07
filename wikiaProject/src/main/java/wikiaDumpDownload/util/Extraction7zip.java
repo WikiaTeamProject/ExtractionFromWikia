@@ -6,7 +6,7 @@ import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
-import utils.Utils;
+import utils.FileOperations;
 
 
 public class Extraction7zip {
@@ -22,7 +22,7 @@ public class Extraction7zip {
     public Extraction7zip() {
         directoryPath = ResourceBundle.getBundle("config").getString("directory");
         directoryExtracted = directoryPath + "/wikiaDumps/extracted7z/";
-        Utils.createDirectory(directoryExtracted);
+        FileOperations.createDirectory(directoryExtracted);
     }
 
 

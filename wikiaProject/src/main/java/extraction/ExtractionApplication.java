@@ -11,7 +11,6 @@ package extraction;
  * - The wikia wikis that shall be extracted were already downloaded and can be found in
  *   /src/main/resources/files/wikiDumps.downloaded
  *
- * Created by Jan Portisch on 04.05.2017.
  */
 public class ExtractionApplication {
 

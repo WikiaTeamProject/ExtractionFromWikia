@@ -1,6 +1,6 @@
 package wikiaDumpRequester.controller;
 
-import utils.Utils;
+import utils.FileOperations;
 import wikiaDumpRequester.model.WikiaUser;
 import wikiaDumpRequester.util.WikiaNewDumpRequest;
 
@@ -39,7 +39,7 @@ public class WikiaDumpRequesterExecutor {
                          + "\nPassword: " + ResourceBundle.getBundle("config").getString("password"));
 
         WikiaNewDumpRequest requester = new WikiaNewDumpRequest();
-        ArrayList<String> urls = Utils.getUrls(filepath);
+        ArrayList<String> urls = FileOperations.getUrls(filepath);
 
         String token = user.getAccessToken();
         logger.info("Token: " + token);

@@ -2,9 +2,7 @@ package extractionPostprocessing;
 
 import utils.ExtractionBz2;
 
-/**
- * Created by Jan Portisch on 29.04.2017.
- */
+
 public class ExtractionPostprocessingApplication {
 
     public static void main(String[] args) {

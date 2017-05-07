@@ -1,8 +1,6 @@
 package extractionPostprocessing.model;
 
-/**
- * Created by Samresh Kumar on 5/1/2017.
- */
+
 public class Evaluator {
 
     private int falseNegatives;
@@ -14,10 +12,10 @@ public class Evaluator {
     public Evaluator(int falseNegatives,int falsePositives,
                      int truePositives,int trueNegatives){
 
-        this.falseNegatives=falseNegatives;
-        this.falsePositives=falsePositives;
-        this.truePositives=truePositives;
-        this.trueNegatives=trueNegatives;
+        this.falseNegatives = falseNegatives;
+        this.falsePositives = falsePositives;
+        this.truePositives = truePositives;
+        this.trueNegatives = trueNegatives;
 
     }
 
@@ -33,47 +31,48 @@ public class Evaluator {
         return this.truePositives;
     }
 
-    public int getTrueNegatives(){
-        return this.trueNegatives;}
+    public int getTrueNegatives() {
+        return this.trueNegatives;
+    }
 
-    public void setFalseNegatives(int falseNegatives ){
-        this.falseNegatives=falseNegatives;
+    public void setFalseNegatives(int falseNegatives){
+        this.falseNegatives = falseNegatives;
     }
 
     public void setFalsePositives(int falsePositives){
-        this.falsePositives=falsePositives;
+        this.falsePositives = falsePositives;
     }
 
     public void setTruePositives(int truePositives){
-        this.truePositives=truePositives;
+        this.truePositives = truePositives;
     }
 
     public void setTrueNegatives(int trueNegatives){
-        this.trueNegatives=trueNegatives;
+        this.trueNegatives = trueNegatives;
     }
 
-    public double getPrecision(){
-        if((this.truePositives+this.falsePositives)==0)
+    public double getPrecision() {
+        if ((this.truePositives + this.falsePositives) == 0)
             return this.truePositives;
         else
-            return this.truePositives/(this.truePositives+this.falsePositives);
+            return this.truePositives / (this.truePositives + this.falsePositives);
     }
 
-    public double getRecall(){
-        if((this.truePositives+this.falseNegatives)==0)
+    public double getRecall() {
+        if ((this.truePositives + this.falseNegatives) == 0)
             return this.truePositives;
         else
-            return this.truePositives/(this.truePositives+this.falseNegatives);
+            return this.truePositives / (this.truePositives + this.falseNegatives);
     }
 
-    public double fMeasure(){
-        double precision=this.getPrecision();
-        double recall=this.getRecall();
+    public double fMeasure() {
+        double precision = this.getPrecision();
+        double recall = this.getRecall();
 
-        if((precision+recall)==0)
-            return (2*precision*recall);
+        if ((precision+recall) == 0)
+            return (2 * precision * recall);
         else
-            return (2*precision*recall)/(precision+recall);
+            return (2 * precision * recall) / (precision + recall);
 
     }
 

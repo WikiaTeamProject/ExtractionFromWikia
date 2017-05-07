@@ -8,7 +8,7 @@ import java.util.ArrayList;
  *
  * This class includes general util methods usable in all packages.
  */
-public class Utils {
+public class FileOperations {
 
     /**
      * This method receives an array of file paths and merges the files into the specified target file
@@ -17,7 +17,7 @@ public class Utils {
      * @param targetFile
      */
     public static void mergeFiles(ArrayList<String> filePaths, String targetFile) {
-
+        // TODO: implement and use!
     }
 
 
