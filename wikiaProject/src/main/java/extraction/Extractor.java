@@ -52,6 +52,8 @@ public class Extractor {
      */
     private void createExtractionFileStructureForWiki(File wikiFile) {
 
+//        TODO: think about commons wiki
+
     }
 
     /**
