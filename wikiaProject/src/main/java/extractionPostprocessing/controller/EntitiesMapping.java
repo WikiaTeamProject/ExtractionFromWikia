@@ -1,4 +1,4 @@
-package extractionPostprocessing;
+package extractionPostprocessing.controller;
 
 import java.io.BufferedReader;
 import java.io.File;
