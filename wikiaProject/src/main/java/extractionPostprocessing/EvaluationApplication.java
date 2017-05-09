@@ -1,11 +1,6 @@
 package extractionPostprocessing;
 
-import extractionPostprocessing.controller.EntitiesMapping;
 import extractionPostprocessing.controller.MappingsEvaluation;
-import utils.ExtractionBz2;
-
-import java.io.File;
-import java.util.ResourceBundle;
 
 
 public class EvaluationApplication {
