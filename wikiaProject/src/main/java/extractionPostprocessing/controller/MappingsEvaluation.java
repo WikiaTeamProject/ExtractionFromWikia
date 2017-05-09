@@ -61,11 +61,28 @@ public class MappingsEvaluation {
         String dbPediaMappingFileName = ResourceBundle.getBundle("config").getString("mappingfilename");
         String manualMappingFileName = ResourceBundle.getBundle("config").getString("manualmappingfilename");
 
-        File mapping = new File(wikiPath + "/" + dbPediaMappingFileName);
-        File manualMapping = new File(wikiPath + "/" + manualMappingFileName);
+        File mappingFile = new File(wikiPath + "/" + dbPediaMappingFileName);
+        File manualMappingFile = new File(wikiPath + "/" + manualMappingFileName);
 
-        if (!mapping.exists() || !manualMapping.exists()) {
+        if (!mappingFile.exists()) {
             return null;
+        }
+
+        // if there is no manual mapping file with the name specified in the properties file use the file that ends
+        // with the specified name
+        if(!manualMappingFile.exists()){
+            // check whether there is a file ending with the specified name
+            File directory = new File(wikiPath);
+            if(directory.isDirectory()){
+                for (File f:directory.listFiles()) {
+                    if(f.getName().endsWith(manualMappingFileName)){
+                        manualMappingFile = f;
+                    }
+                }
+            } else {
+                // wikiPath is not a directory
+                return null;
+            }
         }
 
         int truePositives = 0;
@@ -75,8 +92,8 @@ public class MappingsEvaluation {
         int totalMapping = 0;
 
         try {
-            dbPediaMappings = ioHandler.getExtractorMappings(mapping);
-            manualMappings = ioHandler.getExtractorMappings(manualMapping);
+            dbPediaMappings = ioHandler.getExtractorMappings(mappingFile);
+            manualMappings = ioHandler.getExtractorMappings(manualMappingFile);
 
             for (String resource : manualMappings.keySet()) {
                 if (dbPediaMappings.containsKey(resource)) {
