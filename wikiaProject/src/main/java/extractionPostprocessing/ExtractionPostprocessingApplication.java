@@ -44,9 +44,6 @@ public class ExtractionPostprocessingApplication {
         // create one mapping file out of all extracted files for each wiki
         EntitiesMapping.extractAllWikiaDbpediaEntitiesMapping();
 
-        // evaluate manual mappings with created mappings
-        MappingsEvaluation.evaluateAllMappings();
-
 
     }
 
