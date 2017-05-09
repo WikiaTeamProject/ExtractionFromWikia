@@ -89,7 +89,7 @@ public class Evaluator {
     public double getAccuracy() {
 
         if (totalMappings != 0) {
-            return (double) truePositives / totalMappings * 100;
+            return ((double) truePositives / totalMappings) * 100;
         } else {
             return 0;
         }

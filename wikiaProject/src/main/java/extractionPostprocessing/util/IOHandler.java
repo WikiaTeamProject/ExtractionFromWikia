@@ -24,7 +24,7 @@ public class IOHandler {
         HashMap<String, String> dbPediaExtractorMappings = new HashMap<String, String>();
         BufferedReader bufferedReader;
         FileReader fileReader;
-        String fileLine, key, value;
+        String fileLine ="", key, value;
 
         try {
             fileReader = new FileReader(fileName);
@@ -39,7 +39,7 @@ public class IOHandler {
             bufferedReader.close();
             fileReader.close();
         } catch (Exception ex) {
-            logger.severe(ex.getMessage());
+            logger.severe("Problem with file " +  fileName.getAbsolutePath() + "\nwith line: " + fileLine + ex.getMessage());
         }
 
         return dbPediaExtractorMappings;

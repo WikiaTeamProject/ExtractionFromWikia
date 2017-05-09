@@ -8,7 +8,9 @@ import extractionPostprocessing.util.IOHandler;
 
 import java.util.logging.Logger;
 
-
+/**
+ *
+ */
 public class MappingsEvaluation {
 
     private static Logger logger = Logger.getLogger(MappingsEvaluation.class.getName());
@@ -20,11 +22,10 @@ public class MappingsEvaluation {
 
         double overallAccuracy = 0;
         int totalMappings = 0;
-        //HashMap<Double, Integer> weightedAccuracies = new HashMap<>();
         ArrayList<Evaluator> evaluationResults = new ArrayList<>();
         String pathToRootDirectory = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
-
         File root = new File(pathToRootDirectory);
+
         if (root.isDirectory()) {
             for (File directory : root.listFiles()) {
                 if (directory.isDirectory()) {
@@ -37,15 +38,18 @@ public class MappingsEvaluation {
                 }
             }
 
+            // get number of total mappings
             for (Evaluator e : evaluationResults) {
                 totalMappings += e.getTotalMappings();
-                overallAccuracy += e.getAccuracy() * ( e.getTotalMappings() / totalMappings );
             }
 
-/*            // calculate weighted accuracy by using mappings/totalMappings as weight
-            for (double accuracy : weightedAccuracies.keySet()) {
-                overallAccuracy += accuracy * weightedAccuracies.get(accuracy) / totalMappings;
-            }*/
+            for(Evaluator e : evaluationResults){
+                double e_accuracy = e.getAccuracy();
+                int e_totalMappings = e.getTotalMappings();
+                overallAccuracy += (e.getAccuracy() * ( (double) e.getTotalMappings() / totalMappings ));
+            }
+
+
 
         } else {
             logger.severe("pathToRootDirectory is not a directory!");
