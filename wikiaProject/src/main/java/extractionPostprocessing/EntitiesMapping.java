@@ -71,7 +71,12 @@ public class EntitiesMapping {
                     while ((line = br.readLine()) != null) {
 
                         if (!line.trim().toLowerCase().startsWith("#") || !line.trim().toLowerCase().startsWith("#")) {
-                            dbPediaNameSpace = line.trim().substring(0, line.indexOf(" "));
+                            try {
+                                dbPediaNameSpace = line.trim().substring(0, line.indexOf(" "));
+                            } catch(StringIndexOutOfBoundsException sioobe){
+                                logger.info("Exception in file " + listOfFiles[i].getAbsolutePath() + ": " + sioobe.toString());
+                                continue;
+                            }
 
                             if(!dbPediaNameSpace.toLowerCase().contains("wikipedia.org")) {
                                 mappingFileContents = dbPediaNameSpace.replace("dbpedia.org", targetNameSpace) + "<owl:As>" + dbPediaNameSpace + "\n";
