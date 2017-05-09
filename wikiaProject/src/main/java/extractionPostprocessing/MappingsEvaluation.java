@@ -1,4 +1,4 @@
-package extractionPostprocessing.controller;
+package extractionPostprocessing;
 
 import java.io.File;
 import java.util.*;
@@ -17,9 +17,11 @@ public class MappingsEvaluation {
 
 
     public static void evaluateAllMappings() {
-        HashMap<Double, Integer> weightedAccuracies = new HashMap<>();
+
         double overallAccuracy = 0;
         int totalMappings = 0;
+        //HashMap<Double, Integer> weightedAccuracies = new HashMap<>();
+        ArrayList<Evaluator> evaluationResults = new ArrayList<>();
         String pathToRootDirectory = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
 
         File root = new File(pathToRootDirectory);
@@ -29,22 +31,26 @@ public class MappingsEvaluation {
                     Evaluator evaluator = evaluateMappingsForOneWiki(directory);
                     if (evaluator != null) {
                         logger.info("Accuracy: " + evaluator.getAccuracy() + "% of: " + directory.getName());
-                        weightedAccuracies.put(evaluator.getAccuracy(), evaluator.getTotalMappings());
+                        //weightedAccuracies.put(evaluator.getAccuracy(), evaluator.getTotalMappings());
+                        evaluationResults.add(evaluator);
                     }
                 }
             }
 
-            for (int mappings : weightedAccuracies.values()) {
-                totalMappings += mappings;
+            for (Evaluator e : evaluationResults) {
+                totalMappings += e.getTotalMappings();
+                overallAccuracy += e.getAccuracy() * ( e.getTotalMappings() / totalMappings );
             }
 
-            // calculate weighted accuracy by using mappings/totalMappings as weight
+/*            // calculate weighted accuracy by using mappings/totalMappings as weight
             for (double accuracy : weightedAccuracies.keySet()) {
                 overallAccuracy += accuracy * weightedAccuracies.get(accuracy) / totalMappings;
-            }
+            }*/
 
+        } else {
+            logger.severe("pathToRootDirectory is not a directory!");
         }
-        logger.info("Overall accuracy: " + overallAccuracy + "% of " + weightedAccuracies.size() + " wikis.");
+        logger.info("Overall accuracy: " + overallAccuracy + "% of " + evaluationResults.size() + " wikis.");
     }
 
 

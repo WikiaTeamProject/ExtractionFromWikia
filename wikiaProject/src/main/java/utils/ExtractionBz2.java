@@ -24,7 +24,7 @@ public class ExtractionBz2 {
      * @param pathToFileToExtract The path to the bz2 compressed file that shall be extracted.
      * @param pathToNewDirectory  Path to where the new file shall be written (without the new filename). The new file name will be derived from the old file name.
      */
-    public static void extract(String pathToFileToExtract, String pathToNewDirectory) {
+    public static boolean extract(String pathToFileToExtract, String pathToNewDirectory) {
         try {
 
             // get file name
@@ -47,10 +47,14 @@ public class ExtractionBz2 {
             // cut the ".bz2" file ending
             fileName = fileName.substring(0, (fileName.length() - 4));
 
+            File extractedResultFile = new File(pathToNewDirectory + "/" + fileName);
+            if(extractedResultFile.exists()){
+                return false;
+            }
 
             // do the actual extraction
             FileInputStream in = new FileInputStream(pathToFileToExtract);
-            FileOutputStream out = new FileOutputStream(pathToNewDirectory + "/" + fileName);
+            FileOutputStream out = new FileOutputStream(extractedResultFile);
             BZip2CompressorInputStream bzIn = new BZip2CompressorInputStream(in);
             final byte[] buffer = new byte[8192];
             int n = 0;
@@ -59,9 +63,11 @@ public class ExtractionBz2 {
             }
             out.close();
             bzIn.close();
+            return true;
 
         } catch (IOException ioe) {
             logger.severe(ioe.toString());
+            return false;
         }
     }
 

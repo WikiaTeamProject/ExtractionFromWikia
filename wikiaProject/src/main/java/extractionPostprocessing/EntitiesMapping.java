@@ -1,4 +1,4 @@
-package extractionPostprocessing.controller;
+package extractionPostprocessing;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,7 +10,9 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
+/**
+ * Class for the creation of the mappings file.
+ */
 public class EntitiesMapping {
 
     private static Logger logger = Logger.getLogger(EntitiesMapping.class.getName());
