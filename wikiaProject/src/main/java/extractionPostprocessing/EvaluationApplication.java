@@ -1,5 +1,7 @@
 package extractionPostprocessing;
 
+import extractionPostprocessing.controller.MappingsEvaluation;
+
 
 public class EvaluationApplication {
 

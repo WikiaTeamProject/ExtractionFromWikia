@@ -1,5 +1,6 @@
 package extractionPostprocessing;
 
+import extractionPostprocessing.controller.EntitiesMapping;
 import utils.ExtractionBz2;
 
 import java.io.File;

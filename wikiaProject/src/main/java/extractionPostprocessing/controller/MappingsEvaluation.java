@@ -1,4 +1,4 @@
-package extractionPostprocessing;
+package extractionPostprocessing.controller;
 
 import java.io.File;
 import java.util.*;
@@ -9,7 +9,7 @@ import extractionPostprocessing.util.IOHandler;
 import java.util.logging.Logger;
 
 /**
- *
+ * Evaluator class for the mapping.
  */
 public class MappingsEvaluation {
 
@@ -32,15 +32,10 @@ public class MappingsEvaluation {
                     Evaluator evaluator = evaluateMappingsForOneWiki(directory);
                     if (evaluator != null) {
                         logger.info("Accuracy: " + evaluator.getAccuracy() + "% of: " + directory.getName());
-                        //weightedAccuracies.put(evaluator.getAccuracy(), evaluator.getTotalMappings());
+                        totalMappings += evaluator.getTotalMappings();
                         evaluationResults.add(evaluator);
                     }
                 }
-            }
-
-            // get number of total mappings
-            for (Evaluator e : evaluationResults) {
-                totalMappings += e.getTotalMappings();
             }
 
             for(Evaluator e : evaluationResults){
