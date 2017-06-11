@@ -1,9 +1,7 @@
 package extraction.model;
 
 /**
- * Created by Samresh Kumar on 5/8/2017.
- * Name: WikiaWikiProperties
- * Description : This class will serve as model to store wikia properties
+ * This class serves as a structure to store wikia properties
  */
 public class WikiaWikiProperties {
 

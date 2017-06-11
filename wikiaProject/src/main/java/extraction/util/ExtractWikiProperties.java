@@ -11,7 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Created by Samresh Kumar on 5/8/2017.
+ * This class allows to extract various properties of wikis.
  */
 public class ExtractWikiProperties {
 

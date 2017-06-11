@@ -19,5 +19,4 @@ public class ExtractionApplication {
         Extractor extractor = new Extractor();
     }
 
-
 }

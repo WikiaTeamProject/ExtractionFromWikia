@@ -218,7 +218,7 @@ public class Extractor {
                 }
 
 
-                copyFileFromOneDirectorytoAnother(wikiFilePath,downloadDirectoryForExtraction+"/"+languageCode+"wiki"+"/"+dateFolderName+"/"+
+                copyFileFromOneDirectorytoAnotherDirectory(wikiFilePath,downloadDirectoryForExtraction+"/"+languageCode+"wiki"+"/"+dateFolderName+"/"+
                                             languageCode+"wiki-"+dateFolderName+"-"+
                                             wikiSourceFileName);
 
@@ -234,12 +234,12 @@ public class Extractor {
 
 
     /**
-     *
+     * Copies one file from one directory to another directory.
      * @param sourceFilePath
      * @param targetFilePath
      */
 
-    public void copyFileFromOneDirectorytoAnother(String sourceFilePath,String targetFilePath){
+    public void copyFileFromOneDirectorytoAnotherDirectory(String sourceFilePath, String targetFilePath){
 
         try{
             File sourceFile=new File(sourceFilePath);
@@ -274,7 +274,7 @@ public class Extractor {
 
 
 
-    public void callDbPediaExtractortoExtractFile(){
+    public void callDbPediaExtractorToExtractFile(){
         try{
             String downloadDirectoryForExtraction =
                     ResourceBundle.getBundle("config").getString("downloadDirectoryforExtraction");

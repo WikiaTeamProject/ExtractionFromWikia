@@ -13,10 +13,8 @@ public class LanguageCodes {
 
     /**
      * This method receives a folder which includes xml files and returns their language codes (xml:lang attribute).
-     *
      * @param wikisFilePath
      */
-
     public static void extractLanguageCodeForAllWikis(String wikisFilePath) {
 
         try {
