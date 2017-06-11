@@ -58,7 +58,7 @@ public class Mapper_2 implements MapperInterface {
                             try {
                                 // get the actual entity
                                 dbPediaEntity = line.trim().substring(0, line.indexOf(" "));
-                                System.out.println(dbPediaEntity);
+                                //System.out.println(dbPediaEntity);
                             } catch(StringIndexOutOfBoundsException sioobe){
                                 logger.info("Exception in file " + listOfFiles[i].getAbsolutePath() + ": " + sioobe.toString());
                                 logger.info("Problem in file: " + listOfFiles[i].toString());
