@@ -56,11 +56,11 @@ public class MappingsEvaluation {
     }
 
 
-    private static EvaluationResult evaluateMappingsForOneWiki(File wikiPath) {
-        return evaluateMappingsForOneWiki(wikiPath.getAbsolutePath());
-    }
-
-
+    /**
+     * Create evaluations for one wiki
+     * @param wikiPath
+     * @return
+     */
     private static EvaluationResult evaluateMappingsForOneWiki(String wikiPath) {
         HashMap<String, String> dbPediaMappings;
         HashMap<String, String> manualMappings;
@@ -120,5 +120,16 @@ public class MappingsEvaluation {
 
         return mappingsEvaluationResult;
     }
+
+    /**
+     * overloaded method
+     * @param wikiPath
+     * @return
+     */
+    private static EvaluationResult evaluateMappingsForOneWiki(File wikiPath) {
+        return evaluateMappingsForOneWiki(wikiPath.getAbsolutePath());
+    }
+
+
 
 }
