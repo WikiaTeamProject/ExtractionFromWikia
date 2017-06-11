@@ -1,6 +1,7 @@
 package extractionPostprocessing;
 
-import extractionPostprocessing.controller.EntitiesMapping;
+import extractionPostprocessing.controller.EntitiesMappingExecutor;
+import extractionPostprocessing.controller.Mapper_1;
 import utils.ExtractionBz2;
 
 import java.io.File;
@@ -29,10 +30,9 @@ public class ExtractionPostprocessingApplication {
         }
 
         // create one mapping file out of all extracted files for each wiki
-        EntitiesMapping.extractAllWikiaDbpediaEntitiesMapping();
-
+        EntitiesMappingExecutor mappingExecutor = new EntitiesMappingExecutor(new Mapper_1());
+        mappingExecutor.createMappingFilesForAllWikis();
 
     }
-
 
 }

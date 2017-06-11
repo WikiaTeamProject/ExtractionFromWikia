@@ -11,7 +11,7 @@ public class WikiaDumpRequesterApplication {
         //System.setProperty("http.proxyHost", "proxy.wdf.sap.corp");
         //System.setProperty("http.proxyPort", "8080");
 
-        WikiaDumpRequesterExecutor.requestDumpsForAllWikis(50000); // +185,800
+        WikiaDumpRequesterExecutor.requestDumpsForAllWikis(51000); // +185,800
 
     }
 

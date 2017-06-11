@@ -1,7 +1,9 @@
 package extractionPostprocessing.model;
 
-
-public class Evaluator {
+/**
+ * EvaluationResult is a data structure for mapping evaluation results
+ */
+public class EvaluationResult {
 
     private int falseNegatives;
     private int falsePositives;
@@ -10,8 +12,16 @@ public class Evaluator {
     private int totalMappings;
 
 
-    public Evaluator(int falseNegatives, int falsePositives,
-                     int truePositives, int trueNegatives, int totalMappings) {
+    /**
+     * Constructor
+     * @param falseNegatives
+     * @param falsePositives
+     * @param truePositives
+     * @param trueNegatives
+     * @param totalMappings
+     */
+    public EvaluationResult(int falseNegatives, int falsePositives,
+                            int truePositives, int trueNegatives, int totalMappings) {
 
         this.falseNegatives = falseNegatives;
         this.falsePositives = falsePositives;

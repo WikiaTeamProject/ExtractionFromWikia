@@ -3,48 +3,51 @@ package extractionPostprocessing.controller;
 import java.io.File;
 import java.util.*;
 
-import extractionPostprocessing.model.Evaluator;
+import extractionPostprocessing.model.EvaluationResult;
 import extractionPostprocessing.util.IOHandler;
 
 import java.util.logging.Logger;
 
 /**
- * Evaluator class for the mapping.
+ * EvaluationResult class for the mapping.
+ * After creating the mapping files using a mapper, the evaluation for that mapping can be performed.
  */
 public class MappingsEvaluation {
 
     private static Logger logger = Logger.getLogger(MappingsEvaluation.class.getName());
 
-    private static Evaluator mappingsEvaluator;
+    private static EvaluationResult mappingsEvaluationResult;
 
 
+    /**
+     * Evaluate all mappings and print the result on the command line.
+     */
+    // TODO: It might be nice to persist the mappings as a result file.
     public static void evaluateAllMappings() {
 
         double overallAccuracy = 0;
         int totalMappings = 0;
-        ArrayList<Evaluator> evaluationResults = new ArrayList<>();
+        ArrayList<EvaluationResult> evaluationResults = new ArrayList<>();
         String pathToRootDirectory = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
         File root = new File(pathToRootDirectory);
 
         if (root.isDirectory()) {
             for (File directory : root.listFiles()) {
                 if (directory.isDirectory()) {
-                    Evaluator evaluator = evaluateMappingsForOneWiki(directory);
-                    if (evaluator != null) {
-                        logger.info("Accuracy: " + evaluator.getAccuracy() + "% of: " + directory.getName());
-                        totalMappings += evaluator.getTotalMappings();
-                        evaluationResults.add(evaluator);
+                    EvaluationResult evaluationResult = evaluateMappingsForOneWiki(directory);
+                    if (evaluationResult != null) {
+                        logger.info("Accuracy: " + evaluationResult.getAccuracy() + "% of: " + directory.getName());
+                        totalMappings += evaluationResult.getTotalMappings();
+                        evaluationResults.add(evaluationResult);
                     }
                 }
             }
 
-            for(Evaluator e : evaluationResults){
+            for(EvaluationResult e : evaluationResults){
                 double e_accuracy = e.getAccuracy();
                 int e_totalMappings = e.getTotalMappings();
                 overallAccuracy += (e.getAccuracy() * ( (double) e.getTotalMappings() / totalMappings ));
             }
-
-
 
         } else {
             logger.severe("pathToRootDirectory is not a directory!");
@@ -53,12 +56,12 @@ public class MappingsEvaluation {
     }
 
 
-    private static Evaluator evaluateMappingsForOneWiki(File wikiPath) {
+    private static EvaluationResult evaluateMappingsForOneWiki(File wikiPath) {
         return evaluateMappingsForOneWiki(wikiPath.getAbsolutePath());
     }
 
 
-    private static Evaluator evaluateMappingsForOneWiki(String wikiPath) {
+    private static EvaluationResult evaluateMappingsForOneWiki(String wikiPath) {
         HashMap<String, String> dbPediaMappings;
         HashMap<String, String> manualMappings;
 
@@ -113,9 +116,9 @@ public class MappingsEvaluation {
             logger.severe(ex.getMessage());
         }
 
-        mappingsEvaluator = new Evaluator(falseNegatives, falsePositives, truePositives, trueNegatives, totalMapping);
+        mappingsEvaluationResult = new EvaluationResult(falseNegatives, falsePositives, truePositives, trueNegatives, totalMapping);
 
-        return mappingsEvaluator;
+        return mappingsEvaluationResult;
     }
 
 }
