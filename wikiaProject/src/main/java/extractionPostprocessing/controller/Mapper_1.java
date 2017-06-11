@@ -28,15 +28,21 @@ public class Mapper_1 implements MapperInterface {
             //get list of extracted files in a folder
             File[] listOfFiles = pathToWikiFolder.listFiles();
 
-            String dbPediaNameSpace = "";
+            String dbPediaEntity = "";
             String mappingFileContents = "";
 
+            String mappingFileName = ResourceBundle.getBundle("config").getString("mappingfilename");
 
             // Loop over all ttl files in the directory and create the mappings.
             // This mapper works relatively simple: It only replaces the name space.
             for (int i = 0; i < listOfFiles.length; i++) {
 
-                if (listOfFiles[i].isFile() && listOfFiles[i].toString().endsWith(".ttl")) {
+                if      (
+                        listOfFiles[i].isFile()
+                        && listOfFiles[i].toString().endsWith(".ttl")
+                        && !listOfFiles[i].toString().endsWith("_evaluation.ttl") // do not use resources from the evaluation file
+                        && !listOfFiles[i].toString().endsWith(mappingFileName)   // do not use resources from the mapping file
+                        ) {
 
                     String line = "";
                     String fileContents = "";
@@ -51,15 +57,18 @@ public class Mapper_1 implements MapperInterface {
                         if (!line.trim().toLowerCase().startsWith("#") || !line.trim().toLowerCase().startsWith("#")) {
                             try {
                                 // get the actual entity
-                                dbPediaNameSpace = line.trim().substring(0, line.indexOf(" "));
+                                dbPediaEntity = line.trim().substring(0, line.indexOf(" "));
+                                System.out.println(dbPediaEntity);
                             } catch(StringIndexOutOfBoundsException sioobe){
                                 logger.info("Exception in file " + listOfFiles[i].getAbsolutePath() + ": " + sioobe.toString());
+                                logger.info("Problem in file: " + listOfFiles[i].toString());
+                                logger.info("With String: " + dbPediaEntity);
                                 continue;
                             }
 
                             // do not do for wikipedia entities
-                            if(!dbPediaNameSpace.toLowerCase().contains("wikipedia.org")) {
-                                mappingFileContents = dbPediaNameSpace.replace("dbpedia.org", targetNameSpace) + "<owl:As>" + dbPediaNameSpace + "\n";
+                            if(!dbPediaEntity.toLowerCase().contains("wikipedia.org")) {
+                                mappingFileContents = dbPediaEntity.replace("dbpedia.org", targetNameSpace) + "<owl:As>" + dbPediaEntity + "\n";
                                 entitiesMapping.add(mappingFileContents);
                             }
                         }
