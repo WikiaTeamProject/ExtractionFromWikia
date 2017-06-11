@@ -2,6 +2,7 @@ package extractionPostprocessing;
 
 import extractionPostprocessing.controller.EntitiesMappingExecutor;
 import extractionPostprocessing.controller.Mapper_1;
+import extractionPostprocessing.controller.Mapper_2;
 import utils.ExtractionBz2;
 
 import java.io.File;
@@ -24,13 +25,13 @@ public class ExtractionPostprocessingApplication {
                 if (directory.isDirectory()) {
 
                     // unzip all bz2 files
-                    ExtractionBz2.extractExtractorResultFiles(directory.getAbsolutePath(), directory.getAbsolutePath());
+                    // ExtractionBz2.extractExtractorResultFiles(directory.getAbsolutePath(), directory.getAbsolutePath());
                 }
             }
         }
 
         // create one mapping file out of all extracted files for each wiki
-        EntitiesMappingExecutor mappingExecutor = new EntitiesMappingExecutor(new Mapper_1());
+        EntitiesMappingExecutor mappingExecutor = new EntitiesMappingExecutor(new Mapper_2());
         mappingExecutor.createMappingFilesForAllWikis();
 
     }

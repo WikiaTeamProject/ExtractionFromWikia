@@ -15,6 +15,4 @@ public class EvaluationApplication {
         MappingsEvaluation.evaluateAllMappings();
 
     }
-
-
 }
