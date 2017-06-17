@@ -20,7 +20,7 @@ public class RedirectProcessor {
     private File wikiDirectory;
 
 
-    // TODO: Delte. This main method is just for testing.
+    // TODO: Delete. This main method is just for testing.
     public static void main(String[] args) {
         String filePath = "C:\\Users\\D060249\\Desktop\\TMP\\GoT_Wikia";
         RedirectProcessor rp = new RedirectProcessor(filePath);
@@ -33,38 +33,40 @@ public class RedirectProcessor {
 
     /**
      * Constructor
+     *
      * @param filePathToWiki File path to the wiki files.
      */
-    public RedirectProcessor(String filePathToWiki){
+    public RedirectProcessor(String filePathToWiki) {
         setWikiDirectory(filePathToWiki);
     }
 
     /**
      * Constructor
+     *
      * @param wikiDirectory Directory where the files of the wiki can be found.
      */
-    public RedirectProcessor(File wikiDirectory){
+    public RedirectProcessor(File wikiDirectory) {
         setWikiDirectory(wikiDirectory);
     }
 
 
-
     /**
      * Read the redirect file.
+     *
      * @return Returns true if reading was successful, else false.
      */
-    public boolean readRedirects(){
+    public boolean readRedirects() {
 
         // make sure the directory actually is a directory
-        if(!wikiDirectory.isDirectory() || wikiDirectory == null){
+        if (!wikiDirectory.isDirectory() || wikiDirectory == null) {
             logger.severe("Given directory does not lead to a directory. Use the corresponding setter method to set the correct path.");
             return false;
         }
 
         // get the redirect file
         File redirectFile = null;
-        for(File f : wikiDirectory.listFiles()){
-            if(f.getName().endsWith("-redirects.ttl")) {
+        for (File f : wikiDirectory.listFiles()) {
+            if (f.getName().endsWith("-redirects.ttl")) {
                 // -> redirects file found
                 redirectFile = f;
                 logger.info("Reading from file " + f.getName());
@@ -77,8 +79,7 @@ public class RedirectProcessor {
 
             String line;
             Matcher matcher = null;
-            while((line = br.readLine()) != null)
-            {
+            while ((line = br.readLine()) != null) {
                 System.out.println(line);
                 Pattern pattern = Pattern.compile("<[^<]*>");
                 // regex: <[^<]*>
@@ -91,9 +92,9 @@ public class RedirectProcessor {
                 String key = null;
                 String value = null;
 
-                while(matcher.find()){
+                while (matcher.find()) {
                     index++;
-                    if(index == 1){
+                    if (index == 1) {
                         // first match: key
                         key = matcher.group();
                         System.out.println("Key: " + matcher.group());
@@ -102,11 +103,11 @@ public class RedirectProcessor {
                     // (second match: "<http://dbpedia.org/ontology/wikiPageRedirects>"
                     // always the same -> irrelevant for us
 
-                    if(index == 3){
+                    if (index == 3) {
                         value = matcher.group();
                         System.out.println(matcher.group());
 
-                        if(key != null && value != null){
+                        if (key != null && value != null) {
                             // key and value found -> add to map and break while loop
                             System.out.println("Value:  " + matcher.group());
 
@@ -128,18 +129,18 @@ public class RedirectProcessor {
     }
 
 
-
     /**
      * Replace all synonyms of resources using the redirect file.
      * Method {@link #readRedirects()} will be called if it has not been called before.
+     *
      * @return
      */
-    public boolean executeRedirects(){
+    public boolean executeRedirects() {
 
         // check whether the redirects were already read.
         // if not read them.
-        if(redirectsMap.isEmpty()){
-            if(!this.readRedirects()){
+        if (redirectsMap.isEmpty()) {
+            if (!this.readRedirects()) {
                 // redirects could not be read
                 logger.severe("Redirects could not be read.");
                 return false;
@@ -154,10 +155,10 @@ public class RedirectProcessor {
             changeOccurred = false; // no change has yet occurred
             StringBuffer newFileContent = new StringBuffer();
 
-            for(File f : wikiDirectory.listFiles()) {
-
+            for (File f : wikiDirectory.listFiles()) {
                 if (f.getName().endsWith(".ttl")) {
                     // -> we are interested in the file
+                    System.out.println(f.getName());
 
                     if (f.getName().endsWith("-redirects.ttl")) {
                         // we do not want to process the redirects file itself
@@ -190,9 +191,9 @@ public class RedirectProcessor {
                                         changeOccurred = true;
 
                                         // replace operation
-                                        System.out.println("old line: " + line);
+                                        //System.out.println("Old line: " + line);
                                         line = line.replace(matcher.group(), (String) redirectsMap.get(matcher.group()));
-                                        System.out.println("new line: " + line);
+                                        //System.out.println("New line: " + line);
                                     }
                                 }
 
@@ -204,9 +205,9 @@ public class RedirectProcessor {
                                         changeOccurred = true;
 
                                         // replace operation
-                                        System.out.println("old line: " + line);
+                                        //System.out.println("Old line: " + line);
                                         line = line.replace(matcher.group(), (String) redirectsMap.get(matcher.group()));
-                                        System.out.println("new line: " + line);
+                                        //System.out.println("New line: " + line);
                                     }
                                 }
                             }
@@ -217,30 +218,30 @@ public class RedirectProcessor {
                         logger.severe(ioe.toString());
                     }
 
+                    // write the new file content into the file if a change occurred
+                    if (changeOccurred) {
+                        File newFile = new File(f.getAbsolutePath());
+                        System.out.println("Re-Writing File :" + newFile.getName());
+                        try {
+                            FileWriter writer = new FileWriter(newFile);
+                            writer.write(newFileContent.toString());
+                            writer.flush();
+                        } catch (IOException ioe) {
+                            logger.severe(ioe.toString());
+                        }
 
-                }
-
-                // write the new file content into the file if a change occurred
-                if (changeOccurred) {
-                    File newFile = new File(f.getAbsolutePath());
-                    try {
-                        FileWriter writer = new FileWriter(newFile);
-                        writer.write(newFileContent.toString());
-                        writer.flush();
-                    } catch (IOException ioe) {
-                        logger.severe(ioe.toString());
+                        // delete the content after it was written
+                        newFileContent = new StringBuffer();
                     }
-                }
 
-                // delete the content after it was written
-                newFileContent = new StringBuffer();
+                }
 
             }
 
 
         } while (changeOccurred);
 
-        System.out.println("Number of iterations: " + (counter-1));
+        System.out.println("Number of iterations: " + (counter - 1));
 
         return true;
     }
@@ -249,12 +250,11 @@ public class RedirectProcessor {
     /**
      * Prints the redirects map in a readable format on the console.
      */
-    public void printRedirectsMapOnConsole(){
+    public void printRedirectsMapOnConsole() {
         HashMap.Entry entry;
         Iterator iterator = redirectsMap.entrySet().iterator();
-        while(iterator.hasNext()){
-
-            entry =  (HashMap.Entry) iterator.next();
+        while (iterator.hasNext()) {
+            entry = (HashMap.Entry) iterator.next();
             System.out.println("Key: " + entry.getKey());
             System.out.println("Value " + entry.getValue());
         }
@@ -273,7 +273,7 @@ public class RedirectProcessor {
         File wikiDirectoryCandidate = new File(filePathToWiki);
 
         // make sure the directory actually is a directory
-        if(!wikiDirectoryCandidate.isDirectory()){
+        if (!wikiDirectoryCandidate.isDirectory()) {
             logger.severe("Given filePathToWiki does not lead to a directory.");
             return false;
         } else {
@@ -281,12 +281,13 @@ public class RedirectProcessor {
         }
 
         // when a new wiki is set, the redirectsMap is not valid any more
-        redirectsMap = new HashMap<>();;
+        redirectsMap = new HashMap<>();
+        ;
         return true;
     }
 
-    public boolean setWikiDirectory(File wikiDirectory){
-        if(!wikiDirectory.isDirectory()){
+    public boolean setWikiDirectory(File wikiDirectory) {
+        if (!wikiDirectory.isDirectory()) {
             logger.severe("Given filePathToWiki does not lead to a directory.");
             return false;
         } else {
@@ -297,7 +298,7 @@ public class RedirectProcessor {
         return true;
     }
 
-    public File getWikiDirectory(){
+    public File getWikiDirectory() {
         return wikiDirectory;
     }
 
