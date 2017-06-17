@@ -1,0 +1,6 @@
+<http://dbpedia.org/resource/Rickon> <http://dbpedia.org/ontology/wikiPageRedirects> <http://dbpedia.org/resource/Rickon_Stark> .
+<http://dbpedia.org/resource/Sansa> <http://dbpedia.org/ontology/wikiPageRedirects> <http://dbpedia.org/resource/Sansa_Stark> .
+<http://dbpedia.org/resource/Arya> <http://dbpedia.org/ontology/wikiPageRedirects> <http://dbpedia.org/resource/Arya_Stark> .
+<http://dbpedia.org/resource/Bran> <http://dbpedia.org/ontology/wikiPageRedirects> <http://dbpedia.org/resource/Bran_Stark> .
+<http://dbpedia.org/resource/Catelyn> <http://dbpedia.org/ontology/wikiPageRedirects> <http://dbpedia.org/resource/Catelyn_Stark> .
+<http://dbpedia.org/resource/Bran_Stark> <http://dbpedia.org/ontology/wikiPageRedirects> <http://dbpedia.org/resource/Stark_Junior> .

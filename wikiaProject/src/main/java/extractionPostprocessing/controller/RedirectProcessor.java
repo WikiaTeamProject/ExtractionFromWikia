@@ -118,7 +118,7 @@ public class RedirectProcessor {
                         }
                     }
                 }
-            }
+            } // end of while ((line = br.readLine()) != null)
             br.close();
 
         } catch (IOException ioe) {
@@ -200,7 +200,7 @@ public class RedirectProcessor {
                                 // (second match: "<some interlinking tag>" -> irrelevant for us
 
                                 if (index == 3) {
-                                    if (redirectsMap.containsKey(line)) {
+                                    if (redirectsMap.containsKey(matcher.group())) {
                                         // there is something to replace
                                         changeOccurred = true;
 
@@ -213,7 +213,7 @@ public class RedirectProcessor {
                             }
                             newFileContent.append(line + "\n"); // the line break must be added
                         }
-
+                        reader.close();
                     } catch (IOException ioe) {
                         logger.severe(ioe.toString());
                     }
@@ -226,6 +226,7 @@ public class RedirectProcessor {
                             FileWriter writer = new FileWriter(newFile);
                             writer.write(newFileContent.toString());
                             writer.flush();
+                            writer.close();
                         } catch (IOException ioe) {
                             logger.severe(ioe.toString());
                         }
@@ -234,10 +235,9 @@ public class RedirectProcessor {
                         newFileContent = new StringBuffer();
                     }
 
-                }
+                } // end of if ( file endsWith("ttl") )
 
-            }
-
+            } // end of for loop through all files in the directory
 
         } while (changeOccurred);
 
