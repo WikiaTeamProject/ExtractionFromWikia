@@ -49,14 +49,7 @@ public class RedirectProcessorTest {
             if(!solution.exists()){
                 System.out.println("Test file not available. Test will fail.");
             }
-            System.out.println(f.getAbsolutePath());
-            System.out.println(solution.getAbsolutePath());
-            System.out.println(FileUtils.contentEquals(f, solution) + "\n");
-            try {
-                Assert.assertTrue(FileUtils.contentEquals(f, solution));
-            } catch(IOException ioe){
-                ioe.printStackTrace();
-            }
+            Assert.assertTrue(FileUtils.contentEqualsIgnoreEOL(f, solution, "utf-8") );
         }
 
     }
