@@ -20,20 +20,8 @@ public class RedirectProcessor {
     private File wikiDirectory;
 
 
-    // TODO: Delete. This main method is just for testing.
-    public static void main(String[] args) {
-        String filePath = "C:\\Users\\D060249\\Desktop\\TMP\\GoT_Wikia";
-        RedirectProcessor rp = new RedirectProcessor(filePath);
-        //rp.readRedirects();
-        rp.executeRedirects();
-        // rp.printRedirectsMapOnConsole();
-
-    }
-
-
     /**
      * Constructor
-     *
      * @param filePathToWiki File path to the wiki files.
      */
     public RedirectProcessor(String filePathToWiki) {

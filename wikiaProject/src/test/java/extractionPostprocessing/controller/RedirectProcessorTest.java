@@ -4,17 +4,19 @@ import org.apache.commons.io.FileUtils;
 import org.junit.*;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
- * Created by D060249 on 17.06.2017.
+ * This method test class RedirectProcessor.
  */
 public class RedirectProcessorTest {
 
     private static final String TEST_DIRECTORY_PATH = "./src/test/test_files/redirect_processor_test";
     private static final String COPY_OF_TEST_DIRECTORY_PATH = "./src/test/test_files/redirect_processor_test_2";
 
+
+    /**
+     * This method sets up the test environment, i.e. copies required files for executing the methods.
+     */
     @BeforeClass
     public static void setup(){
 
@@ -36,6 +38,10 @@ public class RedirectProcessorTest {
         }
     }
 
+    /**
+     * The following method tests methods executeRedirects() AND readRedirects() which is called implicitly.
+     * @throws Exception
+     */
     @Test
     public void executeRedirects() throws Exception {
         File testDirectory = new File(COPY_OF_TEST_DIRECTORY_PATH);
@@ -54,6 +60,9 @@ public class RedirectProcessorTest {
 
     }
 
+    /**
+     * This method deletes the copied files for the test.
+     */
     @AfterClass
     public static void cleanup(){
         try {
