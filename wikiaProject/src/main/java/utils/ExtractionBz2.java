@@ -78,7 +78,7 @@ public class ExtractionBz2 {
      * @param pathToFiles        Path to the files that shall be extracted. Only bz2 compressed files will be extracted and written to the new directory specified in pathToNewDirectory.
      * @param pathToNewDirectory The path where the decompressed files will be written to.
      */
-    public static void extractExtractorResultFiles(String pathToFiles, String pathToNewDirectory) {
+    public static void extractDBpediaExtractorResultFiles(String pathToFiles, String pathToNewDirectory) {
 
         // create pathToNewDirectory if it does not exist yet
         File newDirectoryPath = new File(pathToNewDirectory);

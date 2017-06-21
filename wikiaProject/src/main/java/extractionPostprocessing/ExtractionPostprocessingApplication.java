@@ -25,7 +25,7 @@ public class ExtractionPostprocessingApplication {
                 if (directory.isDirectory()) {
 
                     // unzip all bz2 files
-                    // ExtractionBz2.extractExtractorResultFiles(directory.getAbsolutePath(), directory.getAbsolutePath());
+                    // ExtractionBz2.extractDBpediaExtractorResultFiles(directory.getAbsolutePath(), directory.getAbsolutePath());
                 }
             }
         }
