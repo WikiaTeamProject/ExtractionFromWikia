@@ -1,5 +1,6 @@
 package wikiaStatistics.controller;
 
+import utils.FileOperations;
 import wikiaStatistics.util.WikiaStatisticsTools;
 
 import java.io.File;
@@ -24,26 +25,17 @@ public class MetadataThreadImpl {
 
     public static void downloadWikiaMetadata() {
 
-        String directoryPath = ResourceBundle.getBundle("config").getString("directory");
-
-        File file = new File(directoryPath + "/wikiaOverviewIndividualFiles");
-
-        if (!file.isDirectory()) {
-            try {
-                Files.createDirectory(file.toPath());
-            } catch (IOException e) {
-                logger.severe(e.toString());
-            }
-        }
+        String directoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
 
         // files will be saved in the newly created subdirectory
+        File file = FileOperations.createDirectory(directoryPath + "/wikiStatistics");
 
         int lowerIdLimit = 0;
         int upperIdLimit = 50000;
 
         for (int i = 0; i < threads.length; i++) {
 
-            String filePath = directoryPath + "/wikiaOverviewIndividualFiles/wikis_" + lowerIdLimit + "_to_" + upperIdLimit +".csv";
+            String filePath = directoryPath + "/wikiStatistics/wikis_" + lowerIdLimit + "_to_" + upperIdLimit +".csv";
             filePaths.add(filePath);
             threads[i] =  new Thread(new MetadataThread(filePath, lowerIdLimit, upperIdLimit), "Thread " + i);
 

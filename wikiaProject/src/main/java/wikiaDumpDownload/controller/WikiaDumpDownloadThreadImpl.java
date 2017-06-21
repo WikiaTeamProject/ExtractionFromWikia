@@ -1,7 +1,8 @@
 package wikiaDumpDownload.controller;
 
+import utils.FileOperations;
+
 import java.io.*;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -13,6 +14,7 @@ public class WikiaDumpDownloadThreadImpl  {
 
     private static Logger logger = Logger.getLogger(WikiaDumpDownloadThreadImpl.class.getName());
     private static Thread[] threads = new Thread[40];
+    private static String statisticsDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/wikiStatistics";
 
 
     public static void downloadWikiaDumps(int beginLine, int endLine) {
@@ -37,8 +39,7 @@ public class WikiaDumpDownloadThreadImpl  {
     }
 
     private static String getFilePath() {
-        String directoryPath = ResourceBundle.getBundle("config").getString("directory");
-        String filePath = directoryPath + "/wikiaAllOverview.csv";
+        String filePath = statisticsDirectoryPath + "/wikiaAllOverview.csv";
 
         return filePath;
     }
@@ -46,19 +47,17 @@ public class WikiaDumpDownloadThreadImpl  {
 
     private static void createThreads() {
         ArrayList<String> filePaths = new ArrayList<String>();
-        String directoryPath = ResourceBundle.getBundle("config").getString("directory");
 
         int lowerIdLimit = 0;
         int upperIdLimit = 50000;
 
-        File file = new File(directoryPath + "/wikiaOverviewIndividualDumpSizes");
-        createDirectory(file);
+        FileOperations.createDirectory(statisticsDirectoryPath + "/wikiaOverviewIndividualDumpSizes");
 
 
         for (int i = 0; i < threads.length; i++) {
 
-            String filePath = directoryPath + "/wikiaOverviewIndividualFiles/wikis_" + lowerIdLimit + "_to_" + upperIdLimit + ".csv";
-            String dumpSizeFilePath = directoryPath + "/wikiaOverviewIndividualDumpSizes/dumpsSizes_" + lowerIdLimit + "_to_" + upperIdLimit + ".csv";
+            String filePath = statisticsDirectoryPath + "/wikiaOverviewIndividualFiles/wikis_" + lowerIdLimit + "_to_" + upperIdLimit + ".csv";
+            String dumpSizeFilePath = statisticsDirectoryPath + "/wikiaOverviewIndividualDumpSizes/dumpsSizes_" + lowerIdLimit + "_to_" + upperIdLimit + ".csv";
             filePaths.add(dumpSizeFilePath);
 
             threads[i] = new Thread(new WikiaDumpDownloadThread(filePath, dumpSizeFilePath));
@@ -86,22 +85,9 @@ public class WikiaDumpDownloadThreadImpl  {
 
     }
 
-    private static File createDirectory(File file) {
-        if (!file.isDirectory()) {
-            try {
-                Files.createDirectory(file.toPath());
-            } catch (IOException e) {
-                logger.severe(e.toString());
-            }
-        }
-        return file;
-    }
-
     private static void mergeFiles(ArrayList<String> filePaths) {
 
-        String directoryPath = ResourceBundle.getBundle("config").getString("directory");
-
-        File resultFile = new File(directoryPath + "/wikiaOverviewDumpSizes.csv");
+        File resultFile = new File(statisticsDirectoryPath + "/wikiaOverviewDumpSizes.csv");
         File f;
         int fileNumber = 0;
         BufferedReader bufferedReader;

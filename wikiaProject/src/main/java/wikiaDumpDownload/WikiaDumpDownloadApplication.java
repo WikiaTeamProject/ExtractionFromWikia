@@ -1,5 +1,6 @@
 package wikiaDumpDownload;
 
+import wikiaDumpDownload.controller.WikiaDumpDownloadThreadImpl;
 import wikiaDumpDownload.util.Extraction7zip;
 
 /**
@@ -16,7 +17,7 @@ public class WikiaDumpDownloadApplication {
 
     public static void main(String[] args) {
 
-//        WikiaDumpDownloadThreadImpl.downloadWikiaDumps();
+        WikiaDumpDownloadThreadImpl.downloadWikiaDumps();
 
         Extraction7zip extractor = new Extraction7zip();
         extractor.extractAll7ZipFilesIntoDesignatedFolder();

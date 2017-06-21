@@ -1,5 +1,7 @@
 package wikiaDumpDownload.controller;
 
+import utils.FileOperations;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -50,14 +52,15 @@ public class WikiaDumpDownloadThread implements Runnable {
      */
     private WikiaDumpDownloadThread(boolean downloadAllWikis, String pathToReadFrom) {
 
+        this.directoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
+
         // initialize static counter to display progress
-        if(totalNumberOfFilesToBeProcessed == 0) {
-            String directoryPath = ResourceBundle.getBundle("config").getString("directory");
-            String filePath = directoryPath + "/wikiaAllOverview.csv";
+        if (totalNumberOfFilesToBeProcessed == 0) {
+            String filePath = this.directoryPath + "/wikiStatistics/wikiaAllOverview.csv";
             File f = new File(filePath);
 
             // make sure that the file exists
-            if(f.exists()){
+            if (f.exists()) {
                 try {
                     LineNumberReader lnr = new LineNumberReader(new FileReader(f));
                     lnr.skip(Long.MAX_VALUE);
@@ -73,17 +76,15 @@ public class WikiaDumpDownloadThread implements Runnable {
 
         this.pathToReadFrom = pathToReadFrom;
         this.downloadAllWikis = downloadAllWikis;
-
-        this.directoryPath = ResourceBundle.getBundle("config").getString("directory");
         this.downloadedFiles = 0;
         this.wikis = 0;
         this.buffer = new StringBuffer();
 
         // create target directories if they do not exist yet
-        File dumps = createDirectory(new File(directoryPath + "/wikiaDumps/"));
-        File dumpsDownloaded = createDirectory(new File(dumps.getPath() + "/downloaded"));
-        dumpsDownloadedgz = createDirectory(new File(dumpsDownloaded.getPath() + "/gz"));
-        dumpsDownloaded7z = createDirectory(new File(dumpsDownloaded.getPath() + "/7z"));
+        File dumps = FileOperations.createDirectory(directoryPath + "/downloadedWikis/");
+        File dumpsDownloaded = FileOperations.createDirectory(dumps.getPath() + "/downloaded");
+        dumpsDownloadedgz = FileOperations.createDirectory(dumpsDownloaded.getPath() + "/gz");
+        dumpsDownloaded7z = FileOperations.createDirectory(dumpsDownloaded.getPath() + "/7z");
 
         this.urlsNotWorking = new StringBuffer();
     }
@@ -383,23 +384,6 @@ public class WikiaDumpDownloadThread implements Runnable {
             logger.severe(e.toString());
         }
 
-    }
-
-    /**
-     * Create directory if file is not a directory yet (mainly needed for OSX environment)
-     *
-     * @param file
-     * @return
-     */
-    private File createDirectory(File file) {
-        if (!file.isDirectory()) {
-            try {
-                Files.createDirectory(file.toPath());
-            } catch (IOException e) {
-                logger.severe(e.toString());
-            }
-        }
-        return file;
     }
 
 }

@@ -104,7 +104,7 @@ public class MetadataStatistics {
         String[] tokens;
         HashMap<String, Integer> languageCounts = new HashMap<String, Integer>();
 
-        String directoryPath = ResourceBundle.getBundle("config").getString("directory");
+        String directoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
 
         try {
             bufferedReader = new BufferedReader(new FileReader("./wikiaProject/src/main/resources/files/wikiaLanguageCodes.csv"));
@@ -149,10 +149,10 @@ public class MetadataStatistics {
      *
      * @param fileContents
      */
-    public void writeResultToFile(String fileContents){
+    public void writeResultToFile(String fileContents) {
 
-        String directoryPath = ResourceBundle.getBundle("config").getString("directory");
-        String filePath = directoryPath + "/wikislanguages.csv";
+        String directoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
+        String filePath = directoryPath + "/wikiStatistics/wikislanguages.csv";
 
         try{
             //Initialize file Writer Objects

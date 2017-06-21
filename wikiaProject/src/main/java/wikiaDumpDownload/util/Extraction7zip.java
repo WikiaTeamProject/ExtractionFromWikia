@@ -12,7 +12,7 @@ import utils.FileOperations;
 public class Extraction7zip {
     private static Logger logger = Logger.getLogger(Extraction7zip.class.getName());
     private String directoryExtracted;
-    private String directoryPath;
+    private static String downloadedDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/downloadedWikis";
 
 
     /**
@@ -20,8 +20,7 @@ public class Extraction7zip {
      *
      */
     public Extraction7zip() {
-        directoryPath = ResourceBundle.getBundle("config").getString("directory");
-        directoryExtracted = directoryPath + "/wikiaDumps/extracted7z/";
+        directoryExtracted = downloadedDirectoryPath + "/extracted7z/";
         FileOperations.createDirectory(directoryExtracted);
     }
 
@@ -128,7 +127,7 @@ public class Extraction7zip {
      *
      */
     public void extractAll7ZipFilesIntoDesignatedFolder() {
-        String folder7z = directoryPath + "/wikiaDumps/downloaded/7z";
+        String folder7z = downloadedDirectoryPath + "/downloaded/7z";
         File folder = new File(folder7z);
 
         for (File file7z : folder.listFiles()) {

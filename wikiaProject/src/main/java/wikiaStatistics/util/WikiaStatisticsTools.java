@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 public class WikiaStatisticsTools {
 
     private static Logger logger = Logger.getLogger(WikiaStatisticsTools.class.getName());
+    private static String statisticsDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/wikiStatistics";
 
 
     /**
@@ -22,9 +23,7 @@ public class WikiaStatisticsTools {
      */
     public static void mergeFiles(ArrayList<String> filePaths) {
 
-        String directoryPath = ResourceBundle.getBundle("config").getString("directory");
-
-        File resultFile = new File(directoryPath + "/wikiaAllOverview.csv");
+        File resultFile = new File(statisticsDirectoryPath + "/wikiaAllOverview.csv");
         File f;
         int fileNumber = 0;
         BufferedReader bufferedReader;
@@ -72,10 +71,9 @@ public class WikiaStatisticsTools {
         String[] tokens;
         String possibleLanguageCode;
         MetadataStatistics statistics = new MetadataStatistics();
-        String directoryPath = ResourceBundle.getBundle("config").getString("directory");
 
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(directoryPath + "/wikiaAllOverview.csv")));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(statisticsDirectoryPath + "/wikiaAllOverview.csv")));
             String readLine;
 
             // ignore header line
