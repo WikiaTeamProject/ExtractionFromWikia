@@ -16,6 +16,10 @@ public class WikiaWikiProperties {
         this.wikiPath=wikiPath;
     }
 
+    //constructor with no arguments
+    public WikiaWikiProperties(){
+    }
+
     //Getter and Setter methods for class attributes
     public String getWikiName(){return this.wikiName;}
 
