@@ -7,12 +7,18 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
+import utils.ExtractionBz2;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.InputStreamReader;
+
 
 /**
  *
@@ -31,6 +37,7 @@ public class Extractor {
     private static Logger logger = Logger.getLogger(Extractor.class.getName());
     private File extractionFrameworkDirectory;
     private String extractionDefaultPropertiesFilePath;
+    private HashMap<String,WikiaWikiProperties> wikisPropertiesSet;
 
 
     public Extractor() {
@@ -116,13 +123,19 @@ public class Extractor {
     }
 
     /**
-     *
-     *
+     * This function reads downloaded wikis
+     * @return Hashmap contains key as wiki name and value as obejct containing
+     * wiki properties
      */
     public HashMap<String,WikiaWikiProperties> extractPropertiesForAllWikis() {
 
         //WikiaWikisProperties
         HashMap<String,WikiaWikiProperties> wikiProperties=new HashMap<String,WikiaWikiProperties>();
+        int index=0;
+        String DATE_FORMAT_NOW = "YYYYMMdd";
+        Calendar calender = Calendar.getInstance();
+        SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT_NOW);
+
 
 
         String wikisFilePath= ResourceBundle.getBundle("config").getString("dumpsdirectory");
@@ -145,8 +158,11 @@ public class Extractor {
 
                             WikiaWikiProperties properties = extractPropertiesForaWiki(listOfFiles[i].getPath());
 
-                            if (wikiProperties != null)
-                                wikiProperties.put(listOfFiles[i].getName(), properties);
+                            if (wikiProperties != null) {
+                                calender.add(Calendar.DATE,-index);
+                                wikiProperties.put(properties.getWikiName(), properties);
+                                index++;
+                            }
                         }
                     }
                 }
@@ -160,13 +176,13 @@ public class Extractor {
     }
 
     /**
-     *
+     * Create structute expected by DBpedia extractor for extraction
      */
     public void createDbpediaExtractionStructure(){
 
         try{
 
-            HashMap<String,WikiaWikiProperties> wikisPropertiesSet=extractPropertiesForAllWikis();
+            wikisPropertiesSet=extractPropertiesForAllWikis();
 
             String downloadDirectoryForExtraction = ResourceBundle.getBundle("config").getString("downloadDirectoryforExtraction");
 
@@ -179,13 +195,11 @@ public class Extractor {
             File languageDirectory=null;
             File dateDirectory=null;
             File wikiFileToCopy=null;
-            int index=0;
+            int index=1;
             String DATE_FORMAT_NOW = "YYYYMMdd";
             Calendar calender = Calendar.getInstance();
             SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT_NOW);
-            String dateFolderName;
-
-
+            String currentDate=dateFormatter.format(calender.getTime());
 
 
             File extractionDirectory=new File(downloadDirectoryForExtraction);
@@ -202,8 +216,10 @@ public class Extractor {
                 languageCode=wikiProperties.getLanguageCode();
                 siteName=wikiProperties.getWikiName();
                 wikiFilePath=wikiProperties.getWikiPath();
-                calender.add(Calendar.DATE,-index);
-                dateFolderName=dateFormatter.format(calender.getTime());
+
+                //dateFolderName=wikiName.substring(0,wikiName.indexOf("_"));
+
+                //dateFolderName=Integer.toString(index);
 
                 languageDirectory=new File(downloadDirectoryForExtraction+"/"+languageCode+"wiki");
 
@@ -211,16 +227,18 @@ public class Extractor {
                     languageDirectory.mkdir();
                 }
 
-                dateDirectory=new File(downloadDirectoryForExtraction+"/"+languageCode+"wiki"+"/"+dateFolderName);
+                dateDirectory=new File(downloadDirectoryForExtraction+"/"+languageCode+"wiki"+"/"+index);
 
                 if(!dateDirectory.exists()){
                     dateDirectory.mkdir();
                 }
 
 
-                copyFileFromOneDirectorytoAnotherDirectory(wikiFilePath,downloadDirectoryForExtraction+"/"+languageCode+"wiki"+"/"+dateFolderName+"/"+
-                                            languageCode+"wiki-"+dateFolderName+"-"+
+                copyFileFromOneDirectorytoAnotherDirectory(wikiFilePath,downloadDirectoryForExtraction+"/"+languageCode+"wiki"+"/"+index+"/"+
+                                            languageCode+"wiki-"+currentDate+"-"+
                                             wikiSourceFileName);
+
+                createWikiPropertiesFile(downloadDirectoryForExtraction+"/"+languageCode+"wiki"+"/"+index+"/",wikiProperties);
 
                 index++;
             }
@@ -234,7 +252,7 @@ public class Extractor {
 
 
     /**
-     * Copies one file from one directory to another directory.
+     * Copies one file from one directory to another directory
      * @param sourceFilePath
      * @param targetFilePath
      */
@@ -273,11 +291,119 @@ public class Extractor {
     }
 
 
-
+    /**
+     * call DBpedia extractor to extract downloaded wikis
+     */
     public void callDbPediaExtractorToExtractFile(){
         try{
             String downloadDirectoryForExtraction =
                     ResourceBundle.getBundle("config").getString("downloadDirectoryforExtraction");
+
+            String pathToExtractionFramework =
+                    ResourceBundle.getBundle("config").getString("dbPediaExtractorPath");
+
+            String DATE_FORMAT_NOW = "YYYYMMdd";
+            Calendar calender = Calendar.getInstance();
+            SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT_NOW);
+            String current_date=dateFormatter.format(calender.getTime());
+
+            File downloadedWikis=new File(downloadDirectoryForExtraction);
+
+            File[] languageCodesFolders=downloadedWikis.listFiles();
+
+            for(File languageCodeFolder:languageCodesFolders){
+                if(languageCodeFolder.isDirectory() &&
+                        !languageCodeFolder.getName().toLowerCase().equals("commonswiki")) {
+                    File[] dateFolders = languageCodeFolder.listFiles();
+                    for(File wikiDirectory:dateFolders){
+                        File[] wikiFiles=wikiDirectory.listFiles();
+
+                        String folderName=wikiDirectory.getAbsolutePath();
+
+                        File renamedFolder=new File(wikiDirectory.getParent()+"//"+current_date);
+
+                        wikiDirectory.renameTo(renamedFolder);
+
+                        //call Dbpedia extractor
+
+                        //Runtime rt = Runtime.getRuntime();
+                        String command="mvn scala:run \"-Dlauncher=extraction\" \"-DaddArgs=extraction.default.properties\"";
+
+                        //System.out.println(command);
+                        //Process pr = rt.exec(command);
+
+
+                       // ProcessBuilder builder = new ProcessBuilder(
+                         //       "cmd.exe", "/c", command);
+                        //builder.redirectErrorStream(true);
+                        //Process p = builder.start();
+
+                        // Process p=Runtime.getRuntime().exec("cmd /c "+
+                          //  pathToExtractionFramework+"/test.bat");
+
+                        //Process p=Runtime.getRuntime().exec("e:/test.bat");
+
+                        //p.wait(50000);
+
+                       // while(p.isAlive()){
+                         //   // Do Nothing
+                           // System.out.println("waiting for process to finish");
+
+                        //}
+
+                        Process p=Runtime.getRuntime().exec("e:/test.bat");
+                        BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                      String line;
+                      while (true) {
+                          line = r.readLine();
+                       if (line == null) { break; }
+                          System.out.println(line);
+
+                         // p.waitFor(5, TimeUnit.SECONDS);
+                      }
+
+
+
+                      //  ProcessBuilder pb = new ProcessBuilder("e:\\test.bat");
+                        //pb.directory(new File("e:/"));
+                        //pb.redirectOutput(new File("e://new.txt"));
+
+                        //Process p=Runtime.getRuntime().exec("cmd /c wait"+
+                          //      "e://test.bat");
+
+                       // Process p = pb.start();
+//                        int exitStatus = p.waitFor();
+
+
+
+
+
+
+
+
+
+
+
+                        //renamedFolder=new File(folderName);
+                        renamedFolder.renameTo(new File(folderName));
+
+
+                        /*for(File wikiFile:wikiFiles){
+                            String fileName=wikiFile.getName();
+                            if(fileName.toLowerCase().endsWith(".xml")) {
+                                String languageCode=fileName.substring(0,fileName.indexOf("-"));
+                                String fileSuffix=fileName.substring(fileName.indexOf("-"),languageCode.length()+2);
+
+                                File renamedFile=new File(wikiFile.getParent()+"//"
+                                        +languageCode+"-"+current_date+
+                                        "-"+fileSuffix);
+                            }
+                        }*/
+
+
+                    }
+                }
+            }
 
 
         }
@@ -312,6 +438,146 @@ public class Extractor {
         // TODO (optional): Check if some wikis were downloaded
 
         return true;
+    }
+
+    /**
+     * This function extracts compressed files obtained from DBpedia extractor
+     * and moves to seperate directory for evaluation
+     */
+    public void moveExtractFilesforEvaluation(){
+
+        String downloadDirectoryForExtraction = ResourceBundle.getBundle("config").getString("downloadDirectoryforExtraction");
+        String extractedFilesDirectory = ResourceBundle.getBundle("config").getString("extractedDumpsDirectory");
+        ExtractionBz2 bz2Extractor=new ExtractionBz2();
+
+        try{
+
+            File extractedWikiFolder = new File(downloadDirectoryForExtraction);
+
+            //get list of wikis in a folder
+            File[] listOfFolders = extractedWikiFolder.listFiles();
+
+            for(File languageCodeFolder:listOfFolders){
+                if(languageCodeFolder.isDirectory() &&
+                        !languageCodeFolder.getName().toLowerCase().equals("commonswiki")){
+
+                    File[] dateFolders = languageCodeFolder.listFiles();
+
+                    for(File dateFolder:dateFolders){
+
+                        if(dateFolder.isDirectory()){
+
+                            WikiaWikiProperties properties=readWikiPropertiesFile(dateFolder.getAbsolutePath());
+
+                            File extractedFilesFolder=new File(extractedFilesDirectory+"//"+properties.getWikiName());
+
+                            if(!extractedFilesFolder.exists()){
+                                extractedFilesFolder.mkdir();
+                            }
+
+                            File[] extractedFiles = dateFolder.listFiles();
+
+                            for(File wikiFile:extractedFiles){
+                                if(wikiFile.getName().endsWith(".bz2")){
+                                    bz2Extractor.extract(wikiFile.getAbsolutePath(),
+                                            extractedFilesDirectory+"//"+properties.getWikiName());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch(Exception ex){
+            logger.severe(ex.getMessage());
+        }
+    }
+
+
+    /**
+     *  This function create proerties file for wiki so that it can be used
+     *  to create folders with proper names for evaluation
+     * @param wikiFolderPath - folder path for respective wiki
+     * @param wikiProperties - properties of respective wiki like wiki name , language
+     */
+    public void createWikiPropertiesFile(String wikiFolderPath,
+                                         WikiaWikiProperties wikiProperties){
+
+        String downloadDirectoryForExtraction =
+                ResourceBundle.getBundle("config").getString("wikiPropertiesFileName");
+        try{
+            PrintWriter fileWriter=new PrintWriter(wikiFolderPath+"//"+downloadDirectoryForExtraction);
+
+            System.out.println("Writing properties for wiki: " + wikiProperties.getWikiName());
+
+            fileWriter.write("WikiName:" + wikiProperties.getWikiName()+"\n");
+            fileWriter.write("LanguageCode:" + wikiProperties.getLanguageCode());
+
+            fileWriter.close();
+
+        }
+        catch(Exception ex){
+            System.out.println(ex.getMessage());
+            logger.severe(ex.getMessage());
+        }
+    }
+
+
+    /**
+     * This function read properties of wiki
+     * @param wikiFolderPath - path of directory where wiki is present
+     * @return properties of respective wiki (wiki name, language)
+     */
+    public WikiaWikiProperties readWikiPropertiesFile(String wikiFolderPath){
+
+        String wikiPropertiesFileName =
+                ResourceBundle.getBundle("config").getString("wikiPropertiesFileName");
+        WikiaWikiProperties wikiProperties=new WikiaWikiProperties();
+
+        try{
+
+
+           String fileLine="";
+            FileReader fileReader=
+                   new FileReader(wikiFolderPath+"//"+wikiPropertiesFileName);
+
+           BufferedReader bufferedReader=new BufferedReader(fileReader);
+
+
+           while((fileLine=bufferedReader.readLine ())!=null){
+
+               String key=fileLine.substring(0,fileLine.indexOf(":"));
+               String value=fileLine.substring(fileLine.indexOf(":")+1,fileLine.length());
+
+            if(key.toLowerCase().equals("wikiname")){
+
+                value=value.replace(":","");
+                value=value.replace("@","");
+                value=value.replace("*","");
+                value=value.replace("/","");
+                value=value.replace("\\","");
+                value=value.replace("?","");
+                value=value.replace("|","");
+                value=value.replace("\"\"","");
+                wikiProperties.setWikiName(value);
+            }
+            else if(key.toLowerCase().equals("languagecode")){
+                wikiProperties.setLanguageCode(value);
+            }
+
+
+           }
+
+
+          bufferedReader.close();
+          fileReader.close();
+
+        }
+        catch(Exception ex){
+            System.out.println(ex.getMessage());
+            logger.severe(ex.getMessage());
+        }
+        return wikiProperties;
     }
 
 }
