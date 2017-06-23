@@ -1,6 +1,7 @@
 package wikiaDumpDownload.controller;
 
 import utils.FileOperations;
+import wikiaStatistics.controller.MetadataThreadImpl;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -35,6 +36,14 @@ public class WikiaDumpDownloadThreadImpl  {
     }
 
     public static void downloadWikiaDumps() {
+        // run download of wiki overview CSV file if it does not exist yet
+        String wikiAllOverview = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/wikiStatistics/wikiaAllOverview.csv";
+        File wikiCSV = new File(wikiAllOverview);
+        if (! wikiCSV.exists()) {
+            logger.info("Download Wikia Metadata to retrieve urls of all wikis.");
+            MetadataThreadImpl.downloadWikiaMetadata();
+        }
+
         createThreads();
     }
 

@@ -25,17 +25,18 @@ public class MetadataThreadImpl {
 
     public static void downloadWikiaMetadata() {
 
-        String directoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
+        String statisticsDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/wikiStatistics";
 
         // files will be saved in the newly created subdirectory
-        File file = FileOperations.createDirectory(directoryPath + "/wikiStatistics");
+        FileOperations.createDirectory(statisticsDirectoryPath);
+        FileOperations.createDirectory(statisticsDirectoryPath + "/wikiaOverviewIndividualFiles");
 
         int lowerIdLimit = 0;
         int upperIdLimit = 50000;
 
         for (int i = 0; i < threads.length; i++) {
 
-            String filePath = directoryPath + "/wikiStatistics/wikis_" + lowerIdLimit + "_to_" + upperIdLimit +".csv";
+            String filePath = statisticsDirectoryPath + "/wikiaOverviewIndividualFiles/wikis_" + lowerIdLimit + "_to_" + upperIdLimit +".csv";
             filePaths.add(filePath);
             threads[i] =  new Thread(new MetadataThread(filePath, lowerIdLimit, upperIdLimit), "Thread " + i);
 

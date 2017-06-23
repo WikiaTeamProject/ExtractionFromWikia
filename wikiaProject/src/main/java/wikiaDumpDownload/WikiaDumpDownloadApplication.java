@@ -2,6 +2,11 @@ package wikiaDumpDownload;
 
 import wikiaDumpDownload.controller.WikiaDumpDownloadThreadImpl;
 import wikiaDumpDownload.util.Extraction7zip;
+import wikiaStatistics.WikiaStatisticsApplication;
+import wikiaStatistics.controller.MetadataThreadImpl;
+
+import java.io.File;
+import java.util.ResourceBundle;
 
 /**
  * This class represents the application to download dumps of Wikia wikis.
@@ -19,8 +24,8 @@ public class WikiaDumpDownloadApplication {
 
         WikiaDumpDownloadThreadImpl.downloadWikiaDumps();
 
-        Extraction7zip extractor = new Extraction7zip();
-        extractor.extractAll7ZipFilesIntoDesignatedFolder();
+        // Extraction7zip extractor = new Extraction7zip();
+        // extractor.extractAll7ZipFilesIntoDesignatedFolder();
 
     }
 
