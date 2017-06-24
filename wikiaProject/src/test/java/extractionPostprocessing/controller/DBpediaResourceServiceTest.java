@@ -19,6 +19,8 @@ public class DBpediaResourceServiceTest {
 
     @Test
     public void resourceExistsInDBpedia() throws Exception {
+        Assert.assertTrue(DBpediaResourceService.resourceExistsInDBpedia("<http://dbpedia.org/resource/Hagrid>"));
+        Assert.assertFalse(DBpediaResourceService.resourceExistsInDBpedia("<http://dbpedia.org/resource/aasdfaapowefl>"));
     }
 
     @Test
