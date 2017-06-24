@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 
 /**
  * First, relatively simple, implementation of a mapper.
+ * - maps all other resources to dbpedia resources (same name)
  */
 public class Mapper_1 implements MapperInterface {
 
