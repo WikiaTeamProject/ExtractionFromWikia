@@ -3,7 +3,7 @@ package extractionPostprocessing;
 import extractionPostprocessing.controller.EntitiesMappingExecutor;
 import extractionPostprocessing.controller.Mapper_3;
 import extractionPostprocessing.controller.RedirectProcessor;
-import utils.ExtractionBz2;
+import extractionPostprocessing.controller.RedirectProcessorSingleWiki;
 
 import java.io.File;
 import java.util.ResourceBundle;
@@ -32,9 +32,9 @@ public class ExtractionPostprocessingApplication {
             }
         }
 
-        // create one mapping file out of all extracted files for each wiki
-        RedirectProcessor rp = new RedirectProcessor(pathToRootDirectory + "/GoT_Wikia");
-        rp.executeRedirects();
+        // create one mapping file for all wikis and replace domain
+        RedirectProcessor redirectProcessor = new RedirectProcessor();
+        redirectProcessor.executeRedirectsForAllWikis();
 
         EntitiesMappingExecutor mappingExecutor = new EntitiesMappingExecutor(new Mapper_3());
         mappingExecutor.createMappingFilesForAllWikis();
