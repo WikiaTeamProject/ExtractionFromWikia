@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
@@ -45,16 +46,17 @@ public class Mapper_3 implements MapperInterface {
             for (int i = 0; i < listOfFiles.length; i++) {
 
                 if      (
-                        listOfFiles[i].isFile()
+                                listOfFiles[i].isFile()
                                 && listOfFiles[i].toString().endsWith(".ttl")
                                 && !listOfFiles[i].toString().endsWith("_evaluation.ttl") // do not use resources from the evaluation file
                                 && !listOfFiles[i].toString().endsWith(mappingFileName)   // do not use resources from the mapping file
                         ) {
 
-                    String line = "";
-                    String fileContents = "";
+                    String line = ""; // line to be read
                     String languageCode = "";
 
+                    // content of the new file with updated domain to be overwritten
+                    StringBuffer contentOfNewFile = new StringBuffer();
 
                     FileReader fr = new FileReader(listOfFiles[i].getAbsolutePath());
                     BufferedReader br = new BufferedReader(fr);
@@ -76,12 +78,14 @@ public class Mapper_3 implements MapperInterface {
                                 continue;
                             }
 
+                            contentOfNewFile.append(line.replaceAll("dbpedia.org", targetNameSpace) + "\n");
+
                             // do not do for wikipedia entities
                             if(!dbPediaResource.toLowerCase().contains("wikipedia.org"))
                             {
                                 // map files to null
                                 if(dbPediaResource.contains("/File:")){
-                                    mappingFileContents = dbPediaResource.replace("dbpedia.org", targetNameSpace) + "<owl:As><null>\n";
+                                    mappingFileContents = dbPediaResource.replace("dbpedia.org", targetNameSpace) + "<owl:sameAs><null>\n";
                                     entitiesMapping.add(mappingFileContents);
                                 } else {
                                     // write that resource in a list to look it up at a later point in time
@@ -92,7 +96,10 @@ public class Mapper_3 implements MapperInterface {
                     }
                     br.close();
                     fr.close();
-                }
+
+                    MapperInterface.updateFile(contentOfNewFile.toString(), listOfFiles[i]);
+
+                } // end of if relevant file
             } // end of loop over all files of that particular wiki
 
 
@@ -105,16 +112,16 @@ public class Mapper_3 implements MapperInterface {
                 if(result.resourceExists){
                     if(result.redirectResource != null){
                         // -> use redirect resource
-                        mappingFileContents = dbPediaResource.replace("dbpedia.org", targetNameSpace) + "<owl:As>" + result.redirectResource +"\n";
+                        mappingFileContents = dbPediaResource.replace("dbpedia.org", targetNameSpace) + "<owl:sameAs>" + result.redirectResource +"\n";
                         entitiesMapping.add(mappingFileContents);
                     } else {
                         // -> no redirect resource
-                        mappingFileContents = dbPediaResource.replace("dbpedia.org", targetNameSpace) + "<owl:As>" + result.redirectResource +"\n";
+                        mappingFileContents = dbPediaResource.replace("dbpedia.org", targetNameSpace) + "<owl:sameAs>" + result.redirectResource +"\n";
                         entitiesMapping.add(mappingFileContents);
                     }
                 } else {
                     // -> resource does not exist -> map to <null>
-                    mappingFileContents = dbPediaResource.replace("dbpedia.org", targetNameSpace) + "<owl:As>" + dbPediaResource + "\n";
+                    mappingFileContents = dbPediaResource.replace("dbpedia.org", targetNameSpace) + "<owl:sameAs>" + "<null>" + "\n";
                     entitiesMapping.add(mappingFileContents);
                 }
             }

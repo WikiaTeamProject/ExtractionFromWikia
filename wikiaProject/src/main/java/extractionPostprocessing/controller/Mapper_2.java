@@ -73,11 +73,11 @@ public class Mapper_2 implements MapperInterface {
                             {
                                 // map files to null
                                 if(dbPediaEntity.contains("/File:")){
-                                    mappingFileContents = dbPediaEntity.replace("dbpedia.org", targetNameSpace) + "<owl:As><null>\n";
+                                    mappingFileContents = dbPediaEntity.replace("dbpedia.org", targetNameSpace) + "<owl:sameAs><null>\n";
                                     entitiesMapping.add(mappingFileContents);
                                 } else {
                                     // standard use case: Map resource to dbpedia resource
-                                    mappingFileContents = dbPediaEntity.replace("dbpedia.org", targetNameSpace) + "<owl:As>" + dbPediaEntity + "\n";
+                                    mappingFileContents = dbPediaEntity.replace("dbpedia.org", targetNameSpace) + "<owl:sameAs>" + dbPediaEntity + "\n";
                                     entitiesMapping.add(mappingFileContents);
                                 }
                             }

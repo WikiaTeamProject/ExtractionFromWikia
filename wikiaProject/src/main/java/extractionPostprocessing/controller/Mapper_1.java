@@ -69,7 +69,7 @@ public class Mapper_1 implements MapperInterface {
 
                             // do not do for wikipedia entities
                             if(!dbPediaEntity.toLowerCase().contains("wikipedia.org")) {
-                                mappingFileContents = dbPediaEntity.replace("dbpedia.org", targetNameSpace) + "<owl:As>" + dbPediaEntity + "\n";
+                                mappingFileContents = dbPediaEntity.replace("dbpedia.org", targetNameSpace) + "<owl:sameAs>" + dbPediaEntity + "\n";
                                 entitiesMapping.add(mappingFileContents);
                             }
                         }
