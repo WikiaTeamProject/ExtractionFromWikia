@@ -6,6 +6,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -33,17 +35,39 @@ public class IOHandler {
         HashMap<String, String> dbPediaExtractorMappings = new HashMap<String, String>();
         BufferedReader bufferedReader;
         FileReader fileReader;
-        String fileLine ="", key, value;
+        String fileLine ="", key="", value="";
 
         try {
             fileReader = new FileReader(fileName);
             bufferedReader = new BufferedReader(fileReader);
 
-            while ((fileLine = bufferedReader.readLine()) != null) {
+            lineLoop: while ((fileLine = bufferedReader.readLine()) != null) {
                 if(!fileLine.startsWith("#")) {
                     // do only if the line does not start with # (used for comment)
-                    key = fileLine.substring(1, fileLine.indexOf("><owl:As>"));
-                    value = fileLine.substring(fileLine.indexOf("><owl:As>") + 10, fileLine.length() - 1);
+
+
+                    Matcher matcher = null;
+                    Pattern pattern = Pattern.compile("<[^<]*>");
+                    // regex: <[^<]*>
+                    // this regex captures everything between tags including the tags: <...>
+                    // there are three tags in every line, we are not interested in the second tag
+
+                    int index = 0;
+                    matcher = pattern.matcher(fileLine);
+
+                    while (matcher.find()) {
+                        index++;
+                        if (index == 1) {
+                            if (dbPediaExtractorMappings.containsKey(matcher.group())) {
+                                continue lineLoop;
+                            } else {
+                                key = matcher.group();
+                            }
+                        } else if(index == 3){
+                            value = matcher.group();
+                        }
+                    }
+
                     dbPediaExtractorMappings.put(key, value);
                 }
             }
