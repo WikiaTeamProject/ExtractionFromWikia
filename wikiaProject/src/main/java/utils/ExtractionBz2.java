@@ -1,6 +1,7 @@
 package utils;
 
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
+import wikiaDumpDownload.util.Extraction7zip;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,6 +16,10 @@ import java.util.regex.Pattern;
  * This class can extract bz2 files.
  */
 public class ExtractionBz2 {
+
+    public static void main(String[] args) {
+        ExtractionBz2.extractDBpediaExtractorResultFiles("C:\\Users\\D060249\\Desktop\\TMP\\Extraction_Raw\\PokemonGo Wiki\\enwiki\\20170102", "C:\\Users\\D060249\\Desktop\\TMP\\Pokemon_Go");
+    }
 
     private static Logger logger = Logger.getLogger(ExtractionBz2.class.getName());
 

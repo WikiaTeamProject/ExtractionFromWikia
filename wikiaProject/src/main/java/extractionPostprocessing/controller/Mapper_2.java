@@ -9,7 +9,9 @@ import java.util.HashSet;
 import java.util.ResourceBundle;
 
 /**
- * First, relatively simple, implementation of a mapper.
+ * Second attempt, implementation of a mapper.
+ * - maps files to <null>
+ * - maps all other resources to dbpedia resources (same name)
  */
 public class Mapper_2 implements MapperInterface {
 
@@ -71,11 +73,11 @@ public class Mapper_2 implements MapperInterface {
                             {
                                 // map files to null
                                 if(dbPediaEntity.contains("/File:")){
-                                    mappingFileContents = dbPediaEntity.replace("dbpedia.org", targetNameSpace) + "<owl:As><null>\n";
+                                    mappingFileContents = dbPediaEntity.replace("dbpedia.org", targetNameSpace) + "<owl:sameAs> <null> .\n";
                                     entitiesMapping.add(mappingFileContents);
                                 } else {
                                     // standard use case: Map resource to dbpedia resource
-                                    mappingFileContents = dbPediaEntity.replace("dbpedia.org", targetNameSpace) + "<owl:As>" + dbPediaEntity + "\n";
+                                    mappingFileContents = dbPediaEntity.replace("dbpedia.org", targetNameSpace) + " <owl:sameAs> " + dbPediaEntity + ".\n";
                                     entitiesMapping.add(mappingFileContents);
                                 }
                             }

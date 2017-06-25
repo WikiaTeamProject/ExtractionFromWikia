@@ -6,9 +6,9 @@ import org.junit.*;
 import java.io.*;
 
 /**
- * This method test class RedirectProcessor.
+ * This method test class RedirectProcessorSingleWiki.
  */
-public class RedirectProcessorTest {
+public class RedirectProcessorSingleWikiTest {
 
     private static final String TEST_DIRECTORY_PATH = "./src/test/test_files/redirect_processor_test";
     private static final String COPY_OF_TEST_DIRECTORY_PATH = "./src/test/test_files/redirect_processor_test_2";
@@ -45,7 +45,7 @@ public class RedirectProcessorTest {
     @Test
     public void executeRedirects() throws Exception {
         File testDirectory = new File(COPY_OF_TEST_DIRECTORY_PATH);
-        RedirectProcessor rp = new RedirectProcessor(testDirectory);
+        RedirectProcessorSingleWiki rp = new RedirectProcessorSingleWiki(testDirectory);
         rp.executeRedirects();
         System.out.println(testDirectory.listFiles().length);
 

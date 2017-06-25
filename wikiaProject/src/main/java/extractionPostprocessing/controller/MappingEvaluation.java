@@ -67,7 +67,6 @@ public class MappingEvaluation {
         } catch (IOException ioe){
             logger.severe(ioe.toString());
         }
-
     }
 
 
@@ -132,7 +131,6 @@ public class MappingEvaluation {
         }
 
         mappingsEvaluationResult = new EvaluationResult(falseNegatives, falsePositives, truePositives, trueNegatives, totalMapping);
-
         return mappingsEvaluationResult;
     }
 

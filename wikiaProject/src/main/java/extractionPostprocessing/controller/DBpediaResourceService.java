@@ -20,7 +20,7 @@ public class DBpediaResourceService {
     public static SPARQLresult getResourceAndRedirectInDBpedia(String resource){
 
         resource = addTagsIfNotAtag(resource);
-
+        System.out.println("Looking up resource " + resource);
         String query =
                 "SELECT ?uri ?re\n" +
                 "WHERE {\n" +
