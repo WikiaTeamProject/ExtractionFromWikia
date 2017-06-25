@@ -14,7 +14,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
-
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import utils.ExtractionBz2;

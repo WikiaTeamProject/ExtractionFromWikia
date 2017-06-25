@@ -115,8 +115,8 @@ public class Mapper_3 implements MapperInterface {
                         mappingFileContents = dbPediaResource.replace("dbpedia.org", targetNameSpace) + " <owl:sameAs> " + result.redirectResource +" .\n";
                         entitiesMapping.add(mappingFileContents);
                     } else {
-                        // -> no redirect resource
-                        mappingFileContents = dbPediaResource.replace("dbpedia.org", targetNameSpace) + " <owl:sameAs> " + result.redirectResource +" .\n";
+                        // -> no redirect resource, use dbPediaResource
+                        mappingFileContents = dbPediaResource.replace("dbpedia.org", targetNameSpace) + " <owl:sameAs> " + dbPediaResource + " .\n";
                         entitiesMapping.add(mappingFileContents);
                     }
                 } else {
