@@ -1,5 +1,7 @@
 package extraction;
 
+import org.apache.commons.exec.*;
+
 /**
  *
  * This class will perform the extraction of the previously downloaded wikis.
@@ -17,6 +19,15 @@ public class ExtractionApplication {
     public static void main(String[] args) {
 
         Extractor extractor = new Extractor();
+        //extractor.createDbpediaExtractionStructure();
+        //   extractor.createDbpediaExtractionStructure();
+        //extractor.moveExtractFilesforEvaluation();
+
+        extractor.callDbPediaExtractorToExtractFile();
+
+
+
+
     }
 
 }
