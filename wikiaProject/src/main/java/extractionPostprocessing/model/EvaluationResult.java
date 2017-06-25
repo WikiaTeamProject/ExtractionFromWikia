@@ -73,7 +73,7 @@ public class EvaluationResult {
     public double getPrecision() {
 
         if ((this.truePositives + this.falsePositives) != 0)
-            return (double) this.truePositives / (this.truePositives + this.falsePositives);
+            return ((double) this.truePositives / (this.truePositives + this.falsePositives)) * 100;
         else
             return 0;
     }
@@ -81,7 +81,7 @@ public class EvaluationResult {
     public double getRecall() {
 
         if ((this.truePositives + this.falseNegatives) != 0)
-            return (double) this.truePositives / (this.truePositives + this.falseNegatives);
+            return ((double) this.truePositives / (this.truePositives + this.falseNegatives)) * 100;
         else
             return 0;
     }
@@ -91,7 +91,7 @@ public class EvaluationResult {
         double recall = this.getRecall();
 
         if ((precision + recall) != 0)
-            return (2 * precision * recall) / (precision + recall);
+            return ((2 * (precision/100.0) * (recall/100.0) / ((precision/100.0) + (recall/100.0))) * 100);
         else
             return 0;
     }
@@ -99,7 +99,7 @@ public class EvaluationResult {
     public double getAccuracy() {
 
         if (totalMappings != 0) {
-            return ((double) truePositives / totalMappings) * 100;
+            return ((double) (truePositives + trueNegatives) / totalMappings) * 100;
         } else {
             return 0;
         }

@@ -37,7 +37,10 @@ public class MappingEvaluation {
                 if (directory.isDirectory()) {
                     EvaluationResult evaluationResult = evaluateMappingsForOneWiki(directory);
                     if (evaluationResult != null) {
-                        evaluationResultLine = "Accuracy: " + evaluationResult.getAccuracy() + "% (" + directory.getName() + ")";
+                        evaluationResultLine = "Accuracy: " + evaluationResult.getAccuracy() + "% (" + directory.getName() + ")\n"
+                                + "Precision: " + evaluationResult.getPrecision() + "% (" + directory.getName() + ")\n"
+                                + "Recall: " + evaluationResult.getRecall() + "% (" + directory.getName() + ")\n"
+                                + "F1-Measure: " + evaluationResult.getF1Measure() + "% (" + directory.getName() + ")\n";
                         logger.info(evaluationResultLine);
                         aggregatedEvaluationResults.append(evaluationResultLine + "\n");
                         totalMappings += evaluationResult.getTotalMappings();
@@ -121,9 +124,28 @@ public class MappingEvaluation {
             for (String resource : manualMappings.keySet()) {
                 if (dbPediaMappings.containsKey(resource)) {
                     totalMapping++;
-                    if (manualMappings.get(resource).toLowerCase().equals(dbPediaMappings.get(resource).toLowerCase())) {
-                        truePositives++;
+
+                    if(manualMappings.get(resource).equals("<null>")){
+                        // NEGATIVE case
+                        if (manualMappings.get(resource).toLowerCase().equals(dbPediaMappings.get(resource).toLowerCase())) {
+                            trueNegatives++;
+                        } else {
+                            falsePositives++;
+                        }
+                    } else {
+                        // POSITIVE case
+                        if (manualMappings.get(resource).toLowerCase().equals(dbPediaMappings.get(resource).toLowerCase())) {
+                            truePositives++;
+                        } else {
+                            if(dbPediaMappings.get(resource).equals("<null>")){
+                                falseNegatives++;
+                            } else {
+                                falsePositives++;
+                            }
+                        }
                     }
+
+
                 }
             }
 
