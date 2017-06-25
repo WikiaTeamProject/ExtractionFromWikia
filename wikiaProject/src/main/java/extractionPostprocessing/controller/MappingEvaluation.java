@@ -24,7 +24,10 @@ public class MappingEvaluation {
      */
     public static void evaluateAllMappings() {
 
-        double overallAccuracy = 0;
+        double overallAccuracy = 0.0;
+        double overallPrecision = 0.0;
+        double overallRecall = 0.0;
+        double overallF1Measure = 0.0;
         int totalMappings = 0;
         ArrayList<EvaluationResult> evaluationResults = new ArrayList<>();
         String pathToRootDirectory = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
@@ -53,12 +56,19 @@ public class MappingEvaluation {
                 double e_accuracy = e.getAccuracy();
                 int e_totalMappings = e.getTotalMappings();
                 overallAccuracy += (e.getAccuracy() * ( (double) e.getTotalMappings() / totalMappings ));
+                overallPrecision += (e.getPrecision() * ( (double) e.getTotalMappings() / totalMappings));
+                overallRecall += (e.getRecall() * ( (double) e.getTotalMappings() / totalMappings));
+                overallF1Measure += (e.getF1Measure() * ( (double) e.getTotalMappings() / totalMappings));
             }
 
         } else {
             logger.severe("pathToRootDirectory is not a directory!");
         }
-        evaluationResultLine = "Overall accuracy of " + evaluationResults.size() + " wikis: " + overallAccuracy + "%";
+        evaluationResultLine = "Overall Accuracy of " + evaluationResults.size() + " wikis: " + overallAccuracy + "%\n" +
+                "Overall Precision of " + evaluationResults.size() + " wikis: " + overallPrecision + "%\n" +
+                "Overall Recall of " + evaluationResults.size() + " wikis: " + overallRecall + "%\n" +
+                "Overall F1-Measure of "+ evaluationResults.size() + " wikis: " + overallF1Measure + "%\n";
+
         logger.info(evaluationResultLine);
         aggregatedEvaluationResults.append(evaluationResultLine + "\n");
 
@@ -91,6 +101,8 @@ public class MappingEvaluation {
         File manualMappingFile = new File(wikiPath + "/" + manualMappingFileName);
 
         if (!mappingFile.exists()) {
+            // there is no generated mapping file
+            logger.severe("No generated mapping file for wiki " + wikiPath + "\nRun mapper before evaluating wiki.");
             return null;
         }
 
@@ -107,6 +119,10 @@ public class MappingEvaluation {
                 }
             } else {
                 // wikiPath is not a directory
+                return null;
+            }
+            if(!manualMappingFile.exists()){
+                // no mapping file could be found
                 return null;
             }
         }
