@@ -40,11 +40,11 @@ public class IOHandler {
         try {
             fileReader = new FileReader(fileName);
             bufferedReader = new BufferedReader(fileReader);
-
+            System.out.println(fileName);
             lineLoop: while ((fileLine = bufferedReader.readLine()) != null) {
                 if(!fileLine.startsWith("#")) {
                     // do only if the line does not start with # (used for comment)
-
+                    System.out.println(fileLine);
 
                     Matcher matcher = null;
                     Pattern pattern = Pattern.compile("<[^<]*>");

@@ -79,7 +79,7 @@ public class MappingEvaluation {
      * @param wikiPath
      * @return
      */
-    private static EvaluationResult evaluateMappingsForOneWiki(String wikiPath) {
+    public static EvaluationResult evaluateMappingsForOneWiki(String wikiPath) {
         HashMap<String, String> dbPediaMappings;
         HashMap<String, String> manualMappings;
 

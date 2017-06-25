@@ -107,7 +107,13 @@ public class EvaluationResult {
 
     public String toString() {
         return "True Positives: " + truePositives + "\n" +
+                "True Negatives: " + trueNegatives + "\n" +
+                "False Positives: " + falsePositives + "\n" +
+                "False Negatives: " + falseNegatives + "\n" +
                 "Total Mappings: " + totalMappings + "\n" +
-                "Accuracy: " + getAccuracy() + "%";
+                "Accuracy: " + this.getAccuracy() + "\n" +
+                "Precision: " + this.getPrecision() + "%\n" +
+                "Recall: " + this.getRecall() + "%\n" +
+                "F1-Measure: " + this.getF1Measure() + "%";
     }
 }

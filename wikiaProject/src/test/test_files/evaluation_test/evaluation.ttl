@@ -1,0 +1,5 @@
+<http://uni-mannheim.de/resource/Banana> <owl:As> <http://dbpedia.org/resource/Banana> .
+<http://uni-mannheim.de/resource/Banana_Fruit> <owl:As> <http://dbpedia.org/resource/Banana> .
+<http://uni-mannheim.de/resource/Cherry> <owl:As> <null> .
+<http://uni-mannheim.de/resource/Cherry_Fruit> <owl:As> <http://dbpedia.org/resource/Cherry> .
+<http://uni-mannheim.de/resource/Strawberry_Fruit> <owl:As> <http://dbpedia.org/resource/Strawberry> .
