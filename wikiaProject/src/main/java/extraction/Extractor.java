@@ -14,6 +14,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
+
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecutor;
 import utils.ExtractionBz2;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -350,7 +353,7 @@ public class Extractor {
                            // System.out.println("waiting for process to finish");
 
                         //}
-
+/*
                         Process p=Runtime.getRuntime().exec("e:/test.bat");
                         BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
                       String line;
@@ -362,7 +365,7 @@ public class Extractor {
                          // p.waitFor(5, TimeUnit.SECONDS);
                       }
 
-
+*/
 
                       //  ProcessBuilder pb = new ProcessBuilder("e:\\test.bat");
                         //pb.directory(new File("e:/"));
@@ -377,7 +380,13 @@ public class Extractor {
 
 
 
+                        String line = "e://test.bat";
+                        CommandLine cmdLine = CommandLine.parse(line);
+                        DefaultExecutor executor = new DefaultExecutor();
+                        executor.setExitValue(0);
+                        int exitValue = executor.execute(cmdLine);
 
+                        System.out.println(exitValue);
 
 
 
