@@ -28,6 +28,7 @@ public interface MapperInterface {
 
         String mappingFileName = ResourceBundle.getBundle("config").getString("mappingfilename");
         String filePath = directoryPath + "/" + mappingFileName;
+        logger.info("Writing mappings file: " + filePath);
         Iterator<String> entitiesMappingIterator;
 
         try {
@@ -56,6 +57,7 @@ public interface MapperInterface {
      * @param file File to be overwritten
      */
     static void updateFile(String content, File file){
+        logger.info("Updating file " + file.getName());
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
             writer.write(content);

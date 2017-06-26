@@ -30,7 +30,7 @@ public class EntitiesMappingExecutor {
      */
     public void createMappingFilesForAllWikis() {
 
-        String pathToRootDirectory = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
+        String pathToRootDirectory = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/PostProcessedWikis";
         File root = new File(pathToRootDirectory);
 
         if (root.isDirectory()) {

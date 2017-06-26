@@ -227,6 +227,11 @@ public class RedirectProcessorSingleWiki {
 
             } // end of for loop through all files in the directory
 
+            if(counter > 10){
+                logger.info("Redirect processing was cancelled after 10 iterations. There is probably an infinite loop relation in the redirects file.");
+                return false;
+            }
+
         } while (changeOccurred);
 
         System.out.println("Number of iterations: " + (counter - 1));

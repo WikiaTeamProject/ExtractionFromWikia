@@ -30,7 +30,7 @@ public class MappingEvaluation {
         double overallF1Measure = 0.0;
         int totalMappings = 0;
         ArrayList<EvaluationResult> evaluationResults = new ArrayList<>();
-        String pathToRootDirectory = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
+        String pathToRootDirectory = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/PostProcessedWikis";
         StringBuffer aggregatedEvaluationResults = new StringBuffer();
         String evaluationResultLine = "";
         File root = new File(pathToRootDirectory);
@@ -160,8 +160,6 @@ public class MappingEvaluation {
                             }
                         }
                     }
-
-
                 }
             }
 
