@@ -20,7 +20,7 @@ public class Extraction7zip {
      *
      */
     public Extraction7zip() {
-        directoryExtracted = downloadedDirectoryPath + "/extracted7z/";
+        directoryExtracted = downloadedDirectoryPath + "/extracted/";
         FileOperations.createDirectory(directoryExtracted);
     }
 
