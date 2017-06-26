@@ -1,9 +1,6 @@
 package extractionPostprocessing;
 
-import extractionPostprocessing.controller.EntitiesMappingExecutor;
-import extractionPostprocessing.controller.Mapper_3;
-import extractionPostprocessing.controller.RedirectProcessor;
-import extractionPostprocessing.controller.RedirectProcessorSingleWiki;
+import extractionPostprocessing.controller.*;
 
 import java.io.File;
 import java.util.ResourceBundle;
@@ -15,28 +12,12 @@ import java.util.ResourceBundle;
 public class ExtractionPostprocessingApplication {
 
     public static void main(String[] args) {
-
-
-        String pathToRootDirectory = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
-        File root = new File(pathToRootDirectory);
-
-
-        // evaluate whether this is really needed.
-        if (root.isDirectory()) {
-            for (File directory : root.listFiles()) {
-                if (directory.isDirectory()) {
-
-                    // unzip all bz2 files
-                    // ExtractionBz2.extractDBpediaExtractorResultFiles(directory.getAbsolutePath(), directory.getAbsolutePath());
-                }
-            }
-        }
-
+        
         // create one mapping file for all wikis and replace domain
         RedirectProcessor redirectProcessor = new RedirectProcessor();
         redirectProcessor.executeRedirectsForAllWikis();
 
-        EntitiesMappingExecutor mappingExecutor = new EntitiesMappingExecutor(new Mapper_3());
+        EntitiesMappingExecutor mappingExecutor = new EntitiesMappingExecutor(new Mapper_4());
         mappingExecutor.createMappingFilesForAllWikis();
 
     }
