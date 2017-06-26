@@ -20,6 +20,7 @@ import org.apache.commons.compress.compressors.gzip.GzipUtils;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import utils.ExtractionBz2;
+import utils.ExtractionGZip;
 import wikiaDumpDownload.util.Extraction7zip;
 
 import java.io.FileWriter;
@@ -45,6 +46,9 @@ public class Extractor {
     private File extractionFrameworkDirectory;
     private String extractionDefaultPropertiesFilePath;
     private HashMap<String,WikiaWikiProperties> wikisPropertiesSet;
+    private String pathToRootDirectory=
+            ResourceBundle.getBundle("config").getString("pathToRootDirectory");
+
 
 
     public Extractor() {
@@ -59,6 +63,22 @@ public class Extractor {
         checkPrerequisites();
 
     }
+
+    public void extractAllWikis(){
+
+        logger.info("Unarachiving all dumps");
+        unarchiveDownloadedDumps();
+
+        logger.info("Creating folder structure for DBpedia extractor");
+        createDbpediaExtractionStructure();
+
+        logger.info("Calling dbPediaExtractor");
+        callDbPediaExtractorToExtractFile();
+
+        logger.info("Moving files for evaluation");
+        moveExtractFilesforEvaluation();
+    }
+
 
 
     /**
@@ -87,18 +107,31 @@ public class Extractor {
         try{
             String wikisFilePath=
                     ResourceBundle.getBundle("config").getString("pathToRootDirectory")
-                            +"//downloadedWikis//";
+                            +"//downloadedWikis//downloaded//";
             File downloadedWikisFolder=new File(wikisFilePath);
-            Extraction7zip extarctor7Zip=new Extraction7zip();
-
+            Extraction7zip extractor7Zip=new Extraction7zip();
+            ExtractionGZip extractorGZip=new ExtractionGZip();
 
             if(downloadedWikisFolder.isDirectory()){
                 File[] downloadedWikisFormats= downloadedWikisFolder.listFiles();
                 for(File downloadedWikisFormat:downloadedWikisFormats){
                     if(downloadedWikisFormat.isDirectory()){
-                        File[] downloadedWikis= downloadedWikisFormat.listFiles();
+                        if(downloadedWikisFormat.getName().endsWith("7z")){
+                            extractor7Zip.extractAll7ZipFilesIntoDesignatedFolder();
+                        }
+                        else if(downloadedWikisFormat.getName().endsWith("gz")){
+                            extractorGZip.extractAllGZipFilesIntoDesignatedFolder();
+                        }
+
+
+
+
+                        /*File[] downloadedWikis= downloadedWikisFormat.listFiles();
                         for(File wikis:downloadedWikis){
                             if(wikis.getName().endsWith(".gz")){
+
+                                extractionGZip.extractGzipFile(wikis.getAbsolutePath(),
+                                        wikis.getAbsolutePath());
 
                             }
                             else
@@ -106,7 +139,7 @@ public class Extractor {
                                 extarctor7Zip.extract7ZipFile(wikis.getAbsolutePath(),
                                         wikis.getParent());
                             }
-                        }
+                        }*/
                     }
                 }
             }
@@ -172,19 +205,33 @@ public class Extractor {
     public HashMap<String,WikiaWikiProperties> extractPropertiesForAllWikis() {
 
         //WikiaWikisProperties
-        HashMap<String,WikiaWikiProperties> wikiProperties=new HashMap<String,WikiaWikiProperties>();
+        HashMap<String,WikiaWikiProperties> wikiProperties=
+                new HashMap<String,WikiaWikiProperties>();
         int index=0;
 
         String wikisFilePath=
                 ResourceBundle.getBundle("config").getString("pathToRootDirectory")
-                +"//DownloadedWikis//";
+                +"//downloadedWikis//extracted//";
 
         try {
             File wikisFilesFolder = new File(wikisFilePath);
 
             //get list of wikis in a folder
-            File[] listOfFolders = wikisFilesFolder.listFiles();
+            File[] wikiFiles = wikisFilesFolder.listFiles();
 
+            for(File wikiFile:wikiFiles){
+
+                if (wikiFile.isFile() && wikiFile.getName().endsWith(".xml")) {
+
+                    WikiaWikiProperties properties = extractPropertiesForaWiki(wikiFile.getPath());
+
+                    if (wikiProperties != null) {
+                        wikiProperties.put(properties.getWikiName(), properties);
+                    }
+                }
+            }
+
+            /*
             for(File formatFolder:listOfFolders){
 
                 if(formatFolder.isDirectory()) {
@@ -204,7 +251,7 @@ public class Extractor {
                     }
                 }
 
-            }
+            }*/
         } catch (Exception exception) {
             logger.log(Level.SEVERE, exception.getMessage());
         }
@@ -221,9 +268,12 @@ public class Extractor {
 
             wikisPropertiesSet=extractPropertiesForAllWikis();
 
-            String downloadDirectoryForExtraction = ResourceBundle.getBundle("config").getString("downloadDirectoryforExtraction");
+            String downloadDirectoryForExtraction=
+                    ResourceBundle.getBundle("config").getString("pathToRootDirectory")
+                            +"//downloadedWikis//DbPediaExtractionFormat//";
 
-            String wikiSourceFileName= ResourceBundle.getBundle("config").getString("wikiSourceFileName");
+            String wikiSourceFileName=
+                    ResourceBundle.getBundle("config").getString("wikiSourceFileName");
 
             WikiaWikiProperties wikiProperties=null;
             String languageCode;
@@ -334,11 +384,9 @@ public class Extractor {
      */
     public void callDbPediaExtractorToExtractFile(){
         try{
-
-            String pathToRootDirectory=
-                    ResourceBundle.getBundle("config").getString("pathToRootDirectory");
             String downloadDirectoryForExtraction =
-                    pathToRootDirectory+"//"+"DbPediaExtractionFormat";
+                    ResourceBundle.getBundle("config").getString("pathToRootDirectory")
+                            +"//downloadedWikis//"+"DbPediaExtractionFormat";
             String pathToExtractionFramework =
                     ResourceBundle.getBundle("config").getString("dbPediaExtractorPath");
             String DATE_FORMAT_NOW = "YYYYMMdd";
@@ -444,13 +492,11 @@ public class Extractor {
      */
     public void moveExtractFilesforEvaluation(){
 
-        String pathToRootDirectory=
-                ResourceBundle.getBundle("config").getString("pathToRootDirectory");
         String downloadDirectoryForExtraction =
-                pathToRootDirectory+"//"+"DbPediaExtractionFormat";
+                pathToRootDirectory+"//downloadedWikis//"+"DbPediaExtractionFormat";
 
-        String extractedFilesDirectory =
-                pathToRootDirectory+"//"+"PostProcessedWikis";
+        String postProcessedFilesDirectoryPath =
+                pathToRootDirectory+"//downloadedWikis//"+"PostProcessedWikis";
 
         ExtractionBz2
                 bz2Extractor=new ExtractionBz2();
@@ -458,6 +504,8 @@ public class Extractor {
         try{
 
             File extractedWikiFolder = new File(downloadDirectoryForExtraction);
+
+
 
             //get list of wikis in a folder
             File[] listOfFolders = extractedWikiFolder.listFiles();
@@ -474,10 +522,10 @@ public class Extractor {
 
                             WikiaWikiProperties properties=readWikiPropertiesFile(dateFolder.getAbsolutePath());
 
-                            File extractedFilesFolder=new File(extractedFilesDirectory+"//"+properties.getWikiName());
+                            File extractedFilesFolder=new File(postProcessedFilesDirectoryPath+"//"+properties.getWikiName());
 
                             if(!extractedFilesFolder.exists()){
-                                extractedFilesFolder.mkdir();
+                                extractedFilesFolder.mkdirs();
                             }
 
                             File[] extractedFiles = dateFolder.listFiles();
@@ -485,7 +533,7 @@ public class Extractor {
                             for(File wikiFile:extractedFiles){
                                 if(wikiFile.getName().endsWith(".bz2")){
                                     bz2Extractor.extract(wikiFile.getAbsolutePath(),
-                                            extractedFilesDirectory+"//"+properties.getWikiName());
+                                            postProcessedFilesDirectoryPath+"//"+properties.getWikiName());
                                 }
                             }
                         }
@@ -510,13 +558,16 @@ public class Extractor {
 
         String downloadDirectoryForExtraction =
                 ResourceBundle.getBundle("config").getString("wikiPropertiesFileName");
+        String newLineCharacter =
+                ResourceBundle.getBundle("config").getString("newLineCharacter");
         try{
             PrintWriter fileWriter=new PrintWriter(wikiFolderPath+"//"+downloadDirectoryForExtraction);
 
             System.out.println("Writing properties for wiki: " + wikiProperties.getWikiName());
 
-            fileWriter.write("WikiName:" + wikiProperties.getWikiName()+"\n");
-            fileWriter.write("LanguageCode:" + wikiProperties.getLanguageCode());
+            fileWriter.write("WikiName:" + wikiProperties.getWikiName()+newLineCharacter);
+            fileWriter.write("LanguageCode:" + wikiProperties.getLanguageCode()+newLineCharacter);
+            fileWriter.write("File Path:" + wikiProperties.getWikiPath()+newLineCharacter);
 
             fileWriter.close();
 
