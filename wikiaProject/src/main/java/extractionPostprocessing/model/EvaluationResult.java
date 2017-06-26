@@ -12,6 +12,7 @@ public class EvaluationResult {
     private int totalMappings;
 
 
+
     /**
      * Constructor
      * @param falseNegatives
@@ -103,6 +104,22 @@ public class EvaluationResult {
         } else {
             return 0;
         }
+    }
+
+    /**
+     * All negative entries, i.e. FP + TN.
+     * @return
+     */
+    public int getNegatives(){
+        return falsePositives + trueNegatives;
+    }
+
+    /**
+     * All positive entries, i.e. TP + FN.
+     * @return
+     */
+    public int getPositives(){
+        return truePositives + falseNegatives;
     }
 
     public String toString() {
