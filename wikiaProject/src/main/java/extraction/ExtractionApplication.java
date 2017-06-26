@@ -1,6 +1,7 @@
 package extraction;
 
 import org.apache.commons.exec.*;
+import utils.ExtractionBz2;
 
 /**
  *
@@ -23,8 +24,9 @@ public class ExtractionApplication {
         //   extractor.createDbpediaExtractionStructure();
         //extractor.moveExtractFilesforEvaluation();
 
-        extractor.callDbPediaExtractorToExtractFile();
+       // extractor.callDbPediaExtractorToExtractFile();
 
+        extractor.unarchiveDownloadedDumps();
 
 
 
