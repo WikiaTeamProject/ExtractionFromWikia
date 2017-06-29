@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  * It allows to create multiple mappers, to test them and to compare them.
  * Every mapper must implement this interface.
  */
-public interface MapperInterface {
+public interface ResourceMapperInterface {
 
     void createMappingFileForSingleWiki(File pathToWikiFolder);
 

@@ -1,6 +1,6 @@
 package extractionPostprocessing.controller;
 
-import extractionPostprocessing.model.MapperInterface;
+import extractionPostprocessing.model.ResourceMapperInterface;
 import extractionPostprocessing.model.SPARQLresult;
 
 import java.io.BufferedReader;
@@ -8,15 +8,17 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Third mapper implementation.
  * - automatically maps files to <null>
  * - checks whether a resource exists before mapping it
+ * - does not map lists
  */
-public class Mapper_3 implements MapperInterface {
+public class ResourceMapper_4 implements ResourceMapperInterface {
 
     /**
      * This method creates the mapping file for the given wiki (using the file path to the wiki).
@@ -24,7 +26,9 @@ public class Mapper_3 implements MapperInterface {
      */
     public void createMappingFileForSingleWiki(File pathToWikiFolder) {
 
-        String targetNameSpace = ResourceBundle.getBundle("config").getString("targetnamespace");
+
+        // TODO: Use actual wiki name
+        String targetNameSpace = ResourceBundle.getBundle("config").getString("targetnamespace") + "/" + "<file_name>";
 
         // data structure containing unique resources for the mapping, used to query dbpedia only once for each resource
         HashSet<String> uniqueResourcesToBeMapped = new HashSet<>();
@@ -46,7 +50,7 @@ public class Mapper_3 implements MapperInterface {
             for (int i = 0; i < listOfFiles.length; i++) {
 
                 if      (
-                                listOfFiles[i].isFile()
+                        listOfFiles[i].isFile()
                                 && listOfFiles[i].toString().endsWith(".ttl")
                                 && !listOfFiles[i].toString().endsWith("_evaluation.ttl") // do not use resources from the evaluation file
                                 && !listOfFiles[i].toString().endsWith(mappingFileName)   // do not use resources from the mapping file
@@ -80,7 +84,7 @@ public class Mapper_3 implements MapperInterface {
 
                             contentOfNewFile.append(line.replaceAll("dbpedia.org", targetNameSpace) + "\n");
 
-                            // do not do for wikipedia entities
+                            // do not do for wikipedia and wikimedia entities
                             if(!dbPediaResource.toLowerCase().contains("wikipedia.org") || !dbPediaResource.toLowerCase().contains("commons.wikimedia.org"))
                             {
                                 // map files to null
@@ -97,7 +101,7 @@ public class Mapper_3 implements MapperInterface {
                     br.close();
                     fr.close();
 
-                    MapperInterface.updateFile(contentOfNewFile.toString(), listOfFiles[i]);
+                    ResourceMapperInterface.updateFile(contentOfNewFile.toString(), listOfFiles[i]);
 
                 } // end of if relevant file
             } // end of loop over all files of that particular wiki
@@ -111,9 +115,18 @@ public class Mapper_3 implements MapperInterface {
 
                 if(result.resourceExists){
                     if(result.redirectResource != null){
-                        // -> use redirect resource
-                        mappingFileContents = dbPediaResource.replace("dbpedia.org", targetNameSpace) + " <owl:sameAs> " + result.redirectResource +" .\n";
-                        entitiesMapping.add(mappingFileContents);
+                        // redirect source found
+                        if(
+                                result.redirectResource.toLowerCase().contains("list_") ||
+                                result.redirectResource.toLowerCase().contains("places_")
+                           ) {
+                            //-> the redirect resource is likely an enumeration of other resources; do not link to it
+                            mappingFileContents = dbPediaResource.replace("dbpedia.org", targetNameSpace) + " <owl:sameAs> " + "<null> " +".\n";
+                            entitiesMapping.add(mappingFileContents);
+                        } else {
+                            mappingFileContents = dbPediaResource.replace("dbpedia.org", targetNameSpace) + " <owl:sameAs> " + result.redirectResource + " .\n";
+                            entitiesMapping.add(mappingFileContents);
+                        }
                     } else {
                         // -> no redirect resource -> use dbPediaResource
                         mappingFileContents = dbPediaResource.replace("dbpedia.org", targetNameSpace) + " <owl:sameAs> " + dbPediaResource + " .\n";
@@ -127,7 +140,7 @@ public class Mapper_3 implements MapperInterface {
             }
 
             //Write Contents to Mapping File
-            MapperInterface.writeContentsToMappingFile(entitiesMapping, pathToWikiFolder.getAbsolutePath());
+            ResourceMapperInterface.writeContentsToMappingFile(entitiesMapping, pathToWikiFolder.getAbsolutePath());
 
         } catch (Exception exception) {
             logger.severe(exception.toString());

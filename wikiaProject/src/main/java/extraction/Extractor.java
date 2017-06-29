@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.FileInputStream;
@@ -15,17 +14,13 @@ import java.io.FileOutputStream;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
 
-import org.apache.commons.compress.compressors.bzip2.BZip2Utils;
-import org.apache.commons.compress.compressors.gzip.GzipUtils;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import utils.ExtractionBz2;
 import utils.ExtractionGZip;
-import wikiaDumpDownload.util.Extraction7zip;
+import utils.Extraction7zip;
 
-import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.io.InputStreamReader;
 
 
 /**

@@ -1,4 +1,4 @@
-package wikiaDumpDownload.util;
+package utils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -6,7 +6,6 @@ import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
-import utils.FileOperations;
 
 
 public class Extraction7zip {
@@ -17,7 +16,6 @@ public class Extraction7zip {
 
     /**
      * Constructor for the 7zip Extraction.
-     *
      */
     public Extraction7zip() {
         directoryExtracted = downloadedDirectoryPath + "/extracted/";

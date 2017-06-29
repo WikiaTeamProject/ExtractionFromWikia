@@ -1,13 +1,11 @@
 package utils;
 
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
-import wikiaDumpDownload.util.Extraction7zip;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

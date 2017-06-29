@@ -3,6 +3,8 @@ package utils;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -40,6 +42,12 @@ public class FileOperations {
     }
 
 
+    /**
+     * Returns an array list containing the statistics pages of all wikis.
+     * Prerequisite: A wiki CSV file exists.
+     * @param filePath
+     * @return
+     */
     public static ArrayList<String> getUrls(String filePath) {
         LineNumberReader fileReader;
         String line;
@@ -77,6 +85,43 @@ public class FileOperations {
         return urls;
     }
 
+
+    /**
+     * This method returns the file name of a given path to a file.
+     * @param path Path to a file.
+     * @return File Name
+     */
+    public static String getFileNameFromPath(String path){
+
+        String regularExpressionToGetFileNameForwardSlash = "(?<=\\/)[^\\/]*$"; // plain: (?<=\/)[^\/]*$
+        String regularExpressionToGetFileNameBackwardSlash = "(?<=\\\\)[^\\\\]*$"; // plain (?<=\\)[^\\]*$
+        String fileName = null;
+
+        Pattern pattern = Pattern.compile(regularExpressionToGetFileNameForwardSlash);
+        Matcher matcher = pattern.matcher(path);
+        if (matcher.find()) {
+            fileName = matcher.group(0);
+        } else {
+            // -> no file name could be derived using forward slash
+            pattern = Pattern.compile(regularExpressionToGetFileNameBackwardSlash);
+            matcher = pattern.matcher(path);
+            if (matcher.find()) {
+                fileName = matcher.group(0);
+            }
+        }
+        return fileName;
+    }
+
+
+    /**
+     * This method returns the file name of a given path to a file.
+     * @param path Path to a file.
+     * @return File Name
+     */
+    public static String getFileNameFromPath(File path){
+        System.out.println(path.getAbsolutePath());
+        return getFileNameFromPath(path.getPath());
+    }
 
 
 }

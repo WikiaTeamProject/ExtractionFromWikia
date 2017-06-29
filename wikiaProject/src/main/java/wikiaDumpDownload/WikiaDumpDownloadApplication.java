@@ -1,12 +1,6 @@
 package wikiaDumpDownload;
 
 import wikiaDumpDownload.controller.WikiaDumpDownloadThreadImpl;
-import wikiaDumpDownload.util.Extraction7zip;
-import wikiaStatistics.WikiaStatisticsApplication;
-import wikiaStatistics.controller.MetadataThreadImpl;
-
-import java.io.File;
-import java.util.ResourceBundle;
 
 /**
  * This class represents the application to download dumps of Wikia wikis.

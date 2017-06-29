@@ -1,6 +1,6 @@
 package extractionPostprocessing.controller;
 
-import extractionPostprocessing.model.MapperInterface;
+import extractionPostprocessing.model.ResourceMapperInterface;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,10 +9,11 @@ import java.util.HashSet;
 import java.util.ResourceBundle;
 
 /**
- * First, relatively simple, implementation of a mapper.
+ * Second attempt, implementation of a mapper.
+ * - maps files to <null>
  * - maps all other resources to dbpedia resources (same name)
  */
-public class Mapper_1 implements MapperInterface {
+public class ResourceMapper_2 implements ResourceMapperInterface {
 
 
     /**
@@ -40,9 +41,9 @@ public class Mapper_1 implements MapperInterface {
 
                 if      (
                         listOfFiles[i].isFile()
-                        && listOfFiles[i].toString().endsWith(".ttl")
-                        && !listOfFiles[i].toString().endsWith("_evaluation.ttl") // do not use resources from the evaluation file
-                        && !listOfFiles[i].toString().endsWith(mappingFileName)   // do not use resources from the mapping file
+                                && listOfFiles[i].toString().endsWith(".ttl")
+                                && !listOfFiles[i].toString().endsWith("_evaluation.ttl") // do not use resources from the evaluation file
+                                && !listOfFiles[i].toString().endsWith(mappingFileName)   // do not use resources from the mapping file
                         ) {
 
                     String line = "";
@@ -59,7 +60,7 @@ public class Mapper_1 implements MapperInterface {
                             try {
                                 // get the actual entity
                                 dbPediaEntity = line.trim().substring(0, line.indexOf(" "));
-                                System.out.println(dbPediaEntity);
+                                //System.out.println(dbPediaEntity);
                             } catch(StringIndexOutOfBoundsException sioobe){
                                 logger.info("Exception in file " + listOfFiles[i].getAbsolutePath() + ": " + sioobe.toString());
                                 logger.info("Problem in file: " + listOfFiles[i].toString());
@@ -68,9 +69,17 @@ public class Mapper_1 implements MapperInterface {
                             }
 
                             // do not do for wikipedia entities
-                            if(!dbPediaEntity.toLowerCase().contains("wikipedia.org")) {
-                                mappingFileContents = dbPediaEntity.replace("dbpedia.org", targetNameSpace) + " <owl:sameAs> " + dbPediaEntity + " .\n";
-                                entitiesMapping.add(mappingFileContents);
+                            if(!dbPediaEntity.toLowerCase().contains("wikipedia.org"))
+                            {
+                                // map files to null
+                                if(dbPediaEntity.contains("/File:")){
+                                    mappingFileContents = dbPediaEntity.replace("dbpedia.org", targetNameSpace) + "<owl:sameAs> <null> .\n";
+                                    entitiesMapping.add(mappingFileContents);
+                                } else {
+                                    // standard use case: Map resource to dbpedia resource
+                                    mappingFileContents = dbPediaEntity.replace("dbpedia.org", targetNameSpace) + " <owl:sameAs> " + dbPediaEntity + ".\n";
+                                    entitiesMapping.add(mappingFileContents);
+                                }
                             }
                         }
 
@@ -81,7 +90,7 @@ public class Mapper_1 implements MapperInterface {
             }
 
             //Write Contents to Mapping File
-            MapperInterface.writeContentsToMappingFile(entitiesMapping, pathToWikiFolder.getAbsolutePath());
+            ResourceMapperInterface.writeContentsToMappingFile(entitiesMapping, pathToWikiFolder.getAbsolutePath());
 
         } catch (Exception exception) {
             logger.severe(exception.toString());

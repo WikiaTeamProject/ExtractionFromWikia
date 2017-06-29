@@ -63,6 +63,7 @@ public class RedirectProcessorSingleWikiTest {
     /**
      * This method deletes the copied files for the test.
      */
+
     @AfterClass
     public static void cleanup(){
         try {
@@ -78,5 +79,6 @@ public class RedirectProcessorSingleWikiTest {
             System.out.println(ioe.toString());
         }
     }
+
 
 }

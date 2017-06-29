@@ -1,15 +1,9 @@
 package extractionPostprocessing.controller;
 
-import extractionPostprocessing.model.MapperInterface;
+import extractionPostprocessing.model.ResourceMapperInterface;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.PrintWriter;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -19,9 +13,9 @@ import java.util.logging.Logger;
 public class EntitiesMappingExecutor {
 
     private static Logger logger = Logger.getLogger(EntitiesMappingExecutor.class.getName());
-    private MapperInterface mapper;
+    private ResourceMapperInterface mapper;
 
-    public EntitiesMappingExecutor(MapperInterface mapper) {
+    public EntitiesMappingExecutor(ResourceMapperInterface mapper) {
         this.mapper = mapper;
     }
 
@@ -43,11 +37,11 @@ public class EntitiesMappingExecutor {
     }
 
 
-    public MapperInterface getMapper() {
+    public ResourceMapperInterface getMapper() {
         return mapper;
     }
 
-    public void setMapper(MapperInterface mapper) {
+    public void setMapper(ResourceMapperInterface mapper) {
         this.mapper = mapper;
     }
 }
