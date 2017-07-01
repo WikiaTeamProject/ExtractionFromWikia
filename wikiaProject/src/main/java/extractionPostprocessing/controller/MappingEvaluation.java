@@ -94,10 +94,10 @@ public class MappingEvaluation {
         HashMap<String, String> manualMappings;
 
         IOHandler ioHandler = new IOHandler();
-        String dbPediaMappingFileName = ResourceBundle.getBundle("config").getString("mappingfilename");
+        String dbPediaResourceMappingsFileName = "resourceMappings.ttl";
         String manualMappingFileName = ResourceBundle.getBundle("config").getString("manualmappingfilename");
 
-        File mappingFile = new File(wikiPath + "/" + dbPediaMappingFileName);
+        File mappingFile = new File(wikiPath + "/" + dbPediaResourceMappingsFileName);
         File manualMappingFile = new File(wikiPath + "/" + manualMappingFileName);
 
         if (!mappingFile.exists()) {
