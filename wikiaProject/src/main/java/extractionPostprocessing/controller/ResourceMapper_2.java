@@ -90,7 +90,7 @@ public class ResourceMapper_2 implements ResourceMapperInterface {
             }
 
             //Write Contents to Mapping File
-            ResourceMapperInterface.writeContentsToMappingFile(entitiesMapping, pathToWikiFolder.getAbsolutePath());
+            ResourceMapperInterface.writeMappingContentsToFile(entitiesMapping, pathToWikiFolder.getAbsolutePath());
 
         } catch (Exception exception) {
             logger.severe(exception.toString());

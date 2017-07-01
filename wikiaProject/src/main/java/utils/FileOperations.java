@@ -5,6 +5,10 @@ import extractionPostprocessing.controller.EntitiesMappingExecutor;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -151,6 +155,40 @@ public class FileOperations {
 
     public static void updateFile(String content, String filepath){
         updateFile(content, new File(filepath));
+    }
+
+
+
+
+    /**
+     * Write the mapings file to the disk.
+     * @param entitiesMapping A HashSet of Strings, each representing one line to be written to the mapping file.
+     * @param pathToFileToBeWritten
+     */
+    public static void writeMappingContentsToFile(HashMap<String, String> entitiesMapping, File pathToFileToBeWritten) {
+
+        StringBuffer contentToWrite = new StringBuffer();
+        Iterator iterator = entitiesMapping.entrySet().iterator();
+
+        while(iterator.hasNext()){
+            HashMap.Entry<String, String> entry = (HashMap.Entry<String, String>) iterator.next();
+            contentToWrite.append(entry.getKey() + " <owl:sameAs> " + entry.getValue() + " .\n");
+        }
+
+
+        try {
+            // Initialize file Writer Objects
+            PrintWriter fileWriter = new PrintWriter(pathToFileToBeWritten, "UTF-8");
+
+            //
+            fileWriter.write(contentToWrite.toString());
+
+            // Close file Writer
+            fileWriter.close();
+
+        } catch (Exception exception) {
+            logger.log(Level.SEVERE, exception.getMessage());
+        }
     }
 
 

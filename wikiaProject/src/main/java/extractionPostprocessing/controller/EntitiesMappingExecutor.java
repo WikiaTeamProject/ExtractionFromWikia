@@ -1,9 +1,7 @@
 package extractionPostprocessing.controller;
 
-import extractionPostprocessing.model.ClassMapperInterface;
-import extractionPostprocessing.model.PropertyMapperInterface;
+import extractionPostprocessing.model.*;
 import extractionPostprocessing.model.ResourceMapperInterface;
-import extractionPostprocessing.model.WikiToMap;
 import utils.FileOperations;
 
 import java.io.BufferedReader;
@@ -21,16 +19,16 @@ import java.util.logging.Logger;
 public class EntitiesMappingExecutor {
 
     private static Logger logger = Logger.getLogger(EntitiesMappingExecutor.class.getName());
-    private ResourceMapperInterface resourceMapper;
-    private PropertyMapperInterface propertyMapper;
-    private ClassMapperInterface classMapper;
+    private ResourceMapper resourceMapper;
+    private PropertyMapper propertyMapper;
+    private ClassMapper classMapper;
 
 
     /**
      * constructor
      * @param resourceMapper
      */
-    public EntitiesMappingExecutor(ResourceMapperInterface resourceMapper, PropertyMapperInterface propertyMapper, ClassMapperInterface classMapper) {
+    public EntitiesMappingExecutor(ResourceMapper resourceMapper, PropertyMapper propertyMapper, ClassMapper classMapper) {
         this.resourceMapper = resourceMapper;
         this.classMapper = classMapper;
         this.propertyMapper = propertyMapper;
@@ -54,11 +52,11 @@ public class EntitiesMappingExecutor {
                     // we have a wiki file
 
                     WikiToMap wikiToMap = getMappingInformationOfWikiAndUpdateFiles(directory);
+                    String targetNameSpace = ResourceBundle.getBundle("config").getString("targetnamespace") + "/" + directory.getName();
 
-                    resourceMapper.createResourceMappings(directory, wikiToMap.resourcesToMap);
-                    propertyMapper.createPropertyMappings(directory, wikiToMap.propertiesToMap);
-                    classMapper.createClassMappings(directory, wikiToMap.classesToMap);
-
+                    resourceMapper.writeResourceMappingsFile(directory, targetNameSpace, wikiToMap.resourcesToMap);
+                    propertyMapper.writePropertiesMappingsFile(directory, targetNameSpace, wikiToMap.propertiesToMap);
+                    classMapper.writeClassMappingsFile(directory, targetNameSpace, wikiToMap.classesToMap);
 
 
                 } // end of check whether file is a directory
@@ -171,27 +169,27 @@ public class EntitiesMappingExecutor {
    ONLY GETTERS AND SETTERS BELOW.
     */
 
-    public void setResourceMapper(ResourceMapperInterface resourceMapper) {
+    public void setResourceMapper(ResourceMapper resourceMapper) {
         this.resourceMapper = resourceMapper;
     }
 
-    public void setPropertyMapper(PropertyMapperInterface propertyMapper) {
+    public void setPropertyMapper(PropertyMapper propertyMapper) {
         this.propertyMapper = propertyMapper;
     }
 
-    public void setClassMapper(ClassMapperInterface classMapper) {
+    public void setClassMapper(ClassMapper classMapper) {
         this.classMapper = classMapper;
     }
 
-    public ResourceMapperInterface getResourceMapper() {
+    public ResourceMapper getResourceMapper() {
         return resourceMapper;
     }
 
-    public PropertyMapperInterface getPropertyMapper() {
+    public PropertyMapper getPropertyMapper() {
         return propertyMapper;
     }
 
-    public ClassMapperInterface getClassMapper() {
+    public ClassMapper getClassMapper() {
         return classMapper;
     }
 }
