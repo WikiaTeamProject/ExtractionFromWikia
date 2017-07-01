@@ -51,28 +51,6 @@ public interface ResourceMapperInterface {
     }
 
 
-    /**
-     * Overwrite file with content.
-     * @param content Content to be written
-     * @param file File to be overwritten
-     */
-    static void updateFile(String content, File file){
-        logger.info("Updating file " + file.getName());
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            writer.write(content);
-            writer.flush();
-            writer.close();
-        } catch (IOException e) {
-            logger.severe("Could not update file " + file.getName() + ".");
-            logger.severe(e.toString());
-            e.printStackTrace();
-        }
-    }
 
-
-    static void updateFile(String content, String filepath){
-        updateFile(content, new File(filepath));
-    }
 
 }

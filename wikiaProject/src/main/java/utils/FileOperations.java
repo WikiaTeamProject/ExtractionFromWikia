@@ -1,8 +1,11 @@
 package utils;
 
+import extractionPostprocessing.controller.EntitiesMappingExecutor;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,6 +14,9 @@ import java.util.regex.Pattern;
  * This class includes general util methods usable in all packages.
  */
 public class FileOperations {
+
+
+    static Logger logger = Logger.getLogger(FileOperations.class.getName());
 
     /**
      * This method receives an array of file paths and merges the files into the specified target file
@@ -122,6 +128,31 @@ public class FileOperations {
         System.out.println(path.getAbsolutePath());
         return getFileNameFromPath(path.getPath());
     }
+
+
+    /**
+     * Overwrite file with content.
+     * @param content Content to be written
+     * @param file File to be overwritten
+     */
+    static void updateFile(String content, File file){
+        logger.info("Updating file " + file.getName());
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            writer.write(content);
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            logger.severe("Could not update file " + file.getName() + ".");
+            logger.severe(e.toString());
+            e.printStackTrace();
+        }
+    }
+
+    static void updateFile(String content, String filepath){
+        updateFile(content, new File(filepath));
+    }
+
 
 
 }
