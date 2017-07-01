@@ -2,6 +2,7 @@ package extractionPostprocessing.controller;
 
 import extractionPostprocessing.model.*;
 import utils.FileOperations;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -9,6 +10,8 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Class for the creation of the mappings files.
@@ -24,6 +27,7 @@ public class EntitiesMappingExecutor {
 
     /**
      * constructor
+     *
      * @param resourceMapper
      */
     public EntitiesMappingExecutor(ResourceMapper resourceMapper, PropertyMapper propertyMapper, ClassMapper classMapper) {
@@ -66,15 +70,15 @@ public class EntitiesMappingExecutor {
     /**
      * This method looks for resources, properties and templates for a given wiki. It will collect those in sets and return them.
      * Additionally all files will be updated with the correct domain name.
+     *
      * @param directoryOfWiki The directory where the files of a single wiki are stored.
      * @return
      */
-    private WikiToMap getMappingInformationOfWikiAndUpdateFiles(File directoryOfWiki){
+    private WikiToMap getMappingInformationOfWikiAndUpdateFiles(File directoryOfWiki) {
 
         //get list of extracted files in a folder
         File[] listOfFiles = directoryOfWiki.listFiles();
 
-        String dbPediaResource = "";
         String mappingFileName = ResourceBundle.getBundle("config").getString("mappingfilename");
         String targetNameSpace = ResourceBundle.getBundle("config").getString("targetnamespace") + "/" + directoryOfWiki.getName();
 
@@ -104,55 +108,64 @@ public class EntitiesMappingExecutor {
                     FileReader fr = new FileReader(listOfFiles[i].getAbsolutePath());
                     BufferedReader br = new BufferedReader(fr);
 
+                    // regex to find tags
+                    Matcher matcher = null;
+                    Pattern pattern = Pattern.compile("<[^<]*>");
+                    // regex: <[^<]*>
+                    // this regex captures everything between tags including the tags: <...>
+                    // there are three tags in every line
+
 
                     // read relevant file line by line
                     while ((line = br.readLine()) != null) {
+
 
                         // if the line is a comment -> continue with the next line
                         if (!line.trim().toLowerCase().startsWith("#") || !line.trim().toLowerCase().startsWith("#")) {
                             // -> line is not a comment
 
-                            try {
-                                // get the actual entity
-                                dbPediaResource = line.trim().substring(0, line.indexOf(" "));
-                                //System.out.println(dbPediaResource);
-                            } catch (StringIndexOutOfBoundsException sioobe) {
-                                logger.info("Exception in file " + listOfFiles[i].getAbsolutePath() + ": " + sioobe.toString());
-                                logger.info("Problem in file: " + listOfFiles[i].toString());
-                                logger.info("With String: " + dbPediaResource);
-                                continue;
-                            }
 
+                            // rewrite line for updating the file
                             contentOfNewFile.append(line.replaceAll("dbpedia.org", targetNameSpace) + "\n");
 
-                            // do not do for wikipedia and wikimedia entities and wikipedia entities
-                            if (dbPediaResource.toLowerCase().contains("wikipedia.org") || dbPediaResource.toLowerCase().contains("commons.wikimedia.org")) {
-                                // do nothing
-                            } else {
-                                // -> not a wikipedia or dbpedia resource
 
-                                if (dbPediaResource.contains("/resource/")){
-                                    resourcesToMap.add(dbPediaResource);
-                                } else if (dbPediaResource.contains("/Template:")){
-                                    classesToMap.add(dbPediaResource);
-                                } else if (dbPediaResource.contains("/property/")) {
-                                    propertiesToMap.add(dbPediaResource);
+                            matcher = pattern.matcher(line);
+
+                            while (matcher.find()) {
+
+                                // do not do for wikipedia and wikimedia entities and wikipedia entities
+                                if (matcher.group().toLowerCase().contains("wikipedia.org") || matcher.group().toLowerCase().contains("commons.wikimedia.org")) {
+                                    // do nothing
+                                } else {
+                                    // -> not a wikipedia or dbpedia resource
+
+                                    if (matcher.group().contains("/Template:")) {
+                                        classesToMap.add(matcher.group());
+                                    } else if (matcher.group().contains("/resource/")) {
+                                        resourcesToMap.add(matcher.group());
+                                    } else if (matcher.group().contains("/property/")) {
+                                        propertiesToMap.add(matcher.group());
+                                    }
+
+                                    // Categories remain. Those are not mapped.
                                 }
 
-                                // Categories remain. Those are not mapped.
-                            }
-                    }
-                }
-                br.close();
-                fr.close();
+                            } // end of while matcher find
 
-                // update the file, i.e. rewrite the file where the dbpedia domain is replaced with the actual domain
-                FileOperations.updateFile(contentOfNewFile.toString(), listOfFiles[i]);
+                        } // end of if (!comment)
 
-            } // end of if relevant file
-        }// end of loop over all files of that particular wiki
+                    } // end of read line loop
 
-        } catch (IOException ioe){
+                    br.close();
+                    fr.close();
+
+                    // update the file, i.e. rewrite the file where the dbpedia domain is replaced with the actual domain
+                    FileOperations.updateFile(contentOfNewFile.toString(), listOfFiles[i]);
+
+                } // end of if relevant file
+            }// end of loop over all files of that particular wiki
+
+        } catch (IOException ioe) {
             logger.severe(ioe.toString());
             ioe.printStackTrace();
         }
