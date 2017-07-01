@@ -1,4 +1,4 @@
-package extractionPostprocessing;
+package extractionPostprocessing.controller;
 
 import extractionPostprocessing.model.ClassMapper;
 

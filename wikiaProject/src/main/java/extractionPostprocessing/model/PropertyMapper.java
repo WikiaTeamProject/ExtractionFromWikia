@@ -40,7 +40,7 @@ public abstract class PropertyMapper {
      * @param propertiesToMap An array list of the properties for which the mapping shall be created.
      */
     public void writePropertiesMappingsFile(File directory, String targetNamespace, HashSet<String> propertiesToMap) {
-        FileOperations.writeMappingContentsToFile(getPropertyMappings(targetNamespace, propertiesToMap), new File(directory.getAbsolutePath() + "/propertiesMapping.ttl"));
+        FileOperations.writeMappingContentsToFile(getPropertyMappings(targetNamespace, propertiesToMap), new File(directory.getAbsolutePath() + "/propertyMapping.ttl"));
     }
 
 }

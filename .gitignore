@@ -24,3 +24,6 @@
 
 # include templates
 !/wikiaProject/src/main/resources/files/templates/template_extraction_default.properties
+
+# properties file
+/wikiaProject/src/main/resources/config.properties
