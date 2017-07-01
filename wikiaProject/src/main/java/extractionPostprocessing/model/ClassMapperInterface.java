@@ -1,8 +1,13 @@
 package extractionPostprocessing.model;
 
+import java.io.File;
+import java.util.HashSet;
+
 /**
- * Templates are interpreted as classes.
- * These classes are mapped to corresponding DBpedia classes.
+ * Created by D060249 on 01.07.2017.
  */
-public class ClassMapperInterface {
+public interface ClassMapperInterface {
+
+    HashSet<String> createClassMappings(File directory, HashSet resourcesToMap);
+
 }

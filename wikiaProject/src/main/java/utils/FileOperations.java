@@ -135,7 +135,7 @@ public class FileOperations {
      * @param content Content to be written
      * @param file File to be overwritten
      */
-    static void updateFile(String content, File file){
+    public static void updateFile(String content, File file){
         logger.info("Updating file " + file.getName());
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
@@ -149,7 +149,7 @@ public class FileOperations {
         }
     }
 
-    static void updateFile(String content, String filepath){
+    public static void updateFile(String content, String filepath){
         updateFile(content, new File(filepath));
     }
 

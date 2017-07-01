@@ -20,6 +20,9 @@ public interface ResourceMapperInterface {
 
     static Logger logger = Logger.getLogger(EntitiesMappingExecutor.class.getName());
 
+
+    HashSet<String> createResourceMappings(File directory, HashSet resourcesToMap);
+
     /**
      * Write the mapings file to the disk.
      * @param entitiesMapping A HashSet of Strings, each representing one line to be written to the mapping file.
@@ -49,8 +52,5 @@ public interface ResourceMapperInterface {
             logger.log(Level.SEVERE, exception.getMessage());
         }
     }
-
-
-
 
 }

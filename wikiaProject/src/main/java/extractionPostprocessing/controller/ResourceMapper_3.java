@@ -2,6 +2,7 @@ package extractionPostprocessing.controller;
 
 import extractionPostprocessing.model.ResourceMapperInterface;
 import extractionPostprocessing.model.SPARQLresult;
+import utils.FileOperations;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -96,7 +97,7 @@ public class ResourceMapper_3 implements ResourceMapperInterface {
                     br.close();
                     fr.close();
 
-                    ResourceMapperInterface.updateFile(contentOfNewFile.toString(), listOfFiles[i]);
+                    FileOperations.updateFile(contentOfNewFile.toString(), listOfFiles[i]);
 
                 } // end of if relevant file
             } // end of loop over all files of that particular wiki
