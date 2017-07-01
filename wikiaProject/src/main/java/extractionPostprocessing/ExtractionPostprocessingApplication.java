@@ -3,7 +3,7 @@ package extractionPostprocessing;
 import extractionPostprocessing.controller.*;
 
 /**
- * This applicatrion will postprocess extracted wikia wikis.
+ * This application will postprocess extracted wikia wikis.
  * Resource mappings are changed.
  */
 public class ExtractionPostprocessingApplication {
@@ -14,7 +14,7 @@ public class ExtractionPostprocessingApplication {
         RedirectProcessor redirectProcessor = new RedirectProcessor();
         redirectProcessor.executeRedirectsForAllWikis();
 
-        EntitiesMappingExecutor mappingExecutor = new EntitiesMappingExecutor(new ResourceMapper_4());
+        EntitiesMappingExecutor mappingExecutor = new EntitiesMappingExecutor(new ResourceMapper_4(), new PropertiesMapper_1(), new ClassMapper_1());
         mappingExecutor.createMappingFilesForAllWikis();
 
     }

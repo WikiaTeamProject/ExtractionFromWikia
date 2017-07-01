@@ -13,7 +13,7 @@ import java.util.HashSet;
 public abstract class PropertyMapper {
 
 
-    abstract String mapSingleProperty(String propertyToMap);
+    public abstract String mapSingleProperty(String propertyToMap);
 
 
     /**
