@@ -24,7 +24,7 @@ public abstract class ClassMapper {
     /**
      * Returns all resource mappings of a wiki.
      * @param targetNamespace The target namespace.
-     * @param classesToMap An array list of all the classes to be mapped (in dbpedia tag format, i.e. the domain is not yet replaced).
+     * @param classesToMap An array list of all the classes to be mapped (in DBpedia tag format, i.e. the domain is not yet replaced).
      * @return A hashmap of the form: key = <targetnamespace_resource> value = <dbpedia_resource>
      */
     public HashMap<String, String> getClassMappings(String targetNamespace, HashSet<String> classesToMap) {
@@ -45,7 +45,7 @@ public abstract class ClassMapper {
      * @param classesToMap An array list of the classes for which the mapping shall be created.
      */
     public void writeClassMappingsFile(File directory, String targetNamespace, HashSet<String> classesToMap) {
-        FileOperations.writeMappingContentsToFile(getClassMappings(targetNamespace, classesToMap), new File(directory.getAbsolutePath() + "/resourceMappings.ttl"));
+        FileOperations.writeMappingContentsToFile(getClassMappings(targetNamespace, classesToMap), new File(directory.getAbsolutePath() + "/classMappings.ttl"));
     }
 
 

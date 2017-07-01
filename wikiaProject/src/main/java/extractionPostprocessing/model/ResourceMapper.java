@@ -25,7 +25,7 @@ public abstract class ResourceMapper {
      * Returns all resource mappings of a wiki.
      * @param targetNamespace The target namespace.
      * @param resourcesToMap An array list of all the resources to be mapped (in dbpedia tag format, i.e. the domain is not yet replaced).
-     * @return A hasmap of the form: key = <targetnamespace_resource> value = <dbpedia_resource>
+     * @return A hashmap of the form: key = <targetnamespace_resource> value = <dbpedia_resource>
      */
     public HashMap<String, String> getResourceMappings(String targetNamespace, HashSet<String> resourcesToMap) {
 
