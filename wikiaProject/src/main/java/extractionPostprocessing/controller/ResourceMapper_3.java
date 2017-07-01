@@ -1,16 +1,8 @@
 package extractionPostprocessing.controller;
 
 import extractionPostprocessing.model.ResourceMapper;
-import extractionPostprocessing.model.ResourceMapperInterface;
 import extractionPostprocessing.model.SPARQLresult;
-import utils.FileOperations;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.ResourceBundle;
 
 /**
  * Third mapper implementation.

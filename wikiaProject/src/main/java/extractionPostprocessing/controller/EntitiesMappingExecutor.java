@@ -1,9 +1,7 @@
 package extractionPostprocessing.controller;
 
 import extractionPostprocessing.model.*;
-import extractionPostprocessing.model.ResourceMapperInterface;
 import utils.FileOperations;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
