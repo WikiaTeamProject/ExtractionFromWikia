@@ -1,6 +1,7 @@
 package utils;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import java.io.File;
@@ -15,8 +16,7 @@ public class Redirects {
     private static HashMap<String,String> redirectsMap;
     private static Logger logger = Logger.getLogger(Redirects.class.getName());
     private static String rootDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
-
-
+    private static HashSet<String> pageIds;
 
     private Redirects() {
         // do nothing
@@ -41,60 +41,54 @@ public class Redirects {
     public String getRedirect(String resource){
         String redirect = null;
         if(redirectsMap == null){
-            readRedirectFile();
+            mapRedirects();
+        }
+
+        if(pageIds==null){
+            getPageIds();
         }
 
         if(redirectsMap.get(resource)!= null){
             redirect = redirectsMap.get(resource);
         }
+        else if(pageIds.contains(resource)){
+            redirect=resource;
+        }
+        else{
+            redirect = "<null>";
+        }
+
         return redirect;
     }
 
 
     /**
-     * This function with read redirects file
-     * and populates HashMap.
+     * This function will map
+     * redirects for resources
      */
-    public void readRedirectFile(){
-        String redirectFilePath = rootDirectoryPath+"//redirects//";
-        FileReader fileReader;
-        BufferedReader bufferedReader;
-        String fileLine="";
-        int i=1;
+    public void mapRedirects(){
+       try{
+           IOoperations ioOps=new IOoperations();
+           redirectsMap=ioOps.getResourcesRedirects();
+       }
+       catch(Exception excpetion){
+           logger.severe(excpetion.getMessage());
+       }
+    }
+
+    /**
+     * This function will get page ids
+     * by calling function which will read page ids file and return hashset of pageids
+     * to this function
+     */
+    public void getPageIds(){
         try{
-
-            File redirectsDirectory = new File(redirectFilePath);
-            if(!redirectsDirectory.exists()){
-                logger.severe("Redirects directory does not exist.");
-            }
-
-            if(redirectsDirectory.isDirectory()) {
-
-                redirectsMap=new HashMap<String,String>();
-
-                for(File redirectsFile:redirectsDirectory.listFiles()){
-                    if(redirectsFile.getName().toLowerCase().endsWith(".ttl")){
-
-                        fileReader=new FileReader(redirectsFile);
-                        bufferedReader=new BufferedReader(fileReader);
-
-                        while((fileLine=bufferedReader.readLine().trim())!="-1"){
-                            String resourceLink=
-                                    fileLine.substring(1,fileLine.indexOf(">"));
-
-                            String redirectLink=
-                                    fileLine.substring(fileLine.lastIndexOf("<")+1,
-                                            fileLine.lastIndexOf(">"));
-
-
-                            redirectsMap.put(resourceLink,redirectLink);
-                        }
-                    }
-                }
-            }
+            IOoperations ioOps=new IOoperations();
+            pageIds=ioOps.getPageIDs();
         }
-        catch(Exception ex){
-            logger.severe(ex.getMessage());
+        catch(Exception excpetion){
+            logger.severe(excpetion.getMessage());
         }
     }
+
 }
