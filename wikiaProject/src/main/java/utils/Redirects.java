@@ -11,7 +11,7 @@ import java.io.FileReader;
  */
 public class Redirects {
 
-    private static HashMap<String,String> redirectsMap=new HashMap<String,String>();
+    private static HashMap<String,String> redirectsMap;
     private static Logger logger = Logger.getLogger(Redirects.class.getName());
     private static String rootDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
 
@@ -45,11 +45,15 @@ public class Redirects {
         FileReader fileReader;
         BufferedReader bufferedReader;
         String fileLine="";
+        int i=1;
         try{
 
             File redirectsDirectory=new File(redirectFilePath);
 
             if(redirectsDirectory.isDirectory()) {
+
+                redirectsMap=new HashMap<String,String>();
+
                 for(File redirectsFile:redirectsDirectory.listFiles()){
                     if(redirectsFile.getName().toLowerCase().endsWith(".ttl")){
 
@@ -58,11 +62,13 @@ public class Redirects {
 
                         while((fileLine=bufferedReader.readLine().trim())!="-1"){
                             String resourceLink=
-                                    fileLine.substring(1,fileLine.indexOf(">")-1);
+                                    fileLine.substring(1,fileLine.indexOf(">"));
 
                             String redirectLink=
                                     fileLine.substring(fileLine.lastIndexOf("<")+1,
-                                            fileLine.lastIndexOf(">")-1);
+                                            fileLine.lastIndexOf(">"));
+
+
                             redirectsMap.put(resourceLink,redirectLink);
                         }
 
@@ -73,7 +79,5 @@ public class Redirects {
         catch(Exception ex){
             logger.severe(ex.getMessage());
         }
-
     }
-
 }
