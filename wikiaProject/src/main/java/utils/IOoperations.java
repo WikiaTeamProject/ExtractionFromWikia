@@ -5,10 +5,12 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.HashSet;
 
 /**
  *
@@ -18,7 +20,7 @@ public class IOoperations {
 
 
     static Logger logger = Logger.getLogger(IOoperations.class.getName());
-
+    private static String rootDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
     /**
      * This method receives an array of file paths and merges the files into the specified target file
      *
@@ -189,5 +191,93 @@ public class IOoperations {
     }
 
 
+    /**
+     * This function will read page Ids file
+     * @return Hashset containing pageIds
+     */
+    public HashSet<String> getPageIDs(){
+        String redirectFilePath = rootDirectoryPath + "//pageids//";
+        HashSet<String> pageIdsSet = new HashSet<String>();
+        FileReader fileReader;
+        BufferedReader bufferedReader;
+        String fileLine = "";
+        int i = 1;
+        try {
 
+            File pageIdsDirectory = new File(redirectFilePath);
+            if (!pageIdsDirectory.exists()) {
+                logger.severe("Page IDs directory does not exist.");
+            }
+
+            if (pageIdsDirectory.isDirectory()) {
+
+                for (File pageIdsFile : pageIdsDirectory.listFiles()) {
+                    if (pageIdsFile.getName().toLowerCase().endsWith(".ttl")) {
+
+                        fileReader = new FileReader(pageIdsFile);
+                        bufferedReader = new BufferedReader(fileReader);
+
+                        while ((fileLine = bufferedReader.readLine().trim()) != "-1") {
+                            String pageId =
+                                    fileLine.substring(0, fileLine.indexOf(">") + 1);
+
+                            pageIdsSet.add(pageId);
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            logger.severe(ex.getMessage());
+        }
+
+        return pageIdsSet;
+    }
+
+    /**
+     * This function with read redirects file
+     * @return HashMap containing redirects mapping
+     */
+    public HashMap<String,String> getResourcesRedirects() {
+
+        String redirectFilePath = rootDirectoryPath + "//redirects//";
+        HashMap redirectsMap = new HashMap<String, String>();
+        FileReader fileReader;
+        BufferedReader bufferedReader;
+        String fileLine = "";
+        int i = 1;
+        try {
+
+            File redirectsDirectory = new File(redirectFilePath);
+            if (!redirectsDirectory.exists()) {
+                logger.severe("Redirects directory does not exist.");
+            }
+
+            if (redirectsDirectory.isDirectory()) {
+
+                for (File redirectsFile : redirectsDirectory.listFiles()) {
+                    if (redirectsFile.getName().toLowerCase().endsWith(".ttl")) {
+
+                        fileReader = new FileReader(redirectsFile);
+                        bufferedReader = new BufferedReader(fileReader);
+
+                        while ((fileLine = bufferedReader.readLine().trim()) != "-1") {
+                            String resourceLink =
+                                    fileLine.substring(0, fileLine.indexOf(">") + 1);
+
+                            String redirectLink =
+                                    fileLine.substring(fileLine.lastIndexOf("<"),
+                                            fileLine.lastIndexOf(">") + 1);
+
+
+                            redirectsMap.put(resourceLink, redirectLink);
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            logger.severe(ex.getMessage());
+        }
+
+        return redirectsMap;
+    }
 }
