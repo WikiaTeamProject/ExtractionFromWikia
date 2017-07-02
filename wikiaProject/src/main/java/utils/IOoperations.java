@@ -1,12 +1,9 @@
 package utils;
 
-import extractionPostprocessing.controller.EntitiesMappingExecutor;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,12 +12,12 @@ import java.util.regex.Pattern;
 
 /**
  *
- * This class includes general util methods usable in all packages.
+ * This class includes general IO/File methods usable in all packages.
  */
-public class FileOperations {
+public class IOoperations {
 
 
-    static Logger logger = Logger.getLogger(FileOperations.class.getName());
+    static Logger logger = Logger.getLogger(IOoperations.class.getName());
 
     /**
      * This method receives an array of file paths and merges the files into the specified target file

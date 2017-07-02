@@ -1,6 +1,6 @@
 package wikiaDumpDownload.controller;
 
-import utils.FileOperations;
+import utils.IOoperations;
 import wikiaStatistics.controller.MetadataThreadImpl;
 
 import java.io.*;
@@ -60,7 +60,7 @@ public class WikiaDumpDownloadThreadImpl  {
         int lowerIdLimit = 0;
         int upperIdLimit = 50000;
 
-        FileOperations.createDirectory(statisticsDirectoryPath + "/wikiaOverviewIndividualDumpSizes");
+        IOoperations.createDirectory(statisticsDirectoryPath + "/wikiaOverviewIndividualDumpSizes");
 
 
         for (int i = 0; i < threads.length; i++) {

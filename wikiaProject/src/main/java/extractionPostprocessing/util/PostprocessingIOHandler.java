@@ -1,5 +1,7 @@
 package extractionPostprocessing.util;
 
+import utils.IOoperations;
+
 import java.io.File;
 import java.util.logging.Logger;
 import java.io.BufferedReader;
@@ -12,10 +14,12 @@ import java.util.regex.Pattern;
 
 /**
  * A helper class for various IO methods that allows for modular usage of such methods.
+ * This class is only for postprocessing specific IO operations.
+ * If you think your method is of use in a more general sense: use class {@link IOoperations IOoperations}.
  */
-public class IOHandler {
+public class PostprocessingIOHandler {
 
-    private static Logger logger = Logger.getLogger(IOHandler.class.getName());
+    private static Logger logger = Logger.getLogger(PostprocessingIOHandler.class.getName());
 
 
     public static HashMap<String, String> getExtractorMappings(String pathName) {

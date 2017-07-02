@@ -1,6 +1,6 @@
 package extractionPostprocessing.model;
 
-import utils.FileOperations;
+import utils.IOoperations;
 
 import java.io.File;
 import java.util.HashMap;
@@ -40,7 +40,7 @@ public abstract class PropertyMapper {
      * @param propertiesToMap An array list of the properties for which the mapping shall be created.
      */
     public void writePropertiesMappingsFile(File directory, String targetNamespace, HashSet<String> propertiesToMap) {
-        FileOperations.writeMappingContentsToFile(getPropertyMappings(targetNamespace, propertiesToMap), new File(directory.getAbsolutePath() + "/propertyMapping.ttl"));
+        IOoperations.writeMappingContentsToFile(getPropertyMappings(targetNamespace, propertiesToMap), new File(directory.getAbsolutePath() + "/propertyMapping.ttl"));
     }
 
 }

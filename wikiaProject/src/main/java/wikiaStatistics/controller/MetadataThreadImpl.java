@@ -1,13 +1,9 @@
 package wikiaStatistics.controller;
 
-import utils.FileOperations;
+import utils.IOoperations;
 import wikiaStatistics.util.WikiaStatisticsTools;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
@@ -28,8 +24,8 @@ public class MetadataThreadImpl {
         String statisticsDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/wikiStatistics";
 
         // files will be saved in the newly created subdirectory
-        FileOperations.createDirectory(statisticsDirectoryPath);
-        FileOperations.createDirectory(statisticsDirectoryPath + "/wikiaOverviewIndividualFiles");
+        IOoperations.createDirectory(statisticsDirectoryPath);
+        IOoperations.createDirectory(statisticsDirectoryPath + "/wikiaOverviewIndividualFiles");
 
         int lowerIdLimit = 0;
         int upperIdLimit = 50000;

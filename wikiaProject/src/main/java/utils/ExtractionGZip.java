@@ -21,7 +21,7 @@ public class ExtractionGZip
      */
     public ExtractionGZip() {
         directoryExtracted = downloadedDirectoryPath + "/extracted/";
-        FileOperations.createDirectory(directoryExtracted);
+        IOoperations.createDirectory(directoryExtracted);
     }
 
 

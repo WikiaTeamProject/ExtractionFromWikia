@@ -1,6 +1,6 @@
 package extractionPostprocessing.model;
 
-import utils.FileOperations;
+import utils.IOoperations;
 
 import java.io.File;
 import java.util.HashMap;
@@ -45,7 +45,7 @@ public abstract class ResourceMapper {
      * @param resourcesToMap An array list of the resources for which the mapping shall be created.
      */
     public void writeResourceMappingsFile(File directory, String targetNamespace, HashSet<String> resourcesToMap) {
-        FileOperations.writeMappingContentsToFile(getResourceMappings(targetNamespace, resourcesToMap), new File(directory.getAbsolutePath() + "/resourceMappings.ttl"));
+        IOoperations.writeMappingContentsToFile(getResourceMappings(targetNamespace, resourcesToMap), new File(directory.getAbsolutePath() + "/resourceMappings.ttl"));
     }
 
 }

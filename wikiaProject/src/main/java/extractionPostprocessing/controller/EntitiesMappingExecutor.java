@@ -1,7 +1,7 @@
 package extractionPostprocessing.controller;
 
 import extractionPostprocessing.model.*;
-import utils.FileOperations;
+import utils.IOoperations;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -160,7 +160,7 @@ public class EntitiesMappingExecutor {
                     fr.close();
 
                     // update the file, i.e. rewrite the file where the dbpedia domain is replaced with the actual domain
-                    FileOperations.updateFile(contentOfNewFile.toString(), listOfFiles[i]);
+                    IOoperations.updateFile(contentOfNewFile.toString(), listOfFiles[i]);
 
                 } // end of if relevant file
             }// end of loop over all files of that particular wiki

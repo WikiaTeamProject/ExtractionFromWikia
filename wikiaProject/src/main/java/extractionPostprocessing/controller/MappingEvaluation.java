@@ -4,8 +4,7 @@ import java.io.*;
 import java.util.*;
 
 import extractionPostprocessing.model.EvaluationResult;
-import extractionPostprocessing.util.IOHandler;
-import utils.OutputOperations;
+import extractionPostprocessing.util.PostprocessingIOHandler;
 
 import java.util.logging.Logger;
 
@@ -93,7 +92,7 @@ public class MappingEvaluation {
         HashMap<String, String> dbPediaMappings;
         HashMap<String, String> manualMappings;
 
-        IOHandler ioHandler = new IOHandler();
+        PostprocessingIOHandler postprocessingIoHandler = new PostprocessingIOHandler();
         String dbPediaResourceMappingsFileName = "resourceMappings.ttl";
         String manualMappingFileName = ResourceBundle.getBundle("config").getString("manualmappingfilename");
 
@@ -134,8 +133,8 @@ public class MappingEvaluation {
         int totalMapping = 0;
 
         try {
-            dbPediaMappings = ioHandler.getExtractorMappings(mappingFile);
-            manualMappings = ioHandler.getExtractorMappings(manualMappingFile);
+            dbPediaMappings = postprocessingIoHandler.getExtractorMappings(mappingFile);
+            manualMappings = postprocessingIoHandler.getExtractorMappings(manualMappingFile);
 
             for (String resource : manualMappings.keySet()) {
                 if (dbPediaMappings.containsKey(resource)) {

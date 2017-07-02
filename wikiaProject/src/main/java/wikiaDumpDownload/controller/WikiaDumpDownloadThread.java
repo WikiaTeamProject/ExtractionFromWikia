@@ -1,6 +1,6 @@
 package wikiaDumpDownload.controller;
 
-import utils.FileOperations;
+import utils.IOoperations;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -8,7 +8,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -81,10 +80,10 @@ public class WikiaDumpDownloadThread implements Runnable {
         this.buffer = new StringBuffer();
 
         // create target directories if they do not exist yet
-        File dumps = FileOperations.createDirectory(directoryPath + "/downloadedWikis/");
-        File dumpsDownloaded = FileOperations.createDirectory(dumps.getPath() + "/downloaded");
-        dumpsDownloadedgz = FileOperations.createDirectory(dumpsDownloaded.getPath() + "/gz");
-        dumpsDownloaded7z = FileOperations.createDirectory(dumpsDownloaded.getPath() + "/7z");
+        File dumps = IOoperations.createDirectory(directoryPath + "/downloadedWikis/");
+        File dumpsDownloaded = IOoperations.createDirectory(dumps.getPath() + "/downloaded");
+        dumpsDownloadedgz = IOoperations.createDirectory(dumpsDownloaded.getPath() + "/gz");
+        dumpsDownloaded7z = IOoperations.createDirectory(dumpsDownloaded.getPath() + "/7z");
 
         this.urlsNotWorking = new StringBuffer();
     }

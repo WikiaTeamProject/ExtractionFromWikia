@@ -1,6 +1,6 @@
 package extractionPostprocessing.model;
 
-import utils.FileOperations;
+import utils.IOoperations;
 
 import java.io.File;
 import java.util.HashMap;
@@ -45,7 +45,7 @@ public abstract class ClassMapper {
      * @param classesToMap An array list of the classes for which the mapping shall be created.
      */
     public void writeClassMappingsFile(File directory, String targetNamespace, HashSet<String> classesToMap) {
-        FileOperations.writeMappingContentsToFile(getClassMappings(targetNamespace, classesToMap), new File(directory.getAbsolutePath() + "/classMappings.ttl"));
+        IOoperations.writeMappingContentsToFile(getClassMappings(targetNamespace, classesToMap), new File(directory.getAbsolutePath() + "/classMappings.ttl"));
     }
 
 
