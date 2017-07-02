@@ -4,9 +4,9 @@ import extractionPostprocessing.model.ResourceMapper;
 import extractionPostprocessing.model.SPARQLresult;
 
 /**
- * Third mapper implementation.
+ * Fourth mapper implementation.
  * - automatically maps files to <null>
- * - checks whether a resource exists before mapping it
+ * - checks whether a resource exists before mapping it (using SPARQL)
  * - does not map lists
  */
 public class ResourceMapper_4 extends ResourceMapper {

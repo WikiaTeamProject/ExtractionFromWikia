@@ -17,11 +17,12 @@ public class Redirects {
     private static String rootDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
 
 
+
     private Redirects() {
         // do nothing
     }
 
-    public Redirects getRedirectsObject(){
+    public static Redirects getRedirectsObject(){
         if(redirectsObject == null){
             redirectsObject = new Redirects();
             return redirectsObject;
@@ -46,7 +47,6 @@ public class Redirects {
         if(redirectsMap.get(resource)!= null){
             redirect = redirectsMap.get(resource);
         }
-
         return redirect;
     }
 
@@ -63,7 +63,10 @@ public class Redirects {
         int i=1;
         try{
 
-            File redirectsDirectory=new File(redirectFilePath);
+            File redirectsDirectory = new File(redirectFilePath);
+            if(!redirectsDirectory.exists()){
+                logger.severe("Redirects directory does not exist.");
+            }
 
             if(redirectsDirectory.isDirectory()) {
 
@@ -86,7 +89,6 @@ public class Redirects {
 
                             redirectsMap.put(resourceLink,redirectLink);
                         }
-
                     }
                 }
             }

@@ -3,14 +3,14 @@ package extractionPostprocessing.controller;
 import extractionPostprocessing.model.ResourceMapper;
 import extractionPostprocessing.model.SPARQLresult;
 
-
 /**
  * Third mapper implementation.
  * - automatically maps files to <null>
- * - checks whether a resource exists on DBpedia before mapping it (using SPARQL)
+ * - checks whether a resource exists on DBpedia before mapping it (using HashMap lookup)
  */
-public class ResourceMapper_3 extends ResourceMapper {
+public class ResourceMapper_3_1 extends ResourceMapper{
 
+    //TODO: Implement
     @Override
     public String mapSingleResource(String resourceToMap) {
         if(resourceToMap.contains("/File:")){

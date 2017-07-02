@@ -13,6 +13,11 @@ import java.util.HashSet;
 public abstract class ResourceMapper {
 
 
+    public static void main(String[] args) {
+
+    }
+
+
     /**
      * Maps a single resource. Accepts a dbpedia tag and will map that to the actual dbpedia tag.
      * @param resourceToMap DBpedia tag from wiki to be mapped.
