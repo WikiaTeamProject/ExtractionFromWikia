@@ -23,10 +23,26 @@ public class MappingEvaluation {
      */
     public static void evaluateAllMappings() {
 
+
+        // KPIs
         double weightedOverallAccuracy = 0.0;
         double weightedOverallPrecision = 0.0;
         double weightedOverallRecall = 0.0;
         double weightedOverallF1Measure = 0.0;
+        double microAverageTruePositives = 0.0;
+        double microAverageFalsePositives = 0.0;
+        double microAverageTrueNegatives = 0.0;
+        double microAverageFalseNegatives = 0.0;
+        double microAverageAccuracy = 0.0;
+        double microAveragePrecision = 0.0;
+        double microAverageRecall = 0.0;
+        double microAverageF1measure = 0.0;
+        double macroAverageAccuracy = 0.0;
+        double macroAveragePrecision = 0.0;
+        double macroAverageRecall = 0.0;
+        double macroAverageF1measure = 0.0;
+
+
         int totalMappings = 0;
         ArrayList<EvaluationResult> evaluationResults = new ArrayList<>();
         String pathToRootDirectory = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/PostProcessedWikis";
@@ -51,18 +67,7 @@ public class MappingEvaluation {
                 }
             }
 
-            double microAverageTruePositives = 0.0;
-            double microAverageFalsePositives = 0.0;
-            double microAverageTrueNegatives = 0.0;
-            double microAverageFalseNegatives = 0.0;
-            double microAverageAccuracy = 0.0;
-            double microAveragePrecision = 0.0;
-            double microAverageRecall = 0.0;
-            double microAverageF1measure = 0.0;
-            double macroAverageAccuracy = 0.0;
-            double macroAveragePrecision = 0.0;
-            double macroAverageRecall = 0.0;
-            double macroAverageF1measure = 0.0;
+
 
             for(EvaluationResult e : evaluationResults){
                 double e_accuracy = e.getAccuracy();
@@ -102,16 +107,24 @@ public class MappingEvaluation {
             macroAverageF1measure = macroAverageF1measure / evaluationResults.size();
 
 
-
-
-
         } else {
+            // -> root is not a directory
             logger.severe("pathToRootDirectory is not a directory!");
-        }
-        evaluationResultLine = "Entry-Weigted Overall Accuracy of " + evaluationResults.size() + " wikis: " + weightedOverallAccuracy + "%\n" +
+        } // end of if(root.isDirectory())
+
+        evaluationResultLine = "Entry-Weigted Resuls + \nEntry-Weigted Overall Accuracy of " + evaluationResults.size() + " wikis: " + weightedOverallAccuracy + "%\n" +
                 "Entry-Weigted Overall Precision of " + evaluationResults.size() + " wikis: " + weightedOverallPrecision + "%\n" +
                 "Entry-Weigted Overall Recall of " + evaluationResults.size() + " wikis: " + weightedOverallRecall + "%\n" +
-                "Entry-Weigted Overall F1-Measure of "+ evaluationResults.size() + " wikis: " + weightedOverallF1Measure + "%\n";
+                "Entry-Weigted Overall F1-Measure of "+ evaluationResults.size() + " wikis: " + weightedOverallF1Measure + "%\n\n\n" +
+                "Microaverage\n" + "Microaverage Accuracy: " + microAverageAccuracy + "%\n" +
+                "Microaverage Precision: " + microAveragePrecision + "%\n" +
+                "Microaverage Recall: " + microAverageRecall + "%\n" +
+                "Microaverage F1-Measure" + microAverageRecall + "%\n\n\n" +
+                "Macroaverage\n" + "Macroaverage Accuracy " + macroAverageAccuracy + "%\n" +
+                "Macroaverage Precision " + macroAveragePrecision + "%\n" +
+                "Macroaverage Recall " + macroAverageRecall + "%\n" +
+                "Macroaverage F1-Measure " + macroAverageF1measure + "%\n";
+
 
         logger.info(evaluationResultLine);
         aggregatedEvaluationResults.append(evaluationResultLine + "\n");
