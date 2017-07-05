@@ -55,10 +55,10 @@ public class MappingEvaluation {
                 if (directory.isDirectory()) {
                     EvaluationResult evaluationResult = evaluateMappingsForOneWiki(directory);
                     if (evaluationResult != null) {
-                        evaluationResultLine = "Accuracy: " + evaluationResult.getAccuracy() + "% (" + directory.getName() + ")\n"
-                                + "Precision: " + evaluationResult.getPrecision() + "% (" + directory.getName() + ")\n"
-                                + "Recall: " + evaluationResult.getRecall() + "% (" + directory.getName() + ")\n"
-                                + "F1-Measure: " + evaluationResult.getF1Measure() + "% (" + directory.getName() + ")\n";
+                        evaluationResultLine = "Accuracy: " + evaluationResult.getAccuracyInPercent() + "% (" + directory.getName() + ")\n"
+                                + "Precision: " + evaluationResult.getPrecisionInPercent() + "% (" + directory.getName() + ")\n"
+                                + "Recall: " + evaluationResult.getRecallInPercent() + "% (" + directory.getName() + ")\n"
+                                + "F1-Measure: " + evaluationResult.getF1MeasureInPercent() + "% (" + directory.getName() + ")\n";
                         logger.info(evaluationResultLine);
                         aggregatedEvaluationResults.append(evaluationResultLine + "\n");
                         totalMappings += evaluationResult.getTotalMappings();
@@ -70,14 +70,14 @@ public class MappingEvaluation {
 
 
             for(EvaluationResult e : evaluationResults){
-                double e_accuracy = e.getAccuracy();
+                double e_accuracy = e.getAccuracyInPercent();
                 int e_totalMappings = e.getTotalMappings();
 
                 // enty-weighted
-                weightedOverallAccuracy += (e.getAccuracy() * ( (double) e.getTotalMappings() / totalMappings ));
-                weightedOverallPrecision += (e.getPrecision() * ( (double) e.getTotalMappings() / totalMappings));
-                weightedOverallRecall += (e.getRecall() * ( (double) e.getTotalMappings() / totalMappings));
-                weightedOverallF1Measure += (e.getF1Measure() * ( (double) e.getTotalMappings() / totalMappings));
+                weightedOverallAccuracy += (e.getAccuracyInPercent() * ( (double) e.getTotalMappings() / totalMappings ));
+                weightedOverallPrecision += (e.getPrecisionInPercent() * ( (double) e.getTotalMappings() / totalMappings));
+                weightedOverallRecall += (e.getRecallInPercent() * ( (double) e.getTotalMappings() / totalMappings));
+                weightedOverallF1Measure += (e.getF1MeasureInPercent() * ( (double) e.getTotalMappings() / totalMappings));
 
                 // microaverage
                 microAverageTruePositives += e.getTruePositives();
@@ -86,10 +86,10 @@ public class MappingEvaluation {
                 microAverageFalseNegatives += e.getFalseNegatives();
 
                 // macroaverage (not final numbers yet, will be processed after loop.)
-                macroAverageAccuracy += e.getAccuracy();
-                macroAveragePrecision += e.getPrecision();
-                macroAverageRecall += e.getRecall();
-                macroAverageF1measure += e.getF1Measure();
+                macroAverageAccuracy += e.getAccuracyInPercent();
+                macroAveragePrecision += e.getPrecisionInPercent();
+                macroAverageRecall += e.getRecallInPercent();
+                macroAverageF1measure += e.getF1MeasureInPercent();
 
             }
 
@@ -116,14 +116,15 @@ public class MappingEvaluation {
                 "Entry-Weigted Overall Precision of " + evaluationResults.size() + " wikis: " + weightedOverallPrecision + "%\n" +
                 "Entry-Weigted Overall Recall of " + evaluationResults.size() + " wikis: " + weightedOverallRecall + "%\n" +
                 "Entry-Weigted Overall F1-Measure of "+ evaluationResults.size() + " wikis: " + weightedOverallF1Measure + "%\n\n\n" +
-                "Microaverage\n" + "Microaverage Accuracy: " + microAverageAccuracy + "%\n" +
-                "Microaverage Precision: " + microAveragePrecision + "%\n" +
-                "Microaverage Recall: " + microAverageRecall + "%\n" +
-                "Microaverage F1-Measure" + microAverageRecall + "%\n\n\n" +
-                "Macroaverage\n" + "Macroaverage Accuracy " + macroAverageAccuracy + "%\n" +
-                "Macroaverage Precision " + macroAveragePrecision + "%\n" +
-                "Macroaverage Recall " + macroAverageRecall + "%\n" +
-                "Macroaverage F1-Measure " + macroAverageF1measure + "%\n";
+                "Microaverage\n" + "Microaverage Accuracy: " + (microAverageAccuracy*100) + "%\n" +
+                "Microaverage Precision: " + (microAveragePrecision*100) + "%\n" +
+                "Microaverage Recall: " + (microAverageRecall*100) + "%\n" +
+                "Microaverage F1-Measure" + (microAverageRecall*100) + "%\n\n\n" +
+                "Macroaverage\n" + "Macroaverage Accuracy " + (macroAverageAccuracy*100) + "%\n" +
+                "Macroaverage Precision " + (macroAveragePrecision*100) + "%\n" +
+                "Macroaverage Recall " + (macroAverageRecall*100) + "%\n" +
+                "Macroaverage F1-Measure " + (macroAverageF1measure*100) + "%\n\n\n" +
+                "Number of annotated wikis: " + evaluationResults.size();
 
 
         logger.info(evaluationResultLine);
@@ -224,7 +225,7 @@ public class MappingEvaluation {
             logger.severe(ex.getMessage());
         }
 
-        mappingsEvaluationResult = new EvaluationResult(falseNegatives, falsePositives, truePositives, trueNegatives, totalMapping);
+        mappingsEvaluationResult = new EvaluationResult(falseNegatives, falsePositives, truePositives, trueNegatives);
         return mappingsEvaluationResult;
     }
 

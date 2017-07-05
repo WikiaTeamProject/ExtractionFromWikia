@@ -19,16 +19,15 @@ public class EvaluationResult {
      * @param falsePositives
      * @param truePositives
      * @param trueNegatives
-     * @param totalMappings
      */
     public EvaluationResult(int falseNegatives, int falsePositives,
-                            int truePositives, int trueNegatives, int totalMappings) {
+                            int truePositives, int trueNegatives) {
 
         this.falseNegatives = falseNegatives;
         this.falsePositives = falsePositives;
         this.truePositives = truePositives;
         this.trueNegatives = trueNegatives;
-        this.totalMappings = totalMappings;
+        this.totalMappings = trueNegatives+truePositives+falseNegatives+falsePositives;
     }
 
     public int getFalseNegatives() {
@@ -71,7 +70,7 @@ public class EvaluationResult {
         this.totalMappings = totalMappings;
     }
 
-    public double getPrecision() {
+    public double getPrecisionInPercent() {
 
         if ((this.truePositives + this.falsePositives) != 0)
             return ((double) this.truePositives / (this.truePositives + this.falsePositives)) * 100;
@@ -79,7 +78,8 @@ public class EvaluationResult {
             return 0;
     }
 
-    public double getRecall() {
+
+    public double getRecallInPercent() {
 
         if ((this.truePositives + this.falseNegatives) != 0)
             return ((double) this.truePositives / (this.truePositives + this.falseNegatives)) * 100;
@@ -87,9 +87,9 @@ public class EvaluationResult {
             return 0;
     }
 
-    public double getF1Measure() {
-        double precision = this.getPrecision();
-        double recall = this.getRecall();
+    public double getF1MeasureInPercent() {
+        double precision = this.getPrecisionInPercent();
+        double recall = this.getRecallInPercent();
 
         if ((precision + recall) != 0)
             return ((2 * (precision/100.0) * (recall/100.0) / ((precision/100.0) + (recall/100.0))) * 100);
@@ -97,8 +97,7 @@ public class EvaluationResult {
             return 0;
     }
 
-    public double getAccuracy() {
-
+    public double getAccuracyInPercent() {
         if (totalMappings != 0) {
             return ((double) (truePositives + trueNegatives) / totalMappings) * 100;
         } else {
@@ -128,9 +127,9 @@ public class EvaluationResult {
                 "False Positives: " + falsePositives + "\n" +
                 "False Negatives: " + falseNegatives + "\n" +
                 "Total Mappings: " + totalMappings + "\n" +
-                "Accuracy: " + this.getAccuracy() + "\n" +
-                "Precision: " + this.getPrecision() + "%\n" +
-                "Recall: " + this.getRecall() + "%\n" +
-                "F1-Measure: " + this.getF1Measure() + "%";
+                "Accuracy: " + this.getAccuracyInPercent() + "%\n" +
+                "Precision: " + this.getPrecisionInPercent() + "%\n" +
+                "Recall: " + this.getRecallInPercent() + "%\n" +
+                "F1-Measure: " + this.getF1MeasureInPercent() + "%";
     }
 }
