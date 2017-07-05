@@ -22,6 +22,7 @@ public class RedirectProcessorSingleWiki {
 
     /**
      * Constructor
+     *
      * @param filePathToWiki File path to the wiki files.
      */
     public RedirectProcessorSingleWiki(String filePathToWiki) {
@@ -135,6 +136,9 @@ public class RedirectProcessorSingleWiki {
             }
         }
 
+        // update label.ttl file with redirects
+        updateLabelFile();
+
         BufferedReader reader = null;
         boolean changeOccurred = false;
         int counter = 0;
@@ -148,8 +152,8 @@ public class RedirectProcessorSingleWiki {
                     // -> we are interested in the file
                     System.out.println(f.getName());
 
-                    if (f.getName().endsWith("-redirects.ttl")) {
-                        // we do not want to process the redirects file itself
+                    if (f.getName().endsWith("-redirects.ttl") || f.getName().endsWith("labels.ttl")) {
+                        // we do not want to process the redirects file itself, labels file already processed
                         continue;
                     }
 
@@ -227,8 +231,8 @@ public class RedirectProcessorSingleWiki {
 
             } // end of for loop through all files in the directory
 
-            if(counter > 10){
-                logger.info("Redirect processing was cancelled after 10 iterations. There is probably an infinite loop relation in the redirects file.");
+            if (counter > 10) {
+                logger.warning("Redirect processing was cancelled after 10 iterations. There is probably an infinite loop relation in the redirects file.");
                 return false;
             }
 
@@ -237,6 +241,135 @@ public class RedirectProcessorSingleWiki {
         System.out.println("Number of iterations: " + (counter - 1));
 
         return true;
+    }
+
+    /**
+     * Update label.ttl file with redirects file and skos properties (skos:prefLabel, skos:altLabel)
+     */
+    public void updateLabelFile() {
+
+        File[] fileList = wikiDirectory.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                if (name.endsWith("labels.ttl")) return true;
+                return false;
+            }
+        });
+
+        // fileList only contains labels.ttl file
+        for (File f : fileList) {
+
+                StringBuffer newFileContent = new StringBuffer();
+
+                try {
+                    BufferedReader reader = new BufferedReader(new FileReader(f));
+
+                    String line;
+                    Matcher matcher;
+                    String key = null;
+                    String redirect;
+
+                    while ((line = reader.readLine()) != null) {
+                        Pattern pattern = Pattern.compile("<[^<]*>");
+                        // regex: <[^<]*>
+                        // this regex captures everything between tags including the tags: <...>
+                        // there are only two tags in every line (replace second)
+                        // e.g. <http://uni-mannheim.de/resource/HBO> <http://www.w3.org/2000/01/rdf-schema#label> "HBO"@en .
+
+                        matcher = pattern.matcher(line);
+                        redirect = null;
+
+                        int index = 0;
+
+                        while (matcher.find()) {
+                            index++;
+
+                            switch (index) {
+                                case 1:
+                                    key = matcher.group();
+                                    if ((redirect = getRedirect(key)) != null) {
+
+                                        // replace tag with redirect
+                                        line = line.replace(key, redirect);
+                                    }
+                                    break;
+
+                                // second match: <http://www.w3.org/2000/01/rdf-schema#label>
+                                // replace if redirect exists with either:
+                                // skos:prefLabel <http://www.w3.org/2004/02/skos/core#prefLabel>
+                                // or skos:altLabel <http://www.w3.org/2004/02/skos/core#altLabel>
+                                case 2:
+                                    if ((!redirectsMap.containsKey(key) && redirectsMap.containsValue(key)) || (redirect != null && key == redirect)) {
+
+                                        // replace tag with pref label
+                                        line = line.replace(matcher.group(), "<http://www.w3.org/2004/02/skos/core#prefLabel>");
+
+                                    } else if (redirect != null) {
+
+                                        // replace tag with alt label
+                                        line = line.replace(matcher.group(), "<http://www.w3.org/2004/02/skos/core#altLabel>");
+                                    }
+                                    break;
+                            }
+
+                        }
+                        newFileContent.append(line + "\n"); // the line break must be added
+                    }
+                    reader.close();
+                } catch (IOException ioe) {
+                    logger.severe(ioe.toString());
+                }
+
+                // write the new file content into the file if a change occurred
+                    File newFile = new File(f.getAbsolutePath());
+                    System.out.println("Re-Writing File :" + newFile.getName());
+                    try {
+                        FileWriter writer = new FileWriter(newFile);
+                        writer.write(newFileContent.toString());
+                        writer.flush();
+                        writer.close();
+                    } catch (IOException ioe) {
+                        logger.severe(ioe.toString());
+                    }
+
+                    // delete the content after it was written
+                    newFileContent = new StringBuffer();
+
+        }
+    }
+
+    /**
+     * Get latest redirect from redirectsMap for a specific key
+     * @param key
+     * @return
+     */
+    private String getRedirect(String key) {
+
+        String input = key;
+        String value = null;
+        boolean changeOccurred;
+        int counter = 0;
+
+
+        do {
+            changeOccurred = false; // no change has yet occurred
+
+            if (redirectsMap.containsKey(key)) {
+                changeOccurred = true;
+                value = redirectsMap.get(key);
+                key = value;
+            }
+
+            if (counter > 10) {
+                logger.warning("Redirect processing was cancelled after 10 iterations. There is probably an infinite loop relation in the redirects file.");
+                changeOccurred = false;
+            }
+
+        } while (changeOccurred);
+
+        System.out.println("Labels.ttl: redirect for " + input + " is " + value);
+
+        return value;
     }
 
 

@@ -1,0 +1,7 @@
+<http://dbpedia.org/resource/Rickon_Stark> <http://www.w3.org/2004/02/skos/core#altLabel> "Rickon"@en .
+<http://dbpedia.org/resource/Rickon_Stark> <http://www.w3.org/2004/02/skos/core#prefLabel> "Rickon Stark"@en .
+<http://dbpedia.org/resource/Sansa_Stark> <http://www.w3.org/2004/02/skos/core#altLabel> "Sansa"@en .
+<http://dbpedia.org/resource/Arya_Stark> <http://www.w3.org/2004/02/skos/core#altLabel> "Arya"@en .
+<http://dbpedia.org/resource/Stark_Junior> <http://www.w3.org/2004/02/skos/core#altLabel> "Bran"@en .
+<http://dbpedia.org/resource/Stark_Junior> <http://www.w3.org/2004/02/skos/core#altLabel> "Bran Stark"@en .
+<http://dbpedia.org/resource/Stark_Junior> <http://www.w3.org/2004/02/skos/core#prefLabel> "Stark Junior"@en .
