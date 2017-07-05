@@ -13,9 +13,6 @@ import java.util.HashSet;
 public abstract class ResourceMapper {
 
 
-    public static void main(String[] args) {
-
-    }
 
 
     /**

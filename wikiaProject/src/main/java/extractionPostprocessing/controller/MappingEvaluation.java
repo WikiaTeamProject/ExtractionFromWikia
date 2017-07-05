@@ -23,10 +23,10 @@ public class MappingEvaluation {
      */
     public static void evaluateAllMappings() {
 
-        double overallAccuracy = 0.0;
-        double overallPrecision = 0.0;
-        double overallRecall = 0.0;
-        double overallF1Measure = 0.0;
+        double weightedOverallAccuracy = 0.0;
+        double weightedOverallPrecision = 0.0;
+        double weightedOverallRecall = 0.0;
+        double weightedOverallF1Measure = 0.0;
         int totalMappings = 0;
         ArrayList<EvaluationResult> evaluationResults = new ArrayList<>();
         String pathToRootDirectory = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/PostProcessedWikis";
@@ -51,22 +51,67 @@ public class MappingEvaluation {
                 }
             }
 
+            double microAverageTruePositives = 0.0;
+            double microAverageFalsePositives = 0.0;
+            double microAverageTrueNegatives = 0.0;
+            double microAverageFalseNegatives = 0.0;
+            double microAverageAccuracy = 0.0;
+            double microAveragePrecision = 0.0;
+            double microAverageRecall = 0.0;
+            double microAverageF1measure = 0.0;
+            double macroAverageAccuracy = 0.0;
+            double macroAveragePrecision = 0.0;
+            double macroAverageRecall = 0.0;
+            double macroAverageF1measure = 0.0;
+
             for(EvaluationResult e : evaluationResults){
                 double e_accuracy = e.getAccuracy();
                 int e_totalMappings = e.getTotalMappings();
-                overallAccuracy += (e.getAccuracy() * ( (double) e.getTotalMappings() / totalMappings ));
-                overallPrecision += (e.getPrecision() * ( (double) e.getTotalMappings() / totalMappings));
-                overallRecall += (e.getRecall() * ( (double) e.getTotalMappings() / totalMappings));
-                overallF1Measure += (e.getF1Measure() * ( (double) e.getTotalMappings() / totalMappings));
+
+                // enty-weighted
+                weightedOverallAccuracy += (e.getAccuracy() * ( (double) e.getTotalMappings() / totalMappings ));
+                weightedOverallPrecision += (e.getPrecision() * ( (double) e.getTotalMappings() / totalMappings));
+                weightedOverallRecall += (e.getRecall() * ( (double) e.getTotalMappings() / totalMappings));
+                weightedOverallF1Measure += (e.getF1Measure() * ( (double) e.getTotalMappings() / totalMappings));
+
+                // microaverage
+                microAverageTruePositives += e.getTruePositives();
+                microAverageFalsePositives += e.getFalsePositives();
+                microAverageTrueNegatives += e.getTrueNegatives();
+                microAverageFalseNegatives += e.getFalseNegatives();
+
+                // macroaverage (not final numbers yet, will be processed after loop.)
+                macroAverageAccuracy += e.getAccuracy();
+                macroAveragePrecision += e.getPrecision();
+                macroAverageRecall += e.getRecall();
+                macroAverageF1measure += e.getF1Measure();
+
             }
+
+
+            // microaverage
+            microAverageAccuracy = (microAverageTruePositives) / (microAverageTruePositives + microAverageTrueNegatives + microAverageFalsePositives + microAverageFalsePositives);
+            microAveragePrecision = (microAverageTruePositives) / (microAverageTruePositives + microAverageFalsePositives);
+            microAverageRecall = (microAverageTruePositives) / (microAverageTruePositives + microAverageFalseNegatives);
+            microAverageF1measure = (2.0 * microAveragePrecision * microAverageRecall) / (microAveragePrecision + microAverageRecall);
+
+            // macroaverage
+            macroAverageAccuracy = macroAverageAccuracy / evaluationResults.size();
+            macroAveragePrecision = macroAveragePrecision / evaluationResults.size();
+            macroAverageRecall = macroAverageRecall / evaluationResults.size();
+            macroAverageF1measure = macroAverageF1measure / evaluationResults.size();
+
+
+
+
 
         } else {
             logger.severe("pathToRootDirectory is not a directory!");
         }
-        evaluationResultLine = "Overall Accuracy of " + evaluationResults.size() + " wikis: " + overallAccuracy + "%\n" +
-                "Overall Precision of " + evaluationResults.size() + " wikis: " + overallPrecision + "%\n" +
-                "Overall Recall of " + evaluationResults.size() + " wikis: " + overallRecall + "%\n" +
-                "Overall F1-Measure of "+ evaluationResults.size() + " wikis: " + overallF1Measure + "%\n";
+        evaluationResultLine = "Entry-Weigted Overall Accuracy of " + evaluationResults.size() + " wikis: " + weightedOverallAccuracy + "%\n" +
+                "Entry-Weigted Overall Precision of " + evaluationResults.size() + " wikis: " + weightedOverallPrecision + "%\n" +
+                "Entry-Weigted Overall Recall of " + evaluationResults.size() + " wikis: " + weightedOverallRecall + "%\n" +
+                "Entry-Weigted Overall F1-Measure of "+ evaluationResults.size() + " wikis: " + weightedOverallF1Measure + "%\n";
 
         logger.info(evaluationResultLine);
         aggregatedEvaluationResults.append(evaluationResultLine + "\n");
