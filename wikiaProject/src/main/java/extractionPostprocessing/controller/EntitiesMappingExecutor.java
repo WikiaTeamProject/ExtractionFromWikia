@@ -1,7 +1,7 @@
 package extractionPostprocessing.controller;
 
 import extractionPostprocessing.controller.classmapper.ClassMapper;
-import extractionPostprocessing.controller.resourcemapper.PropertyMapper;
+import extractionPostprocessing.controller.propertymapper.PropertyMapper;
 import extractionPostprocessing.controller.resourcemapper.ResourceMapper;
 import extractionPostprocessing.model.*;
 import utils.IOoperations;

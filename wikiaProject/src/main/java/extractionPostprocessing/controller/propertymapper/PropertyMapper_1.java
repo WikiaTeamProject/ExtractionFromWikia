@@ -1,7 +1,5 @@
 package extractionPostprocessing.controller.propertymapper;
 
-import extractionPostprocessing.controller.resourcemapper.PropertyMapper;
-
 /**
  * Trivial implementation of a properties mapper.
  * - maps all other properties to dbpedia properties (same name)

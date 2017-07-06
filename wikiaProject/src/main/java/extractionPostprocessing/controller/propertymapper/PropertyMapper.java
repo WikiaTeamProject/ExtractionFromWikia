@@ -1,4 +1,4 @@
-package extractionPostprocessing.controller.resourcemapper;
+package extractionPostprocessing.controller.propertymapper;
 
 import utils.IOoperations;
 
