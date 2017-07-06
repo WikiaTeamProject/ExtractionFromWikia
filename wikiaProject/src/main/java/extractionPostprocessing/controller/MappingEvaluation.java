@@ -115,14 +115,15 @@ public class MappingEvaluation {
             logger.severe("pathToRootDirectory is not a directory!");
         } // end of if(root.isDirectory())
 
-        evaluationResultLine = "Microaverage\n" + "Microaverage Accuracy: " + (microAverageAccuracy * 100) + "%\n" +
+        evaluationResultLine = "Summarized Evaluation Results\n\n\n" +
+                "Microaverage\n" + "Microaverage Accuracy: " + (microAverageAccuracy * 100) + "%\n" +
                 "Microaverage Precision: " + (microAveragePrecision * 100) + "%\n" +
                 "Microaverage Recall: " + (microAverageRecall * 100) + "%\n" +
                 "Microaverage F1-Measure" + (microAverageRecall * 100) + "%\n\n\n" +
-                "Macroaverage\n" + "Macroaverage Accuracy " + (macroAverageAccuracy * 100) + "%\n" +
-                "Macroaverage Precision " + (macroAveragePrecision * 100) + "%\n" +
-                "Macroaverage Recall " + (macroAverageRecall * 100) + "%\n" +
-                "Macroaverage F1-Measure " + (macroAverageF1measure * 100) + "%\n\n\n" +
+                "Macroaverage\n" + "Macroaverage Accuracy " + (macroAverageAccuracy) + "%\n" +
+                "Macroaverage Precision " + (macroAveragePrecision) + "%\n" +
+                "Macroaverage Recall " + (macroAverageRecall) + "%\n" +
+                "Macroaverage F1-Measure " + (macroAverageF1measure) + "%\n\n\n" +
                 "Entry-Weigted Resuls" + "\nEntry-Weigted Overall Accuracy of " + evaluationResults.size() + " wikis: " + weightedOverallAccuracy + "%\n" +
                 "Entry-Weigted Overall Precision of " + evaluationResults.size() + " wikis: " + weightedOverallPrecision + "%\n" +
                 "Entry-Weigted Overall Recall of " + evaluationResults.size() + " wikis: " + weightedOverallRecall + "%\n" +
