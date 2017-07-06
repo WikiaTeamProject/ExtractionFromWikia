@@ -1,16 +1,16 @@
-package extractionPostprocessing.controller;
+package extractionPostprocessing.controller.resourcemapper;
 
-import extractionPostprocessing.model.ResourceMapper;
+import extractionPostprocessing.controller.DBpediaResourceService;
 import extractionPostprocessing.model.SPARQLresult;
 
 /**
- * Third mapper implementation.
+ * Fourth mapper implementation.
  * - automatically maps files to <null>
- * - checks whether a resource exists on DBpedia before mapping it (using HashMap lookup)
+ * - checks whether a resource exists before mapping it (using SPARQL)
+ * - does not map lists
  */
-public class ResourceMapper_3_1 extends ResourceMapper{
+public class ResourceMapper_4 extends ResourceMapper {
 
-    //TODO: Implement
     @Override
     public String mapSingleResource(String resourceToMap) {
         if(resourceToMap.contains("/File:")){
@@ -21,7 +21,14 @@ public class ResourceMapper_3_1 extends ResourceMapper{
             if(result.resourceExists){
                 if(result.redirectResource != null){
                     // redirect source found
-                    return result.redirectResource;
+                    if(
+                            result.redirectResource.toLowerCase().contains("list_") || result.redirectResource.toLowerCase().contains("places_")
+                            ) {
+                        //-> the redirect resource is likely an enumeration of other resources; do not link to it
+                        return "<null>";
+                    } else {
+                        return result.redirectResource;
+                    }
                 } else {
                     // -> no redirect resource -> use dbPediaResource
                     return(resourceToMap);

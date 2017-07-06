@@ -1,6 +1,6 @@
-package extractionPostprocessing.controller;
+package extractionPostprocessing.controller.propertymapper;
 
-import extractionPostprocessing.model.PropertyMapper;
+import extractionPostprocessing.controller.resourcemapper.PropertyMapper;
 
 /**
  * Trivial implementation of a properties mapper.

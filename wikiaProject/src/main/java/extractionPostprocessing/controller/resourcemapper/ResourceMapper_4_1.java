@@ -1,6 +1,6 @@
-package extractionPostprocessing.controller;
+package extractionPostprocessing.controller.resourcemapper;
 
-import extractionPostprocessing.model.ResourceMapper;
+import extractionPostprocessing.controller.DBpediaResourceService;
 import extractionPostprocessing.model.SPARQLresult;
 
 /**

@@ -1,6 +1,9 @@
 package extractionPostprocessing;
 
 import extractionPostprocessing.controller.*;
+import extractionPostprocessing.controller.classmapper.ClassMapper_1;
+import extractionPostprocessing.controller.propertymapper.PropertyMapper_1;
+import extractionPostprocessing.controller.resourcemapper.ResourceMapper_1;
 
 /**
  * This application will postprocess extracted wikia wikis.
