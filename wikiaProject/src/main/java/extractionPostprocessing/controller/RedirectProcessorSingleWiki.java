@@ -247,25 +247,18 @@ public class RedirectProcessorSingleWiki {
                             case 1:
                                 key = matcher.group();
                                 if ((redirect = getRedirect(key)) != null) {
-
                                     // replace tag with redirect
                                     line = line.replace(key, redirect);
                                 }
                                 break;
-
                             // second match: <http://www.w3.org/2000/01/rdf-schema#label>
-                            // replace if redirect exists with either:
-                            // skos:prefLabel <http://www.w3.org/2004/02/skos/core#prefLabel>
-                            // or skos:altLabel <http://www.w3.org/2004/02/skos/core#altLabel>
                             case 2:
                                 if ((!redirectsMap.containsKey(key) && redirectsMap.containsValue(key)) || (redirect != null && key == redirect)) {
-
-                                    // replace tag with pref label
+                                    // replace tag with skos:prefLabel <http://www.w3.org/2004/02/skos/core#prefLabel>
                                     line = line.replace(matcher.group(), "<http://www.w3.org/2004/02/skos/core#prefLabel>");
 
                                 } else if (redirect != null) {
-
-                                    // replace tag with alt label
+                                    // replace tag with skos:altLabel <http://www.w3.org/2004/02/skos/core#altLabel>
                                     line = line.replace(matcher.group(), "<http://www.w3.org/2004/02/skos/core#altLabel>");
                                 }
                                 break;
@@ -282,18 +275,7 @@ public class RedirectProcessorSingleWiki {
             // write the new file content into the file if a change occurred
             File newFile = new File(f.getAbsolutePath());
             logger.info("Re-Writing File: " + newFile.getName());
-            try {
-                FileWriter writer = new FileWriter(newFile);
-                writer.write(newFileContent.toString());
-                writer.flush();
-                writer.close();
-            } catch (IOException ioe) {
-                logger.severe(ioe.toString());
-            }
-
-            // delete the content after it was written
-            newFileContent = new StringBuffer();
-
+            IOoperations.writeContentToFile(newFile, newFileContent.toString());
         }
     }
 
@@ -309,7 +291,6 @@ public class RedirectProcessorSingleWiki {
         String value = null;
         boolean changeOccurred;
         int counter = 1;
-
 
         do {
             // no change has yet occurred
