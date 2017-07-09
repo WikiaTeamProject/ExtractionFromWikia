@@ -1,5 +1,5 @@
 package extractionPostprocessing.util;
-import extractionPostprocessing.model.SPARQLresult;
+import extractionPostprocessing.model.ResourceServiceResult;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.RDFNode;
 
@@ -17,7 +17,7 @@ public class DBpediaResourceServiceOnline extends DBpediaResourceService{
      * @param resource The resource to be checked.
      * @return
      */
-    public SPARQLresult getResourceAndRedirectInDBpedia(String resource){
+    public ResourceServiceResult getResourceAndRedirectInDBpedia(String resource){
 
         resource = addTagsIfNotAtag(resource);
         System.out.println("Looking up resource " + resource);
@@ -37,16 +37,16 @@ public class DBpediaResourceServiceOnline extends DBpediaResourceService{
             RDFNode uriNode = solution.get("uri");
             RDFNode reNode = solution.get("re");
             if(uriNode.toString() == null){
-                return new SPARQLresult(false, null);
+                return new ResourceServiceResult(false, null);
             } else {
                 if(reNode == null){
-                    return new SPARQLresult(true, null);
+                    return new ResourceServiceResult(true, null);
                 } else {
-                    return new SPARQLresult(true, addTagsIfNotAtag(reNode.toString()));
+                    return new ResourceServiceResult(true, addTagsIfNotAtag(reNode.toString()));
                 }
             }
         } else {
-            return new SPARQLresult(false, null);
+            return new ResourceServiceResult(false, null);
         }
     }
 

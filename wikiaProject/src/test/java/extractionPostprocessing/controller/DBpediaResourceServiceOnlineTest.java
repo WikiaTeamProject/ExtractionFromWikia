@@ -1,6 +1,6 @@
 package extractionPostprocessing.controller;
 
-import extractionPostprocessing.model.SPARQLresult;
+import extractionPostprocessing.model.ResourceServiceResult;
 import static org.junit.Assert.*;
 
 import extractionPostprocessing.util.DBpediaResourceServiceOnline;
@@ -16,7 +16,7 @@ public class DBpediaResourceServiceOnlineTest {
     public void getResourceAndRedirectInDBpedia() throws Exception {
 
         // try with redirect resource
-        SPARQLresult result = DBpediaResourceServiceOnline.getResourceAndRedirectInDBpedia("<http://dbpedia.org/resource/Hagrid>");
+        ResourceServiceResult result = DBpediaResourceServiceOnline.getResourceAndRedirectInDBpedia("<http://dbpedia.org/resource/Hagrid>");
         assertTrue(result.resourceExists);
         assertTrue(result.redirectResource.equals("<http://dbpedia.org/resource/Rubeus_Hagrid>"));
 

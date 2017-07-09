@@ -1,6 +1,6 @@
 package extractionPostprocessing.util;
 
-import extractionPostprocessing.model.SPARQLresult;
+import extractionPostprocessing.model.ResourceServiceResult;
 import utils.IOoperations;
 
 import java.util.HashMap;
@@ -111,9 +111,9 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
     }
 
     @Override
-    public SPARQLresult getResourceAndRedirectInDBpedia(String resource) {
+    public ResourceServiceResult getResourceAndRedirectInDBpedia(String resource) {
 
-        SPARQLresult result = new SPARQLresult();
+        ResourceServiceResult result = new ResourceServiceResult();
         result.resourceExists = resourceExistsInDBpedia(resource);
         if(result.resourceExists){
             result.redirectResource = getRedirect(resource);

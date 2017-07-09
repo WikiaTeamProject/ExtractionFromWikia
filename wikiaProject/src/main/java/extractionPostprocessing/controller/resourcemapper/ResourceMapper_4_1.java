@@ -1,8 +1,7 @@
 package extractionPostprocessing.controller.resourcemapper;
 
 import extractionPostprocessing.util.DBpediaResourceServiceOffline;
-import extractionPostprocessing.util.DBpediaResourceServiceOnline;
-import extractionPostprocessing.model.SPARQLresult;
+import extractionPostprocessing.model.ResourceServiceResult;
 
 /**
  * Fourth mapper implementation.
@@ -18,7 +17,7 @@ public class ResourceMapper_4_1 extends ResourceMapper{
             return "<null>";
         } else {
             DBpediaResourceServiceOffline service = DBpediaResourceServiceOffline.getDBpediaResourceServiceOfflineObject();
-            SPARQLresult result = service.getResourceAndRedirectInDBpedia(resourceToMap);
+            ResourceServiceResult result = service.getResourceAndRedirectInDBpedia(resourceToMap);
 
             if(result.resourceExists){
                 if(result.redirectResource != null){

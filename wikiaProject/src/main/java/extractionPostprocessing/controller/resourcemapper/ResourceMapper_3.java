@@ -1,7 +1,7 @@
 package extractionPostprocessing.controller.resourcemapper;
 
 import extractionPostprocessing.util.DBpediaResourceServiceOnline;
-import extractionPostprocessing.model.SPARQLresult;
+import extractionPostprocessing.model.ResourceServiceResult;
 
 
 /**
@@ -17,7 +17,7 @@ public class ResourceMapper_3 extends ResourceMapper {
             return "<null>";
         } else {
             DBpediaResourceServiceOnline service = new DBpediaResourceServiceOnline();
-            SPARQLresult result = service.getResourceAndRedirectInDBpedia(resourceToMap);
+            ResourceServiceResult result = service.getResourceAndRedirectInDBpedia(resourceToMap);
 
             if(result.resourceExists){
                 if(result.redirectResource != null){
