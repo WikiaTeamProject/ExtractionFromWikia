@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * A class handling tasks concerning db-pedia like answering the question whether an entity exists in dbpedia or not.
  * The class can also just execute SPARQL queries for dbpedia.
  */
-public class DBpediaResourceServiceOnline {
+public class DBpediaResourceServiceOnline extends DBpediaResourceService{
 
     /**
      * This method checks whether a resource exists and whether there is a redirect resource on DBpedia.
@@ -17,7 +17,7 @@ public class DBpediaResourceServiceOnline {
      * @param resource The resource to be checked.
      * @return
      */
-    public static SPARQLresult getResourceAndRedirectInDBpedia(String resource){
+    public SPARQLresult getResourceAndRedirectInDBpedia(String resource){
 
         resource = addTagsIfNotAtag(resource);
         System.out.println("Looking up resource " + resource);
@@ -52,11 +52,11 @@ public class DBpediaResourceServiceOnline {
 
 
     /**
-     * Checks wheter a resource exists in dbpedia. This method will also return true if there is a redirect.
+     * Checks whether a resource exists in dbpedia. This method will also return true if there is a redirect.
      * @param resource
      * @return
      */
-    public static boolean resourceExistsInDBpedia(String resource) {
+    public boolean resourceExistsInDBpedia(String resource) {
         String query =
                 "SELECT ?uri ?id \n" +
                 " WHERE {\n" +
@@ -78,7 +78,7 @@ public class DBpediaResourceServiceOnline {
      * @param queryString The query to execute.
      * @return
      */
-    public static ResultSet executeSPARQLquery(String queryString) {
+    public ResultSet executeSPARQLquery(String queryString) {
         Query query = QueryFactory.create(queryString);
         QueryExecution queryExecution = QueryExecutionFactory.sparqlService
                 (

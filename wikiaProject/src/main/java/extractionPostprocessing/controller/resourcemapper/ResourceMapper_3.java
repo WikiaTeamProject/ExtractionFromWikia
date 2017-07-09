@@ -16,7 +16,8 @@ public class ResourceMapper_3 extends ResourceMapper {
         if(resourceToMap.contains("/File:")){
             return "<null>";
         } else {
-            SPARQLresult result = DBpediaResourceServiceOnline.getResourceAndRedirectInDBpedia(resourceToMap);
+            DBpediaResourceServiceOnline service = new DBpediaResourceServiceOnline();
+            SPARQLresult result = service.getResourceAndRedirectInDBpedia(resourceToMap);
 
             if(result.resourceExists){
                 if(result.redirectResource != null){

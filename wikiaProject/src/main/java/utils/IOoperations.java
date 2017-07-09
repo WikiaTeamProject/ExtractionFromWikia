@@ -192,7 +192,8 @@ public class IOoperations {
 
 
     /**
-     * This function will read page Ids file
+     * This function reads DBpedia pageids. pageIds file
+     * Make sure that the folder "pageids" exists in the root directory and that there is at least one redirect file in the folder.
      * @return Hashset containing pageIds
      */
     public HashSet<String> getPageIDs(){
@@ -234,7 +235,8 @@ public class IOoperations {
     }
 
     /**
-     * This function with read redirects file
+     * This function reads the DBpedia redirects file.
+     * Make sure that the folder "redirects" exists in the root directory and that there is at least one redirect file in the folder.
      * @return HashMap containing redirects mapping
      */
     public HashMap<String,String> getResourcesRedirects() {

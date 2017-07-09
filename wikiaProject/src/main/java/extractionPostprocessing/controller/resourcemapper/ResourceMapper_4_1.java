@@ -1,5 +1,6 @@
 package extractionPostprocessing.controller.resourcemapper;
 
+import extractionPostprocessing.util.DBpediaResourceServiceOffline;
 import extractionPostprocessing.util.DBpediaResourceServiceOnline;
 import extractionPostprocessing.model.SPARQLresult;
 
@@ -11,13 +12,13 @@ import extractionPostprocessing.model.SPARQLresult;
  */
 public class ResourceMapper_4_1 extends ResourceMapper{
 
-    // TODO: Implement
     @Override
     public String mapSingleResource(String resourceToMap) {
         if(resourceToMap.contains("/File:")){
             return "<null>";
         } else {
-            SPARQLresult result = DBpediaResourceServiceOnline.getResourceAndRedirectInDBpedia(resourceToMap);
+            DBpediaResourceServiceOffline service = DBpediaResourceServiceOffline.getDBpediaResourceServiceOfflineObject();
+            SPARQLresult result = service.getResourceAndRedirectInDBpedia(resourceToMap);
 
             if(result.resourceExists){
                 if(result.redirectResource != null){
@@ -40,5 +41,4 @@ public class ResourceMapper_4_1 extends ResourceMapper{
             }
         }
     }
-
 }
