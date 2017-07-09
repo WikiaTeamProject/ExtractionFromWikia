@@ -3,16 +3,18 @@ package extractionPostprocessing.controller;
 import extractionPostprocessing.model.ResourceServiceResult;
 import static org.junit.Assert.*;
 
+import extractionPostprocessing.util.DBpediaResourceServiceOffline;
 import extractionPostprocessing.util.DBpediaResourceServiceOnline;
 import org.junit.Test;
 
 /**
- * Test class for {@link DBpediaResourceServiceOnline DBpediaResourceServiceOnline}.
+ * Test class for {@link extractionPostprocessing.util.DBpediaResourceServiceOffline DBpediaResourceServiceOnline}.
+ * Make sure you allocate at least 8 gigabytes of RAM to the JVM.
  */
 
-public class DBpediaResourceServiceOnlineTest {
+public class DBpediaResourceServiceOfflineTest {
 
-    public static DBpediaResourceServiceOnline service = new DBpediaResourceServiceOnline();
+    public static DBpediaResourceServiceOffline service = DBpediaResourceServiceOffline.getDBpediaResourceServiceOfflineObject();
 
 
     @Test

@@ -186,6 +186,7 @@ public class IOoperations {
             fileWriter.close();
 
         } catch (Exception exception) {
+            exception.printStackTrace();
             logger.log(Level.SEVERE, exception.getMessage());
         }
     }
@@ -228,6 +229,7 @@ public class IOoperations {
                 }
             }
         } catch (Exception ex) {
+            ex.printStackTrace();
             logger.severe(ex.getMessage());
         }
 
@@ -277,6 +279,7 @@ public class IOoperations {
                 }
             }
         } catch (Exception ex) {
+            ex.printStackTrace();
             logger.severe(ex.getMessage());
         }
 

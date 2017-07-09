@@ -47,13 +47,13 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
      * @return Redirect mapping for a resource. Null if there is no resource.
      */
     public String getRedirect(String resource) {
-        String redirect = null;
+        String redirect;
         if (redirectsMap == null) {
-            mapRedirects();
+            loadRedirects();
         }
 
         if (pageIds == null) {
-            getPageIds();
+            loadPageIds();
         }
 
         if (redirectsMap.get(resource) != null) {
@@ -75,38 +75,42 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
      * @return
      */
     public boolean resourceExistsInDBpedia(String resource) {
-        if (pageIds.isEmpty()) {
-            getPageIds();
+        if (pageIds == null) {
+            // pageIds were not loaded yet
+            this.loadPageIds();
         }
         return pageIds.contains(resource);
-
     }
 
 
     /**
-     * This function will map
-     * redirects for resources
+     * This function will load the redirect file into a HashMap.
+     * If the HashMap already exists, a reload takes place.
      */
-    public void mapRedirects() {
+    public void loadRedirects() {
+        logger.info("Loading redirects from file into memory. This may take a while.");
         try {
             IOoperations ioOps = new IOoperations();
             redirectsMap = ioOps.getResourcesRedirects();
-        } catch (Exception excpetion) {
-            logger.severe(excpetion.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.severe(e.getMessage());
         }
     }
 
     /**
-     * This function will get page ids
-     * by calling function which will read page ids file and return hashset of pageids
-     * to this function
+     * This function will get pageids
+     * by calling a function which will read the page ids file and return a HashSet of pageids to this function.
+     * If the HashSet already exists, a reload takes place.
      */
-    public void getPageIds() {
+    public void loadPageIds() {
+        logger.info("Loading page ids from file into memory. This may take a while.");
         try {
             IOoperations ioOps = new IOoperations();
-            pageIds = ioOps.getPageIDs();
-        } catch (Exception excpetion) {
-            logger.severe(excpetion.getMessage());
+            this.pageIds = ioOps.getPageIDs();
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.severe(e.getMessage());
         }
     }
 
