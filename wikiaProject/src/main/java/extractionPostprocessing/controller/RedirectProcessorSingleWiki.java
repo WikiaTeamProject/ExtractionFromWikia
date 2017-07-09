@@ -131,7 +131,7 @@ public class RedirectProcessorSingleWiki {
         if (redirectsMap.isEmpty()) {
             if (!this.readRedirects()) {
                 // redirects could not be read
-                logger.severe("Redirects could not be read.");
+                logger.severe("DBpediaResourceServiceOffline could not be read.");
                 return false;
             }
         }

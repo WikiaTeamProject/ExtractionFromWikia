@@ -1,33 +1,36 @@
-package utils;
+package extractionPostprocessing.util;
+
+import utils.IOoperations;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
-import java.io.File;
-import java.io.BufferedReader;
-import java.io.FileReader;
+
 /**
  * A class for storing redirects.
  */
-public class Redirects {
+public class DBpediaResourceServiceOffline {
 
-    private static Redirects redirectsObject;
+    private static DBpediaResourceServiceOffline DBpediaResourceServiceOfflineObject;
     private static HashMap<String,String> redirectsMap;
-    private static Logger logger = Logger.getLogger(Redirects.class.getName());
+    private static Logger logger = Logger.getLogger(DBpediaResourceServiceOffline.class.getName());
     private static String rootDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
     private static HashSet<String> pageIds;
 
-    private Redirects() {
+    /**
+     * Private constructor -> Singleton pattern
+     */
+    private DBpediaResourceServiceOffline() {
         // do nothing
     }
 
-    public static Redirects getRedirectsObject(){
-        if(redirectsObject == null){
-            redirectsObject = new Redirects();
-            return redirectsObject;
+    public static DBpediaResourceServiceOffline getDBpediaResourceServiceOfflineObject(){
+        if(DBpediaResourceServiceOfflineObject == null){
+            DBpediaResourceServiceOfflineObject = new DBpediaResourceServiceOffline();
+            return DBpediaResourceServiceOfflineObject;
         } else {
-            return redirectsObject;
+            return DBpediaResourceServiceOfflineObject;
         }
     }
 

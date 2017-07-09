@@ -1,4 +1,4 @@
-package extractionPostprocessing.controller;
+package extractionPostprocessing.util;
 import extractionPostprocessing.model.SPARQLresult;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.RDFNode;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * A class handling tasks concerning db-pedia like answering the question whether an entity exists in dbpedia or not.
  * The class can also just execute SPARQL queries for dbpedia.
  */
-public class DBpediaResourceService {
+public class DBpediaResourceServiceOnline {
 
     /**
      * This method checks whether a resource exists and whether there is a redirect resource on DBpedia.

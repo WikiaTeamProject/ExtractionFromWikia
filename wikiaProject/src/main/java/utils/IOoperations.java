@@ -249,7 +249,7 @@ public class IOoperations {
 
             File redirectsDirectory = new File(redirectFilePath);
             if (!redirectsDirectory.exists()) {
-                logger.severe("Redirects directory does not exist.");
+                logger.severe("DBpediaResourceServiceOffline directory does not exist.");
             }
 
             if (redirectsDirectory.isDirectory()) {
