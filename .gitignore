@@ -15,6 +15,7 @@
 
 # exclude the properties file for reasons of security (passwords etc.)
 *.properties
+!/wikiaProject/src/main/resources/config.properties
 
 # exclude csv files
 *.csv
@@ -25,5 +26,3 @@
 # include templates
 !/wikiaProject/src/main/resources/files/templates/template_extraction_default.properties
 
-# properties file
-/wikiaProject/src/main/resources/config.properties
