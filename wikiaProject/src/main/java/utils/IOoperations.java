@@ -285,4 +285,17 @@ public class IOoperations {
 
         return redirectsMap;
     }
+
+    public static void writeContentToFile(File file, String content) {
+
+        try {
+            FileWriter writer = new FileWriter(file);
+            writer.write(content);
+            writer.flush();
+            writer.close();
+        } catch (IOException ioe) {
+            logger.severe(ioe.toString());
+        }
+
+    }
 }
