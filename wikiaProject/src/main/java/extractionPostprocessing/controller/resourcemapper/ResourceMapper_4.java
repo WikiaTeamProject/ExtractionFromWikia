@@ -1,7 +1,7 @@
-package extractionPostprocessing.controller;
+package extractionPostprocessing.controller.resourcemapper;
 
-import extractionPostprocessing.model.ResourceMapper;
-import extractionPostprocessing.model.SPARQLresult;
+import extractionPostprocessing.util.DBpediaResourceServiceOnline;
+import extractionPostprocessing.model.ResourceServiceResult;
 
 /**
  * Fourth mapper implementation.
@@ -16,7 +16,8 @@ public class ResourceMapper_4 extends ResourceMapper {
         if(resourceToMap.contains("/File:")){
             return "<null>";
         } else {
-            SPARQLresult result = DBpediaResourceService.getResourceAndRedirectInDBpedia(resourceToMap);
+            DBpediaResourceServiceOnline service = new DBpediaResourceServiceOnline();
+            ResourceServiceResult result = service.getResourceAndRedirectInDBpedia(resourceToMap);
 
             if(result.resourceExists){
                 if(result.redirectResource != null){

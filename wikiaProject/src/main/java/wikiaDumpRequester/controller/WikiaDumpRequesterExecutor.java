@@ -30,13 +30,13 @@ public class WikiaDumpRequesterExecutor {
      */
     public static void requestDumpsForAllWikis(int beginAtLine) {
 
-        WikiaUser user = new WikiaUser(ResourceBundle.getBundle("config").getString("username"),
-                         ResourceBundle.getBundle("config").getString("password"));
-        String filepath = ResourceBundle.getBundle("config").getString("directory") + "/wikiaAllOverview.csv";
+        WikiaUser user = new WikiaUser(ResourceBundle.getBundle("credentials").getString("username"),
+                         ResourceBundle.getBundle("credentials").getString("password"));
+        String filepath = ResourceBundle.getBundle("credentials").getString("directory") + "/wikiaAllOverview.csv";
 
         // user output
-        logger.info("Credentials:\nUsername: " + ResourceBundle.getBundle("config").getString("username")
-                         + "\nPassword: " + ResourceBundle.getBundle("config").getString("password"));
+        logger.info("Credentials:\nUsername: " + ResourceBundle.getBundle("credentials").getString("username")
+                         + "\nPassword: " + ResourceBundle.getBundle("credentials").getString("password"));
 
         WikiaNewDumpRequest requester = new WikiaNewDumpRequest();
         ArrayList<String> urls = IOoperations.getUrls(filepath);
@@ -82,8 +82,8 @@ public class WikiaDumpRequesterExecutor {
                 }
 
                 // re-instantiate objects, I am not sure, whether this helps
-                user = new WikiaUser(ResourceBundle.getBundle("config").getString("username"),
-                                  ResourceBundle.getBundle("config").getString("password"));
+                user = new WikiaUser(ResourceBundle.getBundle("credentials").getString("username"),
+                                  ResourceBundle.getBundle("credentials").getString("password"));
                 requester = new WikiaNewDumpRequest();
 
                 logger.info("Request a new access token...");

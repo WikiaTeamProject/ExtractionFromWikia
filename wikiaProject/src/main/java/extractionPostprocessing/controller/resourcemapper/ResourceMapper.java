@@ -1,4 +1,4 @@
-package extractionPostprocessing.model;
+package extractionPostprocessing.controller.resourcemapper;
 
 import utils.IOoperations;
 

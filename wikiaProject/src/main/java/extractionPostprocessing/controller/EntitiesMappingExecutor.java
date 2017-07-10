@@ -1,5 +1,8 @@
 package extractionPostprocessing.controller;
 
+import extractionPostprocessing.controller.classmapper.ClassMapper;
+import extractionPostprocessing.controller.propertymapper.PropertyMapper;
+import extractionPostprocessing.controller.resourcemapper.ResourceMapper;
 import extractionPostprocessing.model.*;
 import utils.IOoperations;
 
@@ -133,12 +136,16 @@ public class EntitiesMappingExecutor {
 
                             while (matcher.find()) {
 
-                                // do not do for wikipedia and wikimedia entities and wikipedia entities
-                                if (matcher.group().toLowerCase().contains("wikipedia.org") || matcher.group().toLowerCase().contains("commons.wikimedia.org")) {
+                                // do not do for wikipedia and wikimedia resources, wikipedia resources and categories
+                                if (matcher.group().toLowerCase().contains("wikipedia.org") ||
+                                        matcher.group().toLowerCase().contains("commons.wikimedia.org") ||
+                                        matcher.group().toLowerCase().contains("category:")
+                                        ) {
                                     // do nothing
                                 } else {
                                     // -> not a wikipedia or dbpedia resource
 
+                                    // sort into proper map
                                     if (matcher.group().contains("/Template:")) {
                                         classesToMap.add(matcher.group());
                                     } else if (matcher.group().contains("/resource/")) {
@@ -147,7 +154,6 @@ public class EntitiesMappingExecutor {
                                         propertiesToMap.add(matcher.group());
                                     }
 
-                                    // Categories remain. Those are not mapped.
                                 }
 
                             } // end of while matcher find

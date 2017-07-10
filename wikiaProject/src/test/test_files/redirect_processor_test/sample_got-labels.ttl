@@ -1,7 +1,6 @@
-<http://dbpedia.org/resource/Rickon> <http://www.w3.org/2000/01/rdf-schema#label> "Rickon"@en .
 <http://dbpedia.org/resource/Rickon_Stark> <http://www.w3.org/2000/01/rdf-schema#label> "Rickon Stark"@en .
 <http://dbpedia.org/resource/Sansa> <http://www.w3.org/2000/01/rdf-schema#label> "Sansa"@en .
-<http://dbpedia.org/resource/Arya> <http://www.w3.org/2000/01/rdf-schema#label> "Arya"@en .
+<http://dbpedia.org/resource/Sansa_Stark> <http://www.w3.org/2000/01/rdf-schema#label> "Sansa Stark"@en .
 <http://dbpedia.org/resource/Bran> <http://www.w3.org/2000/01/rdf-schema#label> "Bran"@en .
 <http://dbpedia.org/resource/Bran_Stark> <http://www.w3.org/2000/01/rdf-schema#label> "Bran Stark"@en .
 <http://dbpedia.org/resource/Stark_Junior> <http://www.w3.org/2000/01/rdf-schema#label> "Stark Junior"@en .

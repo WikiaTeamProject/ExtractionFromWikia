@@ -68,16 +68,20 @@ public class MappingEvaluation {
             }
 
 
+            if(evaluationResults.size() == 0){
+                logger.info("No evaluation file was found. Make sure that there is at least one evaluation file within a wiki folder.");
+                return;
+            }
 
-            for(EvaluationResult e : evaluationResults){
+            for (EvaluationResult e : evaluationResults) {
                 double e_accuracy = e.getAccuracyInPercent();
                 int e_totalMappings = e.getTotalMappings();
 
                 // enty-weighted
-                weightedOverallAccuracy += (e.getAccuracyInPercent() * ( (double) e.getTotalMappings() / totalMappings ));
-                weightedOverallPrecision += (e.getPrecisionInPercent() * ( (double) e.getTotalMappings() / totalMappings));
-                weightedOverallRecall += (e.getRecallInPercent() * ( (double) e.getTotalMappings() / totalMappings));
-                weightedOverallF1Measure += (e.getF1MeasureInPercent() * ( (double) e.getTotalMappings() / totalMappings));
+                weightedOverallAccuracy += (e.getAccuracyInPercent() * ((double) e.getTotalMappings() / totalMappings));
+                weightedOverallPrecision += (e.getPrecisionInPercent() * ((double) e.getTotalMappings() / totalMappings));
+                weightedOverallRecall += (e.getRecallInPercent() * ((double) e.getTotalMappings() / totalMappings));
+                weightedOverallF1Measure += (e.getF1MeasureInPercent() * ((double) e.getTotalMappings() / totalMappings));
 
                 // microaverage
                 microAverageTruePositives += e.getTruePositives();
@@ -92,7 +96,6 @@ public class MappingEvaluation {
                 macroAverageF1measure += e.getF1MeasureInPercent();
 
             }
-
 
             // microaverage
             microAverageAccuracy = (microAverageTruePositives) / (microAverageTruePositives + microAverageTrueNegatives + microAverageFalsePositives + microAverageFalsePositives);
@@ -112,18 +115,19 @@ public class MappingEvaluation {
             logger.severe("pathToRootDirectory is not a directory!");
         } // end of if(root.isDirectory())
 
-        evaluationResultLine = "Entry-Weigted Resuls + \nEntry-Weigted Overall Accuracy of " + evaluationResults.size() + " wikis: " + weightedOverallAccuracy + "%\n" +
+        evaluationResultLine = "Summarized Evaluation Results\n\n\n" +
+                "Microaverage\n" + "Microaverage Accuracy: " + (microAverageAccuracy * 100) + "%\n" +
+                "Microaverage Precision: " + (microAveragePrecision * 100) + "%\n" +
+                "Microaverage Recall: " + (microAverageRecall * 100) + "%\n" +
+                "Microaverage F1-Measure" + (microAverageRecall * 100) + "%\n\n\n" +
+                "Macroaverage\n" + "Macroaverage Accuracy " + (macroAverageAccuracy) + "%\n" +
+                "Macroaverage Precision " + (macroAveragePrecision) + "%\n" +
+                "Macroaverage Recall " + (macroAverageRecall) + "%\n" +
+                "Macroaverage F1-Measure " + (macroAverageF1measure) + "%\n\n\n" +
+                "Entry-Weigted Resuls" + "\nEntry-Weigted Overall Accuracy of " + evaluationResults.size() + " wikis: " + weightedOverallAccuracy + "%\n" +
                 "Entry-Weigted Overall Precision of " + evaluationResults.size() + " wikis: " + weightedOverallPrecision + "%\n" +
                 "Entry-Weigted Overall Recall of " + evaluationResults.size() + " wikis: " + weightedOverallRecall + "%\n" +
-                "Entry-Weigted Overall F1-Measure of "+ evaluationResults.size() + " wikis: " + weightedOverallF1Measure + "%\n\n\n" +
-                "Microaverage\n" + "Microaverage Accuracy: " + (microAverageAccuracy*100) + "%\n" +
-                "Microaverage Precision: " + (microAveragePrecision*100) + "%\n" +
-                "Microaverage Recall: " + (microAverageRecall*100) + "%\n" +
-                "Microaverage F1-Measure" + (microAverageRecall*100) + "%\n\n\n" +
-                "Macroaverage\n" + "Macroaverage Accuracy " + (macroAverageAccuracy*100) + "%\n" +
-                "Macroaverage Precision " + (macroAveragePrecision*100) + "%\n" +
-                "Macroaverage Recall " + (macroAverageRecall*100) + "%\n" +
-                "Macroaverage F1-Measure " + (macroAverageF1measure*100) + "%\n\n\n" +
+                "Entry-Weigted Overall F1-Measure of " + evaluationResults.size() + " wikis: " + weightedOverallF1Measure + "%\n\n\n" +
                 "Number of annotated wikis: " + evaluationResults.size();
 
 
@@ -136,7 +140,7 @@ public class MappingEvaluation {
             BufferedWriter bw = new BufferedWriter(new FileWriter(evaluationFile));
             bw.write(aggregatedEvaluationResults.toString());
             bw.close();
-        } catch (IOException ioe){
+        } catch (IOException ioe) {
             logger.severe(ioe.toString());
         }
     }
@@ -144,6 +148,7 @@ public class MappingEvaluation {
 
     /**
      * Create evaluations for one wiki
+     *
      * @param wikiPath
      * @return
      */
@@ -166,12 +171,12 @@ public class MappingEvaluation {
 
         // if there is no manual mapping file with the name specified in the properties file use the file that ends
         // with the specified name
-        if(!manualMappingFile.exists()){
+        if (!manualMappingFile.exists()) {
             // check whether there is a file ending with the specified name
             File directory = new File(wikiPath);
-            if(directory.isDirectory()){
-                for (File f:directory.listFiles()) {
-                    if(f.getName().endsWith(manualMappingFileName)){
+            if (directory.isDirectory()) {
+                for (File f : directory.listFiles()) {
+                    if (f.getName().endsWith(manualMappingFileName)) {
                         manualMappingFile = f;
                     }
                 }
@@ -179,7 +184,7 @@ public class MappingEvaluation {
                 // wikiPath is not a directory
                 return null;
             }
-            if(!manualMappingFile.exists()){
+            if (!manualMappingFile.exists()) {
                 // no mapping file could be found
                 return null;
             }
@@ -199,7 +204,7 @@ public class MappingEvaluation {
                 if (dbPediaMappings.containsKey(resource)) {
                     totalMapping++;
 
-                    if(manualMappings.get(resource).equals("<null>")){
+                    if (manualMappings.get(resource).equals("<null>")) {
                         // NEGATIVE case
                         if (manualMappings.get(resource).toLowerCase().equals(dbPediaMappings.get(resource).toLowerCase())) {
                             trueNegatives++;
@@ -211,7 +216,7 @@ public class MappingEvaluation {
                         if (manualMappings.get(resource).toLowerCase().equals(dbPediaMappings.get(resource).toLowerCase())) {
                             truePositives++;
                         } else {
-                            if(dbPediaMappings.get(resource).equals("<null>")){
+                            if (dbPediaMappings.get(resource).equals("<null>")) {
                                 falseNegatives++;
                             } else {
                                 falsePositives++;
@@ -231,6 +236,7 @@ public class MappingEvaluation {
 
     /**
      * overloaded method
+     *
      * @param wikiPath
      * @return
      */

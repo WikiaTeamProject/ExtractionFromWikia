@@ -1,6 +1,4 @@
-package extractionPostprocessing.controller;
-
-import extractionPostprocessing.model.ResourceMapper;
+package extractionPostprocessing.controller.resourcemapper;
 
 
 /**

@@ -3,9 +3,17 @@ package extractionPostprocessing.model;
 /**
  * A structure serving as a tuple for a SPARQL result of a special query.
  */
-public class SPARQLresult {
+public class ResourceServiceResult {
 
+
+    /**
+     * Boolean which indicates whether the dbpedia resource exists.
+     */
     public boolean resourceExists;
+
+    /**
+     * Null if there is no redirect.
+     */
     public String redirectResource;
 
     /**
@@ -13,7 +21,7 @@ public class SPARQLresult {
      * @param resourceExists
      * @param redirectResource
      */
-    public SPARQLresult(boolean resourceExists, String redirectResource){
+    public ResourceServiceResult(boolean resourceExists, String redirectResource){
         this.resourceExists = resourceExists;
         this.redirectResource = redirectResource;
     }
@@ -21,7 +29,7 @@ public class SPARQLresult {
     /**
      * Constructor
      */
-    public SPARQLresult(){}
+    public ResourceServiceResult(){}
 
     @Override
     public String toString(){

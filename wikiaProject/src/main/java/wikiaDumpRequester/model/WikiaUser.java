@@ -44,7 +44,7 @@ public class WikiaUser {
 
     public String getAccessToken(){
 
-        String accessTokenURL=ResourceBundle.getBundle("config").getString("accessTokenURL");
+        String accessTokenURL=ResourceBundle.getBundle("credentials").getString("accessTokenURL");
         String responseMessage="";
         String responseMessageLine="";
         String userAccessToken="";

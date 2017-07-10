@@ -1,6 +1,4 @@
-package extractionPostprocessing.controller;
-
-import extractionPostprocessing.model.ClassMapper;
+package extractionPostprocessing.controller.classmapper;
 
 /**
  * Trivial implementation of a class mapper.

@@ -186,13 +186,15 @@ public class IOoperations {
             fileWriter.close();
 
         } catch (Exception exception) {
+            exception.printStackTrace();
             logger.log(Level.SEVERE, exception.getMessage());
         }
     }
 
 
     /**
-     * This function will read page Ids file
+     * This function reads DBpedia pageids. pageIds file
+     * Make sure that the folder "pageids" exists in the root directory and that there is at least one redirect file in the folder.
      * @return Hashset containing pageIds
      */
     public HashSet<String> getPageIDs(){
@@ -227,6 +229,7 @@ public class IOoperations {
                 }
             }
         } catch (Exception ex) {
+            ex.printStackTrace();
             logger.severe(ex.getMessage());
         }
 
@@ -234,7 +237,8 @@ public class IOoperations {
     }
 
     /**
-     * This function with read redirects file
+     * This function reads the DBpedia redirects file.
+     * Make sure that the folder "redirects" exists in the root directory and that there is at least one redirect file in the folder.
      * @return HashMap containing redirects mapping
      */
     public HashMap<String,String> getResourcesRedirects() {
@@ -249,7 +253,7 @@ public class IOoperations {
 
             File redirectsDirectory = new File(redirectFilePath);
             if (!redirectsDirectory.exists()) {
-                logger.severe("Redirects directory does not exist.");
+                logger.severe("DBpediaResourceServiceOffline directory does not exist.");
             }
 
             if (redirectsDirectory.isDirectory()) {
@@ -275,9 +279,23 @@ public class IOoperations {
                 }
             }
         } catch (Exception ex) {
+            ex.printStackTrace();
             logger.severe(ex.getMessage());
         }
 
         return redirectsMap;
+    }
+
+    public static void writeContentToFile(File file, String content) {
+
+        try {
+            FileWriter writer = new FileWriter(file);
+            writer.write(content);
+            writer.flush();
+            writer.close();
+        } catch (IOException ioe) {
+            logger.severe(ioe.toString());
+        }
+
     }
 }

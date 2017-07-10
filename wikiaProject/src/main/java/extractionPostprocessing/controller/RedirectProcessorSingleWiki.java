@@ -1,6 +1,6 @@
 package extractionPostprocessing.controller;
 
-import extraction.Extractor;
+import utils.IOoperations;
 
 import java.io.*;
 import java.util.HashMap;
@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 public class RedirectProcessorSingleWiki {
 
     private HashMap<String, String> redirectsMap = new HashMap<>();
-    private static Logger logger = Logger.getLogger(Extractor.class.getName());
+    private static Logger logger = Logger.getLogger(RedirectProcessorSingleWiki.class.getName());
     private File wikiDirectory;
 
 
@@ -69,7 +69,7 @@ public class RedirectProcessorSingleWiki {
             String line;
             Matcher matcher = null;
             while ((line = br.readLine()) != null) {
-                System.out.println(line);
+                logger.info(line);
                 Pattern pattern = Pattern.compile("<[^<]*>");
                 // regex: <[^<]*>
                 // this regex captures everything between tags including the tags: <...>
@@ -83,29 +83,29 @@ public class RedirectProcessorSingleWiki {
 
                 while (matcher.find()) {
                     index++;
-                    if (index == 1) {
-                        // first match: key
-                        key = matcher.group();
-                        System.out.println("Key: " + matcher.group());
-                    }
-
-                    // (second match: "<http://dbpedia.org/ontology/wikiPageRedirects>"
-                    // always the same -> irrelevant for us
-
-                    if (index == 3) {
-                        value = matcher.group();
-                        System.out.println(matcher.group());
-
-                        if (key != null && value != null) {
-                            // key and value found -> add to map and break while loop
-                            System.out.println("Value:  " + matcher.group());
-
-                            redirectsMap.put(key, value);
-                            key = null;
-                            value = null;
+                    switch (index) {
+                        case 1:
+                            // first match: key
+                            key = matcher.group();
+                            logger.info("Key: " + matcher.group());
                             break;
-                        }
+                        // (second match: "<http://dbpedia.org/ontology/wikiPageRedirects>"
+                        // always the same -> irrelevant for us
+                        case 3:
+                            value = matcher.group();
+
+                            if (key != null && value != null) {
+                                // key and value found -> add to map and break while loop
+                                logger.info("Value:  " + matcher.group());
+
+                                redirectsMap.put(key, value);
+                                key = null;
+                                value = null;
+                                break;
+                            }
+                            break;
                     }
+
                 }
             } // end of while ((line = br.readLine()) != null)
             br.close();
@@ -131,7 +131,7 @@ public class RedirectProcessorSingleWiki {
         if (redirectsMap.isEmpty()) {
             if (!this.readRedirects()) {
                 // redirects could not be read
-                logger.severe("Redirects could not be read.");
+                logger.severe("DBpediaResourceServiceOffline could not be read.");
                 return false;
             }
         }
@@ -139,106 +139,68 @@ public class RedirectProcessorSingleWiki {
         // update label.ttl file with redirects
         updateLabelFile();
 
-        BufferedReader reader = null;
-        boolean changeOccurred = false;
-        int counter = 0;
-        do {
-            System.out.println("Iteration number " + counter++);
-            changeOccurred = false; // no change has yet occurred
-            StringBuffer newFileContent = new StringBuffer();
+        BufferedReader reader;
 
-            for (File f : wikiDirectory.listFiles()) {
-                if (f.getName().endsWith(".ttl")) {
-                    // -> we are interested in the file
-                    System.out.println(f.getName());
+        StringBuffer newFileContent = new StringBuffer();
 
-                    if (f.getName().endsWith("-redirects.ttl") || f.getName().endsWith("labels.ttl")) {
-                        // we do not want to process the redirects file itself, labels file already processed
-                        continue;
-                    }
+        File[] fileList = wikiDirectory.listFiles((dir, name) -> {
+            if (name.endsWith(".ttl") && !name.endsWith("-redirects.ttl") && !name.endsWith("labels.ttl")) {
+                // we do not want to process the redirects file itself, labels file is already processed
+                return true;
+            }
+            logger.info("Skipped: " + name);
+            return false;
+        });
 
-                    try {
-                        reader = new BufferedReader(new FileReader(f));
+        for (File f : fileList) {
+            // -> we are interested in the file
+            logger.info("Processing: " + f.getName());
 
-                        String line;
-                        Matcher matcher = null;
+            try {
+                reader = new BufferedReader(new FileReader(f));
 
-                        while ((line = reader.readLine()) != null) {
-                            Pattern pattern = Pattern.compile("<[^<]*>");
-                            // regex: <[^<]*>
-                            // this regex captures everything between tags including the tags: <...>
-                            // there are three tags in every line, we are not interested in the second tag
+                String line;
+                Matcher matcher;
 
-                            matcher = pattern.matcher(line);
+                while ((line = reader.readLine()) != null) {
+                    Pattern pattern = Pattern.compile("<[^<]*>");
+                    // regex: <[^<]*>
+                    // this regex captures everything between tags including the tags: <...>
+                    // there are three tags in every line, we are not interested in the second tag
 
-                            int index = 0;
-                            String key = null;
-                            String value = null;
+                    matcher = pattern.matcher(line);
+                    int index = 0;
 
-                            while (matcher.find()) {
-                                index++;
-                                if (index == 1) {
-                                    if (redirectsMap.containsKey(matcher.group())) {
-                                        // there is something to replace
-                                        changeOccurred = true;
-
-                                        // replace operation
-                                        //System.out.println("Old line: " + line);
-                                        line = line.replace(matcher.group(), (String) redirectsMap.get(matcher.group()));
-                                        //System.out.println("New line: " + line);
-                                    }
+                    while (matcher.find()) {
+                        index++;
+                        switch (index) {
+                            // first and last tag replaced with redirect if one exists
+                            // (second match: "<some interlinking tag>" -> irrelevant for us
+                            case 1:
+                            case 3:
+                                if (redirectsMap.containsKey(matcher.group())) {
+                                    // replace operation
+                                    line = line.replace(matcher.group(), getRedirect(matcher.group()));
                                 }
-
-                                // (second match: "<some interlinking tag>" -> irrelevant for us
-
-                                if (index == 3) {
-                                    if (redirectsMap.containsKey(matcher.group())) {
-                                        // there is something to replace
-                                        changeOccurred = true;
-
-                                        // replace operation
-                                        //System.out.println("Old line: " + line);
-                                        line = line.replace(matcher.group(), (String) redirectsMap.get(matcher.group()));
-                                        //System.out.println("New line: " + line);
-                                    }
-                                }
-                            }
-                            newFileContent.append(line + "\n"); // the line break must be added
-                        }
-                        reader.close();
-                    } catch (IOException ioe) {
-                        logger.severe(ioe.toString());
-                    }
-
-                    // write the new file content into the file if a change occurred
-                    if (changeOccurred) {
-                        File newFile = new File(f.getAbsolutePath());
-                        System.out.println("Re-Writing File :" + newFile.getName());
-                        try {
-                            FileWriter writer = new FileWriter(newFile);
-                            writer.write(newFileContent.toString());
-                            writer.flush();
-                            writer.close();
-                        } catch (IOException ioe) {
-                            logger.severe(ioe.toString());
+                                break;
                         }
 
-                        // delete the content after it was written
-                        newFileContent = new StringBuffer();
                     }
-
-                } // end of if ( file endsWith("ttl") )
-
-            } // end of for loop through all files in the directory
-
-            if (counter > 10) {
-                logger.warning("Redirect processing was cancelled after 10 iterations. There is probably an infinite loop relation in the redirects file.");
-                return false;
+                    newFileContent.append(line + "\n"); // the line break must be added
+                }
+                reader.close();
+            } catch (IOException ioe) {
+                logger.severe(ioe.toString());
             }
 
-        } while (changeOccurred);
+            // write the new file content into the file if a change occurred
+            File newFile = new File(f.getAbsolutePath());
+            logger.info("Re-Writing File: " + newFile.getName());
+            IOoperations.writeContentToFile(newFile, newFileContent.toString());
 
-        System.out.println("Number of iterations: " + (counter - 1));
+            // delete the content after it was written
+            newFileContent = new StringBuffer();
+        }
 
         return true;
     }
@@ -248,98 +210,78 @@ public class RedirectProcessorSingleWiki {
      */
     public void updateLabelFile() {
 
-        File[] fileList = wikiDirectory.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                if (name.endsWith("labels.ttl")) return true;
-                return false;
-            }
+        File[] fileList = wikiDirectory.listFiles((dir, name) -> {
+            if (name.endsWith("labels.ttl")) return true;
+            return false;
         });
 
         // fileList only contains labels.ttl file
         for (File f : fileList) {
 
-                StringBuffer newFileContent = new StringBuffer();
+            StringBuffer newFileContent = new StringBuffer();
 
-                try {
-                    BufferedReader reader = new BufferedReader(new FileReader(f));
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(f));
 
-                    String line;
-                    Matcher matcher;
-                    String key = null;
-                    String redirect;
+                String line;
+                Matcher matcher;
+                String key = null;
+                String redirect;
 
-                    while ((line = reader.readLine()) != null) {
-                        Pattern pattern = Pattern.compile("<[^<]*>");
-                        // regex: <[^<]*>
-                        // this regex captures everything between tags including the tags: <...>
-                        // there are only two tags in every line (replace second)
-                        // e.g. <http://uni-mannheim.de/resource/HBO> <http://www.w3.org/2000/01/rdf-schema#label> "HBO"@en .
+                while ((line = reader.readLine()) != null) {
+                    Pattern pattern = Pattern.compile("<[^<]*>");
+                    // regex: <[^<]*>
+                    // this regex captures everything between tags including the tags: <...>
+                    // there are only two tags in every line (replace second)
+                    // e.g. <http://uni-mannheim.de/resource/HBO> <http://www.w3.org/2000/01/rdf-schema#label> "HBO"@en .
 
-                        matcher = pattern.matcher(line);
-                        redirect = null;
+                    matcher = pattern.matcher(line);
+                    redirect = null;
 
-                        int index = 0;
+                    int index = 0;
 
-                        while (matcher.find()) {
-                            index++;
+                    while (matcher.find()) {
+                        index++;
 
-                            switch (index) {
-                                case 1:
-                                    key = matcher.group();
-                                    if ((redirect = getRedirect(key)) != null) {
+                        switch (index) {
+                            case 1:
+                                key = matcher.group();
+                                if ((redirect = getRedirect(key)) != null) {
+                                    // replace tag with redirect
+                                    line = line.replace(key, redirect);
+                                }
+                                break;
+                            // second match: <http://www.w3.org/2000/01/rdf-schema#label>
+                            case 2:
+                                if ((!redirectsMap.containsKey(key) && redirectsMap.containsValue(key)) || (redirect != null && key == redirect)) {
+                                    // replace tag with skos:prefLabel <http://www.w3.org/2004/02/skos/core#prefLabel>
+                                    line = line.replace(matcher.group(), "<http://www.w3.org/2004/02/skos/core#prefLabel>");
 
-                                        // replace tag with redirect
-                                        line = line.replace(key, redirect);
-                                    }
-                                    break;
-
-                                // second match: <http://www.w3.org/2000/01/rdf-schema#label>
-                                // replace if redirect exists with either:
-                                // skos:prefLabel <http://www.w3.org/2004/02/skos/core#prefLabel>
-                                // or skos:altLabel <http://www.w3.org/2004/02/skos/core#altLabel>
-                                case 2:
-                                    if ((!redirectsMap.containsKey(key) && redirectsMap.containsValue(key)) || (redirect != null && key == redirect)) {
-
-                                        // replace tag with pref label
-                                        line = line.replace(matcher.group(), "<http://www.w3.org/2004/02/skos/core#prefLabel>");
-
-                                    } else if (redirect != null) {
-
-                                        // replace tag with alt label
-                                        line = line.replace(matcher.group(), "<http://www.w3.org/2004/02/skos/core#altLabel>");
-                                    }
-                                    break;
-                            }
-
+                                } else if (redirect != null) {
+                                    // replace tag with skos:altLabel <http://www.w3.org/2004/02/skos/core#altLabel>
+                                    line = line.replace(matcher.group(), "<http://www.w3.org/2004/02/skos/core#altLabel>");
+                                }
+                                break;
                         }
-                        newFileContent.append(line + "\n"); // the line break must be added
+
                     }
-                    reader.close();
-                } catch (IOException ioe) {
-                    logger.severe(ioe.toString());
+                    newFileContent.append(line + "\n"); // the line break must be added
                 }
+                reader.close();
+            } catch (IOException ioe) {
+                logger.severe(ioe.toString());
+            }
 
-                // write the new file content into the file if a change occurred
-                    File newFile = new File(f.getAbsolutePath());
-                    System.out.println("Re-Writing File :" + newFile.getName());
-                    try {
-                        FileWriter writer = new FileWriter(newFile);
-                        writer.write(newFileContent.toString());
-                        writer.flush();
-                        writer.close();
-                    } catch (IOException ioe) {
-                        logger.severe(ioe.toString());
-                    }
-
-                    // delete the content after it was written
-                    newFileContent = new StringBuffer();
-
+            // write the new file content into the file if a change occurred
+            File newFile = new File(f.getAbsolutePath());
+            logger.info("Re-Writing File: " + newFile.getName());
+            IOoperations.writeContentToFile(newFile, newFileContent.toString());
         }
     }
 
     /**
-     * Get latest redirect from redirectsMap for a specific key
+     * Get latest redirect from redirectsMap for a specific key.
+     *
      * @param key
      * @return
      */
@@ -348,14 +290,15 @@ public class RedirectProcessorSingleWiki {
         String input = key;
         String value = null;
         boolean changeOccurred;
-        int counter = 0;
-
+        int counter = 1;
 
         do {
-            changeOccurred = false; // no change has yet occurred
+            // no change has yet occurred
+            changeOccurred = false;
 
             if (redirectsMap.containsKey(key)) {
                 changeOccurred = true;
+                counter++;
                 value = redirectsMap.get(key);
                 key = value;
             }
@@ -367,7 +310,7 @@ public class RedirectProcessorSingleWiki {
 
         } while (changeOccurred);
 
-        System.out.println("Labels.ttl: redirect for " + input + " is " + value);
+        logger.fine("Labels.ttl: redirect for " + input + " is " + value);
 
         return value;
     }
@@ -381,8 +324,8 @@ public class RedirectProcessorSingleWiki {
         Iterator iterator = redirectsMap.entrySet().iterator();
         while (iterator.hasNext()) {
             entry = (HashMap.Entry) iterator.next();
-            System.out.println("Key: " + entry.getKey());
-            System.out.println("Value " + entry.getValue());
+            logger.info("Key: " + entry.getKey());
+            logger.info("Value " + entry.getValue());
         }
     }
 
