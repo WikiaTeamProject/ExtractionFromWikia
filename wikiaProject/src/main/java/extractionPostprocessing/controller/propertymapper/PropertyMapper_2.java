@@ -1,9 +1,7 @@
-package extractionPostprocessing.controller;
+package extractionPostprocessing.controller.propertymapper;
 
-import extractionPostprocessing.model.PropertyMapper;
 
 /**
- * Created by Samresh Kumar on 7/5/2017.
  * This mapper will replace property in URI
  * to ontology
  */
