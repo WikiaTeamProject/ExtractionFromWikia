@@ -219,7 +219,10 @@ public class IOoperations {
                         fileReader = new FileReader(pageIdsFile);
                         bufferedReader = new BufferedReader(fileReader);
 
-                        while ((fileLine = bufferedReader.readLine().trim()) != "-1") {
+                        while ((fileLine = bufferedReader.readLine()) != null) {
+
+                            fileLine=fileLine.trim();
+
                             String pageId =
                                     fileLine.substring(0, fileLine.indexOf(">") + 1);
 
@@ -264,7 +267,10 @@ public class IOoperations {
                         fileReader = new FileReader(redirectsFile);
                         bufferedReader = new BufferedReader(fileReader);
 
-                        while ((fileLine = bufferedReader.readLine().trim()) != "-1") {
+                        while ((fileLine = bufferedReader.readLine()) != null) {
+
+                            fileLine=fileLine.trim();
+
                             String resourceLink =
                                     fileLine.substring(0, fileLine.indexOf(">") + 1);
 
