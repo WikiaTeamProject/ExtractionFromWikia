@@ -24,6 +24,8 @@ public class DBpediaResourceServiceOfflineTest {
         // try with redirect resource
         ResourceServiceResult result = service.getResourceAndRedirectInDBpedia("<http://dbpedia.org/resource/Hagrid>");
         assertTrue(result.resourceExists);
+        System.out.println("Expected: <http://dbpedia.org/resource/Rubeus_Hagrid>");
+        System.out.println(result.redirectResource);
         assertTrue(result.redirectResource.equals("<http://dbpedia.org/resource/Rubeus_Hagrid>"));
 
         // try with non-redirect resource
