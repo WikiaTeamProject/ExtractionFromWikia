@@ -16,6 +16,7 @@ public class DBpediaResourceServiceOfflineTest {
 
     public static DBpediaResourceServiceOffline service = DBpediaResourceServiceOffline.getDBpediaResourceServiceOfflineObject();
 
+    // TODO: Evaluate why this test fails
 
     @Test
     public void getResourceAndRedirectInDBpedia() throws Exception {

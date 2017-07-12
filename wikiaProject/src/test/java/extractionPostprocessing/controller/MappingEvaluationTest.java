@@ -10,6 +10,7 @@ import static org.junit.Assert.*;
  */
 public class MappingEvaluationTest {
 
+
     @Test
     public void evaluateMappingsForOneWiki() throws Exception {
         EvaluationResult result = MappingEvaluation.evaluateMappingsForOneWiki("./src/test/test_files/evaluation_test");

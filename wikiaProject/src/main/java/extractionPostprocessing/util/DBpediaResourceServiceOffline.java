@@ -61,7 +61,9 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
         } else if (pageIds.contains(resource)) {
             redirect = resource;
         } else {
+            // TODO: evaluate what's better
             redirect = "<null>";
+            //return null;
         }
 
         return redirect;

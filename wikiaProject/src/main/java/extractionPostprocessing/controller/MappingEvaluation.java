@@ -180,6 +180,15 @@ public class MappingEvaluation {
                         manualMappingFile = f;
                     }
                 }
+                if(manualMappingFile == null || !manualMappingFile.exists()){
+                    // the manual mapping file does not exist
+                    // look for a file ending with evaluation.ttl
+                    for (File f : directory.listFiles()) {
+                        if (f.getName().endsWith("evaluation.ttl")) {
+                            manualMappingFile = f;
+                        }
+                    }
+                }
             } else {
                 // wikiPath is not a directory
                 return null;
