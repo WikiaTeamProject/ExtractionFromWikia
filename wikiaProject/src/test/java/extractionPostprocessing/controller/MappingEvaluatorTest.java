@@ -5,14 +5,14 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Test class for {@link extractionPostprocessing.controller.MappingEvaluation MappingEvaluation}.
+ * Test class for {@link MappingEvaluator MappingEvaluator}.
  * The test also covers some functionality of {@Link extractionPostprocessing.model.EvaluationResult EvaluationResult}.
  */
-public class MappingEvaluationTest {
+public class MappingEvaluatorTest {
 
     @Test
     public void evaluateMappingsForOneWiki() throws Exception {
-        EvaluationResult result = MappingEvaluation.evaluateMappingsForOneWiki("./src/test/test_files/evaluation_test");
+        EvaluationResult result = MappingEvaluator.evaluateMappingsForOneWiki("./src/test/test_files/evaluation_test");
         assertTrue(result.getFalseNegatives() == 2);
         assertTrue(result.getFalsePositives() == 1);
         assertTrue(result.getTruePositives() == 1);

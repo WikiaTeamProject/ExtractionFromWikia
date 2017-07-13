@@ -1,6 +1,6 @@
 package extractionPostprocessing;
 
-import extractionPostprocessing.controller.MappingEvaluation;
+import extractionPostprocessing.controller.MappingEvaluator;
 
 
 /**
@@ -12,7 +12,7 @@ public class EvaluationApplication {
     public static void main(String[] args) {
 
         // evaluate manual mappings with created mappings for all wikis in root folder
-        MappingEvaluation.evaluateAllMappings();
+        MappingEvaluator.evaluateAllMappings();
 
     }
 }
