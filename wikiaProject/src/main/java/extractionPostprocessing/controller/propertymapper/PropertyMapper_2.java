@@ -1,4 +1,4 @@
-package extractionPostprocessing.controller;
+package extractionPostprocessing.controller.propertymapper;
 
 import extractionPostprocessing.controller.propertymapper.PropertyMapper;
 
