@@ -12,7 +12,6 @@ public class EvaluationResult {
     private int totalMappings;
 
 
-
     /**
      * Constructor
      * @param falseNegatives

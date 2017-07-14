@@ -57,11 +57,15 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
         }
 
         if (redirectsMap.get(resource) != null) {
-            redirect = redirectsMap.get(resource);
-        } else if (pageIds.contains(resource)) {
-            redirect = resource;
+            if(redirectsMap.get(resource).equals(resource)) {
+                // we do not map entities to themselves
+                return null;
+            } else {
+                redirect = redirectsMap.get(resource);
+            }
         } else {
-            redirect = "<null>";
+            // no redirect found
+            return null;
         }
 
         return redirect;
@@ -116,7 +120,7 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
 
     @Override
     public ResourceServiceResult getResourceAndRedirectInDBpedia(String resource) {
-
+        resource = addTagsIfNotAtag(resource);
         ResourceServiceResult result = new ResourceServiceResult();
         result.resourceExists = resourceExistsInDBpedia(resource);
         if(result.resourceExists){

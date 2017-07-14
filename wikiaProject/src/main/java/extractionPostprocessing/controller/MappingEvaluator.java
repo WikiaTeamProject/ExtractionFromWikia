@@ -11,37 +11,54 @@ import java.util.logging.Logger;
 /**
  * After creating the mapping files using a mapper, the evaluation for that mapping can be performed using this class.
  */
-public class MappingEvaluation {
+public class MappingEvaluator {
 
-    private static Logger logger = Logger.getLogger(MappingEvaluation.class.getName());
+    private static Logger logger = Logger.getLogger(MappingEvaluator.class.getName());
 
     private static EvaluationResult mappingsEvaluationResult;
+
+
+    // KPIs that are calculated for evaluation
+    // The result of the last evaluation is persisted (to allow for testability)
+    private static double weightedOverallAccuracy;
+    private static double weightedOverallPrecision;
+    private static double weightedOverallRecall;
+    private static double weightedOverallF1Measure;
+    private static double microAverageTruePositives;
+    private static double microAverageFalsePositives;
+    private static double microAverageTrueNegatives;
+    private static double microAverageFalseNegatives;
+    private static double microAverageAccuracy;
+    private static double microAveragePrecision;
+    private static double microAverageRecall;
+    private static double microAverageF1measure;
+    private static double macroAverageAccuracy;
+    private static double macroAveragePrecision;
+    private static double macroAverageRecall;
+    private static double macroAverageF1measure;
 
     /**
      * Evaluate all mappings and print the result on the command line.
      * The results are also persisted in a file.
      */
-    public static void evaluateAllMappings() {
+    public static void evaluateAllMappings(){
 
-
-        // KPIs
-        double weightedOverallAccuracy = 0.0;
-        double weightedOverallPrecision = 0.0;
-        double weightedOverallRecall = 0.0;
-        double weightedOverallF1Measure = 0.0;
-        double microAverageTruePositives = 0.0;
-        double microAverageFalsePositives = 0.0;
-        double microAverageTrueNegatives = 0.0;
-        double microAverageFalseNegatives = 0.0;
-        double microAverageAccuracy = 0.0;
-        double microAveragePrecision = 0.0;
-        double microAverageRecall = 0.0;
-        double microAverageF1measure = 0.0;
-        double macroAverageAccuracy = 0.0;
-        double macroAveragePrecision = 0.0;
-        double macroAverageRecall = 0.0;
-        double macroAverageF1measure = 0.0;
-
+        weightedOverallAccuracy = 0;
+        weightedOverallPrecision = 0;
+        weightedOverallRecall = 0;
+        weightedOverallF1Measure = 0;
+        microAverageTruePositives = 0;
+        microAverageFalsePositives = 0;
+        microAverageTrueNegatives = 0;
+        microAverageFalseNegatives = 0;
+        microAverageAccuracy = 0;
+        microAveragePrecision = 0;
+        microAverageRecall = 0;
+        microAverageF1measure = 0;
+        macroAverageAccuracy = 0;
+        macroAveragePrecision = 0;
+        macroAverageRecall = 0;
+        macroAverageF1measure = 0 ;
 
         int totalMappings = 0;
         ArrayList<EvaluationResult> evaluationResults = new ArrayList<>();
@@ -119,7 +136,7 @@ public class MappingEvaluation {
                 "Microaverage\n" + "Microaverage Accuracy: " + (microAverageAccuracy * 100) + "%\n" +
                 "Microaverage Precision: " + (microAveragePrecision * 100) + "%\n" +
                 "Microaverage Recall: " + (microAverageRecall * 100) + "%\n" +
-                "Microaverage F1-Measure" + (microAverageRecall * 100) + "%\n\n\n" +
+                "Microaverage F1-Measure" + (microAverageF1measure * 100) + "%\n\n\n" +
                 "Macroaverage\n" + "Macroaverage Accuracy " + (macroAverageAccuracy) + "%\n" +
                 "Macroaverage Precision " + (macroAveragePrecision) + "%\n" +
                 "Macroaverage Recall " + (macroAverageRecall) + "%\n" +
@@ -178,6 +195,15 @@ public class MappingEvaluation {
                 for (File f : directory.listFiles()) {
                     if (f.getName().endsWith(manualMappingFileName)) {
                         manualMappingFile = f;
+                    }
+                }
+                if(manualMappingFile == null || !manualMappingFile.exists()){
+                    // the manual mapping file does not exist
+                    // look for a file ending with evaluation.ttl
+                    for (File f : directory.listFiles()) {
+                        if (f.getName().endsWith("evaluation.ttl")) {
+                            manualMappingFile = f;
+                        }
                     }
                 }
             } else {
@@ -244,4 +270,76 @@ public class MappingEvaluation {
         return evaluateMappingsForOneWiki(wikiPath.getAbsolutePath());
     }
 
+
+    /*
+     * Only getters and setters below this point
+     */
+
+    public static EvaluationResult getMappingsEvaluationResult() {
+        return mappingsEvaluationResult;
+    }
+
+    public static double getWeightedOverallAccuracy() {
+        return weightedOverallAccuracy;
+    }
+
+    public static double getWeightedOverallPrecision() {
+        return weightedOverallPrecision;
+    }
+
+    public static double getWeightedOverallRecall() {
+        return weightedOverallRecall;
+    }
+
+    public static double getWeightedOverallF1Measure() {
+        return weightedOverallF1Measure;
+    }
+
+    public static double getMicroAverageTruePositives() {
+        return microAverageTruePositives;
+    }
+
+    public static double getMicroAverageFalsePositives() {
+        return microAverageFalsePositives;
+    }
+
+    public static double getMicroAverageTrueNegatives() {
+        return microAverageTrueNegatives;
+    }
+
+    public static double getMicroAverageFalseNegatives() {
+        return microAverageFalseNegatives;
+    }
+
+    public static double getMicroAverageAccuracy() {
+        return microAverageAccuracy;
+    }
+
+    public static double getMicroAveragePrecision() {
+        return microAveragePrecision;
+    }
+
+    public static double getMicroAverageRecall() {
+        return microAverageRecall;
+    }
+
+    public static double getMicroAverageF1measure() {
+        return microAverageF1measure;
+    }
+
+    public static double getMacroAverageAccuracy() {
+        return macroAverageAccuracy;
+    }
+
+    public static double getMacroAveragePrecision() {
+        return macroAveragePrecision;
+    }
+
+    public static double getMacroAverageRecall() {
+        return macroAverageRecall;
+    }
+
+    public static double getMacroAverageF1measure() {
+        return macroAverageF1measure;
+    }
 }
