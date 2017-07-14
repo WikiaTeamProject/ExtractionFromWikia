@@ -19,6 +19,7 @@ import org.apache.commons.exec.DefaultExecutor;
 import utils.ExtractionBz2;
 import utils.ExtractionGZip;
 import utils.Extraction7zip;
+import java.util.Date;
 
 import java.io.PrintWriter;
 
@@ -160,9 +161,20 @@ public class Extractor {
             String wikiName="";
             String wikiPath=wikiFilePath;
             int lineNumber = 0;
+            SimpleDateFormat simpleDateFormat=new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            Date lastModifiedDate;
+            long wikiSize;
 
 
-            FileReader fr = new FileReader(wikiFilePath);
+            File wikiFile=new File(wikiFilePath);
+
+            logger.info("Getting Properties for wiki : " +wikiFilePath);
+
+            lastModifiedDate=simpleDateFormat.parse(simpleDateFormat.format(wikiFile.lastModified()));
+            System.out.println("Total Size:" + (wikiFile.length()/1024) + " KB");
+
+            FileReader fr = new FileReader(wikiFile);
+
             BufferedReader br = new BufferedReader(fr);
 
             while ((line = br.readLine()) != null && lineNumber <= 20) {
@@ -177,7 +189,9 @@ public class Extractor {
 
                 wikiName = (fileContents.substring(fileContents.indexOf("<sitename>") + 10, fileContents.indexOf("</sitename>", fileContents.indexOf("<sitename>") + 10) - 1)).trim().replace(" ", "_");
 
-                wikiProperties=new WikiaWikiProperties(wikiName, languageCode,wikiPath);
+                wikiSize=(wikiFile.length()/1024);
+
+                wikiProperties=new WikiaWikiProperties(wikiName, languageCode,wikiPath,lastModifiedDate,wikiSize);
 
             }
             br.close();
@@ -214,15 +228,27 @@ public class Extractor {
             //get list of wikis in a folder
             File[] wikiFiles = wikisFilesFolder.listFiles();
 
+            System.out.println("Total Files :" + wikiFiles.length);
+
             for(File wikiFile:wikiFiles){
 
                 if (wikiFile.isFile() && wikiFile.getName().endsWith(".xml")) {
 
+                    if(wikiFile.getName().equals("bprd_pages_current.xml")){
+                        System.out.println("I am here");
+                    }
                     WikiaWikiProperties properties = extractPropertiesForaWiki(wikiFile.getPath());
 
                     if (wikiProperties != null) {
-                        wikiProperties.put(properties.getWikiName(), properties);
+                        //wikiProperties.put(properties.getWikiName(), properties);
+                        wikiProperties.put(properties.getWikiPath().substring(properties.getWikiPath().lastIndexOf("\\",properties.getWikiPath().length())), properties);
                     }
+
+                }
+                else
+                {
+                    logger.severe("File is not valid XML : "+wikiFile.getName());
+                    break;
                 }
             }
 
