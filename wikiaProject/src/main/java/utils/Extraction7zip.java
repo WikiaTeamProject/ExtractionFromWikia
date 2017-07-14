@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
+
+import java.text.SimpleDateFormat;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
@@ -52,6 +54,11 @@ public class Extraction7zip {
 
             SevenZFile sevenZFile = new SevenZFile(compressedFile);
             SevenZArchiveEntry zipContents = sevenZFile.getNextEntry();
+
+            SimpleDateFormat sdf=new SimpleDateFormat("MM/dd/yyyy");
+
+            System.out.println("Last Modified Date:" + sdf.format(zipContents.getLastModifiedDate()));
+
             File extractedFile=null;
             FileOutputStream fileStream=null;
             byte[] extractedFileContents=null;
@@ -64,13 +71,16 @@ public class Extraction7zip {
                 if (!extractedFile.exists()) {
                     extractedFile.createNewFile();
                 }
+
                 fileStream = new FileOutputStream(extractedFile, false);
+
                 extractedFileContents = new byte[(int) zipContents.getSize()];
 
                 sevenZFile.read(extractedFileContents, 0, extractedFileContents.length);
 
                 fileStream.write(extractedFileContents);
                 fileStream.close();
+                extractedFile.setLastModified(zipContents.getLastModifiedDate().getTime());
                 zipContents = sevenZFile.getNextEntry();
             }
             sevenZFile.close();
