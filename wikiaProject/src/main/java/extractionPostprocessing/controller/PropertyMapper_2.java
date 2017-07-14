@@ -1,6 +1,6 @@
 package extractionPostprocessing.controller;
 
-import extractionPostprocessing.model.PropertyMapper;
+import extractionPostprocessing.controller.propertymapper.PropertyMapper;
 
 /**
  * Created by Samresh Kumar on 7/5/2017.
