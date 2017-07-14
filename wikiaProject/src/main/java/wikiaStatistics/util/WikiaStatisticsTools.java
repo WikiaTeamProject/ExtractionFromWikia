@@ -1,8 +1,12 @@
 package wikiaStatistics.util;
 
+import extraction.model.WikiaWikiProperties;
+import extraction.Extractor;
 import wikiaStatistics.model.MetadataStatistics;
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
@@ -145,6 +149,61 @@ public class WikiaStatisticsTools {
         }
 
         return statistics;
+    }
+
+
+    /**
+     * This method generates statistics files from
+     * downloaded dumps
+     */
+    public void createWikiaStatisticsFromDownloadedDumps(){
+
+        Extractor extractor=new Extractor();
+
+        SimpleDateFormat dateFormater=new
+                SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+
+        String newLineCharacter =
+                ResourceBundle.getBundle("config").getString("newLineCharacter");
+
+        String staticsFileName=statisticsDirectoryPath+"//wikiaStatistics.csv";
+
+        HashMap<String,WikiaWikiProperties> prop=extractor.extractPropertiesForAllWikis();
+
+        try {
+
+            File wikiaStatisticsDirectory=new File(statisticsDirectoryPath);
+
+            if(!wikiaStatisticsDirectory.exists()){
+                wikiaStatisticsDirectory.mkdir();
+            }
+
+            PrintWriter fileWriter
+                    = new PrintWriter(staticsFileName);
+
+
+            //Writing header row
+            fileWriter.write
+                    ("Wiki Name,Language Code,Last Modified Date," +
+                            "File Path,wiki Size,"+newLineCharacter);
+
+            for(String wiki:prop.keySet()){
+                WikiaWikiProperties wikiProp=prop.get(wiki);
+
+                fileWriter.write(wikiProp.getWikiName().replace(","," ")+
+                        ","+ wikiProp.getLanguageCode()+ ","+
+                        dateFormater.format(wikiProp.getLastModifiedDate())+","+
+                        wikiProp.getWikiPath()+","
+                        +wikiProp.getWikiSize() +","+
+                        newLineCharacter);
+            }
+
+            fileWriter.close();
+        }
+        catch(Exception ex){
+            logger.severe(ex.getMessage());
+
+        }
     }
 
 }
