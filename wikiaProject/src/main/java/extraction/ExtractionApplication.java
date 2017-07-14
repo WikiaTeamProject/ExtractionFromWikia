@@ -1,8 +1,5 @@
 package extraction;
 
-import org.apache.commons.exec.*;
-import utils.ExtractionBz2;
-
 /**
  *
  * This class will perform the extraction of the previously downloaded wikis.
@@ -24,5 +21,4 @@ public class ExtractionApplication {
         //extract all wikis
         extractor.extractAllWikis();
     }
-
 }
