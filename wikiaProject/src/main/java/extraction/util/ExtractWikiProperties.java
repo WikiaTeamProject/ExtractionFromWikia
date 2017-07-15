@@ -24,6 +24,7 @@ public class ExtractWikiProperties {
         WikiaWikiProperties wikiProperties=null;
         // get the path to the dbpedia extraction framework
 
+
         try {
             String line = "";
             String fileContents = "";
@@ -62,6 +63,7 @@ public class ExtractWikiProperties {
                 wikiSize=(wikiFile.length()/1024);
 
                 wikiProperties=new WikiaWikiProperties(wikiName, languageCode,wikiPath,lastModifiedDate,wikiSize);
+                // wikiProperties = new WikiaWikiProperties(wikiName, languageCode, wikiPath);
 
             }
             br.close();
