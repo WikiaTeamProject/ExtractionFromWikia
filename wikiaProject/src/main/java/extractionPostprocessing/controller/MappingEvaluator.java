@@ -3,7 +3,8 @@ package extractionPostprocessing.controller;
 import java.io.*;
 import java.util.*;
 
-import extractionPostprocessing.model.EvaluationResult;
+import extractionPostprocessing.model.EvaluationResultAllWikis;
+import extractionPostprocessing.model.EvaluationResultSingleWiki;
 import extractionPostprocessing.util.PostprocessingIOHandler;
 
 import java.util.logging.Logger;
@@ -15,53 +16,69 @@ public class MappingEvaluator {
 
     private static Logger logger = Logger.getLogger(MappingEvaluator.class.getName());
 
-    private static EvaluationResult mappingsEvaluationResult;
+    private static EvaluationResultSingleWiki mappingsEvaluationResultSingleWiki;
+
+    /**
+     * Enum indicating what shall be evaluated.
+     */
+    public enum EvaluationObject {
+        RESOURCES, PROPERTIES, CLASSES;
+
+        @Override
+        public String toString(){
+            switch (this){
+                case RESOURCES:
+                    return "resources";
+                case PROPERTIES:
+                    return "properties";
+                case CLASSES:
+                    return "classes";
+            }
+
+            // none of the above
+            return null;
+        }
+
+    }
 
 
-    // KPIs that are calculated for evaluation
-    // The result of the last evaluation is persisted (to allow for testability)
-    private static double weightedOverallAccuracyInPercent;
-    private static double weightedOverallPrecisionInPercent;
-    private static double weightedOverallRecallInPercent;
-    private static double weightedOverallF1MeasureInPercent;
-    private static double microAverageTruePositives;
-    private static double microAverageFalsePositives;
-    private static double microAverageTrueNegatives;
-    private static double microAverageFalseNegatives;
-    private static double microAverageAccuracyInPercent;
-    private static double microAveragePrecisionInPercent;
-    private static double microAverageRecallInPercent;
-    private static double microAverageF1measureInPercent;
-    private static double macroAverageAccuracyInPercent;
-    private static double macroAveragePrecisionInPercent;
-    private static double macroAverageRecallInPercent;
-    private static double macroAverageF1measureInPercent;
+    /*
+    * Evaluate all mappings and persist them in separate files
+     */
+    public static void evaluateAllMappings(){
+        evaluateAllMappings(EvaluationObject.CLASSES, true);
+        evaluateAllMappings(EvaluationObject.PROPERTIES, true);
+        evaluateAllMappings(EvaluationObject.RESOURCES, true);
+    }
 
     /**
      * Evaluate all mappings and print the result on the command line.
      * The results are also persisted in a file.
+     * @param evaluationObject The evaluationObject specifies for which mapping an evaluation shall be created.
+     * @param persistResult The persistResult flag indicates whether the result shall be persistet.
      */
-    public static void evaluateAllMappings(){
+    public static EvaluationResultAllWikis evaluateAllMappings(EvaluationObject evaluationObject, boolean persistResult){
 
-        weightedOverallAccuracyInPercent = 0;
-        weightedOverallPrecisionInPercent = 0;
-        weightedOverallRecallInPercent = 0;
-        weightedOverallF1MeasureInPercent = 0;
-        microAverageTruePositives = 0;
-        microAverageFalsePositives = 0;
-        microAverageTrueNegatives = 0;
-        microAverageFalseNegatives = 0;
-        microAverageAccuracyInPercent = 0;
-        microAveragePrecisionInPercent = 0;
-        microAverageRecallInPercent = 0;
-        microAverageF1measureInPercent = 0;
-        macroAverageAccuracyInPercent = 0;
-        macroAveragePrecisionInPercent = 0;
-        macroAverageRecallInPercent = 0;
-        macroAverageF1measureInPercent = 0 ;
+        // KPIs that are calculated for evaluation
+        double weightedOverallAccuracyInPercent = 0;
+        double weightedOverallPrecisionInPercent = 0;
+        double weightedOverallRecallInPercent = 0;
+        double weightedOverallF1MeasureInPercent = 0;
+        double microAverageTruePositives = 0;
+        double microAverageFalsePositives = 0;
+        double microAverageTrueNegatives = 0;
+        double microAverageFalseNegatives = 0;
+        double microAverageAccuracyInPercent = 0;
+        double microAveragePrecisionInPercent = 0;
+        double microAverageRecallInPercent = 0;
+        double microAverageF1measureInPercent = 0;
+        double macroAverageAccuracyInPercent = 0;
+        double macroAveragePrecisionInPercent = 0;
+        double macroAverageRecallInPercent = 0;
+        double macroAverageF1measureInPercent = 0 ;
 
         int totalMappings = 0;
-        ArrayList<EvaluationResult> evaluationResults = new ArrayList<>();
+        ArrayList<EvaluationResultSingleWiki> evaluationResultSingleWikis = new ArrayList<>();
         String pathToRootDirectory = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/PostProcessedWikis";
         StringBuffer aggregatedEvaluationResults = new StringBuffer();
         String evaluationResultLine = "";
@@ -70,27 +87,27 @@ public class MappingEvaluator {
         if (root.isDirectory()) {
             for (File directory : root.listFiles()) {
                 if (directory.isDirectory()) {
-                    EvaluationResult evaluationResult = evaluateMappingsForOneWiki(directory);
-                    if (evaluationResult != null) {
-                        evaluationResultLine = "Accuracy: " + evaluationResult.getAccuracyInPercent() + "% (" + directory.getName() + ")\n"
-                                + "Precision: " + evaluationResult.getPrecisionInPercent() + "% (" + directory.getName() + ")\n"
-                                + "Recall: " + evaluationResult.getRecallInPercent() + "% (" + directory.getName() + ")\n"
-                                + "F1-Measure: " + evaluationResult.getF1MeasureInPercent() + "% (" + directory.getName() + ")\n";
+                    EvaluationResultSingleWiki evaluationResultSingleWiki = evaluateMappingsForOneWiki(directory.getPath(), evaluationObject);
+                    if (evaluationResultSingleWiki != null) {
+                        evaluationResultLine = "Accuracy: " + evaluationResultSingleWiki.getAccuracyInPercent() + "% (" + directory.getName() + ")\n"
+                                + "Precision: " + evaluationResultSingleWiki.getPrecisionInPercent() + "% (" + directory.getName() + ")\n"
+                                + "Recall: " + evaluationResultSingleWiki.getRecallInPercent() + "% (" + directory.getName() + ")\n"
+                                + "F1-Measure: " + evaluationResultSingleWiki.getF1MeasureInPercent() + "% (" + directory.getName() + ")\n";
                         logger.info(evaluationResultLine);
                         aggregatedEvaluationResults.append(evaluationResultLine + "\n");
-                        totalMappings += evaluationResult.getTotalMappings();
-                        evaluationResults.add(evaluationResult);
+                        totalMappings += evaluationResultSingleWiki.getTotalMappings();
+                        evaluationResultSingleWikis.add(evaluationResultSingleWiki);
                     }
                 }
             }
 
 
-            if(evaluationResults.size() == 0){
+            if(evaluationResultSingleWikis.size() == 0){
                 logger.info("No evaluation file was found. Make sure that there is at least one evaluation file within a wiki folder.");
-                return;
+                return null;
             }
 
-            for (EvaluationResult e : evaluationResults) {
+            for (EvaluationResultSingleWiki e : evaluationResultSingleWikis) {
                 double e_accuracy = e.getAccuracyInPercent();
                 int e_totalMappings = e.getTotalMappings();
 
@@ -121,10 +138,10 @@ public class MappingEvaluator {
             microAverageF1measureInPercent = ( (2.0 * microAveragePrecisionInPercent * microAverageRecallInPercent) / (microAveragePrecisionInPercent + microAverageRecallInPercent) );
 
             // macroaverage
-            macroAverageAccuracyInPercent = macroAverageAccuracyInPercent / evaluationResults.size();
-            macroAveragePrecisionInPercent = macroAveragePrecisionInPercent / evaluationResults.size();
-            macroAverageRecallInPercent = macroAverageRecallInPercent / evaluationResults.size();
-            macroAverageF1measureInPercent = macroAverageF1measureInPercent / evaluationResults.size();
+            macroAverageAccuracyInPercent = macroAverageAccuracyInPercent / evaluationResultSingleWikis.size();
+            macroAveragePrecisionInPercent = macroAveragePrecisionInPercent / evaluationResultSingleWikis.size();
+            macroAverageRecallInPercent = macroAverageRecallInPercent / evaluationResultSingleWikis.size();
+            macroAverageF1measureInPercent = macroAverageF1measureInPercent / evaluationResultSingleWikis.size();
 
 
         } else {
@@ -141,40 +158,92 @@ public class MappingEvaluator {
                 "Macroaverage Precision: " + (macroAveragePrecisionInPercent) + "%\n" +
                 "Macroaverage Recall: " + (macroAverageRecallInPercent) + "%\n" +
                 "Macroaverage F1-Measure: " + (macroAverageF1measureInPercent) + "%\n\n\n" +
-                "Entry-Weigted Resuls" + "\nEntry-Weigted Overall Accuracy of " + evaluationResults.size() + " wikis: " + weightedOverallAccuracyInPercent + "%\n" +
-                "Entry-Weigted Overall Precision of " + evaluationResults.size() + " wikis: " + weightedOverallPrecisionInPercent + "%\n" +
-                "Entry-Weigted Overall Recall of " + evaluationResults.size() + " wikis: " + weightedOverallRecallInPercent + "%\n" +
-                "Entry-Weigted Overall F1-Measure of " + evaluationResults.size() + " wikis: " + weightedOverallF1MeasureInPercent + "%\n\n\n" +
-                "Number of annotated wikis: " + evaluationResults.size();
+                "Entry-Weigted Resuls" + "\nEntry-Weigted Overall Accuracy of " + evaluationResultSingleWikis.size() + " wikis: " + weightedOverallAccuracyInPercent + "%\n" +
+                "Entry-Weigted Overall Precision of " + evaluationResultSingleWikis.size() + " wikis: " + weightedOverallPrecisionInPercent + "%\n" +
+                "Entry-Weigted Overall Recall of " + evaluationResultSingleWikis.size() + " wikis: " + weightedOverallRecallInPercent + "%\n" +
+                "Entry-Weigted Overall F1-Measure of " + evaluationResultSingleWikis.size() + " wikis: " + weightedOverallF1MeasureInPercent + "%\n\n\n" +
+                "Number of annotated wikis: " + evaluationResultSingleWikis.size();
 
 
         logger.info(evaluationResultLine);
         aggregatedEvaluationResults.append(evaluationResultLine + "\n");
 
-        // persist evaluation results to evaluation file:
-        File evaluationFile = new File(pathToRootDirectory + "/evaluation_results.txt");
-        try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(evaluationFile));
-            bw.write(aggregatedEvaluationResults.toString());
-            bw.close();
-        } catch (IOException ioe) {
-            logger.severe(ioe.toString());
+
+        if(persistResult) {
+            // persist evaluation results to evaluation file:
+            File evaluationFile = new File(pathToRootDirectory + "/" + evaluationObject.toString() + "_" + "evaluation_results.txt");
+            try {
+                BufferedWriter bw = new BufferedWriter(new FileWriter(evaluationFile));
+                bw.write(aggregatedEvaluationResults.toString());
+                bw.close();
+            } catch (IOException ioe) {
+                logger.severe(ioe.toString());
+            }
         }
+
+        // return object
+        EvaluationResultAllWikis evaluationResultAllWikis = new EvaluationResultAllWikis();
+
+        // macro average
+        evaluationResultAllWikis.macroAverageAccuracyInPercent = macroAverageAccuracyInPercent;
+        evaluationResultAllWikis.macroAveragePrecisionInPercent = macroAveragePrecisionInPercent;
+        evaluationResultAllWikis.macroAverageRecallInPercent = macroAverageRecallInPercent;
+        evaluationResultAllWikis.macroAverageF1measureInPercent = macroAverageF1measureInPercent;
+
+        // micro average
+        evaluationResultAllWikis.microAverageTruePositives = microAverageTruePositives;
+        evaluationResultAllWikis.microAverageFalsePositives = microAverageFalsePositives;
+        evaluationResultAllWikis.microAverageTrueNegatives = microAverageTrueNegatives;
+        evaluationResultAllWikis.microAverageFalseNegatives = microAverageFalseNegatives;
+        evaluationResultAllWikis.microAverageAccuracyInPercent = microAverageAccuracyInPercent;
+        evaluationResultAllWikis.microAveragePrecisionInPercent = microAveragePrecisionInPercent;
+        evaluationResultAllWikis.microAverageRecallInPercent = microAverageRecallInPercent;
+        evaluationResultAllWikis.microAverageF1measureInPercent = microAverageF1measureInPercent;
+
+        // micro average
+        evaluationResultAllWikis.weightedOverallAccuracyInPercent = weightedOverallAccuracyInPercent;
+        evaluationResultAllWikis.weightedOverallPrecisionInPercent = weightedOverallPrecisionInPercent;
+        evaluationResultAllWikis.weightedOverallRecallInPercent = weightedOverallRecallInPercent;
+        evaluationResultAllWikis.weightedOverallF1MeasureInPercent = weightedOverallF1MeasureInPercent;
+
+        return evaluationResultAllWikis;
     }
 
 
     /**
-     * Create evaluations for one wiki
+     * Evaluate all mappings and persist the result in a file.
+     * @param evaluationObject The evaluationObject specifies for which mapping an evaluation shall be created.
+     */
+    public static EvaluationResultAllWikis evaluateAllMappings(EvaluationObject evaluationObject){
+        return evaluateAllMappings(evaluationObject, true);
+    }
+
+    /**
+     * Create evaluations for one wiki.
      *
      * @param wikiPath
      * @return
      */
-    public static EvaluationResult evaluateMappingsForOneWiki(String wikiPath) {
+    public static EvaluationResultSingleWiki evaluateMappingsForOneWiki(String wikiPath, EvaluationObject evaluationObject) {
+
+        String dbPediaResourceMappingsFileName = "";
+
+        switch (evaluationObject) {
+            case CLASSES:
+                dbPediaResourceMappingsFileName = "classMappings.ttl";
+                break;
+            case RESOURCES:
+                dbPediaResourceMappingsFileName = "resourceMappings.ttl";
+                break;
+            case PROPERTIES:
+                dbPediaResourceMappingsFileName = "propertyMappings.ttl";
+                break;
+        }
+
         HashMap<String, String> dbPediaMappings;
         HashMap<String, String> manualMappings;
 
         PostprocessingIOHandler postprocessingIoHandler = new PostprocessingIOHandler();
-        String dbPediaResourceMappingsFileName = "resourceMappings.ttl";
         String manualMappingFileName = ResourceBundle.getBundle("config").getString("manualmappingfilename");
 
         File mappingFile = new File(wikiPath + "/" + dbPediaResourceMappingsFileName);
@@ -256,91 +325,20 @@ public class MappingEvaluator {
             logger.severe(ex.getMessage());
         }
 
-        mappingsEvaluationResult = new EvaluationResult(falseNegatives, falsePositives, truePositives, trueNegatives);
-        return mappingsEvaluationResult;
+        mappingsEvaluationResultSingleWiki = new EvaluationResultSingleWiki(falseNegatives, falsePositives, truePositives, trueNegatives);
+        return mappingsEvaluationResultSingleWiki;
     }
 
     /**
-     * overloaded method
+     * Overloaded method.
      *
      * @param wikiPath
      * @return
      */
-    private static EvaluationResult evaluateMappingsForOneWiki(File wikiPath) {
-        return evaluateMappingsForOneWiki(wikiPath.getAbsolutePath());
+    private static EvaluationResultSingleWiki evaluateMappingsForOneWiki(File wikiPath, EvaluationObject evaluationObject) {
+        return evaluateMappingsForOneWiki(wikiPath.getAbsolutePath(), evaluationObject);
     }
 
 
-    /*
-     * Only getters and setters below this point
-     */
 
-    public static EvaluationResult getMappingsEvaluationResult() {
-        return mappingsEvaluationResult;
-    }
-
-    public static double getWeightedOverallAccuracyInPercent() {
-        return weightedOverallAccuracyInPercent;
-    }
-
-    public static double getWeightedOverallPrecisionInPercent() {
-        return weightedOverallPrecisionInPercent;
-    }
-
-    public static double getWeightedOverallRecallInPercent() {
-        return weightedOverallRecallInPercent;
-    }
-
-    public static double getWeightedOverallF1MeasureInPercent() {
-        return weightedOverallF1MeasureInPercent;
-    }
-
-    public static int getMicroAverageTruePositives() {
-        return (int) microAverageTruePositives;
-    }
-
-    public static int getMicroAverageFalsePositives() {
-        return (int) microAverageFalsePositives;
-    }
-
-    public static int getMicroAverageTrueNegatives() {
-        return (int) microAverageTrueNegatives;
-    }
-
-    public static int getMicroAverageFalseNegatives() {
-        return (int) microAverageFalseNegatives;
-    }
-
-    public static double getMicroAverageAccuracyInPercent() {
-        return microAverageAccuracyInPercent;
-    }
-
-    public static double getMicroAveragePrecisionInPercent() {
-        return microAveragePrecisionInPercent;
-    }
-
-    public static double getMicroAverageRecallInPercent() {
-        return microAverageRecallInPercent;
-    }
-
-    public static double getMicroAverageF1measureInPercent() {
-        return microAverageF1measureInPercent;
-    }
-
-    public static double getMacroAverageAccuracyInPercent() {
-        return macroAverageAccuracyInPercent;
-    }
-
-    public static double getMacroAveragePrecisionInPercent() {
-        return macroAveragePrecisionInPercent;
-    }
-
-    public static double getMacroAverageRecallInPercent() {
-        return macroAverageRecallInPercent;
-    }
-
-    public static double getMacroAverageF1measureInPercent() {
-        System.out.println();
-        return macroAverageF1measureInPercent;
-    }
 }

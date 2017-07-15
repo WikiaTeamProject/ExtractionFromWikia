@@ -1,6 +1,7 @@
 package extractionPostprocessing.controller;
 
-import extractionPostprocessing.model.EvaluationResult;
+import extractionPostprocessing.model.EvaluationResultAllWikis;
+import extractionPostprocessing.model.EvaluationResultSingleWiki;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -11,7 +12,7 @@ import static org.junit.Assert.*;
 
 /**
  * Test class for {@link MappingEvaluator MappingEvaluator}.
- * The test also covers some functionality of {@Link extractionPostprocessing.model.EvaluationResult EvaluationResult}.
+ * The test also covers some functionality of {@Link extractionPostprocessing.model.EvaluationResultSingleWiki EvaluationResultSingleWiki}.
  */
 public class MappingEvaluatorTest {
 
@@ -25,31 +26,31 @@ public class MappingEvaluatorTest {
     @Test
     public void evaluateAllMappings() throws Exception {
 
-        MappingEvaluator.evaluateAllMappings();
+        EvaluationResultAllWikis result = MappingEvaluator.evaluateAllMappings(MappingEvaluator.EvaluationObject.RESOURCES, false);
 
         // macro average
-        assertEquals(MappingEvaluator.getMacroAverageAccuracyInPercent(), 50.0, 0.00000001);
-        assertEquals(MappingEvaluator.getMacroAveragePrecisionInPercent(), ((7.0/6.0)/2.0) * 100 , 0.00000001);
-        assertEquals(MappingEvaluator.getMacroAverageRecallInPercent(), 50.0, 0.00000001);
-        assertEquals(MappingEvaluator.getMacroAverageF1measureInPercent(), (40.0 + (2.0/3.0) * 100.0) / 2.0, 0.00000001);
+        assertEquals(result.macroAverageAccuracyInPercent, 50.0, 0.00000001);
+        assertEquals(result.macroAveragePrecisionInPercent, ((7.0/6.0)/2.0) * 100 , 0.00000001);
+        assertEquals(result.macroAverageRecallInPercent, 50.0, 0.00000001);
+        assertEquals(result.macroAverageF1measureInPercent, (40.0 + (2.0/3.0) * 100.0) / 2.0, 0.00000001);
 
         // micro average
-        assertEquals(MappingEvaluator.getMicroAverageTruePositives(), 5);
-        assertEquals(MappingEvaluator.getMicroAverageFalsePositives(), 3);
-        assertEquals(MappingEvaluator.getMicroAverageTrueNegatives(), 3);
-        assertEquals(MappingEvaluator.getMicroAverageFalseNegatives(), 4);
+        assertEquals(result.microAverageTruePositives, 5, 0);
+        assertEquals(result.microAverageFalsePositives, 3, 0);
+        assertEquals(result.microAverageTrueNegatives, 3, 0);
+        assertEquals(result.microAverageFalseNegatives, 4, 0);
 
 
-        assertEquals(MappingEvaluator.getMicroAverageAccuracyInPercent(), (8.0/15.0) * 100, 0.00000001);
-        assertEquals(MappingEvaluator.getMicroAveragePrecisionInPercent(), (5.0/8.0) * 100, 0.00000001);
-        assertEquals(MappingEvaluator.getMicroAverageRecallInPercent(), (5.0/9.0) * 100, 0.00000001);
-        assertEquals(MappingEvaluator.getMicroAverageF1measureInPercent(), ((2.0*(5.0/8.0)*(5.0/9.0)) / ((5.0/8.0)+(5.0/9.0))) * 100.0, 0.00000001);
+        assertEquals(result.microAverageAccuracyInPercent, (8.0/15.0) * 100, 0.00000001);
+        assertEquals(result.microAveragePrecisionInPercent, (5.0/8.0) * 100, 0.00000001);
+        assertEquals(result.microAverageRecallInPercent, (5.0/9.0) * 100, 0.00000001);
+        assertEquals(result.microAverageF1measureInPercent, ((2.0*(5.0/8.0)*(5.0/9.0)) / ((5.0/8.0)+(5.0/9.0))) * 100.0, 0.00000001);
 
         // weighted average
-        assertEquals(MappingEvaluator.getWeightedOverallAccuracyInPercent(), (40.0/3 + 120.0/3), 0.00000001);
-        assertEquals(MappingEvaluator.getWeightedOverallPrecisionInPercent(), (50.0/3+(4.0/6.0)*200/3.0), 0.00000001);
-        assertEquals(MappingEvaluator.getWeightedOverallRecallInPercent(), (1.0/9.0) * 100 + (2.0/3.0) * (4.0/6.0) * 100.0, 0.00000001);
-        assertEquals(MappingEvaluator.getWeightedOverallF1MeasureInPercent(), (40.0/3.0) + (2.0/3.0) * (2.0/3.0) * 100, 0.00000001);
+        assertEquals(result.weightedOverallAccuracyInPercent, (40.0/3 + 120.0/3), 0.00000001);
+        assertEquals(result.weightedOverallPrecisionInPercent, (50.0/3+(4.0/6.0)*200/3.0), 0.00000001);
+        assertEquals(result.weightedOverallRecallInPercent, (1.0/9.0) * 100 + (2.0/3.0) * (4.0/6.0) * 100.0, 0.00000001);
+        assertEquals(result.weightedOverallF1MeasureInPercent, (40.0/3.0) + (2.0/3.0) * (2.0/3.0) * 100, 0.00000001);
 
     }
 
@@ -58,7 +59,7 @@ public class MappingEvaluatorTest {
     public void evaluateMappingsForOneWiki() throws Exception {
 
         // case 1
-        EvaluationResult result = MappingEvaluator.evaluateMappingsForOneWiki("./src/test/test_files/evaluation_test");
+        EvaluationResultSingleWiki result = MappingEvaluator.evaluateMappingsForOneWiki("./src/test/test_files/evaluation_test", MappingEvaluator.EvaluationObject.RESOURCES);
         assertTrue(result.getFalseNegatives() == 2);
         assertTrue(result.getFalsePositives() == 1);
         assertTrue(result.getTruePositives() == 1);
@@ -72,7 +73,7 @@ public class MappingEvaluatorTest {
 
 
         // case 2
-        result = MappingEvaluator.evaluateMappingsForOneWiki("./src/test/test_files/test_root/PostProcessedWikis/test_wiki_2");
+        result = MappingEvaluator.evaluateMappingsForOneWiki("./src/test/test_files/test_root/PostProcessedWikis/test_wiki_2", MappingEvaluator.EvaluationObject.RESOURCES);
         assertTrue(result.getFalseNegatives() == 2);
         assertTrue(result.getFalsePositives() == 2);
         assertTrue(result.getTruePositives() == 4);

@@ -1,9 +1,9 @@
 package extractionPostprocessing.model;
 
 /**
- * EvaluationResult is a data structure for mapping evaluation results
+ * EvaluationResultSingleWiki is a data structure for mapping evaluation results of a single wiki.
  */
-public class EvaluationResult {
+public class EvaluationResultSingleWiki {
 
     private int falseNegatives;
     private int falsePositives;
@@ -19,8 +19,8 @@ public class EvaluationResult {
      * @param truePositives
      * @param trueNegatives
      */
-    public EvaluationResult(int falseNegatives, int falsePositives,
-                            int truePositives, int trueNegatives) {
+    public EvaluationResultSingleWiki(int falseNegatives, int falsePositives,
+                                      int truePositives, int trueNegatives) {
 
         this.falseNegatives = falseNegatives;
         this.falsePositives = falsePositives;
