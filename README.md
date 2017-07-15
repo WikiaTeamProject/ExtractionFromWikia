@@ -32,8 +32,8 @@ root_directory
 |     +---PostProcessedWikis
 ```
 
-The program performs a lot of file operations. All of those file operations are handled within the `root_directory` that you specify.
-The `downloadedWiki` directory... <todo>
-The `7z` directory contains all wikis that were downloaded in the 7z format.
-The `gz` directory contains all wikis that were downloaded the gz format.
+The program performs a lot of file operations. All of those file operations are handled within the `root_directory` that you specify.<br />
+The `downloadedWiki` directory... <todo><br />
+The `7z` directory contains all wikis that were downloaded in the 7z format.<br />
+The `gz` directory contains all wikis that were downloaded the gz format.<br />
 
