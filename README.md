@@ -30,10 +30,16 @@ root_directory
 |     +---extracted
 |     +---DbPediaExtractionFormat
 |     +---PostProcessedWikis
++---pageids
++---redirects
++---PostProcessedWikis
 ```
 
-The program performs a lot of file operations. All of those file operations are handled within the `root_directory` that you specify.<br />
-The `downloadedWiki` directory... <todo><br />
-The `7z` directory contains all wikis that were downloaded in the 7z format.<br />
-The `gz` directory contains all wikis that were downloaded the gz format.<br />
-
+The program performs a lot of file operations. All of those file operations are handled within the `root_directory` that you specify in the `config.properties file`.
+- The `downloadedWiki` directory... <todo>
+    - The `downloaded` directory contains the wikis that were downloaded in their compressed form.
+        - The `7z` directory contains all wikis that were downloaded in the 7z format.
+        - The `gz` directory contains all wikis that were downloaded the gz format.
+- The `pageids` directory should contain a TTL file with all page ids of DBpedia. This is required for some mappers to work.
+- The `redirects` directory should contain a TTL file with all redirects of DBpedia. This is required for some mappers to work.
+- The `PostProcessedWikis` directory contains all wikis in their final postprocessed form. After successfully running the program, you should find everything you need here. 
