@@ -5,6 +5,8 @@ import extraction.model.WikiaWikiProperties;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -30,9 +32,20 @@ public class ExtractWikiProperties {
             String wikiName="";
             String wikiPath=wikiFilePath;
             int lineNumber = 0;
+            SimpleDateFormat simpleDateFormat=new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            Date lastModifiedDate;
+            long wikiSize;
 
 
-            FileReader fr = new FileReader(wikiFilePath);
+            File wikiFile=new File(wikiFilePath);
+
+            logger.info("Getting Properties for wiki : " +wikiFilePath);
+
+            lastModifiedDate=simpleDateFormat.parse(simpleDateFormat.format(wikiFile.lastModified()));
+            System.out.println("Total Size:" + (wikiFile.length()/1024) + " KB");
+
+            FileReader fr = new FileReader(wikiFile);
+
             BufferedReader br = new BufferedReader(fr);
 
             while ((line = br.readLine()) != null && lineNumber <= 20) {
@@ -42,12 +55,14 @@ public class ExtractWikiProperties {
             }
 
             if(fileContents.length()>0) {
-                System.out.println(wikiFilePath);
 
                 languageCode = fileContents.substring(fileContents.indexOf("xml:lang=") + 10, fileContents.indexOf(">", fileContents.indexOf("xml:lang=") + 10) - 1);
 
                 wikiName = (fileContents.substring(fileContents.indexOf("<sitename>") + 10, fileContents.indexOf("</sitename>", fileContents.indexOf("<sitename>") + 10) - 1)).trim().replace(" ", "_");
 
+                wikiSize=(wikiFile.length()/1024);
+
+                wikiProperties=new WikiaWikiProperties(wikiName, languageCode,wikiPath,lastModifiedDate,wikiSize);
                 // wikiProperties = new WikiaWikiProperties(wikiName, languageCode, wikiPath);
 
             }
