@@ -21,6 +21,7 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
     private static Logger logger = Logger.getLogger(DBpediaResourceServiceOffline.class.getName());
     private static String rootDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
     private static HashSet<String> pageIds;
+    private static HashSet<String> ontologiesSet;
 
     /**
      * Private constructor -> Singleton pattern
@@ -130,4 +131,34 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
         return result;
 
     }
+
+    /**
+     *
+     * @param resource ontology class to check
+     * @return true if ontology class present in DBpedia else false
+     */
+    public boolean ontologyClassExistInDBpedia(String resource) {
+        if (ontologiesSet == null) {
+            // pageIds were not loaded yet
+            this.loadOntologyClasses();
+        }
+        return ontologiesSet.contains(resource);
+    }
+
+
+    /**
+     * This function will loads ontology classes
+     * into static object by calling IO function
+     */
+    public void loadOntologyClasses() {
+        logger.info("Loading ontology classes in memory. Please wait");
+        try {
+            IOoperations ioOps = new IOoperations();
+            ontologiesSet = ioOps.getOntologyClasses();
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.severe(e.getMessage());
+        }
+    }
+
 }
