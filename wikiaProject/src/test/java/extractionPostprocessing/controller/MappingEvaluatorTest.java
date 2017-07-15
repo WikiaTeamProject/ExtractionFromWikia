@@ -26,7 +26,7 @@ public class MappingEvaluatorTest {
     @Test
     public void evaluateAllMappings() throws Exception {
 
-        EvaluationResultAllWikis result = MappingEvaluator.evaluateAllMappings(MappingEvaluator.EvaluationObject.RESOURCES, false);
+        EvaluationResultAllWikis result = MappingEvaluator.evaluateAllMappings(MappingEvaluator.EvaluationObjectAllWikis.RESOURCES, false);
 
         // macro average
         assertEquals(result.macroAverageAccuracyInPercent, 50.0, 0.00000001);
@@ -59,7 +59,7 @@ public class MappingEvaluatorTest {
     public void evaluateMappingsForOneWiki() throws Exception {
 
         // case 1
-        EvaluationResultSingleWiki result = MappingEvaluator.evaluateMappingsForOneWiki("./src/test/test_files/evaluation_test", MappingEvaluator.EvaluationObject.RESOURCES);
+        EvaluationResultSingleWiki result = MappingEvaluator.evaluateMappingsForOneWiki("./src/test/test_files/evaluation_test", MappingEvaluator.EvaluationObjectSingleWiki.RESOURCES);
         assertTrue(result.getFalseNegatives() == 2);
         assertTrue(result.getFalsePositives() == 1);
         assertTrue(result.getTruePositives() == 1);
@@ -73,7 +73,7 @@ public class MappingEvaluatorTest {
 
 
         // case 2
-        result = MappingEvaluator.evaluateMappingsForOneWiki("./src/test/test_files/test_root/PostProcessedWikis/test_wiki_2", MappingEvaluator.EvaluationObject.RESOURCES);
+        result = MappingEvaluator.evaluateMappingsForOneWiki("./src/test/test_files/test_root/PostProcessedWikis/test_wiki_2", MappingEvaluator.EvaluationObjectSingleWiki.RESOURCES);
         assertTrue(result.getFalseNegatives() == 2);
         assertTrue(result.getFalsePositives() == 2);
         assertTrue(result.getTruePositives() == 4);

@@ -21,12 +21,12 @@ public class MappingEvaluator {
     /**
      * Enum indicating what shall be evaluated.
      */
-    public enum EvaluationObject {
+    public enum EvaluationObjectSingleWiki {
         RESOURCES, PROPERTIES, CLASSES;
 
         @Override
-        public String toString(){
-            switch (this){
+        public String toString() {
+            switch (this) {
                 case RESOURCES:
                     return "resources";
                 case PROPERTIES:
@@ -38,26 +38,52 @@ public class MappingEvaluator {
             // none of the above
             return null;
         }
+    }
 
+
+    /**
+     * Enum indicating what shall be evaluated.
+     */
+    public enum EvaluationObjectAllWikis {
+        RESOURCES, PROPERTIES, CLASSES, ALL;
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case RESOURCES:
+                    return "resources";
+                case PROPERTIES:
+                    return "properties";
+                case CLASSES:
+                    return "classes";
+                case ALL:
+                    return "all";
+            }
+
+            // none of the above
+            return null;
+        }
     }
 
 
     /*
     * Evaluate all mappings and persist them in separate files
      */
-    public static void evaluateAllMappings(){
-        evaluateAllMappings(EvaluationObject.CLASSES, true);
-        evaluateAllMappings(EvaluationObject.PROPERTIES, true);
-        evaluateAllMappings(EvaluationObject.RESOURCES, true);
+    public static void evaluateAllMappings() {
+        evaluateAllMappings(EvaluationObjectAllWikis.CLASSES, true);
+        evaluateAllMappings(EvaluationObjectAllWikis.PROPERTIES, true);
+        evaluateAllMappings(EvaluationObjectAllWikis.RESOURCES, true);
+        evaluateAllMappings(EvaluationObjectAllWikis.ALL, true);
     }
 
     /**
      * Evaluate all mappings and print the result on the command line.
      * The results are also persisted in a file.
-     * @param evaluationObject The evaluationObject specifies for which mapping an evaluation shall be created.
-     * @param persistResult The persistResult flag indicates whether the result shall be persistet.
+     *
+     * @param evaluationObjectAllWikis The evaluationObjectAllWikis specifies for which mapping an evaluation shall be created.
+     * @param persistResult            The persistResult flag indicates whether the result shall be persistet.
      */
-    public static EvaluationResultAllWikis evaluateAllMappings(EvaluationObject evaluationObject, boolean persistResult){
+    public static EvaluationResultAllWikis evaluateAllMappings(EvaluationObjectAllWikis evaluationObjectAllWikis, boolean persistResult) {
 
         // KPIs that are calculated for evaluation
         double weightedOverallAccuracyInPercent = 0;
@@ -75,7 +101,7 @@ public class MappingEvaluator {
         double macroAverageAccuracyInPercent = 0;
         double macroAveragePrecisionInPercent = 0;
         double macroAverageRecallInPercent = 0;
-        double macroAverageF1measureInPercent = 0 ;
+        double macroAverageF1measureInPercent = 0;
 
         int totalMappings = 0;
         ArrayList<EvaluationResultSingleWiki> evaluationResultSingleWikis = new ArrayList<>();
@@ -87,7 +113,47 @@ public class MappingEvaluator {
         if (root.isDirectory()) {
             for (File directory : root.listFiles()) {
                 if (directory.isDirectory()) {
-                    EvaluationResultSingleWiki evaluationResultSingleWiki = evaluateMappingsForOneWiki(directory.getPath(), evaluationObject);
+
+                    EvaluationResultSingleWiki evaluationResultSingleWiki = null;
+
+                    switch (evaluationObjectAllWikis) {
+                        case CLASSES:
+                            evaluationResultSingleWiki = evaluateMappingsForOneWiki(directory.getPath(), EvaluationObjectSingleWiki.CLASSES);
+                            break;
+                        case PROPERTIES:
+                            evaluationResultSingleWiki = evaluateMappingsForOneWiki(directory.getPath(), EvaluationObjectSingleWiki.PROPERTIES);
+                            break;
+                        case RESOURCES:
+                            evaluationResultSingleWiki = evaluateMappingsForOneWiki(directory.getPath(), EvaluationObjectSingleWiki.RESOURCES);
+                            break;
+                        case ALL:
+                            int falseNegatives;
+                            int falsePositives;
+                            int truePositives;
+                            int trueNegatives;
+                            EvaluationResultSingleWiki evaluationResultSingleWikiClasses = evaluateMappingsForOneWiki(directory.getPath(), EvaluationObjectSingleWiki.CLASSES);
+                            EvaluationResultSingleWiki evaluationResultSingleWikiProperties = evaluateMappingsForOneWiki(directory.getPath(), EvaluationObjectSingleWiki.PROPERTIES);
+                            EvaluationResultSingleWiki evaluationResultSingleWikiResources = evaluateMappingsForOneWiki(directory.getPath(), EvaluationObjectSingleWiki.RESOURCES);
+
+                            // aggregate
+                            falseNegatives = evaluationResultSingleWikiClasses.getFalseNegatives() + evaluationResultSingleWikiProperties.getFalseNegatives() +
+                                    evaluationResultSingleWikiResources.getFalseNegatives();
+                            falsePositives = evaluationResultSingleWikiClasses.getFalsePositives() + evaluationResultSingleWikiProperties.getFalsePositives() +
+                                    evaluationResultSingleWikiResources.getFalsePositives();
+                            truePositives = evaluationResultSingleWikiClasses.getTruePositives() + evaluationResultSingleWikiProperties.getTruePositives() +
+                                    evaluationResultSingleWikiResources.getTruePositives();
+                            trueNegatives = evaluationResultSingleWikiClasses.getTrueNegatives() + evaluationResultSingleWikiProperties.getTrueNegatives() +
+                                    evaluationResultSingleWikiResources.getTrueNegatives();
+
+                            evaluationResultSingleWiki = new EvaluationResultSingleWiki(
+                                    falseNegatives,
+                                    falsePositives,
+                                    truePositives,
+                                    trueNegatives
+                            );
+
+                    }
+
                     if (evaluationResultSingleWiki != null) {
                         evaluationResultLine = "Accuracy: " + evaluationResultSingleWiki.getAccuracyInPercent() + "% (" + directory.getName() + ")\n"
                                 + "Precision: " + evaluationResultSingleWiki.getPrecisionInPercent() + "% (" + directory.getName() + ")\n"
@@ -102,7 +168,7 @@ public class MappingEvaluator {
             }
 
 
-            if(evaluationResultSingleWikis.size() == 0){
+            if (evaluationResultSingleWikis.size() == 0) {
                 logger.info("No evaluation file was found. Make sure that there is at least one evaluation file within a wiki folder.");
                 return null;
             }
@@ -111,7 +177,7 @@ public class MappingEvaluator {
                 double e_accuracy = e.getAccuracyInPercent();
                 int e_totalMappings = e.getTotalMappings();
 
-                // enty-weighted
+                // entry-weighted
                 weightedOverallAccuracyInPercent += (e.getAccuracyInPercent() * ((double) e.getTotalMappings() / totalMappings));
                 weightedOverallPrecisionInPercent += (e.getPrecisionInPercent() * ((double) e.getTotalMappings() / totalMappings));
                 weightedOverallRecallInPercent += (e.getRecallInPercent() * ((double) e.getTotalMappings() / totalMappings));
@@ -132,10 +198,10 @@ public class MappingEvaluator {
             }
 
             // microaverage
-            microAverageAccuracyInPercent = ( (microAverageTruePositives + microAverageTrueNegatives) / (microAverageTruePositives + microAverageTrueNegatives + microAverageFalsePositives + microAverageFalseNegatives)) * 100;
-            microAveragePrecisionInPercent = ( (microAverageTruePositives) / (microAverageTruePositives + microAverageFalsePositives) ) * 100;
-            microAverageRecallInPercent = ( (microAverageTruePositives) / (microAverageTruePositives + microAverageFalseNegatives) ) * 100;
-            microAverageF1measureInPercent = ( (2.0 * microAveragePrecisionInPercent * microAverageRecallInPercent) / (microAveragePrecisionInPercent + microAverageRecallInPercent) );
+            microAverageAccuracyInPercent = ((microAverageTruePositives + microAverageTrueNegatives) / (microAverageTruePositives + microAverageTrueNegatives + microAverageFalsePositives + microAverageFalseNegatives)) * 100;
+            microAveragePrecisionInPercent = ((microAverageTruePositives) / (microAverageTruePositives + microAverageFalsePositives)) * 100;
+            microAverageRecallInPercent = ((microAverageTruePositives) / (microAverageTruePositives + microAverageFalseNegatives)) * 100;
+            microAverageF1measureInPercent = ((2.0 * microAveragePrecisionInPercent * microAverageRecallInPercent) / (microAveragePrecisionInPercent + microAverageRecallInPercent));
 
             // macroaverage
             macroAverageAccuracyInPercent = macroAverageAccuracyInPercent / evaluationResultSingleWikis.size();
@@ -169,9 +235,9 @@ public class MappingEvaluator {
         aggregatedEvaluationResults.append(evaluationResultLine + "\n");
 
 
-        if(persistResult) {
+        if (persistResult) {
             // persist evaluation results to evaluation file:
-            File evaluationFile = new File(pathToRootDirectory + "/" + evaluationObject.toString() + "_" + "evaluation_results.txt");
+            File evaluationFile = new File(pathToRootDirectory + "/" + evaluationObjectAllWikis.toString() + "_" + "evaluation_results.txt");
             try {
                 BufferedWriter bw = new BufferedWriter(new FileWriter(evaluationFile));
                 bw.write(aggregatedEvaluationResults.toString());
@@ -212,10 +278,11 @@ public class MappingEvaluator {
 
     /**
      * Evaluate all mappings and persist the result in a file.
-     * @param evaluationObject The evaluationObject specifies for which mapping an evaluation shall be created.
+     *
+     * @param evaluationObjectAllWikis The evaluationObjectSingleWiki specifies for which mapping an evaluation shall be created.
      */
-    public static EvaluationResultAllWikis evaluateAllMappings(EvaluationObject evaluationObject){
-        return evaluateAllMappings(evaluationObject, true);
+    public static EvaluationResultAllWikis evaluateAllMappings(EvaluationObjectAllWikis evaluationObjectAllWikis) {
+        return evaluateAllMappings(evaluationObjectAllWikis, true);
     }
 
     /**
@@ -224,11 +291,11 @@ public class MappingEvaluator {
      * @param wikiPath
      * @return
      */
-    public static EvaluationResultSingleWiki evaluateMappingsForOneWiki(String wikiPath, EvaluationObject evaluationObject) {
+    public static EvaluationResultSingleWiki evaluateMappingsForOneWiki(String wikiPath, EvaluationObjectSingleWiki evaluationObjectSingleWiki) {
 
         String dbPediaResourceMappingsFileName = "";
 
-        switch (evaluationObject) {
+        switch (evaluationObjectSingleWiki) {
             case CLASSES:
                 dbPediaResourceMappingsFileName = "classMappings.ttl";
                 break;
@@ -266,7 +333,7 @@ public class MappingEvaluator {
                         manualMappingFile = f;
                     }
                 }
-                if(manualMappingFile == null || !manualMappingFile.exists()){
+                if (manualMappingFile == null || !manualMappingFile.exists()) {
                     // the manual mapping file does not exist
                     // look for a file ending with evaluation.ttl
                     for (File f : directory.listFiles()) {
@@ -335,10 +402,9 @@ public class MappingEvaluator {
      * @param wikiPath
      * @return
      */
-    private static EvaluationResultSingleWiki evaluateMappingsForOneWiki(File wikiPath, EvaluationObject evaluationObject) {
-        return evaluateMappingsForOneWiki(wikiPath.getAbsolutePath(), evaluationObject);
+    private static EvaluationResultSingleWiki evaluateMappingsForOneWiki(File wikiPath, EvaluationObjectSingleWiki evaluationObjectSingleWiki) {
+        return evaluateMappingsForOneWiki(wikiPath.getAbsolutePath(), evaluationObjectSingleWiki);
     }
-
 
 
 }
