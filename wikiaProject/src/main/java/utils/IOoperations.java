@@ -194,11 +194,12 @@ public class IOoperations {
 
     /**
      * This function reads DBpedia pageids. pageIds file
-     * Make sure that the folder "pageids" exists in the root directory and that there is at least one redirect file in the folder.
+     * Make sure that the folder "pageids" exists in the root directory
+     * and that there is at least one page IDs file in the folder.
      * @return Hashset containing pageIds
      */
     public HashSet<String> getPageIDs(){
-        String redirectFilePath = rootDirectoryPath + "//pageids//";
+        String pageIDsFilePath = rootDirectoryPath + "//pageids//";
         HashSet<String> pageIdsSet = new HashSet<String>();
         FileReader fileReader;
         BufferedReader bufferedReader;
@@ -206,7 +207,7 @@ public class IOoperations {
         int i = 1;
         try {
 
-            File pageIdsDirectory = new File(redirectFilePath);
+            File pageIdsDirectory = new File(pageIDsFilePath);
             if (!pageIdsDirectory.exists()) {
                 logger.severe("Page IDs directory does not exist.");
             }
@@ -303,5 +304,52 @@ public class IOoperations {
             logger.severe(ioe.toString());
         }
 
+    }
+
+    /**
+     * This function reads DBpedia ontology classes from ontology file
+     * Make sure that the folder "ontology" exists
+     * in the root directory and that there is at least one ontology classes file in the folder.
+     * @return Hashset containing ontology
+     */
+    public HashSet<String> getOntologyClasses(){
+        String ontologyFilePath = rootDirectoryPath + "//ontology//";
+        HashSet<String> ontologiesSet = new HashSet<String>();
+        FileReader fileReader;
+        BufferedReader bufferedReader;
+        String fileLine = "";
+        try {
+
+            File ontologyDirectory = new File(ontologyFilePath);
+            if (!ontologyDirectory.exists()) {
+                logger.severe("Ontology directory does not exist.");
+            }
+
+            if (ontologyDirectory.isDirectory()) {
+
+                for (File ontologyFile : ontologyDirectory.listFiles()) {
+                    if (ontologyFile.getName().toLowerCase().endsWith(".nt")) {
+
+                        fileReader = new FileReader(ontologyFile);
+                        bufferedReader = new BufferedReader(fileReader);
+
+                        while ((fileLine = bufferedReader.readLine()) != null) {
+
+                            fileLine=fileLine.trim();
+
+                            String ontologyClass =
+                                    fileLine.substring(0, fileLine.indexOf(">") + 1).toLowerCase();
+
+                            ontologiesSet.add(ontologyClass);
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger.severe(ex.getMessage());
+        }
+
+        return ontologiesSet;
     }
 }
