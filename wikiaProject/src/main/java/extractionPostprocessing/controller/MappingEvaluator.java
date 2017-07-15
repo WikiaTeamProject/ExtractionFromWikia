@@ -20,22 +20,22 @@ public class MappingEvaluator {
 
     // KPIs that are calculated for evaluation
     // The result of the last evaluation is persisted (to allow for testability)
-    private static double weightedOverallAccuracy;
-    private static double weightedOverallPrecision;
-    private static double weightedOverallRecall;
-    private static double weightedOverallF1Measure;
+    private static double weightedOverallAccuracyInPercent;
+    private static double weightedOverallPrecisionInPercent;
+    private static double weightedOverallRecallInPercent;
+    private static double weightedOverallF1MeasureInPercent;
     private static double microAverageTruePositives;
     private static double microAverageFalsePositives;
     private static double microAverageTrueNegatives;
     private static double microAverageFalseNegatives;
-    private static double microAverageAccuracy;
-    private static double microAveragePrecision;
-    private static double microAverageRecall;
-    private static double microAverageF1measure;
-    private static double macroAverageAccuracy;
-    private static double macroAveragePrecision;
-    private static double macroAverageRecall;
-    private static double macroAverageF1measure;
+    private static double microAverageAccuracyInPercent;
+    private static double microAveragePrecisionInPercent;
+    private static double microAverageRecallInPercent;
+    private static double microAverageF1measureInPercent;
+    private static double macroAverageAccuracyInPercent;
+    private static double macroAveragePrecisionInPercent;
+    private static double macroAverageRecallInPercent;
+    private static double macroAverageF1measureInPercent;
 
     /**
      * Evaluate all mappings and print the result on the command line.
@@ -43,22 +43,22 @@ public class MappingEvaluator {
      */
     public static void evaluateAllMappings(){
 
-        weightedOverallAccuracy = 0;
-        weightedOverallPrecision = 0;
-        weightedOverallRecall = 0;
-        weightedOverallF1Measure = 0;
+        weightedOverallAccuracyInPercent = 0;
+        weightedOverallPrecisionInPercent = 0;
+        weightedOverallRecallInPercent = 0;
+        weightedOverallF1MeasureInPercent = 0;
         microAverageTruePositives = 0;
         microAverageFalsePositives = 0;
         microAverageTrueNegatives = 0;
         microAverageFalseNegatives = 0;
-        microAverageAccuracy = 0;
-        microAveragePrecision = 0;
-        microAverageRecall = 0;
-        microAverageF1measure = 0;
-        macroAverageAccuracy = 0;
-        macroAveragePrecision = 0;
-        macroAverageRecall = 0;
-        macroAverageF1measure = 0 ;
+        microAverageAccuracyInPercent = 0;
+        microAveragePrecisionInPercent = 0;
+        microAverageRecallInPercent = 0;
+        microAverageF1measureInPercent = 0;
+        macroAverageAccuracyInPercent = 0;
+        macroAveragePrecisionInPercent = 0;
+        macroAverageRecallInPercent = 0;
+        macroAverageF1measureInPercent = 0 ;
 
         int totalMappings = 0;
         ArrayList<EvaluationResult> evaluationResults = new ArrayList<>();
@@ -95,10 +95,10 @@ public class MappingEvaluator {
                 int e_totalMappings = e.getTotalMappings();
 
                 // enty-weighted
-                weightedOverallAccuracy += (e.getAccuracyInPercent() * ((double) e.getTotalMappings() / totalMappings));
-                weightedOverallPrecision += (e.getPrecisionInPercent() * ((double) e.getTotalMappings() / totalMappings));
-                weightedOverallRecall += (e.getRecallInPercent() * ((double) e.getTotalMappings() / totalMappings));
-                weightedOverallF1Measure += (e.getF1MeasureInPercent() * ((double) e.getTotalMappings() / totalMappings));
+                weightedOverallAccuracyInPercent += (e.getAccuracyInPercent() * ((double) e.getTotalMappings() / totalMappings));
+                weightedOverallPrecisionInPercent += (e.getPrecisionInPercent() * ((double) e.getTotalMappings() / totalMappings));
+                weightedOverallRecallInPercent += (e.getRecallInPercent() * ((double) e.getTotalMappings() / totalMappings));
+                weightedOverallF1MeasureInPercent += (e.getF1MeasureInPercent() * ((double) e.getTotalMappings() / totalMappings));
 
                 // microaverage
                 microAverageTruePositives += e.getTruePositives();
@@ -107,24 +107,24 @@ public class MappingEvaluator {
                 microAverageFalseNegatives += e.getFalseNegatives();
 
                 // macroaverage (not final numbers yet, will be processed after loop.)
-                macroAverageAccuracy += e.getAccuracyInPercent();
-                macroAveragePrecision += e.getPrecisionInPercent();
-                macroAverageRecall += e.getRecallInPercent();
-                macroAverageF1measure += e.getF1MeasureInPercent();
+                macroAverageAccuracyInPercent += e.getAccuracyInPercent();
+                macroAveragePrecisionInPercent += e.getPrecisionInPercent();
+                macroAverageRecallInPercent += e.getRecallInPercent();
+                macroAverageF1measureInPercent += e.getF1MeasureInPercent();
 
             }
 
             // microaverage
-            microAverageAccuracy = (microAverageTruePositives) / (microAverageTruePositives + microAverageTrueNegatives + microAverageFalsePositives + microAverageFalsePositives);
-            microAveragePrecision = (microAverageTruePositives) / (microAverageTruePositives + microAverageFalsePositives);
-            microAverageRecall = (microAverageTruePositives) / (microAverageTruePositives + microAverageFalseNegatives);
-            microAverageF1measure = (2.0 * microAveragePrecision * microAverageRecall) / (microAveragePrecision + microAverageRecall);
+            microAverageAccuracyInPercent = ( (microAverageTruePositives + microAverageTrueNegatives) / (microAverageTruePositives + microAverageTrueNegatives + microAverageFalsePositives + microAverageFalseNegatives)) * 100;
+            microAveragePrecisionInPercent = ( (microAverageTruePositives) / (microAverageTruePositives + microAverageFalsePositives) ) * 100;
+            microAverageRecallInPercent = ( (microAverageTruePositives) / (microAverageTruePositives + microAverageFalseNegatives) ) * 100;
+            microAverageF1measureInPercent = ( (2.0 * microAveragePrecisionInPercent * microAverageRecallInPercent) / (microAveragePrecisionInPercent + microAverageRecallInPercent) );
 
             // macroaverage
-            macroAverageAccuracy = macroAverageAccuracy / evaluationResults.size();
-            macroAveragePrecision = macroAveragePrecision / evaluationResults.size();
-            macroAverageRecall = macroAverageRecall / evaluationResults.size();
-            macroAverageF1measure = macroAverageF1measure / evaluationResults.size();
+            macroAverageAccuracyInPercent = macroAverageAccuracyInPercent / evaluationResults.size();
+            macroAveragePrecisionInPercent = macroAveragePrecisionInPercent / evaluationResults.size();
+            macroAverageRecallInPercent = macroAverageRecallInPercent / evaluationResults.size();
+            macroAverageF1measureInPercent = macroAverageF1measureInPercent / evaluationResults.size();
 
 
         } else {
@@ -133,18 +133,18 @@ public class MappingEvaluator {
         } // end of if(root.isDirectory())
 
         evaluationResultLine = "Summarized Evaluation Results\n\n\n" +
-                "Microaverage\n" + "Microaverage Accuracy: " + (microAverageAccuracy * 100) + "%\n" +
-                "Microaverage Precision: " + (microAveragePrecision * 100) + "%\n" +
-                "Microaverage Recall: " + (microAverageRecall * 100) + "%\n" +
-                "Microaverage F1-Measure" + (microAverageF1measure * 100) + "%\n\n\n" +
-                "Macroaverage\n" + "Macroaverage Accuracy " + (macroAverageAccuracy) + "%\n" +
-                "Macroaverage Precision " + (macroAveragePrecision) + "%\n" +
-                "Macroaverage Recall " + (macroAverageRecall) + "%\n" +
-                "Macroaverage F1-Measure " + (macroAverageF1measure) + "%\n\n\n" +
-                "Entry-Weigted Resuls" + "\nEntry-Weigted Overall Accuracy of " + evaluationResults.size() + " wikis: " + weightedOverallAccuracy + "%\n" +
-                "Entry-Weigted Overall Precision of " + evaluationResults.size() + " wikis: " + weightedOverallPrecision + "%\n" +
-                "Entry-Weigted Overall Recall of " + evaluationResults.size() + " wikis: " + weightedOverallRecall + "%\n" +
-                "Entry-Weigted Overall F1-Measure of " + evaluationResults.size() + " wikis: " + weightedOverallF1Measure + "%\n\n\n" +
+                "Microaverage\n" + "Microaverage Accuracy: " + (microAverageAccuracyInPercent) + "%\n" +
+                "Microaverage Precision: " + (microAveragePrecisionInPercent) + "%\n" +
+                "Microaverage Recall: " + (microAverageRecallInPercent) + "%\n" +
+                "Microaverage F1-Measure: " + (microAverageF1measureInPercent) + "%\n\n\n" +
+                "Macroaverage\n" + "Macroaverage Accuracy: " + (macroAverageAccuracyInPercent) + "%\n" +
+                "Macroaverage Precision: " + (macroAveragePrecisionInPercent) + "%\n" +
+                "Macroaverage Recall: " + (macroAverageRecallInPercent) + "%\n" +
+                "Macroaverage F1-Measure: " + (macroAverageF1measureInPercent) + "%\n\n\n" +
+                "Entry-Weigted Resuls" + "\nEntry-Weigted Overall Accuracy of " + evaluationResults.size() + " wikis: " + weightedOverallAccuracyInPercent + "%\n" +
+                "Entry-Weigted Overall Precision of " + evaluationResults.size() + " wikis: " + weightedOverallPrecisionInPercent + "%\n" +
+                "Entry-Weigted Overall Recall of " + evaluationResults.size() + " wikis: " + weightedOverallRecallInPercent + "%\n" +
+                "Entry-Weigted Overall F1-Measure of " + evaluationResults.size() + " wikis: " + weightedOverallF1MeasureInPercent + "%\n\n\n" +
                 "Number of annotated wikis: " + evaluationResults.size();
 
 
@@ -279,67 +279,68 @@ public class MappingEvaluator {
         return mappingsEvaluationResult;
     }
 
-    public static double getWeightedOverallAccuracy() {
-        return weightedOverallAccuracy;
+    public static double getWeightedOverallAccuracyInPercent() {
+        return weightedOverallAccuracyInPercent;
     }
 
-    public static double getWeightedOverallPrecision() {
-        return weightedOverallPrecision;
+    public static double getWeightedOverallPrecisionInPercent() {
+        return weightedOverallPrecisionInPercent;
     }
 
-    public static double getWeightedOverallRecall() {
-        return weightedOverallRecall;
+    public static double getWeightedOverallRecallInPercent() {
+        return weightedOverallRecallInPercent;
     }
 
-    public static double getWeightedOverallF1Measure() {
-        return weightedOverallF1Measure;
+    public static double getWeightedOverallF1MeasureInPercent() {
+        return weightedOverallF1MeasureInPercent;
     }
 
-    public static double getMicroAverageTruePositives() {
-        return microAverageTruePositives;
+    public static int getMicroAverageTruePositives() {
+        return (int) microAverageTruePositives;
     }
 
-    public static double getMicroAverageFalsePositives() {
-        return microAverageFalsePositives;
+    public static int getMicroAverageFalsePositives() {
+        return (int) microAverageFalsePositives;
     }
 
-    public static double getMicroAverageTrueNegatives() {
-        return microAverageTrueNegatives;
+    public static int getMicroAverageTrueNegatives() {
+        return (int) microAverageTrueNegatives;
     }
 
-    public static double getMicroAverageFalseNegatives() {
-        return microAverageFalseNegatives;
+    public static int getMicroAverageFalseNegatives() {
+        return (int) microAverageFalseNegatives;
     }
 
-    public static double getMicroAverageAccuracy() {
-        return microAverageAccuracy;
+    public static double getMicroAverageAccuracyInPercent() {
+        return microAverageAccuracyInPercent;
     }
 
-    public static double getMicroAveragePrecision() {
-        return microAveragePrecision;
+    public static double getMicroAveragePrecisionInPercent() {
+        return microAveragePrecisionInPercent;
     }
 
-    public static double getMicroAverageRecall() {
-        return microAverageRecall;
+    public static double getMicroAverageRecallInPercent() {
+        return microAverageRecallInPercent;
     }
 
-    public static double getMicroAverageF1measure() {
-        return microAverageF1measure;
+    public static double getMicroAverageF1measureInPercent() {
+        return microAverageF1measureInPercent;
     }
 
-    public static double getMacroAverageAccuracy() {
-        return macroAverageAccuracy;
+    public static double getMacroAverageAccuracyInPercent() {
+        return macroAverageAccuracyInPercent;
     }
 
-    public static double getMacroAveragePrecision() {
-        return macroAveragePrecision;
+    public static double getMacroAveragePrecisionInPercent() {
+        return macroAveragePrecisionInPercent;
     }
 
-    public static double getMacroAverageRecall() {
-        return macroAverageRecall;
+    public static double getMacroAverageRecallInPercent() {
+        return macroAverageRecallInPercent;
     }
 
-    public static double getMacroAverageF1measure() {
-        return macroAverageF1measure;
+    public static double getMacroAverageF1measureInPercent() {
+        System.out.println();
+        return macroAverageF1measureInPercent;
     }
 }

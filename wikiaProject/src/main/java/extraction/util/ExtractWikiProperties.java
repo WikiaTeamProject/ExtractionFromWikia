@@ -48,7 +48,7 @@ public class ExtractWikiProperties {
 
                 wikiName = (fileContents.substring(fileContents.indexOf("<sitename>") + 10, fileContents.indexOf("</sitename>", fileContents.indexOf("<sitename>") + 10) - 1)).trim().replace(" ", "_");
 
-                wikiProperties=new WikiaWikiProperties(wikiName, languageCode,wikiPath);
+                // wikiProperties = new WikiaWikiProperties(wikiName, languageCode, wikiPath);
 
             }
             br.close();
