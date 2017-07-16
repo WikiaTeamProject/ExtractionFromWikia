@@ -1,16 +1,25 @@
 package extractionPostprocessing.controller.propertymapper;
 
-import extractionPostprocessing.controller.propertymapper.PropertyMapper;
+import extractionPostprocessing.util.DBpediaResourceServiceOffline;
 
 /**
- * Created by Samresh Kumar on 7/5/2017.
- * This mapper will replace property in URI
- * to ontology
+ * This mapper maps properties.
+ * It looks up whether the property exists in dbpedia and maps to it if it exists.
+ * Otherwise it maps to <null>.
  */
 public class PropertyMapper_2 extends PropertyMapper {
 
     @Override
     public String mapSingleProperty(String propertyToMap) {
-        return propertyToMap.replace("property","ontology");
+
+        //Equivalent Ontology class
+        String ontologyClass = propertyToMap.toLowerCase().replace("/property/","/ontology/");
+
+        if(DBpediaResourceServiceOffline.getDBpediaResourceServiceOfflineObject().
+                ontologyClassExistInDBpedia(ontologyClass)){
+            return ontologyClass;
+        }
+
+        else return null;
     }
 }
