@@ -10,6 +10,10 @@ import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 
+/**
+ * This class extracts individual 7zip files as well as all 7zip files within one directory.
+ * There are methods specifically for the purpose of extracting to a certain folder (designated methods) as well as some more general purpose methods.
+ */
 public class Extraction7zip {
     private static Logger logger = Logger.getLogger(Extraction7zip.class.getName());
     private String directoryExtracted;
@@ -20,6 +24,16 @@ public class Extraction7zip {
      * Constructor for the 7zip Extraction.
      */
     public Extraction7zip() {
+        // Note that the assureDesignatedFunctionality() now makes sure that the desired directory exists.
+        // To make this class more flexible and allow for multiple purposes, this was moved out of the constructor.
+        // Make sure that you call assureDesignatedFunctionality() for methods that assume that the "designated folder" (=root/extracted/) exists.
+    }
+
+
+    /**
+     * This is a helper method which ensures that the target directory (= the designated folder) for methods that automatically use the "designated" folder exist.
+     */
+    private void assureDesignatedFunctionality(){
         directoryExtracted = downloadedDirectoryPath + "/extracted/";
         IOoperations.createDirectory(directoryExtracted);
     }
@@ -117,6 +131,7 @@ public class Extraction7zip {
      * @return true if extraction was successful, else false.
      */
     public boolean extract7ZipFileIntoDesignatedFolder(File compressedFile) {
+        assureDesignatedFunctionality();
         return extract7ZipFile(compressedFile, new File(directoryExtracted));
     }
 
@@ -126,15 +141,16 @@ public class Extraction7zip {
      * @return true if extraction was successful, else false.
      */
     public boolean extract7ZipFileIntoDesignatedFolder(String pathToFile){
+        assureDesignatedFunctionality();
         return extract7ZipFileIntoDesignatedFolder(new File(pathToFile));
     }
 
 
     /**
      * Unzips all 7zip files of the wikiaDumps/downloaded/7zip folder into the wikiaDumps/extracted7z folder
-     *
      */
     public void extractAll7ZipFilesIntoDesignatedFolder() {
+        assureDesignatedFunctionality();
         String folder7z = downloadedDirectoryPath + "/downloaded/7z";
         File folder = new File(folder7z);
 
@@ -142,6 +158,18 @@ public class Extraction7zip {
             logger.info("Extraction for following 7z file is started: " + file7z.getAbsolutePath());
             extract7ZipFileIntoDesignatedFolder(file7z.getAbsolutePath());
         }
+    }
+
+    /**
+     * Unzips all 7zip files of the specified directory into the specified directory.
+     */
+    public void extractAll7ZipFilesIntoFolder(File extractFrom, File extractTo) {
+
+        for (File file7z : extractFrom.listFiles()) {
+            logger.info("Extraction for following 7z file is started: " + file7z.getAbsolutePath());
+            extract7ZipFile(file7z.getAbsolutePath(), extractTo);
+        }
+
     }
 
 }
