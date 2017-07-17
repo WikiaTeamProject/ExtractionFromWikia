@@ -18,6 +18,6 @@ public class PropertyMapper_3 extends PropertyMapper {
 
         }
 
-        else return null;
+        else return "<NULL>";
     }
 }
