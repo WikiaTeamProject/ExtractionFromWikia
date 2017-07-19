@@ -20,7 +20,7 @@ public class ExtractionGZip
      * Constructor for Extraction GZip Class
      */
     public ExtractionGZip() {
-        directoryExtracted = downloadedDirectoryPath + "/extracted/";
+        directoryExtracted = downloadedDirectoryPath + "/decompressed/";
         IOoperations.createDirectory(directoryExtracted);
     }
 
@@ -117,7 +117,7 @@ public class ExtractionGZip
      *
      */
     public void extractAllGZipFilesIntoDesignatedFolder() {
-        String foldergz = downloadedDirectoryPath + "/downloaded/gz";
+        String foldergz = downloadedDirectoryPath + "/gz/";
         File folder = new File(foldergz);
 
         for (File filegz : folder.listFiles()) {
