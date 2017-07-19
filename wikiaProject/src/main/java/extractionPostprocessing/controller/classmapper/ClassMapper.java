@@ -5,6 +5,7 @@ import utils.IOoperations;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.ResourceBundle;
 
 /**
  * Abstract class for property mappers.
@@ -25,7 +26,7 @@ public abstract class ClassMapper {
      * Returns all resource mappings of a wiki.
      * @param targetNamespace The target namespace.
      * @param classesToMap An array list of all the classes to be mapped (in DBpedia tag format, i.e. the domain is not yet replaced).
-     * @return A hashmap of the form: key = <targetnamespace_resource> value = <dbpedia_resource>
+     * @return A HashMap of the form: key = <targetnamespace_resource> value = <dbpedia_resource>
      */
     public HashMap<String, String> getClassMappings(String targetNamespace, HashSet<String> classesToMap) {
 
@@ -49,6 +50,43 @@ public abstract class ClassMapper {
     }
 
 
+    /**
+     * This method transforms a template entity into a class entity.
+     * Example:
+     * Input: <http://uni-mannheim.de/HarryPotter/resource/Template:Creature_infobox>
+     * Output: <http://uni-mannheim.de/HarryPotter/class/Creature>
+     * @param templateToTransform
+     * @return A string representing a class.
+     */
+    public String performClassTransformation(String templateToTransform){
+
+        String transformedTemplate = templateToTransform;
+
+        // check whether entity is already transformed to target namespace
+        String targetNamespace = ResourceBundle.getBundle("config").getString("targetnamespace");
+        if(!templateToTransform.contains(targetNamespace) && templateToTransform.contains("dbpedia.org")){
+            // transform into target namespace
+            transformedTemplate = templateToTransform.replaceAll("dbpedia.org", targetNamespace);
+        }
+
+
+        // transform into class
+        transformedTemplate = transformedTemplate.replace("/resource/Template:", "/class/");
+
+        // remove infobox information
+        transformedTemplate = transformedTemplate.replace("infobox_", "");
+        transformedTemplate = transformedTemplate.replace("_infobox", "");
+        transformedTemplate = transformedTemplate.replace("Infobox_", "");
+        transformedTemplate = transformedTemplate.replace("_Infobox", "");
+
+        // transform first character of class name to uppercase
+        transformedTemplate = transformedTemplate.substring(0, transformedTemplate.indexOf("/class/") + 7)
+                + transformedTemplate.substring(transformedTemplate.indexOf("/class/") + 7).substring(0, 1).toUpperCase()
+                + transformedTemplate.substring(transformedTemplate.indexOf("/class/") + 7).substring(1);
+
+    return transformedTemplate;
+
+    }
 
 }
 

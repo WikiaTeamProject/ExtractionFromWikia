@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 /**
  * This class processes the redirect file of a single wiki.
+ * It also takes care of the labels.ttl file and sets preferred and alternate labels.
  */
 public class RedirectProcessorSingleWiki {
 

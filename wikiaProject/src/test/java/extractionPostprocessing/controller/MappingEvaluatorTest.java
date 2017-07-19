@@ -28,6 +28,7 @@ public class MappingEvaluatorTest {
 
         EvaluationResultAllWikis result = MappingEvaluator.evaluateAllMappings(MappingEvaluator.EvaluationObjectAllWikis.RESOURCES, false);
 
+
         // macro average
         assertEquals(result.macroAverageAccuracyInPercent, 50.0, 0.00000001);
         assertEquals(result.macroAveragePrecisionInPercent, ((7.0/6.0)/2.0) * 100 , 0.00000001);

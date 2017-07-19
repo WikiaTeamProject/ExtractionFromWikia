@@ -23,6 +23,6 @@ public class PropertyMapper_3 extends PropertyMapper {
             return propertyToMap.toLowerCase();
 
         }
-        else return "<NULL>";
+        else return "<null>";
     }
 }
