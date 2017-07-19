@@ -207,7 +207,7 @@ public class IOoperations {
 
             File pageIdsDirectory = new File(pageIDsFilePath);
             if (!pageIdsDirectory.exists()) {
-                logger.severe("Page IDs directory does not exist.");
+                logger.severe("<root>/resources/pageids/ directory does not exist.");
             }
 
             if (pageIdsDirectory.isDirectory()) {
@@ -255,7 +255,7 @@ public class IOoperations {
 
             File redirectsDirectory = new File(redirectFilePath);
             if (!redirectsDirectory.exists()) {
-                logger.severe("DBpediaResourceServiceOffline directory does not exist.");
+                logger.severe("<root>/resources/redirects/ directory does not exist.");
             }
 
             if (redirectsDirectory.isDirectory()) {
@@ -326,7 +326,7 @@ public class IOoperations {
 
             File ontologyDirectory = new File(ontologyFilePath);
             if (!ontologyDirectory.exists()) {
-                logger.severe("Ontology directory does not exist.");
+                logger.severe("<root>/resources/ontology/ directory does not exist.");
             }
 
             if (ontologyDirectory.isDirectory()) {
@@ -373,7 +373,7 @@ public class IOoperations {
 
             File propertiesDirectory = new File(propertiesFilePath);
             if (!propertiesDirectory.exists()) {
-                logger.severe("Properties directory does not exist.");
+                logger.severe("<root>/resources/properties/ directory does not exist.");
             }
 
             if (propertiesDirectory.isDirectory()) {

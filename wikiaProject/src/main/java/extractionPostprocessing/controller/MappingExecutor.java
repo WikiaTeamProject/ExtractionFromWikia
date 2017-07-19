@@ -29,8 +29,7 @@ public class MappingExecutor {
 
 
     /**
-     * constructor
-     *
+     * Constructor
      * @param resourceMapper
      */
     public MappingExecutor(ResourceMapper resourceMapper, PropertyMapper propertyMapper, ClassMapper classMapper) {
