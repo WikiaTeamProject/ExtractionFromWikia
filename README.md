@@ -24,22 +24,27 @@ In the `config.properties` file, you specify a root directory. For a regular pro
 ```
 root_directory
 +---downloadedWikis
-|     +---downloaded
-|         +---7z
-|         +---gz
-|     +---extracted
-|     +---DbPediaExtractionFormat
-|     +---PostProcessedWikis
-+---pageids
-+---redirects
-+---PostProcessedWikis
+|     +---7z
+|     +---gz
+|     +---decompressed
++---dbPediaExtractionFormat
++---resources
+|      +---pageids
+|      +---redirects
+|      +---ontology
+|      +---properties
++---postProcessedWikis
 ```
 
 The program performs a lot of file operations. All of those file operations are handled within the `root_directory` that you specify in the `config.properties file`.
-- The `downloadedWiki` directory... <todo>
-    - The `downloaded` directory contains the wikis that were downloaded in their compressed form.
-        - The `7z` directory contains all wikis that were downloaded in the 7z format.
-        - The `gz` directory contains all wikis that were downloaded the gz format.
-- The `pageids` directory should contain a TTL file with all page ids of DBpedia. This is required for some mappers to work.
-- The `redirects` directory should contain a TTL file with all redirects of DBpedia. This is required for some mappers to work.
-- The `PostProcessedWikis` directory contains all wikis in their final postprocessed form. After successfully running the program, you should find everything you need here. 
+- The `downloadedWikis` directory contains plain dumps from wikia
+     - The `7z` directory contains all wikis that were downloaded in the 7z format.
+     - The `gz` directory contains all wikis that were downloaded the gz format.
+     - The `decompressed` directory contains all wikis from the `7z` and `gz` folder but in a decompressed format.
+- The `dbPediaExtractionFormat` contains the decompressed wiki dumps that are following a file structure required for the dbPedia extractor to work.
+- The `resources` directory contains different files from DBpedia. This folder requires user interaction: the user has to put the files in the directory.
+   - The `pageids` directory should contain a TTL file with all page ids of DBpedia. This is required for some mappers to work.
+   - The `redirects` directory should contain a TTL file with all redirects of DBpedia. This is required for some mappers to work.
+   - The `ontology` directory should contain a TTL file with all ontologies of DBpedia. This is required for some mappers to work.
+   - The `properties` mapper should contain a TTL file with all properties of DBpedia. This is required for some mappers to work.
+- The `PostProcessedWikis` directory contains all wikis in their final postprocessed form. After successfully running the program, the user should find the final output here. 
