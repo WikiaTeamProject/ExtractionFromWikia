@@ -22,7 +22,7 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
     private static String rootDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
     private static HashSet<String> pageIds;
     private static HashSet<String> ontologiesSet;
-
+    private static HashSet<String> propertiesSet;
     /**
      * Private constructor -> Singleton pattern
      */
@@ -135,7 +135,7 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
     /**
      *
      * @param resource ontology class to check
-     * @return true if ontology class present in DBpedia else false
+     * @return true if ontology class is present in DBpedia else false
      */
     public boolean ontologyClassExistInDBpedia(String resource) {
         if (ontologiesSet == null) {
@@ -143,6 +143,20 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
             this.loadOntologyClasses();
         }
         return ontologiesSet.contains(resource);
+    }
+
+
+    /**
+     *
+     * @param resource property to check for existance
+     * @return true if property is present in DBpedia else false
+     */
+    public boolean propertyExistInDBPedia(String resource) {
+        if (propertiesSet == null) {
+            // pageIds were not loaded yet
+            this.loadPropertiesSet();
+        }
+        return propertiesSet.contains(resource);
     }
 
 
@@ -155,6 +169,22 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
         try {
             IOoperations ioOps = new IOoperations();
             ontologiesSet = ioOps.getOntologyClasses();
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.severe(e.getMessage());
+        }
+    }
+
+
+    /**
+     * This function will loads list of properties
+     * into static object by calling IO function
+     */
+    public void loadPropertiesSet() {
+        logger.info("Loading Properties Set in memory. Please wait");
+        try {
+            IOoperations ioOps = new IOoperations();
+            propertiesSet = ioOps.getPropertiesSet();
         } catch (Exception e) {
             e.printStackTrace();
             logger.severe(e.getMessage());
