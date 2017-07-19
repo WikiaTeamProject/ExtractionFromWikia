@@ -13,7 +13,27 @@ There are some prerequisites that must be fulfilled in order to be able to run t
 - at least 100 gigabytes freely available disk space
 
 ## How to execute the Program?
-<TODO: file structure (very quick there is a larger section below), config file, what to download etc.>
+Create the following directory structure (you can name `root_directory` whatever you like, but the other directory names have to match):
+```
+root_directory
++---resources
+|      +---pageids
+|      +---redirects
+|      +---ontology
+|      +---properties
+```
+
+Go to the DBpedia download page, download the files listed below and decompress them. Put the decompressed files into the specified directory:
+- DBpedia Ontology (nt) → `ontology`
+- Page Ids (ttl) → `pageids`
+- Rransitive Redirects (ttl) → `redirects`
+- Infobox Property Definitions (ttl) → `properties`
+
+You can choose whatever version you like, however, if you want to use the provided gold standard for evaluation, you should go for version 2016-10 (http://wiki.dbpedia.org/downloads-2016-10).
+
+<todo: add more>
+
+After successfully running the program, you will find the postprocessed wikis in `root_directory/postProcessedWikis`.
 
 
 ## Implementation Details
