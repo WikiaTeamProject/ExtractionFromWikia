@@ -20,9 +20,9 @@ import java.util.regex.Pattern;
  * Class for the creation of the mappings files.
  * Given a resourceMapper, this class performs the mapping for all wikis.
  */
-public class EntitiesMappingExecutor {
+public class MappingExecutor {
 
-    private static Logger logger = Logger.getLogger(EntitiesMappingExecutor.class.getName());
+    private static Logger logger = Logger.getLogger(MappingExecutor.class.getName());
     private ResourceMapper resourceMapper;
     private PropertyMapper propertyMapper;
     private ClassMapper classMapper;
@@ -33,7 +33,7 @@ public class EntitiesMappingExecutor {
      *
      * @param resourceMapper
      */
-    public EntitiesMappingExecutor(ResourceMapper resourceMapper, PropertyMapper propertyMapper, ClassMapper classMapper) {
+    public MappingExecutor(ResourceMapper resourceMapper, PropertyMapper propertyMapper, ClassMapper classMapper) {
         this.resourceMapper = resourceMapper;
         this.classMapper = classMapper;
         this.propertyMapper = propertyMapper;

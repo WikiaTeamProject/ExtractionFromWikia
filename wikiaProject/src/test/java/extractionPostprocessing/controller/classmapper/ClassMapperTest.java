@@ -38,19 +38,19 @@ public class ClassMapperTest {
 
         // input: perfect class -> nothing should happen
         assertEquals("<http://uni-mannheim.de/HarryPotter/class/Creature>",
-                testMapper.performClassTransformation("<http://uni-mannheim.de/HarryPotter/class/Creature>"));
+                testMapper.transformTemplateToClass("<http://uni-mannheim.de/HarryPotter/class/Creature>"));
 
         // input: letter after "/class/" should be capitalized
         assertEquals("<http://uni-mannheim.de/HarryPotter/class/Creature>",
-                testMapper.performClassTransformation("<http://uni-mannheim.de/HarryPotter/class/creature>"));
+                testMapper.transformTemplateToClass("<http://uni-mannheim.de/HarryPotter/class/creature>"));
 
         // input: letter after "/class/" should be capitalized, namespace should be replaced
         assertEquals("<http://uni-mannheim.de/HarryPotter/class/Creature>",
-                testMapper.performClassTransformation("<http://dbpedia.org/HarryPotter/class/creature>"));
+                testMapper.transformTemplateToClass("<http://dbpedia.org/HarryPotter/class/creature>"));
 
         // input: letter after "/class/" should be capitalized, namespace should be replaced, Template should be removed
         assertEquals("<http://uni-mannheim.de/HarryPotter/class/Creature>",
-                testMapper.performClassTransformation("<http://dbpedia.org/HarryPotter/resource/Template:creature>"));
+                testMapper.transformTemplateToClass("<http://dbpedia.org/HarryPotter/resource/Template:creature>"));
 
     }
 

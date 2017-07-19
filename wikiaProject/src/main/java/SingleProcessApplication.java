@@ -1,5 +1,5 @@
 import extraction.Extractor;
-import extractionPostprocessing.controller.EntitiesMappingExecutor;
+import extractionPostprocessing.controller.MappingExecutor;
 import extractionPostprocessing.controller.RedirectProcessor;
 import extractionPostprocessing.controller.classmapper.ClassMapper_1;
 import extractionPostprocessing.controller.propertymapper.PropertyMapper_2;
@@ -37,7 +37,7 @@ public class SingleProcessApplication {
         // create mappings
         RedirectProcessor redirectProcessor = new RedirectProcessor();
         redirectProcessor.executeRedirectsForAllWikis();
-        EntitiesMappingExecutor mappingExecutor = new EntitiesMappingExecutor(new ResourceMapper_1(), new PropertyMapper_2(), new ClassMapper_1());
+        MappingExecutor mappingExecutor = new MappingExecutor(new ResourceMapper_1(), new PropertyMapper_2(), new ClassMapper_1());
         mappingExecutor.createMappingFilesForAllWikis();
 
     }

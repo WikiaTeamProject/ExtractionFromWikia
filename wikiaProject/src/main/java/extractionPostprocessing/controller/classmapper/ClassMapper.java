@@ -34,7 +34,7 @@ public abstract class ClassMapper {
         HashMap<String, String> result = new HashMap<String, String>();
 
         for (String resource : classesToMap) {
-            result.put(resource.replace("dbpedia.org", targetNamespace), mapSingleClass(resource));
+            result.put(transformTemplateToClass(resource), mapSingleClass(resource));
         }
         return result;
     }
@@ -61,7 +61,7 @@ public abstract class ClassMapper {
      * @param templateToTransform
      * @return A string representing a class.
      */
-    public String performClassTransformation(String templateToTransform, boolean replaceNamespace) {
+    public String transformTemplateToClass(String templateToTransform, boolean replaceNamespace) {
 
         String transformedTemplate = templateToTransform;
 
@@ -98,8 +98,8 @@ public abstract class ClassMapper {
      * @param templateToTransform
      * @return
      */
-    public String performClassTransformation(String templateToTransform) {
-        return performClassTransformation(templateToTransform, true);
+    public String transformTemplateToClass(String templateToTransform) {
+        return transformTemplateToClass(templateToTransform, true);
     }
 
 
