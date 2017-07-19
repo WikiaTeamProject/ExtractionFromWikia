@@ -352,4 +352,53 @@ public class IOoperations {
 
         return ontologiesSet;
     }
+
+
+    /**
+     * This function reads list of properties
+     * from dbpedia file
+     * @return list of properties in Hashset
+     */
+    public HashSet<String> getPropertiesSet(){
+        String propertiesFilePath = rootDirectoryPath + "//properties//";
+        HashSet<String> propertiesSet = new HashSet<String>();
+        FileReader fileReader;
+        BufferedReader bufferedReader;
+        String fileLine = "";
+        try {
+
+            File propertiesDirectory = new File(propertiesFilePath);
+            if (!propertiesDirectory.exists()) {
+                logger.severe("Properties directory does not exist.");
+            }
+
+            if (propertiesDirectory.isDirectory()) {
+
+                for (File propertiesFile : propertiesDirectory.listFiles()) {
+                    if (propertiesFile.getName().toLowerCase().endsWith(".ttl")) {
+
+                        fileReader = new FileReader(propertiesFile);
+                        bufferedReader = new BufferedReader(fileReader);
+
+                        while ((fileLine = bufferedReader.readLine()) != null) {
+
+                            fileLine=fileLine.trim();
+
+                            if(!fileLine.startsWith("#")) {
+                                String property =
+                                        fileLine.substring(0, fileLine.indexOf(">") + 1).toLowerCase();
+
+                                propertiesSet.add(property);
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger.severe(ex.getMessage());
+        }
+
+        return propertiesSet;
+    }
 }
