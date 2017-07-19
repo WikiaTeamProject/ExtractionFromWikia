@@ -1,9 +1,6 @@
 package utils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * A helper class for different output operations like printing ArrayList conents on the console.
@@ -34,6 +31,12 @@ public class OutputOperations {
             System.out.println(entry.getKey().toString() + " : " + entry.getValue().toString());
         }
 
+    }
+
+    public static <T> void printSet(Set<T> set){
+        for(T t: set){
+            System.out.println(t);
+        }
     }
 
 }

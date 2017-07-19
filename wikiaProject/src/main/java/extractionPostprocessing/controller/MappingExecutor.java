@@ -4,13 +4,16 @@ import extractionPostprocessing.controller.classmapper.ClassMapper;
 import extractionPostprocessing.controller.propertymapper.PropertyMapper;
 import extractionPostprocessing.controller.resourcemapper.ResourceMapper;
 import extractionPostprocessing.model.*;
+
 import utils.IOoperations;
+import utils.OutputOperations;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -61,6 +64,17 @@ public class MappingExecutor {
                     resourceMapper.writeResourceMappingsFile(directory, targetNameSpace, wikiToMap.resourcesToMap);
                     propertyMapper.writePropertiesMappingsFile(directory, targetNameSpace, wikiToMap.propertiesToMap);
                     classMapper.writeClassMappingsFile(directory, targetNameSpace, wikiToMap.classesToMap);
+
+                    HashSet<String> classesForDefinition = new HashSet<String>();
+                    Iterator iterator = wikiToMap.classesToMap.iterator();
+
+                    while(iterator.hasNext()){
+                        classesForDefinition.add( classMapper.transformTemplateToClass( (String) iterator.next()));
+                    }
+
+                    // OutputOperations.printSet(classesForDefinition);
+
+                    // TODO Sam: Write classesForDefinition in extra File in appropriate format...
 
 
                 } // end of check whether file is a directory

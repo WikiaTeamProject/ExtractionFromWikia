@@ -2,7 +2,11 @@ package extractionPostprocessing;
 
 import extractionPostprocessing.controller.*;
 import extractionPostprocessing.controller.classmapper.ClassMapper_4;
+import extractionPostprocessing.controller.propertymapper.PropertyMapper_1;
 import extractionPostprocessing.controller.propertymapper.PropertyMapper_3;
+import extractionPostprocessing.controller.resourcemapper.ResourceMapper_1;
+import extractionPostprocessing.controller.resourcemapper.ResourceMapper_3_1;
+import extractionPostprocessing.controller.resourcemapper.ResourceMapper_4;
 import extractionPostprocessing.controller.resourcemapper.ResourceMapper_4_1;
 
 /**
@@ -17,9 +21,8 @@ public class ExtractionPostprocessingApplication {
         RedirectProcessor redirectProcessor = new RedirectProcessor();
         redirectProcessor.executeRedirectsForAllWikis();
 
-        MappingExecutor mappingExecutor = new MappingExecutor(new ResourceMapper_4_1(), new PropertyMapper_3(), new ClassMapper_4());
+        MappingExecutor mappingExecutor = new MappingExecutor(new ResourceMapper_4(), new PropertyMapper_3(), new ClassMapper_4());
         mappingExecutor.createMappingFilesForAllWikis();
-
     }
 
 }
