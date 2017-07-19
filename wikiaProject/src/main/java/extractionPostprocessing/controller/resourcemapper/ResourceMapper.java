@@ -17,7 +17,7 @@ public abstract class ResourceMapper {
 
     /**
      * Maps a single resource. Accepts a dbpedia tag and will map that to the actual dbpedia tag.
-     * @param resourceToMap DBpedia tag from wiki to be mapped.
+     * @param resourceToMap DBpedia tag from wiki to be mapped. Example: "<http://dbpedia.org/resource/Stomp>"
      * @return DBpedia resource.
      */
     public abstract String mapSingleResource(String resourceToMap);

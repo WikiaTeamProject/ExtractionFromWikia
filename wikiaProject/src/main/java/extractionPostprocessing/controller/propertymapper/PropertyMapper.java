@@ -13,6 +13,11 @@ import java.util.HashSet;
 public abstract class PropertyMapper {
 
 
+    /**
+     * Map a single property
+     * @param propertyToMap Example property:
+     * @return
+     */
     public abstract String mapSingleProperty(String propertyToMap);
 
 
@@ -20,6 +25,7 @@ public abstract class PropertyMapper {
      * Returns all resource mappings of a wiki.
      * @param targetNamespace The target namespace.
      * @param propertiesToMap An array list of all the resources to be mapped (in dbpedia tag format, i.e. the domain is not yet replaced).
+     *                        Example: "<http://dbpedia.org/property/type>"
      * @return A hasmap of the form: key = <targetnamespace_resource> value = <dbpedia_resource>
      */
     public HashMap<String, String> getPropertyMappings(String targetNamespace, HashSet<String> propertiesToMap) {
