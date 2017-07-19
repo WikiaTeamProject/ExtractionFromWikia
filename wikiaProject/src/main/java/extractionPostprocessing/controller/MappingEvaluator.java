@@ -105,7 +105,7 @@ public class MappingEvaluator {
 
         int totalMappings = 0;
         ArrayList<EvaluationResultSingleWiki> evaluationResultSingleWikis = new ArrayList<>();
-        String pathToRootDirectory = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/PostProcessedWikis";
+        String pathToRootDirectory = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/postProcessedWikis";
         StringBuffer aggregatedEvaluationResults = new StringBuffer();
         String evaluationResultLine = "";
         File root = new File(pathToRootDirectory);

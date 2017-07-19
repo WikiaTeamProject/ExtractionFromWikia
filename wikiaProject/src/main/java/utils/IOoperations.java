@@ -157,8 +157,6 @@ public class IOoperations {
     }
 
 
-
-
     /**
      * Write the mapings file to the disk.
      * @param entitiesMapping A HashSet of Strings, each representing one line to be written to the mapping file.
@@ -199,7 +197,7 @@ public class IOoperations {
      * @return Hashset containing pageIds
      */
     public HashSet<String> getPageIDs(){
-        String pageIDsFilePath = rootDirectoryPath + "//pageids//";
+        String pageIDsFilePath = rootDirectoryPath + "//resources//pageids//";
         HashSet<String> pageIdsSet = new HashSet<String>();
         FileReader fileReader;
         BufferedReader bufferedReader;
@@ -247,7 +245,7 @@ public class IOoperations {
      */
     public HashMap<String,String> getResourcesRedirects() {
 
-        String redirectFilePath = rootDirectoryPath + "//redirects//";
+        String redirectFilePath = rootDirectoryPath + "//resources//redirects//";
         HashMap redirectsMap = new HashMap<String, String>();
         FileReader fileReader;
         BufferedReader bufferedReader;
@@ -293,6 +291,12 @@ public class IOoperations {
         return redirectsMap;
     }
 
+
+    /**
+     * A very simple file writer.
+     * @param file The file in which shall be written.
+     * @param content The content that shall be written.
+     */
     public static void writeContentToFile(File file, String content) {
 
         try {
@@ -313,7 +317,7 @@ public class IOoperations {
      * @return Hashset containing ontology
      */
     public HashSet<String> getOntologyClasses(){
-        String ontologyFilePath = rootDirectoryPath + "//ontology//";
+        String ontologyFilePath = rootDirectoryPath + "//resources//ontology//";
         HashSet<String> ontologiesSet = new HashSet<String>();
         FileReader fileReader;
         BufferedReader bufferedReader;
@@ -357,10 +361,10 @@ public class IOoperations {
     /**
      * This function reads list of properties
      * from dbpedia file
-     * @return list of properties in Hashset
+     * @return list of properties in HashSet
      */
     public HashSet<String> getPropertiesSet(){
-        String propertiesFilePath = rootDirectoryPath + "//properties//";
+        String propertiesFilePath = rootDirectoryPath + "//resources//properties//";
         HashSet<String> propertiesSet = new HashSet<String>();
         FileReader fileReader;
         BufferedReader bufferedReader;
