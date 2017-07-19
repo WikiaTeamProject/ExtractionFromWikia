@@ -23,7 +23,7 @@ root_directory
 |      +---properties
 ```
 
-Go to the DBpedia download page, download the following files and put them into the specified directory:
+Go to the DBpedia download page, download the files listed below and decompress them. Put the decompressed files into the specified directory:
 - DBpedia Ontology (nt) → `ontology`
 - Page Ids (ttl) → `pageids`
 - Rransitive Redirects (ttl) → `redirects`
