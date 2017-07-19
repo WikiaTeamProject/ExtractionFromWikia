@@ -102,7 +102,7 @@ public class Extractor {
         try {
             String wikisFilePath =
                     ResourceBundle.getBundle("config").getString("pathToRootDirectory")
-                            + "//downloadedWikis//downloaded//";
+                            + "//downloadedWikis//";
             File downloadedWikisFolder = new File(wikisFilePath);
             Extraction7zip extractor7Zip = new Extraction7zip();
             ExtractionGZip extractorGZip = new ExtractionGZip();
@@ -181,7 +181,15 @@ public class Extractor {
 
                 languageCode = fileContents.substring(fileContents.indexOf("xml:lang=") + 10, fileContents.indexOf(">", fileContents.indexOf("xml:lang=") + 10) - 1);
 
-                wikiName = (fileContents.substring(fileContents.indexOf("<sitename>") + 10, fileContents.indexOf("</sitename>", fileContents.indexOf("<sitename>") + 10) - 1)).trim().replace(" ", "_");
+
+                if((fileContents.indexOf("<sitename>") + 10) <=
+                        fileContents.indexOf("</sitename>", fileContents.indexOf("<sitename>") + 10) - 1)
+                {
+
+                    wikiName = (fileContents.substring(fileContents.indexOf("<sitename>") + 10, fileContents.indexOf("</sitename>", fileContents.indexOf("<sitename>") + 10) - 1)).trim().replace(" ", "_");
+                }
+                else
+                    wikiName="";
 
                 wikiSize = (wikiFile.length() / 1024);
 
@@ -215,7 +223,7 @@ public class Extractor {
 
         String wikisFilePath =
                 ResourceBundle.getBundle("config").getString("pathToRootDirectory")
-                        + "//downloadedWikis//extracted//";
+                        + "//downloadedWikis//decompressed//";
 
         try {
             File wikisFilesFolder = new File(wikisFilePath);
@@ -229,9 +237,6 @@ public class Extractor {
 
                 if (wikiFile.isFile() && wikiFile.getName().endsWith(".xml")) {
 
-                    if (wikiFile.getName().equals("bprd_pages_current.xml")) {
-                        System.out.println("I am here");
-                    }
                     WikiaWikiProperties properties = extractPropertiesForaWiki(wikiFile.getPath());
 
                     if (wikiProperties != null) {
@@ -284,7 +289,7 @@ public class Extractor {
 
             String downloadDirectoryForExtraction =
                     ResourceBundle.getBundle("config").getString("pathToRootDirectory")
-                            + "//downloadedWikis//DbPediaExtractionFormat//";
+                            +"//dbPediaExtractionFormat//";
 
             String wikiSourceFileName =
                     ResourceBundle.getBundle("config").getString("wikiSourceFileName");
@@ -399,7 +404,7 @@ public class Extractor {
         try {
             String downloadDirectoryForExtraction =
                     ResourceBundle.getBundle("config").getString("pathToRootDirectory")
-                            + "//downloadedWikis//" + "DbPediaExtractionFormat";
+                             + "//dbPediaExtractionFormat//";
             String pathToExtractionFramework =
                     ResourceBundle.getBundle("config").getString("dbPediaExtractorPath");
             String DATE_FORMAT_NOW = "YYYYMMdd";
@@ -441,7 +446,6 @@ public class Extractor {
                                     commonsWikiDirectory.delete();
                                 }
 
-                                //commonsWikiDirectory.mkdir();
                                 commonsWikiDirectory.mkdirs();
 
                                 copyFileFromOneDirectorytoAnotherDirectory(
@@ -506,10 +510,10 @@ public class Extractor {
     public void moveExtractFilesforEvaluation() {
 
         String downloadDirectoryForExtraction =
-                pathToRootDirectory + "//downloadedWikis//" + "DbPediaExtractionFormat";
+                pathToRootDirectory + "//dbPediaExtractionFormat";
 
         String postProcessedFilesDirectoryPath =
-                pathToRootDirectory + "//downloadedWikis//" + "PostProcessedWikis";
+                pathToRootDirectory +  "//postProcessedWikis";
 
         ExtractionBz2
                 bz2Extractor = new ExtractionBz2();

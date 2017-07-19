@@ -34,7 +34,7 @@ public class Extraction7zip {
      * This is a helper method which ensures that the target directory (= the designated folder) for methods that automatically use the "designated" folder exist.
      */
     private void assureDesignatedFunctionality(){
-        directoryExtracted = downloadedDirectoryPath + "/extracted/";
+        directoryExtracted = downloadedDirectoryPath + "/decompressed/";
         IOoperations.createDirectory(directoryExtracted);
     }
 
@@ -151,7 +151,7 @@ public class Extraction7zip {
      */
     public void extractAll7ZipFilesIntoDesignatedFolder() {
         assureDesignatedFunctionality();
-        String folder7z = downloadedDirectoryPath + "/downloaded/7z";
+        String folder7z = downloadedDirectoryPath + "/7z/";
         File folder = new File(folder7z);
 
         for (File file7z : folder.listFiles()) {

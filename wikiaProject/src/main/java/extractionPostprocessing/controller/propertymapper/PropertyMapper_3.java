@@ -17,7 +17,12 @@ public class PropertyMapper_3 extends PropertyMapper {
             return ontologyClass;
 
         }
+         if(DBpediaResourceServiceOffline.
+                getDBpediaResourceServiceOfflineObject().propertyExistInDBPedia(propertyToMap.toLowerCase())
+                ){
+            return propertyToMap.toLowerCase();
 
+        }
         else return "<NULL>";
     }
 }
