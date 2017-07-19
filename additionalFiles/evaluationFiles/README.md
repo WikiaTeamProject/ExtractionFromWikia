@@ -11,7 +11,7 @@ findstr location dbpedia_2016-10.nt
 → This will look for occurrences of "location" in file `dbpedia_2016-10.nt` and print the resulting lines to the console.
 
 ## Mapping Resources
-Resources are mapped to DBpedia resources.
+Resources are mapped to DBpedia resources. If there is a redirect, resources are mapped to the DBpedia resource that is directed to.
 
 ## Mapping Properties
 Properties are mapped to DBpedia ontologies, if they are not available to DBpedia properties.
