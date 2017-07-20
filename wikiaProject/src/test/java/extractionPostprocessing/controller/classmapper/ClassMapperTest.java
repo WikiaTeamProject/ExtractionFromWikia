@@ -29,8 +29,14 @@ public class ClassMapperTest {
 
     @Test
     public void transformTemplateToOntology() throws Exception {
+
+        // transformation to lowercase
+        assertEquals("<http://uni-mannheim.de/HarryPotter/ontology/creature>",
+                testMapper.transformTemplateToOntology("<http://uni-mannheim.de/HarryPotter/resource/Template:Creature_infobox>", false));
+
+        // transformation to uppercase
         assertEquals("<http://uni-mannheim.de/HarryPotter/ontology/Creature>",
-                testMapper.transformTemplateToOntology("<http://uni-mannheim.de/HarryPotter/resource/Template:Creature_infobox>"));
+                testMapper.transformTemplateToOntology("<http://uni-mannheim.de/HarryPotter/resource/Template:Creature_infobox>", true));
     }
 
     @Test

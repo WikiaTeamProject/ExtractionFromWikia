@@ -110,9 +110,10 @@ public abstract class ClassMapper {
      * Output: <http://dbpedia.org/ontology/Speculation>
      *
      * @param templateToTransform
+     * @param capitalize TRUE if character after /ontology/ should be capitalized. FALSE if it should be in lowercase.
      * @return A string representing a class.
      */
-    public String transformTemplateToOntology(String templateToTransform) {
+    public String transformTemplateToOntology(String templateToTransform, boolean capitalize) {
 
         String transformedTemplate = templateToTransform;
 
@@ -126,12 +127,17 @@ public abstract class ClassMapper {
         transformedTemplate = transformedTemplate.replace("_Infobox", "");
 
         // transform first character of class name to uppercase
-        transformedTemplate = transformedTemplate.substring(0, transformedTemplate.indexOf("/ontology/") + 10)
-                + transformedTemplate.substring(transformedTemplate.indexOf("/ontology/") + 10).substring(0, 1).toUpperCase()
-                + transformedTemplate.substring(transformedTemplate.indexOf("/ontology/") + 10).substring(1);
+        if(capitalize) {
+            transformedTemplate = transformedTemplate.substring(0, transformedTemplate.indexOf("/ontology/") + 10)
+                    + transformedTemplate.substring(transformedTemplate.indexOf("/ontology/") + 10).substring(0, 1).toUpperCase()
+                    + transformedTemplate.substring(transformedTemplate.indexOf("/ontology/") + 10).substring(1);
+        } else {
+            transformedTemplate = transformedTemplate.substring(0, transformedTemplate.indexOf("/ontology/") + 10)
+                    + transformedTemplate.substring(transformedTemplate.indexOf("/ontology/") + 10).substring(0, 1).toLowerCase()
+                    + transformedTemplate.substring(transformedTemplate.indexOf("/ontology/") + 10).substring(1);
+        }
         return transformedTemplate;
     }
-
 
 }
 

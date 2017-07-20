@@ -13,7 +13,7 @@ public class ClassMapper_4 extends ClassMapper{
     @Override
     public String mapSingleClass(String templateToMap) {
 
-        String lookupOntology = this.transformTemplateToOntology(templateToMap);
+        String lookupOntology = this.transformTemplateToOntology(templateToMap, false);
         DBpediaResourceServiceOffline dbPediaService = DBpediaResourceServiceOffline.getDBpediaResourceServiceOfflineObject();
 
         if (dbPediaService.ontologyClassExistInDBpedia(lookupOntology)) {
