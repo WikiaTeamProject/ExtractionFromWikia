@@ -203,6 +203,8 @@ public class IOoperations {
         BufferedReader bufferedReader;
         String fileLine = "";
         int i = 1;
+        String fileLinePattern="<[^<]*> <[^<]*> \"[0-9]+\"[\\^][\\^]<[^<]*> [.]";
+
         try {
 
             File pageIdsDirectory = new File(pageIDsFilePath);
@@ -222,10 +224,14 @@ public class IOoperations {
 
                             fileLine=fileLine.trim();
 
-                            String pageId =
-                                    fileLine.substring(0, fileLine.indexOf(">") + 1);
+                            if((!fileLine.startsWith("#")) && fileLine.matches(fileLinePattern)) {
 
-                            pageIdsSet.add(pageId);
+
+                                String pageId =
+                                        fileLine.substring(0, fileLine.indexOf(">") + 1);
+
+                                pageIdsSet.add(pageId);
+                            }
                         }
                     }
                 }
@@ -250,6 +256,7 @@ public class IOoperations {
         FileReader fileReader;
         BufferedReader bufferedReader;
         String fileLine = "";
+        String fileLinePattern="<[^<]*> <[^<]*> <[^<]*> [.]";
         int i = 1;
         try {
 
@@ -270,15 +277,18 @@ public class IOoperations {
 
                             fileLine=fileLine.trim();
 
-                            String resourceLink =
-                                    fileLine.substring(0, fileLine.indexOf(">") + 1);
+                            if((!fileLine.startsWith("#")) && fileLine.matches(fileLinePattern)) {
 
-                            String redirectLink =
-                                    fileLine.substring(fileLine.lastIndexOf("<"),
-                                            fileLine.lastIndexOf(">") + 1);
+                                String resourceLink =
+                                        fileLine.substring(0, fileLine.indexOf(">") + 1);
+
+                                String redirectLink =
+                                        fileLine.substring(fileLine.lastIndexOf("<"),
+                                                fileLine.lastIndexOf(">") + 1);
 
 
-                            redirectsMap.put(resourceLink, redirectLink);
+                                redirectsMap.put(resourceLink, redirectLink);
+                            }
                         }
                     }
                 }
@@ -322,6 +332,7 @@ public class IOoperations {
         FileReader fileReader;
         BufferedReader bufferedReader;
         String fileLine = "";
+        String fileLinePattern= "<[^<]*> <[^<]*>.+";
         try {
 
             File ontologyDirectory = new File(ontologyFilePath);
@@ -341,10 +352,12 @@ public class IOoperations {
 
                             fileLine=fileLine.trim();
 
-                            String ontologyClass =
-                                    fileLine.substring(0, fileLine.indexOf(">") + 1).toLowerCase();
+                            if((!fileLine.startsWith("#")) && fileLine.matches(fileLinePattern)) {
+                                String ontologyClass =
+                                        fileLine.substring(0, fileLine.indexOf(">") + 1).toLowerCase();
 
-                            ontologiesSet.add(ontologyClass);
+                                ontologiesSet.add(ontologyClass);
+                            }
                         }
                     }
                 }
@@ -369,6 +382,7 @@ public class IOoperations {
         FileReader fileReader;
         BufferedReader bufferedReader;
         String fileLine = "";
+        String fileLinePattern= "<[^<]*> <[^<]*>.+";
         try {
 
             File propertiesDirectory = new File(propertiesFilePath);
@@ -388,7 +402,7 @@ public class IOoperations {
 
                             fileLine=fileLine.trim();
 
-                            if(!fileLine.startsWith("#")) {
+                            if((!fileLine.startsWith("#")) && fileLine.matches(fileLinePattern)) {
                                 String property =
                                         fileLine.substring(0, fileLine.indexOf(">") + 1).toLowerCase();
 
