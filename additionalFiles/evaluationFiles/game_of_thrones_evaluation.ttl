@@ -1,0 +1,80 @@
+# Game of Thrones http://gameofthrones.wikia.com/wiki/Special:Statistics
+<http://uni-mannheim.de/resource/File:Neill_Fleming.jpg> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/File:Melisandre_S5.jpg> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/File:Stannis_on_the_wall.jpg> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/File:Jeyne.PNG> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/Kear_Umber> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/Joramun> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/File:GameOfThrones_Cersei_02.jpg> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/File:Jamie_Michie.jpg> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/File:Ros_9.jpg> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/File:Mors_Martell.png> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/Baratheon_soldier_(Mother's_Mercy)> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/Jenna_Tuttle> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/Stonesnake> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/File:Lord_Snow_Cersei_and_Jaime.png> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/File:Oathbreaker_10.jpg> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/Assassination_of_Renly_Baratheon> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/File:MountainSeason4.jpg> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/File:Stygg_2x10.jpg> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/File:Dickon-tarly-512x512.jpg> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/File:White_Harbor_Pin.png> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/File:Foreign_Merchant.jpg> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/Fola_Evans-Akingbola> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/Category:Image_(House_Clegane)> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/Category:Template_Documentation> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/File:Season4-GOT-Sansaposter.jpg> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/File:501_Great_Sept_Seven_statues.jpg> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/King's_Gate> <owl:sameAs> <http://dbpedia.org/resource/null> .
+<http://uni-mannheim.de/resource/Tim_Landers> <owl:sameAs> <http://uni-mannheim.de/resource/Tim_Landers> .
+<http://uni-mannheim.de/resource/Brothel_child_1> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/Category:Story> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/File:House-Swann-Shield-From-Making-Game-of-Thrones-1200x800.jpg> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/House_Wibberley> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/Magnar> <owl:sameAs> <http://dbpedia.org/resource/Magnar> .
+<http://uni-mannheim.de/resource/File:Beric_s6_infobox.jpg> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/File:Oberyn_Promo_S6.jpg> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/Category:Lords_of_Ironrath> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/Craster's_last_son> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/File:Game-of-Thrones-Telltale-642x329.jpg> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/File:Rhaegar.png> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/File:Isabella_Steinbarth.jpg> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/Iron_From_Ice> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/Despondent_man> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/Casterly_Rock> <owl:sameAs> <http://dbpedia.org/resource/World_of_A_Song_of_Ice_and_Fire> .
+<http://uni-mannheim.de/resource/North> <owl:sameAs> <http://dbpedia.org/resource/North> .
+<http://uni-mannheim.de/resource/Hoji_Fortuna> <owl:sameAs> <http://dbpedia.org/resource/Hoji_Fortuna> .
+<http://uni-mannheim.de/resource/Steven_Blount> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/Cape_of_Eagles> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/Black_Walder_Frey> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/Kerr_Logan> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/Yuri_Lowenthal> <owl:sameAs> <http://dbpedia.org/resource/Yuri_Lowenthal> .
+<http://uni-mannheim.de/resource/Locke> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/The_Sea_of_Dorne> <owl:sameAs> <null> .
+<http://uni-mannheim.de/resource/Vermithrax> <owl:sameAs> <null> .
+<http://uni-mannheim.de/Game_of_Thrones/property/age> <owl:sameAs> <http://dbpedia.org/ontology/age> .
+<http://uni-mannheim.de/Game_of_Thrones/property/status> <owl:sameAs> <http://dbpedia.org/ontology/status> .
+<http://uni-mannheim.de/Game_of_Thrones/property/castles> <owl:sameAs> <null> .
+<http://uni-mannheim.de/Game_of_Thrones/property/family> <owl:sameAs> <http://dbpedia.org/ontology/family> .
+<http://uni-mannheim.de/Game_of_Thrones/property/image3link> <owl:sameAs> <null> .
+<http://uni-mannheim.de/Game_of_Thrones/property/length> <owl:sameAs> <http://dbpedia.org/ontology/length> .
+<http://uni-mannheim.de/Game_of_Thrones/property/habitat> <owl:sameAs> <http://dbpedia.org/property/habitat> .
+<http://uni-mannheim.de/Game_of_Thrones/property/death> <owl:sameAs> <http://dbpedia.org/ontology/deathDate> .
+<http://uni-mannheim.de/Game_of_Thrones/property/year> <owl:sameAs> <http://dbpedia.org/ontology/year> .
+<http://uni-mannheim.de/Game_of_Thrones/property/birthdate> <owl:sameAs> <http://dbpedia.org/ontology/birthDate> .
+<http://uni-mannheim.de/Game_of_Thrones/property/religion> <owl:sameAs> <http://dbpedia.org/ontology/religion> .
+<http://uni-mannheim.de/Game_of_Thrones/property/width> <owl:sameAs> <http://dbpedia.org/ontology/width> .
+<http://uni-mannheim.de/Game_of_Thrones/property/allegiance> <owl:sameAs> <http://dbpedia.org/ontology/allegiance> .
+<http://uni-mannheim.de/Game_of_Thrones/property/lord> <owl:sameAs> <http://dbpedia.org/property/lord> .
+<http://uni-mannheim.de/Game_of_Thrones/property/type> <owl:sameAs> <http://dbpedia.org/ontology/type> .
+<http://uni-mannheim.de/Game_of_Thrones/property/airdate> <owl:sameAs> <http://dbpedia.org/ontology/airDate> .
+
+
+
+
+
+
+
+
+
+
