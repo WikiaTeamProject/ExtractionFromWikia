@@ -2,7 +2,10 @@ package extractionPostprocessing.controller.propertymapper;
 
 import extractionPostprocessing.util.DBpediaResourceServiceOffline;
 /**
- * Created by Samresh Kumar on 7/15/2017.
+ * Algorithm of property mapper
+ * - check whether ontology with the same name exists -> map to ontology
+ * - if not check whether property with the same name exists -> map to property
+ * - if not map to <null>
  */
 public class PropertyMapper_3 extends PropertyMapper {
 
@@ -10,7 +13,7 @@ public class PropertyMapper_3 extends PropertyMapper {
     public String mapSingleProperty(String propertyToMap) {
 
         //Equivalent Ontology class
-        String ontologyClass=propertyToMap.toLowerCase().replace("/property/","/ontology/");
+        String ontologyClass = propertyToMap.replace("/property/","/ontology/");
 
         if(DBpediaResourceServiceOffline.getDBpediaResourceServiceOfflineObject().
                 ontologyClassExistInDBpedia(ontologyClass)){
