@@ -15,15 +15,14 @@ public class PropertyMapper_3 extends PropertyMapper {
         //Equivalent Ontology class
         String ontologyClass = propertyToMap.replace("/property/","/ontology/");
 
-        if(DBpediaResourceServiceOffline.getDBpediaResourceServiceOfflineObject().
-                ontologyClassExistInDBpedia(ontologyClass)){
-            return ontologyClass;
+        DBpediaResourceServiceOffline service = DBpediaResourceServiceOffline.getDBpediaResourceServiceOfflineObject();
+
+        if(service.ontologyClassExistInDBpediaIgnoreCase(ontologyClass)){
+            return service.getOntologyClassCorrectCase(ontologyClass);
 
         }
-         if(DBpediaResourceServiceOffline.
-                getDBpediaResourceServiceOfflineObject().propertyExistInDBPediaIgnoreCase(propertyToMap.toLowerCase())
-                ){
-            return propertyToMap.toLowerCase();
+         if(service.propertyExistInDBPediaIgnoreCase(propertyToMap.toLowerCase())){
+            return service.getPropertyCorrectCase(propertyToMap);
 
         }
         else return "<null>";

@@ -93,11 +93,11 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
     /**
      * This function will return pageID in actual
      * case as stored in DBpedia
-     * @param pageID page ID to look for in HashMap
+     * @param resource page ID to look for in HashMap
      * @return pageID in actual case
      */
-    public String getPageIdCorrectCase(String pageID){
-        pageID = pageID.toLowerCase();
+    public String getResourceCorrectCase(String resource){
+        resource = resource.toLowerCase();
         String pageIDValue;
 
         if(pageIdsMap==null){
@@ -105,8 +105,8 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
             this.loadPageIds();
         }
 
-        if(pageIdsMap.get(pageID)!=null){
-            pageIDValue = pageIdsMap.get(pageID);
+        if(pageIdsMap.get(resource)!=null){
+            pageIDValue = pageIdsMap.get(resource);
         }
         else pageIDValue="<null>";
 
@@ -149,14 +149,13 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
     public ResourceServiceResult getResourceAndRedirectInDBpedia(String resource) {
         resource = addTagsIfNotAtag(resource);
         resource = resource.toLowerCase();
+
         ResourceServiceResult result = new ResourceServiceResult();
         result.resourceExists = resourceExistsInDBpediaIgnoreCase(resource);
         if(result.resourceExists){
             result.redirectResource = getRedirect(resource);
         }
-
         return result;
-
     }
 
     /**
@@ -164,7 +163,7 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
      * @param resource ontology class to check
      * @return true if ontology class is present in DBpedia else false
      */
-    public boolean ontologyClassExistInDBpedia(String resource) {
+    public boolean ontologyClassExistInDBpediaIgnoreCase(String resource) {
         resource = resource.toLowerCase();
         if (ontologiesMap == null) {
             // ontologies were not loaded yet
@@ -180,7 +179,7 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
      * @param ontology  ontology class to look for in HashMap
      * @return ontology class in actual case
      */
-    public String getOntologyClassIgnoreCase(String ontology){
+    public String getOntologyClassCorrectCase(String ontology){
 
         ontology = ontology.toLowerCase();
         String ontologyClassValue;
@@ -221,7 +220,7 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
      * @param property  Property to look for in the HashMap.
      * @return Property in the correct casing.
      */
-    public String getProperty(String property){
+    public String getPropertyCorrectCase(String property){
         property = property.toLowerCase();
         String propertyValue;
 

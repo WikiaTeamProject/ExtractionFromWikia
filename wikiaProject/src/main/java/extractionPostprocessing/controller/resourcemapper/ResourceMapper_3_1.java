@@ -24,7 +24,7 @@ public class ResourceMapper_3_1 extends ResourceMapper{
                     return result.redirectResource;
                 } else {
                     // -> no redirect resource -> use dbPediaResource
-                    return(resourceToMap);
+                    return(service.getResourceCorrectCase(resourceToMap));
                 }
             } else {
                 // -> resource does not exist -> map to <null>

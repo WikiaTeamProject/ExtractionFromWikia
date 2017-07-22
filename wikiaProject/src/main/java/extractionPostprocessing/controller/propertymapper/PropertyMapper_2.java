@@ -17,8 +17,8 @@ public class PropertyMapper_2 extends PropertyMapper {
 
         DBpediaResourceServiceOffline service = DBpediaResourceServiceOffline.getDBpediaResourceServiceOfflineObject();
 
-        if(service.ontologyClassExistInDBpedia(ontologyClass)){
-            return service.getOntologyClassIgnoreCase(ontologyClass);
+        if(service.ontologyClassExistInDBpediaIgnoreCase(ontologyClass)){
+            return service.getOntologyClassCorrectCase(ontologyClass);
         }
 
         else return null;

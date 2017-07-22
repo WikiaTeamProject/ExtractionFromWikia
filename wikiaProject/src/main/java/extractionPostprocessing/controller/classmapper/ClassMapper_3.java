@@ -29,7 +29,7 @@ public class ClassMapper_3 extends ClassMapper {
                 System.out.println("Ontology Class : "+ontologyClass);
 
                 if(DBpediaResourceServiceOffline.getDBpediaResourceServiceOfflineObject().
-                        ontologyClassExistInDBpedia(ontologyClass)){
+                        ontologyClassExistInDBpediaIgnoreCase(ontologyClass)){
 
 
                     mappedClass=ontologyClass;

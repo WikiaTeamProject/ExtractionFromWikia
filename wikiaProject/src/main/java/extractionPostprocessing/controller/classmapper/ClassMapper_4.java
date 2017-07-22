@@ -16,8 +16,8 @@ public class ClassMapper_4 extends ClassMapper{
         String lookupOntology = this.transformTemplateToOntology(templateToMap, false);
         DBpediaResourceServiceOffline dbPediaService = DBpediaResourceServiceOffline.getDBpediaResourceServiceOfflineObject();
 
-        if (dbPediaService.ontologyClassExistInDBpedia(lookupOntology)) {
-            lookupOntology = dbPediaService.getOntologyClassIgnoreCase(lookupOntology);
+        if (dbPediaService.ontologyClassExistInDBpediaIgnoreCase(lookupOntology)) {
+            lookupOntology = dbPediaService.getOntologyClassCorrectCase(lookupOntology);
             if(lookupOntology != null) {
                 return lookupOntology;
             } else {
