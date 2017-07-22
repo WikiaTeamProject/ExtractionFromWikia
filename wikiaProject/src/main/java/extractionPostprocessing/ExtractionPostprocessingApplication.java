@@ -18,7 +18,7 @@ public class ExtractionPostprocessingApplication {
         RedirectProcessor redirectProcessor = new RedirectProcessor();
         redirectProcessor.executeRedirectsForAllWikis();
 
-        MappingExecutor mappingExecutor = new MappingExecutor(new ResourceMapper_4(), new PropertyMapper_3(), new ClassMapper_4());
+        MappingExecutor mappingExecutor = new MappingExecutor(new ResourceMapper_4_1(), new PropertyMapper_3(), new ClassMapper_4());
         mappingExecutor.createMappingFilesForAllWikis();
     }
 

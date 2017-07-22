@@ -20,6 +20,8 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
     private static HashMap<String,String> pageIdsMap;
     private static HashMap<String,String> ontologiesMap;
     private static HashMap<String,String> propertiesMap;
+
+
     /**
      * Private constructor -> Singleton pattern
      */
@@ -77,6 +79,7 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
      * @return true if it exist on DBpedia else false
      */
     public boolean resourceExistsInDBpedia(String resource) {
+        resource = resource.toLowerCase();
         if (pageIdsMap == null) {
             // pageIds were not loaded yet
             this.loadPageIds();
@@ -154,13 +157,14 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
     }
 
     /**
-     *
+     * This class returns true when the ontology exists. It ignores casing.
      * @param resource ontology class to check
      * @return true if ontology class is present in DBpedia else false
      */
     public boolean ontologyClassExistInDBpedia(String resource) {
+        resource = resource.toLowerCase();
         if (ontologiesMap == null) {
-            // pageIds were not loaded yet
+            // ontologies were not loaded yet
             this.loadOntologyClasses();
         }
         return ontologiesMap.containsKey(resource);
@@ -175,6 +179,7 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
      */
     public String getOntologyClass(String ontology){
 
+        ontology = ontology.toLowerCase();
         String ontologyClassValue;
 
         if(ontologiesMap==null){
