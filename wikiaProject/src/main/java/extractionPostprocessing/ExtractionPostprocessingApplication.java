@@ -2,10 +2,7 @@ package extractionPostprocessing;
 
 import extractionPostprocessing.controller.*;
 import extractionPostprocessing.controller.classmapper.ClassMapper_4;
-import extractionPostprocessing.controller.propertymapper.PropertyMapper_1;
 import extractionPostprocessing.controller.propertymapper.PropertyMapper_3;
-import extractionPostprocessing.controller.resourcemapper.ResourceMapper_1;
-import extractionPostprocessing.controller.resourcemapper.ResourceMapper_3_1;
 import extractionPostprocessing.controller.resourcemapper.ResourceMapper_4;
 import extractionPostprocessing.controller.resourcemapper.ResourceMapper_4_1;
 

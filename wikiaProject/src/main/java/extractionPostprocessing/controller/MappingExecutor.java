@@ -72,7 +72,7 @@ public class MappingExecutor {
                         classesForDefinition.add( classMapper.transformTemplateToClass( (String) iterator.next()));
                     }
 
-                    // OutputOperations.printSet(classesForDefinition);
+                    OutputOperations.printSet(classesForDefinition);
 
                     // TODO Sam: Write classesForDefinition in extra File in appropriate format...
 
@@ -160,7 +160,9 @@ public class MappingExecutor {
 
                                     // sort into proper map
                                     if (matcher.group().contains("/Template:")) {
-                                        classesToMap.add(matcher.group());
+                                        if(matcher.group().toLowerCase().contains("infobox")){
+                                            classesToMap.add(matcher.group());
+                                        }
                                     } else if (matcher.group().contains("/resource/")) {
                                         resourcesToMap.add(matcher.group());
                                     } else if (matcher.group().contains("/property/")) {

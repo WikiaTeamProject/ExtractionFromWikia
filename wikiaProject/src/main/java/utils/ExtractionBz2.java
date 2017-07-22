@@ -14,11 +14,11 @@ import java.util.regex.Pattern;
  * This class can extract bz2 files.
  */
 public class ExtractionBz2 {
-    
+
     private static Logger logger = Logger.getLogger(ExtractionBz2.class.getName());
 
     /**
-     * Extract one bz2 File
+     * Extract one bz2 File.
      *
      * @param pathToFileToExtract The path to the bz2 compressed file that shall be extracted.
      * @param pathToNewDirectory  Path to where the new file shall be written (without the new filename). The new file name will be derived from the old file name.
@@ -65,6 +65,7 @@ public class ExtractionBz2 {
             return true;
 
         } catch (IOException ioe) {
+            logger.severe("A problem occurred. Common error: This method tries to extract a single file. If you want to extract all files in a directory use another method.");
             logger.severe(ioe.toString());
             return false;
         }
@@ -77,7 +78,7 @@ public class ExtractionBz2 {
      * @param pathToFiles        Path to the files that shall be extracted. Only bz2 compressed files will be extracted and written to the new directory specified in pathToNewDirectory.
      * @param pathToNewDirectory The path where the decompressed files will be written to.
      */
-    public static void extractDBpediaExtractorResultFiles(String pathToFiles, String pathToNewDirectory) {
+    public static void extractAllFilesInDirectory(String pathToFiles, String pathToNewDirectory) {
 
         // create pathToNewDirectory if it does not exist yet
         File newDirectoryPath = new File(pathToNewDirectory);
@@ -95,8 +96,7 @@ public class ExtractionBz2 {
                     extract(f.getAbsolutePath(), pathToNewDirectory);
                 }
             }
-        }
-
-    }
+        } // end of for loop
+    } // end of method extractAllFilesInDirectory
 
 }
