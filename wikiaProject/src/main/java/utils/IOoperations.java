@@ -286,8 +286,7 @@ public class IOoperations {
                                         fileLine.substring(fileLine.lastIndexOf("<"),
                                                 fileLine.lastIndexOf(">") + 1);
 
-
-                                redirectsMap.put(resourceLink, redirectLink);
+                                redirectsMap.put(resourceLink.toLowerCase(), redirectLink);
                             }
                         }
                     }

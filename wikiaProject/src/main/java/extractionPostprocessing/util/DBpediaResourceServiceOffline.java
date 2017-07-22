@@ -47,6 +47,7 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
      * @return Redirect mapping for a resource. Null if there is no resource.
      */
     public String getRedirect(String resource) {
+        resource = resource.toLowerCase();
         String redirect;
         if (redirectsMap == null) {
             loadRedirects();
@@ -74,11 +75,12 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
 
     /**
      * Checks whether a resource exists in dbpedia. This method will also return true if there is a redirect.
+     * Casing is ignored.
      *
      * @param resource resource/page ID to look for in DBpedia
      * @return true if it exist on DBpedia else false
      */
-    public boolean resourceExistsInDBpedia(String resource) {
+    public boolean resourceExistsInDBpediaIgnoreCase(String resource) {
         resource = resource.toLowerCase();
         if (pageIdsMap == null) {
             // pageIds were not loaded yet
@@ -94,8 +96,8 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
      * @param pageID page ID to look for in HashMap
      * @return pageID in actual case
      */
-    public String getPageId(String pageID){
-
+    public String getPageIdCorrectCase(String pageID){
+        pageID = pageID.toLowerCase();
         String pageIDValue;
 
         if(pageIdsMap==null){
@@ -146,8 +148,9 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
     @Override
     public ResourceServiceResult getResourceAndRedirectInDBpedia(String resource) {
         resource = addTagsIfNotAtag(resource);
+        resource = resource.toLowerCase();
         ResourceServiceResult result = new ResourceServiceResult();
-        result.resourceExists = resourceExistsInDBpedia(resource);
+        result.resourceExists = resourceExistsInDBpediaIgnoreCase(resource);
         if(result.resourceExists){
             result.redirectResource = getRedirect(resource);
         }
@@ -177,7 +180,7 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
      * @param ontology  ontology class to look for in HashMap
      * @return ontology class in actual case
      */
-    public String getOntologyClass(String ontology){
+    public String getOntologyClassIgnoreCase(String ontology){
 
         ontology = ontology.toLowerCase();
         String ontologyClassValue;
@@ -197,11 +200,13 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
 
 
     /**
-     *
+     * Returns a boolean indicating whether the specified property exists in DBpedia.
+     * It ignores casing.
      * @param resource property to check for existance
      * @return true if property is present in DBpedia else false
      */
-    public boolean propertyExistInDBPedia(String resource) {
+    public boolean propertyExistInDBPediaIgnoreCase(String resource) {
+        resource = resource.toLowerCase();
         if (propertiesMap == null) {
             // pageIds were not loaded yet
             this.loadPropertiesSet();
@@ -213,11 +218,11 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
     /**
      * This function will return property in actual
      * case as stored in DBpedia
-     * @param property  property to look for in HashMap
-     * @return property in actual case
+     * @param property  Property to look for in the HashMap.
+     * @return Property in the correct casing.
      */
     public String getProperty(String property){
-
+        property = property.toLowerCase();
         String propertyValue;
 
         if(propertiesMap==null){

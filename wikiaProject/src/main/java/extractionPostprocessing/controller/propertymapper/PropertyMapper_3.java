@@ -21,7 +21,7 @@ public class PropertyMapper_3 extends PropertyMapper {
 
         }
          if(DBpediaResourceServiceOffline.
-                getDBpediaResourceServiceOfflineObject().propertyExistInDBPedia(propertyToMap.toLowerCase())
+                getDBpediaResourceServiceOfflineObject().propertyExistInDBPediaIgnoreCase(propertyToMap.toLowerCase())
                 ){
             return propertyToMap.toLowerCase();
 

@@ -3,7 +3,7 @@ package extractionPostprocessing.controller.classmapper;
 import extractionPostprocessing.util.DBpediaResourceServiceOffline;
 
 /**
- * Created by Samresh Kumar on 7/16/2017.
+ * THE OUTPUT OF THIS MAPPER IS INCORRECT.
  */
 public class ClassMapper_3 extends ClassMapper {
 

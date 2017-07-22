@@ -4,7 +4,6 @@ import extractionPostprocessing.model.ResourceServiceResult;
 import static org.junit.Assert.*;
 
 import extractionPostprocessing.util.DBpediaResourceServiceOffline;
-import extractionPostprocessing.util.DBpediaResourceServiceOnline;
 import org.junit.Test;
 
 /**
@@ -54,10 +53,10 @@ public class DBpediaResourceServiceOfflineTest {
     @Test
     public void resourceExistsInDBpedia() throws Exception {
         // test with existing resource
-        assertTrue(service.resourceExistsInDBpedia("<http://dbpedia.org/resource/Hagrid>"));
+        assertTrue(service.resourceExistsInDBpediaIgnoreCase("<http://dbpedia.org/resource/Hagrid>"));
 
         // test with non-existing resource
-        assertFalse(service.resourceExistsInDBpedia("<http://dbpedia.org/resource/aasdfaapowefl>"));
+        assertFalse(service.resourceExistsInDBpediaIgnoreCase("<http://dbpedia.org/resource/aasdfaapowefl>"));
     }
 
     @Test

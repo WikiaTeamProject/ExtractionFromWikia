@@ -8,7 +8,6 @@ package extractionPostprocessing.controller.resourcemapper;
  */
 public class ResourceMapper_2 extends ResourceMapper {
 
-
     @Override
     public String mapSingleResource(String resourceToMap) {
         if(resourceToMap.contains("/File:")){

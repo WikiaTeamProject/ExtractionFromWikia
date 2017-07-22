@@ -1,8 +1,7 @@
 package extractionPostprocessing.controller.classmapper;
 
 /**
- * Trivial implementation of a class mapper.
- * - maps all classes to dbpedia classes (same name)
+ * THE OUTPUT OF THIS MAPPER IS INCORRECT.
  */
 public class ClassMapper_1 extends ClassMapper{
 

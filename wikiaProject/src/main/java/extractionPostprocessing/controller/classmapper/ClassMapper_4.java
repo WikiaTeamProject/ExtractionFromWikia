@@ -17,7 +17,12 @@ public class ClassMapper_4 extends ClassMapper{
         DBpediaResourceServiceOffline dbPediaService = DBpediaResourceServiceOffline.getDBpediaResourceServiceOfflineObject();
 
         if (dbPediaService.ontologyClassExistInDBpedia(lookupOntology)) {
-            return lookupOntology;
+            lookupOntology = dbPediaService.getOntologyClassIgnoreCase(lookupOntology);
+            if(lookupOntology != null) {
+                return lookupOntology;
+            } else {
+                return "<null>";
+            }
         } else {
             return "<null>";
         }
