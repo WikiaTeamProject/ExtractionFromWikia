@@ -10,7 +10,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.HashSet;
 
 /**
  *
@@ -194,11 +193,12 @@ public class IOoperations {
      * This function reads DBpedia pageids. pageIds file
      * Make sure that the folder "pageids" exists in the root directory
      * and that there is at least one page IDs file in the folder.
-     * @return Hashset containing pageIds
+     * @return HashMap containing pageIds in lower case as key and actual
+     * case is preserved as value
      */
-    public HashSet<String> getPageIDs(){
+    public HashMap<String,String> getPageIDs(){
         String pageIDsFilePath = rootDirectoryPath + "//resources//pageids//";
-        HashSet<String> pageIdsSet = new HashSet<String>();
+        HashMap<String,String> pageIdsMap = new HashMap<String,String>();
         FileReader fileReader;
         BufferedReader bufferedReader;
         String fileLine = "";
@@ -230,7 +230,7 @@ public class IOoperations {
                                 String pageId =
                                         fileLine.substring(0, fileLine.indexOf(">") + 1);
 
-                                pageIdsSet.add(pageId);
+                                pageIdsMap.put(pageId.toLowerCase(),pageId);
                             }
                         }
                     }
@@ -241,7 +241,7 @@ public class IOoperations {
             logger.severe(ex.getMessage());
         }
 
-        return pageIdsSet;
+        return pageIdsMap;
     }
 
     /**
@@ -280,7 +280,7 @@ public class IOoperations {
                             if((!fileLine.startsWith("#")) && fileLine.matches(fileLinePattern)) {
 
                                 String resourceLink =
-                                        fileLine.substring(0, fileLine.indexOf(">") + 1);
+                                        fileLine.substring(0, fileLine.indexOf(">") + 1).toLowerCase();
 
                                 String redirectLink =
                                         fileLine.substring(fileLine.lastIndexOf("<"),
@@ -324,11 +324,12 @@ public class IOoperations {
      * This function reads DBpedia ontology classes from ontology file
      * Make sure that the folder "ontology" exists
      * in the root directory and that there is at least one ontology classes file in the folder.
-     * @return Hashset containing ontology
+     * @return HashMap containing ontology class in lower as key and actual
+     * case is preserved as value
      */
-    public HashSet<String> getOntologyClasses(){
+    public HashMap<String,String> getOntologyClasses(){
         String ontologyFilePath = rootDirectoryPath + "//resources//ontology//";
-        HashSet<String> ontologiesSet = new HashSet<String>();
+        HashMap<String,String> ontologiesMap = new HashMap<String,String>();
         FileReader fileReader;
         BufferedReader bufferedReader;
         String fileLine = "";
@@ -354,9 +355,9 @@ public class IOoperations {
 
                             if((!fileLine.startsWith("#")) && fileLine.matches(fileLinePattern)) {
                                 String ontologyClass =
-                                        fileLine.substring(0, fileLine.indexOf(">") + 1).toLowerCase();
+                                        fileLine.substring(0, fileLine.indexOf(">") + 1);
 
-                                ontologiesSet.add(ontologyClass);
+                                ontologiesMap.put(ontologyClass.toLowerCase(),ontologyClass);
                             }
                         }
                     }
@@ -367,18 +368,19 @@ public class IOoperations {
             logger.severe(ex.getMessage());
         }
 
-        return ontologiesSet;
+        return ontologiesMap;
     }
 
 
     /**
      * This function reads list of properties
      * from dbpedia file
-     * @return list of properties in HashSet
+     * @return list of properties in HashMap the key contains property
+     * in lower case and actual case is preserved as value
      */
-    public HashSet<String> getPropertiesSet(){
+    public HashMap<String,String> getPropertiesSet(){
         String propertiesFilePath = rootDirectoryPath + "//resources//properties//";
-        HashSet<String> propertiesSet = new HashSet<String>();
+        HashMap<String,String> propertiesMap = new HashMap<String,String>();
         FileReader fileReader;
         BufferedReader bufferedReader;
         String fileLine = "";
@@ -404,9 +406,9 @@ public class IOoperations {
 
                             if((!fileLine.startsWith("#")) && fileLine.matches(fileLinePattern)) {
                                 String property =
-                                        fileLine.substring(0, fileLine.indexOf(">") + 1).toLowerCase();
+                                        fileLine.substring(0, fileLine.indexOf(">") + 1);
 
-                                propertiesSet.add(property);
+                                propertiesMap.put(property.toLowerCase(),property);
                             }
                         }
                     }
@@ -417,6 +419,6 @@ public class IOoperations {
             logger.severe(ex.getMessage());
         }
 
-        return propertiesSet;
+        return propertiesMap;
     }
 }
