@@ -4,8 +4,6 @@ import extractionPostprocessing.model.ResourceServiceResult;
 import utils.IOoperations;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 /**
@@ -19,10 +17,9 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
     private static DBpediaResourceServiceOffline DBpediaResourceServiceOfflineObject;
     private static HashMap<String, String> redirectsMap;
     private static Logger logger = Logger.getLogger(DBpediaResourceServiceOffline.class.getName());
-    private static String rootDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
-    private static HashSet<String> pageIds;
-    private static HashSet<String> ontologiesSet;
-    private static HashSet<String> propertiesSet;
+    private static HashMap<String,String> pageIdsMap;
+    private static HashMap<String,String> ontologiesMap;
+    private static HashMap<String,String> propertiesMap;
     /**
      * Private constructor -> Singleton pattern
      */
@@ -53,7 +50,7 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
             loadRedirects();
         }
 
-        if (pageIds == null) {
+        if (pageIdsMap == null) {
             loadPageIds();
         }
 
@@ -76,15 +73,39 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
     /**
      * Checks whether a resource exists in dbpedia. This method will also return true if there is a redirect.
      *
-     * @param resource
-     * @return
+     * @param resource resource/page ID to look for in DBpedia
+     * @return true if it exist on DBpedia else false
      */
     public boolean resourceExistsInDBpedia(String resource) {
-        if (pageIds == null) {
+        if (pageIdsMap == null) {
             // pageIds were not loaded yet
             this.loadPageIds();
         }
-        return pageIds.contains(resource);
+        return pageIdsMap.containsKey(resource);
+    }
+
+
+    /**
+     * This function will return pageID in actual
+     * case as stored in DBpedia
+     * @param pageID page ID to look for in HashMap
+     * @return pageID in actual case
+     */
+    public String getPageId(String pageID){
+
+        String pageIDValue;
+
+        if(pageIdsMap==null){
+            // pageIds were not loaded yet
+            this.loadPageIds();
+        }
+
+        if(pageIdsMap.get(pageID)!=null){
+            pageIDValue = pageIdsMap.get(pageID);
+        }
+        else pageIDValue="<null>";
+
+        return pageIDValue;
     }
 
 
@@ -108,11 +129,11 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
      * by calling a function which will read the page ids file and return a HashSet of pageids to this function.
      * If the HashSet already exists, a reload takes place.
      */
-    public void loadPageIds() {
+    private void loadPageIds() {
         logger.info("Loading page ids from file into memory. This may take a while.");
         try {
             IOoperations ioOps = new IOoperations();
-            this.pageIds = ioOps.getPageIDs();
+            this.pageIdsMap = ioOps.getPageIDs();
         } catch (Exception e) {
             e.printStackTrace();
             logger.severe(e.getMessage());
@@ -138,11 +159,35 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
      * @return true if ontology class is present in DBpedia else false
      */
     public boolean ontologyClassExistInDBpedia(String resource) {
-        if (ontologiesSet == null) {
+        if (ontologiesMap == null) {
             // pageIds were not loaded yet
             this.loadOntologyClasses();
         }
-        return ontologiesSet.contains(resource);
+        return ontologiesMap.containsKey(resource);
+    }
+
+
+    /**
+     * This function will return ontology Class in actual
+     * case as stored in DBpedia
+     * @param ontology  ontology class to look for in HashMap
+     * @return ontology class in actual case
+     */
+    public String getOntologyClass(String ontology){
+
+        String ontologyClassValue;
+
+        if(ontologiesMap==null){
+            // ontologies were not loaded yet
+            this.loadOntologyClasses();
+        }
+
+        if(ontologiesMap.get(ontology)!=null){
+            ontologyClassValue = ontologiesMap.get(ontology);
+        }
+        else ontologyClassValue="<null>";
+
+        return ontologyClassValue;
     }
 
 
@@ -152,23 +197,46 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
      * @return true if property is present in DBpedia else false
      */
     public boolean propertyExistInDBPedia(String resource) {
-        if (propertiesSet == null) {
+        if (propertiesMap == null) {
             // pageIds were not loaded yet
             this.loadPropertiesSet();
         }
-        return propertiesSet.contains(resource);
+        return propertiesMap.containsKey(resource);
     }
 
+
+    /**
+     * This function will return property in actual
+     * case as stored in DBpedia
+     * @param property  property to look for in HashMap
+     * @return property in actual case
+     */
+    public String getProperty(String property){
+
+        String propertyValue;
+
+        if(propertiesMap==null){
+            // properties were not loaded yet
+            this.loadPropertiesSet();
+        }
+
+        if(propertiesMap.get(property)!=null){
+            propertyValue = propertiesMap.get(property);
+        }
+        else propertyValue="<null>";
+
+        return propertyValue;
+    }
 
     /**
      * This function will loads ontology classes
      * into static object by calling IO function
      */
-    public void loadOntologyClasses() {
+    private void loadOntologyClasses() {
         logger.info("Loading ontology classes in memory. Please wait");
         try {
             IOoperations ioOps = new IOoperations();
-            ontologiesSet = ioOps.getOntologyClasses();
+            ontologiesMap = ioOps.getOntologyClasses();
         } catch (Exception e) {
             e.printStackTrace();
             logger.severe(e.getMessage());
@@ -180,11 +248,11 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
      * This function will loads list of properties
      * into static object by calling IO function
      */
-    public void loadPropertiesSet() {
+    private void loadPropertiesSet() {
         logger.info("Loading Properties Set in memory. Please wait");
         try {
             IOoperations ioOps = new IOoperations();
-            propertiesSet = ioOps.getPropertiesSet();
+            propertiesMap = ioOps.getPropertiesSet();
         } catch (Exception e) {
             e.printStackTrace();
             logger.severe(e.getMessage());
