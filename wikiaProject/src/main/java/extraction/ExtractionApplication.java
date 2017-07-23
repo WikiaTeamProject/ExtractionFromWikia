@@ -9,7 +9,7 @@ package extraction;
  *   @see <a href="https://github.com/dbpedia/extraction-framework">https://github.com/dbpedia/extraction-framework</a>
  * - The DBpedia extraction framework was successfully built.
  * - The wikia wikis that shall be extracted were already downloaded and can be found in
- *   /src/main/resources/files/wikiDumps.downloaded
+ *   /<root>/downloadedWikis/7z and /<root>/downloadedWikis/bz
  *
  */
 public class ExtractionApplication {

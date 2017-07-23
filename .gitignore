@@ -20,6 +20,9 @@
 # exclude csv files
 *.csv
 
+# include config sample file
+!/additionalFiles/configFile/config.properties
+
 # include language codes
 !/wikiaProject/src/main/resources/files/wikiaLanguageCodes.csv
 
