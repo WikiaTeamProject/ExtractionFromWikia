@@ -19,6 +19,6 @@ public class ExtractionApplication {
         Extractor extractor = new Extractor();
 
         //extract all wikis
-        extractor.unarchiveDownloadedDumps();
+        extractor.extractAllWikis();
     }
 }
