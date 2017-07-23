@@ -19,6 +19,7 @@ import org.apache.commons.exec.DefaultExecutor;
 import utils.ExtractionBz2;
 import utils.ExtractionGZip;
 import utils.Extraction7zip;
+import utils.IOoperations;
 
 import java.util.Date;
 
@@ -327,24 +328,24 @@ public class Extractor {
 
                 //dateFolderName=Integer.toString(index);
 
-                languageDirectory = new File(downloadDirectoryForExtraction + "/" + languageCode + "wiki");
+                languageDirectory = new File(downloadDirectoryForExtraction + "/" + languageCode + "wiki_");
 
                 if (!languageDirectory.exists()) {
                     languageDirectory.mkdir();
                 }
 
-                dateDirectory = new File(downloadDirectoryForExtraction + "/" + languageCode + "wiki" + "/" + index);
+                dateDirectory = new File(downloadDirectoryForExtraction + "/" + languageCode + "wiki_" + "/" + index);
 
                 if (!dateDirectory.exists()) {
                     dateDirectory.mkdir();
                 }
 
 
-                copyFileFromOneDirectorytoAnotherDirectory(wikiFilePath, downloadDirectoryForExtraction + "/" + languageCode + "wiki" + "/" + index + "/" +
+                copyFileFromOneDirectorytoAnotherDirectory(wikiFilePath, downloadDirectoryForExtraction + "/" + languageCode + "wiki_" + "/" + index + "/" +
                         languageCode + "wiki-" + currentDate + "-" +
                         wikiSourceFileName);
 
-                createWikiPropertiesFile(downloadDirectoryForExtraction + "/" + languageCode + "wiki" + "/" + index + "/", wikiProperties);
+                createWikiPropertiesFile(downloadDirectoryForExtraction + "/" + languageCode + "wiki_" + "/" + index + "/", wikiProperties);
 
                 index++;
             }
@@ -411,9 +412,12 @@ public class Extractor {
             Calendar calender = Calendar.getInstance();
             SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT_NOW);
             String current_date = dateFormatter.format(calender.getTime());
+            String date="";
             String line = "dbpediaextraction.bat " + pathToExtractionFramework;
             CommandLine cmdLine = null;
             DefaultExecutor executor = null;
+            IOoperations iOoperations=new IOoperations();
+
 
             File downloadedWikisDirectory = new File(downloadDirectoryForExtraction);
 
@@ -422,25 +426,33 @@ public class Extractor {
             for (File languageCodeFolder : languageCodesFolders) {
                 if (languageCodeFolder.isDirectory() &&
                         !languageCodeFolder.getName().toLowerCase().equals("commonswiki")) {
-                    File[] dateFolders = languageCodeFolder.listFiles();
+
+                    File renamedLanguageCodeFolder=new File(languageCodeFolder.getAbsolutePath().substring(0,languageCodeFolder.getAbsolutePath().length()-1));
+
+                    languageCodeFolder.renameTo(renamedLanguageCodeFolder);
+
+                    File[] dateFolders = renamedLanguageCodeFolder.listFiles();
                     for (File wikiDirectory : dateFolders) {
+
+                        if(!iOoperations.checkIfFileExist(wikiDirectory.getAbsolutePath(),"*-complete")){
+
                         File[] wikiFiles = wikiDirectory.listFiles();
 
                         String folderName = wikiDirectory.getAbsolutePath();
 
-                        File renamedFolder = new
-                                File(wikiDirectory.getParent() + "//" + current_date);
 
-                        wikiDirectory.renameTo(renamedFolder);
 
-                        File[] filesToExtract = renamedFolder.listFiles();
+                       // File[] filesToExtract = renamedFolder.listFiles();
 
-                        for (File fileForExtraction : filesToExtract) {
+                        for (File fileForExtraction : wikiFiles) {
                             if (fileForExtraction.getName().endsWith(".xml")) {
+
+                                date=fileForExtraction.getName().substring (fileForExtraction.getName().indexOf("-")+1,
+                                        fileForExtraction.getName().indexOf("-",fileForExtraction.getName().indexOf("-")+1));
 
                                 File commonsWikiDirectory = new
                                         File(downloadedWikisDirectory.getAbsoluteFile()
-                                        + "//commonswiki//" + current_date + "//");
+                                        + "//commonswiki//" + date + "//");
 
                                 if (commonsWikiDirectory.exists()) {
                                     commonsWikiDirectory.delete();
@@ -451,21 +463,34 @@ public class Extractor {
                                 copyFileFromOneDirectorytoAnotherDirectory(
                                         fileForExtraction.getAbsolutePath(),
                                         commonsWikiDirectory.getAbsolutePath()
-                                                + "//commonswiki-" + current_date + "-pages-current.xml");
+                                                + "//commonswiki-" + date + "-pages-current.xml");
 
 
                             }
                         }
 
-                        //call dbpedia extractor
-                        cmdLine = CommandLine.parse(line);
-                        executor = new DefaultExecutor();
-                        executor.setExitValue(0);
-                        int exitValue = executor.execute(cmdLine);
+                            File renamedFolder = new
+                                    File(wikiDirectory.getParent() + "/" + date);
+
+                            wikiDirectory.renameTo(renamedFolder);
+
+                        try {
+                            //call dbpedia extractor
+                            cmdLine = CommandLine.parse(line);
+                            executor = new DefaultExecutor();
+                            executor.setExitValue(0);
+                            int exitValue = executor.execute(cmdLine);
+                        }
+                        catch(Exception ex){
+                            logger.severe("DBpedia extraction failed for this wiki .... !!");
+                        }
 
                         //rename folder to orignal name
                         renamedFolder.renameTo(new File(folderName));
+                        }
                     }
+
+                    renamedLanguageCodeFolder.renameTo(languageCodeFolder);
                 }
             }
 
