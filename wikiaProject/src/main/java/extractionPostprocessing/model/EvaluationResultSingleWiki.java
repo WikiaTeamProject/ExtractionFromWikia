@@ -132,4 +132,7 @@ public class EvaluationResultSingleWiki {
                 "Recall: " + this.getRecallInPercent() + "%\n" +
                 "F1-Measure: " + this.getF1MeasureInPercent() + "%";
     }
+
+
+
 }

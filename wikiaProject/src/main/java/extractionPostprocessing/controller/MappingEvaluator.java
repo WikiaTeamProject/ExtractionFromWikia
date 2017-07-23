@@ -104,6 +104,7 @@ public class MappingEvaluator {
         double macroAverageF1measureInPercent = 0;
 
         int totalMappings = 0;
+        int totalAnnotations = 0;
         ArrayList<EvaluationResultSingleWiki> evaluationResultSingleWikis = new ArrayList<>();
         String pathToRootDirectory = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/postProcessedWikis";
         StringBuffer aggregatedEvaluationResults = new StringBuffer();
@@ -148,7 +149,6 @@ public class MappingEvaluator {
                             }
 
 
-
                             // aggregate
                             falseNegatives = evaluationResultSingleWikiClasses.getFalseNegatives() + evaluationResultSingleWikiProperties.getFalseNegatives() +
                                     evaluationResultSingleWikiResources.getFalseNegatives();
@@ -166,20 +166,22 @@ public class MappingEvaluator {
                                     trueNegatives
                             );
 
-                    }
+                    } // switch (evaluationObjectAllWikis)
 
                     if (evaluationResultSingleWiki != null) {
                         evaluationResultLine = "Accuracy: " + evaluationResultSingleWiki.getAccuracyInPercent() + "% (" + directory.getName() + ")\n"
                                 + "Precision: " + evaluationResultSingleWiki.getPrecisionInPercent() + "% (" + directory.getName() + ")\n"
                                 + "Recall: " + evaluationResultSingleWiki.getRecallInPercent() + "% (" + directory.getName() + ")\n"
-                                + "F1-Measure: " + evaluationResultSingleWiki.getF1MeasureInPercent() + "% (" + directory.getName() + ")\n";
+                                + "F1-Measure: " + evaluationResultSingleWiki.getF1MeasureInPercent() + "% (" + directory.getName() + ")\n"
+                                + "Number of Mannual Annotations: " + evaluationResultSingleWiki.getTotalMappings() + " (" + directory.getName() + ")\n";
                         logger.info(evaluationResultLine);
                         aggregatedEvaluationResults.append(evaluationResultLine + "\n");
                         totalMappings += evaluationResultSingleWiki.getTotalMappings();
+                        totalAnnotations += evaluationResultSingleWiki.getTotalMappings();
                         evaluationResultSingleWikis.add(evaluationResultSingleWiki);
                     }
                 }
-            }
+            } // for File directory : root.listFiles())
 
 
             if (evaluationResultSingleWikis.size() == 0) {
@@ -229,7 +231,8 @@ public class MappingEvaluator {
             logger.severe("pathToRootDirectory is not a directory!");
         } // end of if(root.isDirectory())
 
-        evaluationResultLine = "Summarized Evaluation Results\n\n\n" +
+        evaluationResultLine = "\nSummarized Evaluation Results\n" +
+                "-----------------------------\n\n" +
                 "Microaverage\n" + "Microaverage Accuracy: " + (microAverageAccuracyInPercent) + "%\n" +
                 "Microaverage Precision: " + (microAveragePrecisionInPercent) + "%\n" +
                 "Microaverage Recall: " + (microAverageRecallInPercent) + "%\n" +
@@ -242,7 +245,8 @@ public class MappingEvaluator {
                 "Entry-Weigted Overall Precision of " + evaluationResultSingleWikis.size() + " wikis: " + weightedOverallPrecisionInPercent + "%\n" +
                 "Entry-Weigted Overall Recall of " + evaluationResultSingleWikis.size() + " wikis: " + weightedOverallRecallInPercent + "%\n" +
                 "Entry-Weigted Overall F1-Measure of " + evaluationResultSingleWikis.size() + " wikis: " + weightedOverallF1MeasureInPercent + "%\n\n\n" +
-                "Number of annotated wikis: " + evaluationResultSingleWikis.size();
+                "Number of annotated wikis: " + evaluationResultSingleWikis.size() + "\n" +
+                "Number of annotations: " + totalAnnotations;
 
 
         logger.info(evaluationResultLine);
