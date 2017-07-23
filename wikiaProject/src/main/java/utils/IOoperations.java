@@ -1,5 +1,7 @@
 package utils;
 
+import org.apache.tools.ant.DirectoryScanner;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -419,5 +421,39 @@ public class IOoperations {
         }
 
         return propertiesMap;
+    }
+
+
+    /**
+     *
+     * @param filePath : Path where file needs to be searched
+     * @param fileName : name of file to search ; function also accepts
+     *                 wild card queries
+     * @return  true if file exists else false
+     */
+    public boolean checkIfFileExist(String filePath,String fileName){
+
+        boolean ifFileExist=false;
+        String[] selectedFiles;
+        try{
+
+            DirectoryScanner scanner = new DirectoryScanner();
+
+            scanner.setIncludes(new String[]{fileName});
+            scanner.setBasedir(filePath);
+            scanner.setCaseSensitive(false);
+            scanner.scan();
+
+            selectedFiles = scanner.getIncludedFiles();
+
+            if(selectedFiles.length>0)
+               ifFileExist=true;
+
+
+        }
+        catch(Exception ex){
+            logger.severe(ex.getMessage());
+        }
+        return ifFileExist;
     }
 }
