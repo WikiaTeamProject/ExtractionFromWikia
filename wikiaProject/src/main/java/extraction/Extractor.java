@@ -97,7 +97,8 @@ public class Extractor {
 
 
     /**
-     * This methods unarchives all the downloaded dumps
+     * This methods unarchives all the downloaded dumps found in /<root>/downloadedWikis/7z and /<root>/downloadedWikis/bz.
+     * The extracted files can be found in /<root>/downloadedWikis/decompressed
      */
     public void unarchiveDownloadedDumps() {
         try {
