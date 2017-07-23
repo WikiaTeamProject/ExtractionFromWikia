@@ -135,6 +135,20 @@ public class MappingEvaluator {
                             EvaluationResultSingleWiki evaluationResultSingleWikiProperties = evaluateMappingsForOneWiki(directory.getPath(), EvaluationObjectSingleWiki.PROPERTIES);
                             EvaluationResultSingleWiki evaluationResultSingleWikiResources = evaluateMappingsForOneWiki(directory.getPath(), EvaluationObjectSingleWiki.RESOURCES);
 
+                            if(evaluationResultSingleWikiClasses == null){
+                                evaluationResultSingleWikiClasses = new EvaluationResultSingleWiki(0, 0, 0, 0);
+                            }
+
+                            if(evaluationResultSingleWikiProperties == null){
+                                evaluationResultSingleWikiProperties = new EvaluationResultSingleWiki(0, 0, 0, 0);
+                            }
+
+                            if(evaluationResultSingleWikiResources == null) {
+                                evaluationResultSingleWikiResources = new EvaluationResultSingleWiki(0, 0, 0, 0);
+                            }
+
+
+
                             // aggregate
                             falseNegatives = evaluationResultSingleWikiClasses.getFalseNegatives() + evaluationResultSingleWikiProperties.getFalseNegatives() +
                                     evaluationResultSingleWikiResources.getFalseNegatives();

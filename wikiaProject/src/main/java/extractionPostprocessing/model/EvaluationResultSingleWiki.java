@@ -5,11 +5,12 @@ package extractionPostprocessing.model;
  */
 public class EvaluationResultSingleWiki {
 
-    private int falseNegatives;
-    private int falsePositives;
-    private int truePositives;
-    private int trueNegatives;
-    private int totalMappings;
+    // initialize values with zero
+    private int falseNegatives = 0;
+    private int falsePositives = 0;
+    private int truePositives = 0;
+    private int trueNegatives = 0;
+    private int totalMappings = 0;
 
 
     /**

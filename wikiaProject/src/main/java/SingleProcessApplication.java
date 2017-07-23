@@ -25,20 +25,20 @@ public class SingleProcessApplication {
     public static void main(String[] args) {
 
         // metadata will be downloaded and files saved
-        MetadataThreadImpl.downloadWikiaMetadata();
+        // MetadataThreadImpl.downloadWikiaMetadata();
 
         // download all existing wiki dumps
-        WikiaDumpDownloadThreadImpl.downloadWikiaDumps();
+        // WikiaDumpDownloadThreadImpl.downloadWikiaDumps();
 
         // run the DBpedia extraction framework
         Extractor extractor = new Extractor();
         extractor.extractAllWikis();
 
         // create mappings
-        RedirectProcessor redirectProcessor = new RedirectProcessor();
-        redirectProcessor.executeRedirectsForAllWikis();
-        MappingExecutor mappingExecutor = new MappingExecutor(new ResourceMapper_1(), new PropertyMapper_2(), new ClassMapper_1());
-        mappingExecutor.createMappingFilesForAllWikis();
+        // RedirectProcessor redirectProcessor = new RedirectProcessor();
+        // redirectProcessor.executeRedirectsForAllWikis();
+        // MappingExecutor mappingExecutor = new MappingExecutor(new ResourceMapper_1(), new PropertyMapper_2(), new ClassMapper_1());
+        // mappingExecutor.createMappingFilesForAllWikis();
 
     }
 }
