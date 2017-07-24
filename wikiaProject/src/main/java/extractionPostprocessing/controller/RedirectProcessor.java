@@ -18,7 +18,7 @@ public class RedirectProcessor {
     public void executeRedirectsForAllWikis(){
 
         // get root directory
-        String pathToRootDirectory = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/PostProcessedWikis";
+        String pathToRootDirectory = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/postProcessedWikis";
         File rootDirectory = new File(pathToRootDirectory);
 
         if(rootDirectory.isDirectory()) {

@@ -52,11 +52,11 @@ public class ClassMapperTest {
 
         // input: letter after "/class/" should be capitalized, namespace should be replaced
         assertEquals("<http://uni-mannheim.de/HarryPotter/class/Creature>",
-                testMapper.transformTemplateToClass("<http://dbpedia.org/HarryPotter/class/creature>"));
+                testMapper.transformTemplateToClass("<http://dbpedia.org/class/creature>", "uni-mannheim.de/HarryPotter"));
 
         // input: letter after "/class/" should be capitalized, namespace should be replaced, Template should be removed
         assertEquals("<http://uni-mannheim.de/HarryPotter/class/Creature>",
-                testMapper.transformTemplateToClass("<http://dbpedia.org/HarryPotter/resource/Template:creature>"));
+                testMapper.transformTemplateToClass("<http://dbpedia.org/resource/Template:creature>", "uni-mannheim.de/HarryPotter"));
 
     }
 

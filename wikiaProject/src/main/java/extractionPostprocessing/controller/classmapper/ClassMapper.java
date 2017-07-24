@@ -34,7 +34,7 @@ public abstract class ClassMapper {
         HashMap<String, String> result = new HashMap<String, String>();
 
         for (String resource : classesToMap) {
-            result.put(transformTemplateToClass(resource), mapSingleClass(resource));
+            result.put(transformTemplateToClass(resource).replace("dbpedia.org", targetNamespace), mapSingleClass(resource));
         }
         return result;
     }
@@ -48,7 +48,7 @@ public abstract class ClassMapper {
      * @param classesToMap    An array list of the classes for which the mapping shall be created.
      */
     public void writeClassMappingsFile(File directory, String targetNamespace, HashSet<String> classesToMap) {
-        IOoperations.writeMappingContentsToFile(getClassMappings(targetNamespace, classesToMap), new File(directory.getAbsolutePath() + "/classMappings.ttl"));
+        IOoperations.writeClassMappingContentsToFile(getClassMappings(targetNamespace, classesToMap), new File(directory.getAbsolutePath() + "/classMappings.ttl"));
     }
 
 
@@ -61,17 +61,17 @@ public abstract class ClassMapper {
      * @param templateToTransform
      * @return A string representing a class.
      */
-    public String transformTemplateToClass(String templateToTransform, boolean replaceNamespace) {
+    public String transformTemplateToClass(String templateToTransform, String namespace) {
 
         String transformedTemplate = templateToTransform;
 
 
-        if (replaceNamespace) {
+        if (namespace != null) {
             // check whether entity is already transformed to target namespace
-            String targetNamespace = ResourceBundle.getBundle("config").getString("targetnamespace");
-            if (!templateToTransform.contains(targetNamespace) && templateToTransform.contains("dbpedia.org")) {
+            String namespaceDomain = ResourceBundle.getBundle("config").getString("targetnamespace");
+            if (!templateToTransform.contains(namespaceDomain) && templateToTransform.contains("dbpedia.org")) {
                 // transform into target namespace
-                transformedTemplate = templateToTransform.replaceAll("dbpedia.org", targetNamespace);
+                transformedTemplate = templateToTransform.replaceAll("dbpedia.org", namespace);
             }
         }
 
@@ -99,7 +99,7 @@ public abstract class ClassMapper {
      * @return
      */
     public String transformTemplateToClass(String templateToTransform) {
-        return transformTemplateToClass(templateToTransform, true);
+        return transformTemplateToClass(templateToTransform, null);
     }
 
 
