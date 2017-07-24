@@ -13,6 +13,13 @@ public class MessageLogger {
     public static final Logger LOGGER = Logger.getLogger("fileAppender");
 
 
+    /**
+     *
+     * @param messagePriority priority message (DEBUG,INFO,WARN,ERROR,FATAL)
+     * @param module name of package
+     * @param className name of the class from where logging message is initiated
+     * @param message log message
+     */
     public void logMessage(Priority messagePriority,
                            String module,
                            String className,
@@ -21,7 +28,7 @@ public class MessageLogger {
 
         DOMConfigurator.configure("wikiaProject/src/main/resources/log4j.xml");
 
-        String logMessage = messagePriority.toString() + " - " + module
+        String logMessage = module
                 + " - " + className + " - "+message;
 
 
@@ -43,7 +50,5 @@ public class MessageLogger {
         else {
             LOGGER.info(logMessage);
         }
-
-
     }
 }
