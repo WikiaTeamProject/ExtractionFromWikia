@@ -40,3 +40,11 @@
 <http://dbkwik.webdatacommons.org/Beauty_and_the_Beast_Wik/property/portrayedby> <owl:sameAs> <http://dbpedia.org/ontology/writer> .
 <http://dbkwik.webdatacommons.org/Beauty_and_the_Beast_Wik/resource/Template:Infobox_Criminal> <owl:sameAs> <http://dbpedia.org/ontology/Criminal> .
 <http://dbkwik.webdatacommons.org/Beauty_and_the_Beast_Wik/property/siblings> <owl:sameAs> <http://dbpedia.org/property/siblings> .
+<http://dbkwik.webdatacommons.org/Beauty_and_the_Beast_Wik/class/Heather_Chandler> <owl:equivalentClass> <null> .
+<http://dbkwik.webdatacommons.org/Beauty_and_the_Beast_Wik/class/Character> <owl:equivalentClass> <null> <http://dbpedia.org/ontology/FictionalCharacter> .
+<http://dbkwik.webdatacommons.org/Beauty_and_the_Beast_Wik/class/Album> <owl:equivalentClass> <http://dbpedia.org/ontology/album> .
+<http://dbkwik.webdatacommons.org/Beauty_and_the_Beast_Wik/class/Ability> <owl:equivalentClass> <null> .
+<http://dbkwik.webdatacommons.org/Beauty_and_the_Beast_Wik/class/Deceased_Character> <owl:equivalentClass> <null> <http://dbpedia.org/ontology/FictionalCharacter> .
+<http://dbkwik.webdatacommons.org/Beauty_and_the_Beast_Wik/class/Criminal> <owl:equivalentClass> <http://dbpedia.org/ontology/Criminal> .
+<http://dbkwik.webdatacommons.org/Beauty_and_the_Beast_Wik/class/Quest> <owl:equivalentClass> <null> .
+<http://dbkwik.webdatacommons.org/Beauty_and_the_Beast_Wik/class/Item> <owl:equivalentClass> <null> .
