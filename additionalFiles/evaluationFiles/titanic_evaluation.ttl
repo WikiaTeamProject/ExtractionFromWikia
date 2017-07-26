@@ -73,3 +73,4 @@
 <http://uni-mannheim.de/Titanic_Wik/property/screenplay> <owl:sameAs> <http://dbpedia.org/property/screenplay> .
 <http://uni-mannheim.de/Titanic_Wik/property/director> <owl:sameAs> <http://dbpedia.org/ontology/director> .
 <http://uni-mannheim.de/Titanic_Wik/property/beam> <owl:sameAs> <http://dbpedia.org/property/beam> .
+<http://uni-mannheim.de/Titanic_Wik/property/operator> <owl:sameAs> <http://dbpedia.org/ontology/operator> .
