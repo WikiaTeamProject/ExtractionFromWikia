@@ -73,3 +73,4 @@
 <http://uni-mannheim.de/Grey's_Anatomy_and_Private_Practice_Wik/property/siblings> <owl:sameAs> <http://dbpedia.org/ontology/sibling> .
 <http://uni-mannheim.de/Grey's_Anatomy_and_Private_Practice_Wik/property/died> <owl:sameAs> <http://dbpedia.org/property/died> .
 <http://uni-mannheim.de/Grey's_Anatomy_and_Private_Practice_Wik/property/treatment> <owl:sameAs> <http://dbpedia.org/property/treatment> .
+<http://uni-mannheim.de/Grey's_Anatomy_and_Private_Practice_Wik/property/marital> <owl:sameAs> <http://dbpedia.org/property/maritalStatus> .
