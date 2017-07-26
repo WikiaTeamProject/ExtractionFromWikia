@@ -30,6 +30,11 @@ public class MappingExecutor {
     private PropertyMapper propertyMapper;
     private ClassMapper classMapper;
 
+    // for the statistics
+    private int totalNumberOfResources = 0;
+    private int totalNumberOfProperties = 0;
+    private int totalNumberOfClasses = 0;
+
 
     /**
      * Constructor
@@ -61,6 +66,12 @@ public class MappingExecutor {
                     WikiToMap wikiToMap = getMappingInformationOfWikiAndUpdateFiles(directory);
                     String targetNameSpace = ResourceBundle.getBundle("config").getString("targetnamespace") + "/" + directory.getName();
 
+
+                    // increment the statistics
+                    totalNumberOfClasses += wikiToMap.classesToMap.size();
+                    totalNumberOfProperties += wikiToMap.propertiesToMap.size();
+                    totalNumberOfResources += wikiToMap.resourcesToMap.size();
+
                     resourceMapper.writeResourceMappingsFile(directory, targetNameSpace, wikiToMap.resourcesToMap);
                     propertyMapper.writePropertiesMappingsFile(directory, targetNameSpace, wikiToMap.propertiesToMap);
                     classMapper.writeClassMappingsFile(directory, targetNameSpace, wikiToMap.classesToMap);
@@ -78,6 +89,26 @@ public class MappingExecutor {
 
                 } // end of check whether file is a directory
             } // end of loop over files
+
+
+            // output the statistics and write them into file
+            String statisticsText = "Total number of resources found: " + totalNumberOfResources + "\n" +
+                    "Total number of properties found: " + totalNumberOfProperties + "\n" +
+                    "Total number of classes found: " + totalNumberOfClasses;
+
+            logger.info(statisticsText);
+
+            String pathToRoot = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
+
+            File statisticsDirectory = new File(pathToRoot + "/statistics");
+            if(!statisticsDirectory.exists()){
+                IOoperations.createDirectory(pathToRoot + "/statistics");
+            }
+
+            // write to file
+            IOoperations.writeContentToFile(new File(pathToRoot + "/statistics/found_resources_properties_classes.txt"), statisticsText);
+
+
         } // end of check whether PostProcessedWikis is a directory
     }
 

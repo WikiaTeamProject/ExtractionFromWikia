@@ -21,7 +21,6 @@ public class GoldStandardStatistics {
         GoldStandardStatistics goldStandardStatistics = new GoldStandardStatistics(path);
         goldStandardStatistics.printGoldStandardStatistics();
         goldStandardStatistics.writeGoldStandardStatisticsIntoFile();
-
     }
 
     // path to directory where all evaluation files are located
