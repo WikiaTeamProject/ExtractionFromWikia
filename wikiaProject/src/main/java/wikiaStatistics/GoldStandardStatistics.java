@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 /**
- * Created by D060249 on 26.07.2017.
+ * This class allows to calculate and to persist statistics about the gold standard.
  */
 public class GoldStandardStatistics {
 
@@ -21,6 +21,7 @@ public class GoldStandardStatistics {
         GoldStandardStatistics goldStandardStatistics = new GoldStandardStatistics(path);
         goldStandardStatistics.printGoldStandardStatistics();
         goldStandardStatistics.writeGoldStandardStatisticsIntoFile();
+
     }
 
     // path to directory where all evaluation files are located
@@ -36,10 +37,19 @@ public class GoldStandardStatistics {
     int numberOfEvaluationFiles = 0;
     private ArrayList<String> linesNotProcessed = new ArrayList<String>();
 
+
+    /**
+     * Constructor
+     * @param filePath The path to the directory where all evaluation files are located.
+     */
     public GoldStandardStatistics(String filePath) {
         this(new File(filePath));
     }
 
+    /**
+     * Constructor
+     * @param evaluationDirectory The directory where all evaluation files are located.
+     */
     public GoldStandardStatistics(File evaluationDirectory) {
         this.evaluationDirectory = evaluationDirectory;
         if (!evaluationDirectory.isDirectory()) {
@@ -136,18 +146,21 @@ public class GoldStandardStatistics {
         buffer.append("Number of resource mappings: " + (numberOfResourcesMappingToNull + numberOfResourcesMappingToDBpedia) + "\n" );
         buffer.append("Number of resources mapped to DBpedia: " + numberOfResourcesMappingToDBpedia+ "\n" );
         buffer.append("Number of resources mapped to <null>: " + numberOfResourcesMappingToNull+ "\n" );
+        buffer.append("Percentage of resources already in DBpedia: " + ((double) numberOfResourcesMappingToDBpedia / (numberOfResourcesMappingToDBpedia + numberOfResourcesMappingToNull)) + "\n");
         buffer.append("\n"+ "\n" );
 
         buffer.append("Property Mappings"+ "\n" );
         buffer.append("Number of property mappings: " + (numberOfPropertiesMappingToNull + numberOfPropertiesMappingToDBpedia) + "\n" );
         buffer.append("Number of properties mapped to DBpedia: " + numberOfPropertiesMappingToDBpedia+ "\n" );
         buffer.append("Number of properties mapped to <null>: " + numberOfPropertiesMappingToNull+ "\n" );
+        buffer.append("Percentage of properties already in DBpedia: " + ((double) numberOfPropertiesMappingToDBpedia / (numberOfPropertiesMappingToDBpedia + numberOfPropertiesMappingToNull)) + "\n");
         buffer.append("\n"+ "\n" );
 
         buffer.append("Class Mappings"+ "\n" );
         buffer.append("Number of class mappings: " + (numberOfClassesMappingToNull + numberOfClassesMappingToDBpedia) + "\n" );
         buffer.append("Number of classes mapped to DBpedia: " + numberOfClassesMappingToDBpedia+ "\n" );
         buffer.append("Number of classes mapped to <null>: " + numberOfClassesMappingToNull+ "\n" );
+        buffer.append("Percentage of classes already in DBpedia: " + ((double) numberOfClassesMappingToDBpedia / (numberOfClassesMappingToDBpedia + numberOfClassesMappingToNull)) + "\n");
         buffer.append("\n"+ "\n" );
 
         buffer.append("The following lines could not be processed:"+ "\n" );
