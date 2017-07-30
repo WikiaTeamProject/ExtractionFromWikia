@@ -19,16 +19,18 @@ public class SingleProcessApplication {
      *  - Extracting wikis with the DBpedia extraction framework
      *  - Creating one mapping file per wiki
      *
-     *  Prerequisites: Please first maintain all attributes in the resources > config.properties file
+     *  Prerequisites:
+     *  - Please copy the config.properties file from the folder additionalFiles into wikiaProject > resources and adjust it
+     *
      * @param args
      */
     public static void main(String[] args) {
 
-        // metadata will be downloaded and files saved
-        // MetadataThreadImpl.downloadWikiaMetadata();
+        // first check prerequisites for all processes
+        if (! checkPrerequisites()) return;
 
-        // download all existing wiki dumps
-        // WikiaDumpDownloadThreadImpl.downloadWikiaDumps();
+        // metadata will be saved and all existing wikia dumps are downloaded
+        WikiaDumpDownloadThreadImpl.downloadWikiaDumps();
 
         // run the DBpedia extraction framework
         Extractor extractor = new Extractor();
@@ -40,5 +42,10 @@ public class SingleProcessApplication {
         // MappingExecutor mappingExecutor = new MappingExecutor(new ResourceMapper_1(), new PropertyMapper_2(), new ClassMapper_1());
         // mappingExecutor.createMappingFilesForAllWikis();
 
+    }
+
+    private static boolean checkPrerequisites() {
+
+        return WikiaDumpDownloadThreadImpl.checkPrerequisites() & Extractor.checkPrerequisites();
     }
 }

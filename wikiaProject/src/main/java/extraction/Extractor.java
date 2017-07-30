@@ -40,7 +40,7 @@ import java.io.PrintWriter;
 public class Extractor {
 
     private static Logger logger = Logger.getLogger(Extractor.class.getName());
-    private File extractionFrameworkDirectory;
+    private static File extractionFrameworkDirectory;
     private String extractionDefaultPropertiesFilePath;
     private HashMap<String, WikiaWikiProperties> wikisPropertiesSet;
     private String pathToRootDirectory =
@@ -49,20 +49,16 @@ public class Extractor {
 
     public Extractor() {
 
-        // get the path to the dbpedia extraction framework
+        // get the path to the DBpedia extraction framework
         String filepath = ResourceBundle.getBundle("config").getString("pathToExtractionFramework");
         extractionFrameworkDirectory = new File(filepath);
         extractionDefaultPropertiesFilePath = extractionFrameworkDirectory.getAbsolutePath()
                 + "\\dump\\extraction.default.properties";
-
-        // make sure prerequisites are fulfilled
-        checkPrerequisites();
-
     }
 
     public void extractAllWikis() {
 
-        logger.info("Unarachiving all dumps");
+        logger.info("Unarchiving all dumps");
         unarchiveDownloadedDumps();
 
         logger.info("Creating folder structure for DBpedia extractor");
@@ -144,11 +140,11 @@ public class Extractor {
     }
 
     /**
-     * Method will generate a properties file and save it within the dbpedia extraction framework
+     * Method will generate a properties file and save it within the DBpedia extraction framework
      */
     private WikiaWikiProperties extractPropertiesForaWiki(String wikiFilePath) {
         WikiaWikiProperties wikiProperties = null;
-        // get the path to the dbpedia extraction framework
+        // get the path to the DBpedia extraction framework
 
         try {
             String line = "";
@@ -281,7 +277,7 @@ public class Extractor {
     }
 
     /**
-     * Create structute expected by DBpedia extractor for extraction
+     * Create structure expected by DBpedia extractor for extraction
      */
     public void createDbpediaExtractionStructure() {
 
@@ -400,7 +396,7 @@ public class Extractor {
 
 
     /**
-     * This method will call dbpedia extarctor to extract all download wikis
+     * This method will call DBpedia extractor to extract all download wikis
      */
     public void callDbPediaExtractorToExtractFile() {
         try {
@@ -476,14 +472,14 @@ public class Extractor {
                             wikiDirectory.renameTo(renamedFolder);
 
                         try {
-                            //call dbpedia extractor
+                            //call DBpedia extractor
                             cmdLine = CommandLine.parse(line);
                             executor = new DefaultExecutor();
                             executor.setExitValue(0);
                             int exitValue = executor.execute(cmdLine);
                         }
                         catch(Exception ex){
-                            logger.severe("DBpedia extraction failed for this wiki .... !!");
+                            logger.severe("DBpedia extraction failed for this wiki!");
                         }
 
                         //rename folder to orignal name
@@ -507,20 +503,20 @@ public class Extractor {
      *
      * @return
      */
-    private boolean checkPrerequisites() {
+    public static boolean checkPrerequisites() {
 
-        // check if path to dbpedia extraction framework is valid
-        if (extractionFrameworkDirectory.exists()) {
+        // check if path to DBpedia extraction framework is valid
+        if (extractionFrameworkDirectory != null && extractionFrameworkDirectory.exists()) {
 
             // check whether specified path is a directory
             if (!extractionFrameworkDirectory.isDirectory()) {
-                logger.severe("Filepath to dbpedia extraction framework is not a directory!" +
+                logger.severe("Filepath to DBpedia extraction framework is not a directory!" +
                         "Link to the root directory!");
                 return false;
             }
 
         } else {
-            logger.severe("Filepath to dbpedia extraction framework does not exist!");
+            logger.severe("Filepath to DBpedia extraction framework does not exist!");
             return false;
         }
 

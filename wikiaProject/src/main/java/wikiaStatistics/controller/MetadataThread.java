@@ -37,7 +37,7 @@ public class MetadataThread implements Runnable {
 
         private ObjectMapper mapper;
 
-        Logger logger = Logger.getLogger(getClass().getName());
+        private static Logger logger = Logger.getLogger(MetadataThread.class.getName());
 
 
         /**

@@ -16,10 +16,10 @@ public class WikiaDumpDownloadApplication {
 
     public static void main(String[] args) {
 
-        WikiaDumpDownloadThreadImpl.downloadWikiaDumps();
+        if (WikiaDumpDownloadThreadImpl.checkPrerequisites()) {
+            WikiaDumpDownloadThreadImpl.downloadWikiaDumps();
+        }
 
-        // Extraction7zip extractor = new Extraction7zip();
-        // extractor.extractAll7ZipFilesIntoDesignatedFolder();
     }
 
 }

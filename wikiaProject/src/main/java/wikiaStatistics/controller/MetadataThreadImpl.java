@@ -3,6 +3,7 @@ package wikiaStatistics.controller;
 import utils.IOoperations;
 import wikiaStatistics.util.WikiaStatisticsTools;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -57,6 +58,21 @@ public class MetadataThreadImpl {
 
         WikiaStatisticsTools.mergeFiles(filePaths);
 
+    }
+
+    /**
+     * There are various prerequisites. To allow for a stable program, the prerequisites are checked in this method.
+     *
+     * @return
+     */
+    public static boolean checkPrerequisites() {
+        File file = new File(ResourceBundle.getBundle("config").getString("pathToRootDirectory"));
+
+        // check whether the path to the root directory is really a directory
+        if (file.isDirectory()) return true;
+
+        logger.severe("Variable pathToRootDirectory in file config.properties is not a directory.");
+        return false;
     }
 
 }

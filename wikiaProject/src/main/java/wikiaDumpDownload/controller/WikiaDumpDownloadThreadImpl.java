@@ -15,39 +15,31 @@ public class WikiaDumpDownloadThreadImpl  {
 
     private static Logger logger = Logger.getLogger(WikiaDumpDownloadThreadImpl.class.getName());
     private static Thread[] threads = new Thread[40];
-    private static String statisticsDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/wikiStatistics";
 
-
-    public static void downloadWikiaDumps(int beginLine, int endLine) {
-        String filePath = getFilePath();
-
-        Thread t1 = new Thread(new WikiaDumpDownloadThread(filePath, beginLine, endLine));
-        t1.run();
-
-    }
-
-    public static void downloadWikiaDumps(int amount) {
-        String filePath = getFilePath();
-
-        // exclude header line (0)
-        Thread t1 = new Thread(new WikiaDumpDownloadThread(filePath, 1, amount));
-        t1.run();
-
-    }
+//    public static void downloadWikiaDumps(int beginLine, int endLine) {
+//        String filePath = getFilePath();
+//
+//        Thread t1 = new Thread(new WikiaDumpDownloadThread(filePath, beginLine, endLine));
+//        t1.run();
+//
+//    }
+//
+//    public static void downloadWikiaDumps(int amount) {
+//        String filePath = getFilePath();
+//
+//        // exclude header line (0)
+//        Thread t1 = new Thread(new WikiaDumpDownloadThread(filePath, 1, amount));
+//        t1.run();
+//
+//    }
 
     public static void downloadWikiaDumps() {
-        // run download of wiki overview CSV file if it does not exist yet
-        String wikiAllOverview = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/wikiStatistics/wikiaAllOverview.csv";
-        File wikiCSV = new File(wikiAllOverview);
-        if (! wikiCSV.exists()) {
-            logger.info("Download Wikia Metadata to retrieve urls of all wikis.");
-            MetadataThreadImpl.downloadWikiaMetadata();
-        }
 
         createThreads();
     }
 
     private static String getFilePath() {
+        String statisticsDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/wikiStatistics";
         String filePath = statisticsDirectoryPath + "/wikiaAllOverview.csv";
 
         return filePath;
@@ -55,6 +47,8 @@ public class WikiaDumpDownloadThreadImpl  {
 
 
     private static void createThreads() {
+        String statisticsDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/wikiStatistics";
+
         ArrayList<String> filePaths = new ArrayList<String>();
 
         int lowerIdLimit = 0;
@@ -95,6 +89,7 @@ public class WikiaDumpDownloadThreadImpl  {
     }
 
     private static void mergeFiles(ArrayList<String> filePaths) {
+        String statisticsDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/wikiStatistics";
 
         File resultFile = new File(statisticsDirectoryPath + "/wikiaOverviewDumpSizes.csv");
         File f;
@@ -132,6 +127,39 @@ public class WikiaDumpDownloadThreadImpl  {
         }
 
         logger.info("Finished merging " + fileNumber + " files.");
+    }
+
+    /**
+     * There are various prerequisites. To allow for a stable program, the prerequisites are checked in this method.
+     *
+     * @return
+     */
+    public static boolean checkPrerequisites() {
+
+        // check whether config.properties file was copied
+        if (ClassLoader.getSystemResource("config.properties") == null) {
+            logger.severe("Please copy the sample config.properties file from folder additionalFiles into resources and adjust it.");
+            return false;
+        }
+
+        File file = new File(ResourceBundle.getBundle("config").getString("pathToRootDirectory"));
+
+        // check whether the path to the root directory is really a directory
+        if (! file.isDirectory()) {
+            logger.severe("Variable pathToRootDirectory in file config.properties is not a directory.");
+            return false;
+        }
+
+        String wikiAllOverview = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/wikiStatistics/wikiaAllOverview.csv";
+        File wikiCSV = new File(wikiAllOverview);
+
+        // check if wiki overview CSV file is already existing, if not create it
+        if (!wikiCSV.exists()) {
+            logger.info("File wikiaAllOverview.csv does not exist yet. Wikia metadata will first be downloaded.");
+            MetadataThreadImpl.downloadWikiaMetadata();
+        }
+
+        return true;
     }
 
 }
