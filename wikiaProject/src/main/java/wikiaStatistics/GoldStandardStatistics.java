@@ -1,9 +1,6 @@
 package wikiaStatistics;
 
-import org.omg.PortableInterceptor.IORInfoOperations;
 import utils.IOoperations;
-import utils.OutputOperations;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -24,7 +21,6 @@ public class GoldStandardStatistics {
     }
 
     // path to directory where all evaluation files are located
-    String evaluationFilePath;
     File evaluationDirectory;
 
     int numberOfResourcesMappingToNull = 0;
