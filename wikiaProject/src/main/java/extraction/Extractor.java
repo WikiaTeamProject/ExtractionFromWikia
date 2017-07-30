@@ -605,13 +605,13 @@ public class Extractor {
 
             // check whether specified path is a directory
             if (!extractionFrameworkDirectory.isDirectory()) {
-                logger.severe("Filepath to DBpedia extraction framework is not a directory!" +
-                        "Link to the root directory!");
+                logger.severe("Filepath to DBpedia extraction framework in config.properties is not a directory." +
+                        "Please link to the root directory.");
                 return false;
             }
 
         } else {
-            logger.severe("Filepath to DBpedia extraction framework does not exist!");
+            logger.severe("Filepath to DBpedia extraction framework in config.properties does not exist. Please adjust it.");
             return false;
         }
 

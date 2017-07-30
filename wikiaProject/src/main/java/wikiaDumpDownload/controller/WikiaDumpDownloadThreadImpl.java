@@ -146,7 +146,7 @@ public class WikiaDumpDownloadThreadImpl  {
 
         // check whether the path to the root directory is really a directory
         if (! file.isDirectory()) {
-            logger.severe("Variable pathToRootDirectory in file config.properties is not a directory.");
+            logger.severe("Variable pathToRootDirectory in file config.properties is not a directory. Please adjust it.");
             return false;
         }
 
