@@ -1,9 +1,9 @@
 # ExtractionFromWikia
-This is a student project of the University of Mannheim. 
+This is a student project of the Data and Web Science (DWS) group of the University of Mannheim. 
 
 ## Goals of this Project
 The goal of this project is to create a linked open data dataset.
-The tools publishe here download all available wikis from wikia (a.k.a. fandom), extract them to create triples and map those triples to existing DBpedia resources. 
+The tools published here download all available wikis from wikia (a.k.a. fandom), extract them to create triples and map those triples to existing DBpedia resources. 
 
 ## Technical Prerequisites
 There are some prerequisites that must be fulfilled in order to be able to run the program.
@@ -29,7 +29,7 @@ Go to the DBpedia download page, download the files listed below and decompress 
 - Rransitive Redirects (ttl) → `redirects`
 - Infobox Property Definitions (ttl) → `properties`
 
-You can choose whatever version you like, however, if you want to use the provided gold standard for evaluation, you should go for version 2016-10 (http://wiki.dbpedia.org/downloads-2016-10).
+You can choose whatever version you like, however, if you want to use the provided gold standard for evaluation, go for version 2016-10 (http://wiki.dbpedia.org/downloads-2016-10).
 
 <todo: add more>
 
@@ -57,13 +57,13 @@ root_directory
 +---statistics
 ```
 
-The program performs a lot of file operations. All of those file operations are handled within the `root_directory` that you specify in the `config.properties file`.
-- The `downloadedWikis` directory contains plain dumps from wikia
+The program performs a lot of file operations. All of those file operations are handled within the `root_directory` that you specify in the `config.properties` file.
+- The `downloadedWikis` directory contains plain dumps from wikia.
      - The `7z` directory contains all wikis that were downloaded in the 7z format.
-     - The `gz` directory contains all wikis that were downloaded the gz format.
+     - The `gz` directory contains all wikis that were downloaded in the gz format.
      - The `decompressed` directory contains all wikis from the `7z` and `gz` folder but in a decompressed format.
-- The `dbPediaExtractionFormat` contains the decompressed wiki dumps that are following a file structure required for the dbPedia extractor to work.
-- The `resources` directory contains different files from DBpedia. This folder requires user interaction: the user has to put the files in the directory.
+- The `dbPediaExtractionFormat` contains the decompressed wiki dumps that are following a file structure required for the DBpedia extractor to work.
+- The `resources` directory contains different files from DBpedia. This folder requires user interaction: the user has to put the files in the directory (as specified in "How to execute the Program?").
    - The `pageids` directory should contain a TTL file with all page ids of DBpedia. This is required for some mappers to work.
    - The `redirects` directory should contain a TTL file with all redirects of DBpedia. This is required for some mappers to work.
    - The `ontology` directory should contain a TTL file with all ontologies of DBpedia. This is required for some mappers to work.
