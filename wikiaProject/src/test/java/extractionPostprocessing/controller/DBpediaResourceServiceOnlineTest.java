@@ -4,6 +4,7 @@ import extractionPostprocessing.model.ResourceServiceResult;
 import static org.junit.Assert.*;
 
 import extractionPostprocessing.util.DBpediaResourceServiceOnline;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -16,6 +17,8 @@ public class DBpediaResourceServiceOnlineTest {
 
 
     @Test
+    @Ignore
+    // ignore test because SPARQL endpoint is not used currently
     public void getResourceAndRedirectInDBpedia() throws Exception {
 
         // try with redirect resource

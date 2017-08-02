@@ -44,7 +44,9 @@ public abstract class ResourceMapper {
      * @param resourcesToMap An array list of the resources for which the mapping shall be created.
      */
     public void writeResourceMappingsFile(File directory, String targetNamespace, HashSet<String> resourcesToMap) {
-        IOoperations.writeMappingContentsToFile(getResourceMappings(targetNamespace, resourcesToMap), new File(directory.getAbsolutePath() + "/resourceMappings.ttl"));
+        IOoperations.writeMappingContentsToFile(getResourceMappings(targetNamespace, resourcesToMap),
+                new File(directory.getAbsolutePath() + "/resourceMappings.ttl"),
+                "<http://www.w3.org/2002/07/owl#sameAs>");
     }
 
 }

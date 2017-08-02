@@ -46,7 +46,9 @@ public abstract class PropertyMapper {
      * @param propertiesToMap An array list of the properties for which the mapping shall be created.
      */
     public void writePropertiesMappingsFile(File directory, String targetNamespace, HashSet<String> propertiesToMap) {
-        IOoperations.writeMappingContentsToFile(getPropertyMappings(targetNamespace, propertiesToMap), new File(directory.getAbsolutePath() + "/propertyMappings.ttl"));
+        IOoperations.writeMappingContentsToFile(getPropertyMappings(targetNamespace, propertiesToMap),
+                new File(directory.getAbsolutePath() + "/propertyMappings.ttl"),
+                "<http://www.w3.org/2002/07/owl#equivalentProperty>");
     }
 
 }

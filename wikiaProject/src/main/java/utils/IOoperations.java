@@ -159,50 +159,18 @@ public class IOoperations {
 
 
     /**
-     * Write the mapings file to the disk.
+     * Write the mappings file to the disk.
      * @param entitiesMapping A HashSet of Strings, each representing one line to be written to the mapping file.
      * @param pathToFileToBeWritten
      */
-    public static void writeMappingContentsToFile(HashMap<String, String> entitiesMapping, File pathToFileToBeWritten) {
+    public static void writeMappingContentsToFile(HashMap<String, String> entitiesMapping, File pathToFileToBeWritten, String ontology) {
 
         StringBuffer contentToWrite = new StringBuffer();
         Iterator iterator = entitiesMapping.entrySet().iterator();
 
         while(iterator.hasNext()){
             HashMap.Entry<String, String> entry = (HashMap.Entry<String, String>) iterator.next();
-            contentToWrite.append(entry.getKey() + " <owl:sameAs> " + entry.getValue() + " .\n");
-        }
-
-        try {
-            // Initialize file Writer Objects
-            PrintWriter fileWriter = new PrintWriter(pathToFileToBeWritten, "UTF-8");
-
-            //
-            fileWriter.write(contentToWrite.toString());
-
-            // Close file Writer
-            fileWriter.close();
-
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            logger.log(Level.SEVERE, exception.getMessage());
-        }
-    }
-
-
-    /**
-     * Write the mapings file to the disk.
-     * @param entitiesMapping A HashSet of Strings, each representing one line to be written to the mapping file.
-     * @param pathToFileToBeWritten
-     */
-    public static void writeClassMappingContentsToFile(HashMap<String, String> entitiesMapping, File pathToFileToBeWritten) {
-
-        StringBuffer contentToWrite = new StringBuffer();
-        Iterator iterator = entitiesMapping.entrySet().iterator();
-
-        while(iterator.hasNext()){
-            HashMap.Entry<String, String> entry = (HashMap.Entry<String, String>) iterator.next();
-            contentToWrite.append(entry.getKey() + " <owl:equivalentClass> " + entry.getValue() + " .\n");
+            contentToWrite.append(entry.getKey() + " " + ontology + " " + entry.getValue() + " .\n");
         }
 
         try {
