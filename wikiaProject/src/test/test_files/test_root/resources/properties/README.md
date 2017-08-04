@@ -1,0 +1,1 @@
+Copy the DBpedia properties file to this directory before running tests.

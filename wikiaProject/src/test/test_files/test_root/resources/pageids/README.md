@@ -1,0 +1,1 @@
+Copy the DBpedia pageids file to this directory before running tests.

@@ -1,0 +1,1 @@
+Copy the DBpedia redirects file to this directory before running tests.

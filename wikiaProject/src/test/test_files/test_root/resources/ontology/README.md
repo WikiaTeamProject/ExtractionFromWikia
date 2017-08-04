@@ -1,0 +1,1 @@
+Copy the DBpedia ontology file to this directory before running tests.

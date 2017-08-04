@@ -4,7 +4,9 @@ import extractionPostprocessing.model.ResourceServiceResult;
 import static org.junit.Assert.*;
 
 import extractionPostprocessing.util.DBpediaResourceServiceOffline;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import testOrchestration.CheckPrerequisitesTest;
 
 /**
  * Test class for {@link extractionPostprocessing.util.DBpediaResourceServiceOffline DBpediaResourceServiceOnline}.
@@ -14,6 +16,13 @@ import org.junit.Test;
 public class DBpediaResourceServiceOfflineTest {
 
     public static DBpediaResourceServiceOffline service = DBpediaResourceServiceOffline.getDBpediaResourceServiceOfflineObject();
+
+    @BeforeClass
+    public static void checkPrerequisites(){
+        // making sure that the required test files exist.
+        new CheckPrerequisitesTest().checkPrerequisites();
+    }
+
 
     @Test
     public void getResourceAndRedirectInDBpedia() throws Exception {
