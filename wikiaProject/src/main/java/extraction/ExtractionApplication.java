@@ -16,9 +16,8 @@ public class ExtractionApplication {
 
     public static void main(String[] args) {
 
+        Extractor extractor = new Extractor();
         if (Extractor.checkPrerequisites()) {
-            Extractor extractor = new Extractor();
-
             //extract all wikis
             extractor.extractAllWikis();
         }
