@@ -5,13 +5,11 @@ import extraction.model.WikiaWikiProperties;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.HashMap;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.Calendar;
 import java.text.SimpleDateFormat;
 
 import org.apache.commons.exec.CommandLine;
@@ -20,8 +18,6 @@ import utils.ExtractionBz2;
 import utils.ExtractionGZip;
 import utils.Extraction7zip;
 import utils.IOoperations;
-
-import java.util.Date;
 
 import java.io.PrintWriter;
 
@@ -58,16 +54,16 @@ public class Extractor {
     public void extractAllWikis() {
 
         logger.info("Unarchiving all dumps");
-        unarchiveDownloadedDumps();
+        //unarchiveDownloadedDumps();
 
         logger.info("Creating folder structure for DBpedia extractor");
         createDbpediaExtractionStructure();
 
         logger.info("Calling DBpediaExtractor");
-        callDbPediaExtractorToExtractFile();
+      //  callDbPediaExtractorToExtractFile();
 
         logger.info("Moving files for evaluation");
-        moveExtractFilesforEvaluation();
+       // moveExtractFilesforEvaluation();
     }
 
 
@@ -281,6 +277,7 @@ public class Extractor {
             String downloadDirectoryForExtraction = ResourceBundle.getBundle("config").getString("pathToRootDirectory")
                             +"//dbPediaExtractionFormat//";
             String wikiSourceFileName = ResourceBundle.getBundle("config").getString("wikiSourceFileName");
+            String[] languageCodestoExtract=ResourceBundle.getBundle("config").getString("languages").split(",");
 
             WikiaWikiProperties wikiProperties = null;
             String languageCode;
@@ -304,24 +301,28 @@ public class Extractor {
 
                 //Get properties
                 languageCode = wikiProperties.getLanguageCode();
-                String siteName = wikiProperties.getWikiName();
-                wikiFilePath = wikiProperties.getWikiPath();
 
-                //dateFolderName = wikiName.substring(0,wikiName.indexOf("_"));
-                //dateFolderName = Integer.toString(index);
+                if(Arrays.asList(languageCodestoExtract).contains(languageCode)){
 
-                languageDirectory = new File(downloadDirectoryForExtraction + "/" + languageCode + "wiki_");
+                    String siteName = wikiProperties.getWikiName();
+                    wikiFilePath = wikiProperties.getWikiPath();
 
-                if (! languageDirectory.exists()) languageDirectory.mkdir();
+                    //dateFolderName = wikiName.substring(0,wikiName.indexOf("_"));
+                    //dateFolderName = Integer.toString(index);
 
-                dateDirectory = new File(downloadDirectoryForExtraction + "/" + languageCode + "wiki_" + "/" + index);
+                    languageDirectory = new File(downloadDirectoryForExtraction + "/" + languageCode + "wiki_");
 
-                if (! dateDirectory.exists()) dateDirectory.mkdir();
+                    if (!languageDirectory.exists()) languageDirectory.mkdir();
 
-                copyFileFromOneDirectorytoAnotherDirectory(wikiFilePath, downloadDirectoryForExtraction + "/" + languageCode + "wiki_" + "/" + index + "/" +
-                        languageCode + "wiki-" + currentDate + "-" + wikiSourceFileName);
-                createWikiPropertiesFile(downloadDirectoryForExtraction + "/" + languageCode + "wiki_" + "/" + index + "/", wikiProperties);
-                index++;
+                    dateDirectory = new File(downloadDirectoryForExtraction + "/" + languageCode + "wiki_" + "/" + index);
+
+                    if (!dateDirectory.exists()) dateDirectory.mkdir();
+
+                    copyFileFromOneDirectorytoAnotherDirectory(wikiFilePath, downloadDirectoryForExtraction + "/" + languageCode + "wiki_" + "/" + index + "/" +
+                            languageCode + "wiki-" + currentDate + "-" + wikiSourceFileName);
+                    createWikiPropertiesFile(downloadDirectoryForExtraction + "/" + languageCode + "wiki_" + "/" + index + "/", wikiProperties);
+                    index++;
+                }
             }
 
         } catch (Exception exception) {
