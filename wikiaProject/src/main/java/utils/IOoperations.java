@@ -357,7 +357,7 @@ public class IOoperations {
                                 String ontologyClass =
                                         fileLine.substring(0, fileLine.indexOf(">") + 1);
 
-                                ontologiesMap.put(ontologyClass.toLowerCase(),ontologyClass);
+                                ontologiesMap.put(ontologyClass,ontologyClass);
                             }
                         }
                     }
