@@ -150,11 +150,18 @@ public class WikiaDumpDownloadThreadImpl  {
             return false;
         }
 
+        String pathLanguageCodes = WikiaDumpDownloadThreadImpl.class.getClassLoader().getResource("files/wikiaLanguageCodes.csv").getPath();
+        File languageCodes = new File(pathLanguageCodes);
+        if (! languageCodes.exists()) {
+            logger.severe("wikiaLanguageCodes.csv in resource directory does not exist.");
+            return false;
+        }
+
         String wikiAllOverview = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/wikiStatistics/wikiaAllOverview.csv";
         File wikiCSV = new File(wikiAllOverview);
 
         // check if wiki overview CSV file is already existing, if not create it
-        if (!wikiCSV.exists()) {
+        if (! wikiCSV.exists()) {
             logger.info("File wikiaAllOverview.csv does not exist yet. Wikia metadata will first be downloaded.");
             MetadataThreadImpl.downloadWikiaMetadata();
         }

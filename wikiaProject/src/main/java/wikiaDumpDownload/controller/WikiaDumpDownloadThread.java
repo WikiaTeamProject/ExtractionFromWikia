@@ -1,5 +1,6 @@
 package wikiaDumpDownload.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import utils.IOoperations;
 
 import java.io.*;
@@ -9,6 +10,7 @@ import java.net.URLConnection;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -43,6 +45,7 @@ public class WikiaDumpDownloadThread implements Runnable {
 
     private static final String[] REGEX = {"http:.*current\\.xml\\.gz", "http:.*current\\.xml\\.7z"}; // unmasked regex "http:.*current\.xml\.7z"
 
+    private HashMap<String, String> languageCodes;
 
     /**
      * Main Constructor - main constructor for initialization -> private
@@ -68,7 +71,7 @@ public class WikiaDumpDownloadThread implements Runnable {
                     totalNumberOfFilesToBeProcessed = lnr.getLineNumber(); //Add 1 because line index starts at 0
                     lnr.close();
                 } catch (IOException ioe){
-                    System.out.println(ioe);
+                    logger.severe(ioe.toString());
                 }
             }
         }
@@ -86,6 +89,8 @@ public class WikiaDumpDownloadThread implements Runnable {
         dumpsDownloaded7z = IOoperations.createDirectory(dumpsDownloaded.getPath() + "/7z");
 
         this.urlsNotWorking = new StringBuffer();
+
+        readWikiaLanguageCodes();
     }
 
 
@@ -127,7 +132,9 @@ public class WikiaDumpDownloadThread implements Runnable {
         ArrayList<String> urls = getUrls(pathToReadFrom);
 
         for(String url : urls) {
-            downloadDump(url);
+
+            if (isEnglishWiki(url)) downloadDump(url);
+
         }
         logger.info("Download finished. Downloaded " + downloadedFiles + " of " + wikis + " wikis.");
 
@@ -195,6 +202,44 @@ public class WikiaDumpDownloadThread implements Runnable {
         return urls;
     }
 
+    /**
+     * read wikiaLanguageCodes file into hashmap
+     */
+    private void readWikiaLanguageCodes() {
+        this.languageCodes = new HashMap<>();
+        String path = WikiaDumpDownloadThread.class.getClassLoader().getResource("files/wikiaLanguageCodes.csv").getPath();
+        File file = new File(path);
+
+        if (file.exists()) {
+            try {
+                BufferedReader br = new BufferedReader( new FileReader(file));
+                String sCurrentLine;
+
+                while ((sCurrentLine = br.readLine()) != null) {
+                    String[] line = sCurrentLine.split(";");
+                    languageCodes.put(line[0], line[1]);
+                }
+            } catch (IOException e) {
+                logger.severe(e.toString());
+            }
+        }
+    }
+
+    /**
+     * Check from url whether it is an English wiki
+     * @param url
+     * @return
+     */
+    private boolean isEnglishWiki(String url) {
+        boolean isEnglishWiki = false;
+        String code = languageCodes.get(StringUtils.substringBetween(url,"http://", "."));
+
+        if (code == null || code.equals("")) {
+            isEnglishWiki = true;
+        }
+
+        return isEnglishWiki;
+    }
 
     /**
      * Check if dump exists for wiki and save the file to the specified directory
