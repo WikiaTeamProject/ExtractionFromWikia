@@ -17,11 +17,11 @@ public class PropertyMapper_3 extends PropertyMapper {
 
         DBpediaResourceServiceOffline service = DBpediaResourceServiceOffline.getDBpediaResourceServiceOfflineObject();
 
-        if(service.ontologyClassExistInDBpediaIgnoreCase(ontologyClass)){
+        if(service.propertyExistInDBPediaOntologyIgnoreCase(ontologyClass)){
             return service.getOntologyClassCorrectCase(ontologyClass);
 
         }
-         if(service.propertyExistInDBPediaIgnoreCase(propertyToMap.toLowerCase())){
+        else if(service.propertyExistInDBPediaIgnoreCase(propertyToMap.toLowerCase())){
             return service.getPropertyCorrectCase(propertyToMap);
 
         }
