@@ -54,16 +54,16 @@ public class Extractor {
     public void extractAllWikis() {
 
         logger.info("Unarchiving all dumps");
-        //unarchiveDownloadedDumps();
+        unarchiveDownloadedDumps();
 
         logger.info("Creating folder structure for DBpedia extractor");
         createDbpediaExtractionStructure();
 
         logger.info("Calling DBpediaExtractor");
-      //  callDbPediaExtractorToExtractFile();
+        callDbPediaExtractorToExtractFile();
 
         logger.info("Moving files for evaluation");
-       // moveExtractFilesforEvaluation();
+        moveExtractFilesforEvaluation();
     }
 
 
