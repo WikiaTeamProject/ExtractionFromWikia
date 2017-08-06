@@ -68,13 +68,14 @@
 <http://dbkwik.webdatacommons.org/Game_of_Thrones_Wik/property/lord> <owl:sameAs> <http://dbpedia.org/property/lord> .
 <http://dbkwik.webdatacommons.org/Game_of_Thrones_Wik/property/type> <owl:sameAs> <http://dbpedia.org/ontology/type> .
 <http://dbkwik.webdatacommons.org/Game_of_Thrones_Wik/property/airdate> <owl:sameAs> <http://dbpedia.org/ontology/airDate> .
-
-
-
-
-
-
-
-
-
-
+<http://dbkwik.webdatacommons.org/Game_of_Thrones_Wik/class/Character> <owl:equivalentClass> <null> .
+<http://dbkwik.webdatacommons.org/Game_of_Thrones_Wik/class/Event> <owl:equivalentClass> <http://dbpedia.org/ontology/event> .
+<http://dbkwik.webdatacommons.org/Game_of_Thrones_Wik/class/Item> <owl:equivalentClass> <null> .
+<http://dbkwik.webdatacommons.org/Game_of_Thrones_Wik/class/Episode> <owl:equivalentClass> <http://dbpedia.org/ontology/episode> .
+<http://dbkwik.webdatacommons.org/Game_of_Thrones_Wik/class/Organization> <owl:equivalentClass> <http://dbpedia.org/ontology/Organisation> .
+<http://dbkwik.webdatacommons.org/Game_of_Thrones_Wik/class/Album> <owl:equivalentClass> <http://dbpedia.org/ontology/album> .
+<http://dbkwik.webdatacommons.org/Game_of_Thrones_Wik/class/Location> <owl:equivalentClass> <http://dbpedia.org/ontology/location> .
+<http://dbkwik.webdatacommons.org/Game_of_Thrones_Wik/class/Quest> <owl:equivalentClass> <null> .
+<http://dbkwik.webdatacommons.org/Game_of_Thrones_Wik/class/Religion> <owl:equivalentClass> <http://dbpedia.org/ontology/religion> .
+<http://dbkwik.webdatacommons.org/Game_of_Thrones_Wik/class/Culture> <owl:equivalentClass> <null> .
+<http://dbkwik.webdatacommons.org/Game_of_Thrones_Wik/class/Relationship> <owl:equivalentClass> <http://dbpedia.org/ontology/Relationship> .
