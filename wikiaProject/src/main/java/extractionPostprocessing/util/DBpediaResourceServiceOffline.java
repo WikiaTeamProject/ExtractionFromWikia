@@ -18,7 +18,8 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
     private static HashMap<String, String> redirectsMap;
     private static Logger logger = Logger.getLogger(DBpediaResourceServiceOffline.class.getName());
     private static HashMap<String,String> pageIdsMap;
-    private static HashMap<String,String> ontologiesMap;
+    private static HashMap<String,String> ontologiesClassMap;
+    private static HashMap<String,String> ontologiesPropertiesMap;
     private static HashMap<String,String> propertiesMap;
 
 
@@ -165,11 +166,11 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
      */
     public boolean ontologyClassExistInDBpediaIgnoreCase(String resource) {
         resource = resource.toLowerCase();
-        if (ontologiesMap == null) {
+        if (ontologiesClassMap == null) {
             // ontologies were not loaded yet
             this.loadOntologyClasses();
         }
-        return ontologiesMap.containsKey(resource);
+        return ontologiesClassMap.containsKey(resource);
     }
 
 
@@ -184,18 +185,63 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
         ontology = ontology.toLowerCase();
         String ontologyClassValue;
 
-        if(ontologiesMap==null){
+        if(ontologiesClassMap==null){
             // ontologies were not loaded yet
             this.loadOntologyClasses();
         }
 
-        if(ontologiesMap.get(ontology)!=null){
-            ontologyClassValue = ontologiesMap.get(ontology);
+        if(ontologiesClassMap.get(ontology)!=null){
+            ontologyClassValue = ontologiesClassMap.get(ontology);
         }
         else ontologyClassValue="<null>";
 
         return ontologyClassValue;
     }
+
+
+    /**
+     * This method resturns property in actual case as
+     * present in DBpedia file
+     * @param property property to search for in DBpedia file
+     * @return property in correct case if is present in DBpedia file
+     * otherwise returns "<NULL>"
+     */
+    public String getOntologyPropertyCorrectCase(String property){
+
+        property = property.toLowerCase();
+        String ontologyPropertyValue;
+
+        if(ontologiesPropertiesMap==null){
+            // load ontology properties in HashMap
+            this.loadOntologyClasses();
+        }
+
+        if(ontologiesPropertiesMap.get(property)!=null){
+            ontologyPropertyValue = ontologiesClassMap.get(property);
+        }
+        else ontologyPropertyValue="<null>";
+
+        return ontologyPropertyValue;
+    }
+
+
+
+    /**
+     * This method checks dbpedia ontology file if property is present
+     * or not ignoring case
+     * @param resource property to search in ontology file
+     * @return true if property is present in ontology file otherwise false
+     */
+    public boolean propertyExistInDBPediaOntologyIgnoreCase(String resource) {
+        resource = resource.toLowerCase();
+        if (ontologiesPropertiesMap == null) {
+            //load ontology properties
+            this.loadOntologyClasses();
+        }
+        return ontologiesPropertiesMap.containsKey(resource);
+    }
+
+
 
 
     /**
@@ -245,7 +291,29 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
         logger.info("Loading ontology classes in memory. Please wait");
         try {
             IOoperations ioOps = new IOoperations();
-            ontologiesMap = ioOps.getOntologyClasses();
+            HashMap<String,String> ontologiesMap = ioOps.getOntologyClasses();
+            ontologiesClassMap=new HashMap<String,String>();
+            ontologiesPropertiesMap=new HashMap<String,String>();
+
+            if(ontologiesMap!=null){
+                for(String ontologyClass:ontologiesMap.keySet()){
+
+                    String resourceName=ontologyClass.substring(ontologyClass.lastIndexOf("\\")+1,ontologyClass.length());
+
+                   if(resourceName.length()>0 &&
+                           Character.isUpperCase(resourceName.charAt(0))){
+
+                       ontologiesClassMap.put(ontologyClass.toLowerCase(),ontologyClass);
+
+                   }
+                   else{
+                       ontologiesPropertiesMap.put(ontologyClass.toLowerCase(),ontologyClass);
+                   }
+
+
+                }
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             logger.severe(e.getMessage());
