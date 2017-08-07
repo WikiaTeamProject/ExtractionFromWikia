@@ -11,3 +11,5 @@ This variable represents the path to your root directory. It contains all output
 <br/><br/>
 TODO: explain other variables
 
+1. Languages
+This variable is used while creating DBpedia folder structure for extraction. It extracts wikis only of languages defined in this variable
