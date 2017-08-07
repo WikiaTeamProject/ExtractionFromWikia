@@ -6,10 +6,10 @@ This variable contains the namespace (i.e., domain) you would like to set for yo
 <br/><br/>
 
 `pathToRootDirectory`<br/>
-This variable represents the path to your root directory. It contains all output and intermediate files from the program operations. It has to be specified, otherwise the program will not run.
+This variable represents the path to your root directory. It contains all output and intermediate files from the program operations. It has to be specified, otherwise the program will not run.<br/><br/>
 
-<br/><br/>
+`Languages`<br/>
+This variable is used while creating DBpedia folder structure for extraction. It extracts wikis only of languages defined in this variable. Possible values are, for instance, `en` or `fr`. If multiple languages are desired, multiple values can be given separated by comma, e.g. `en,fr`.<br/><br/>
+
 TODO: explain other variables
 
-1. Languages
-This variable is used while creating DBpedia folder structure for extraction. It extracts wikis only of languages defined in this variable
