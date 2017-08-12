@@ -1,5 +1,6 @@
 # ExtractionFromWikia
-This is a student project of the Data and Web Science (DWS) group of the University of Mannheim. 
+This is a student project of the Data and Web Science (DWS) group of the University of Mannheim. The overall goal is to create a knowledge graph out of the fandom (a.k.a. wikia) wiki farm and link it to DBpedia.<br/>
+The program implemented here determines all available wiki dumps on wikia, downloads them, mass-processes them using the <a href="https://github.com/dbpedia/extraction-framework">DBpedia Extraction Framework</a>, postprocesses the output and maps resources, properties and classes to DBpedia. Furthermore, it provides functionality to compile various statistics. A gold standard for evaluating the performance of mappers is also available (see <a href="https://github.com/WikiaTeamProject/ExtractionFromWikia/tree/master/additionalFiles/evaluationFiles">/additionalFiles/evaluationFiles</a>). The resulting knowledge graph is published on <a href="http://dbkwik.webdatacommons.org/">http://dbkwik.webdatacommons.org/</a>.
 
 ## Goals of this Project
 The goal of this project is to create a linked open data dataset.
