@@ -399,7 +399,7 @@ public class Extractor {
 
                     for (File wikiDirectory : dateFolders) {
 
-                        if(! iOoperations.checkIfFileExist(wikiDirectory.getAbsolutePath(),"*-complete")) {
+                        if(! iOoperations.checkIfFileExists(wikiDirectory.getAbsolutePath(),"*-complete")) {
 
                         File[] wikiFiles = wikiDirectory.listFiles();
                         String folderName = wikiDirectory.getAbsolutePath();

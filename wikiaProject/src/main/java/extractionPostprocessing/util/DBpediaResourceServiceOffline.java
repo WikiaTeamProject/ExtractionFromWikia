@@ -182,6 +182,7 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
      */
     public String getOntologyClassCorrectCase(String ontology){
 
+
         ontology = ontology.toLowerCase();
         String ontologyClassValue;
 

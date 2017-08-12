@@ -22,6 +22,8 @@ public class IOoperations {
 
     static Logger logger = Logger.getLogger(IOoperations.class.getName());
     private static String rootDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
+
+
     /**
      * This method receives an array of file paths and merges the files into the specified target file
      *
@@ -29,9 +31,34 @@ public class IOoperations {
      * @param targetFile
      */
     public static void mergeFiles(ArrayList<String> filePaths, String targetFile) {
+        logger.severe("!!! mergeFiles not implemented yet !!!");
         // TODO: implement and use!
     }
 
+
+    /**
+     * Returns the rootDirectoryPath as specified in config.properties.
+     * @return
+     */
+    public static String getRootDirectoryPath(){
+        return rootDirectoryPath;
+    }
+
+    /**
+     * Returns a File object to the rootDirectory as specified in config.properties.
+     * @return
+     */
+    public static File getRootDirectory(){
+        return new File(rootDirectoryPath);
+    }
+
+    /**
+     * Returns the target namespace as specified in config.properties.
+     * @return
+     */
+    public static String getTargetNamespace() {
+        return ResourceBundle.getBundle("config").getString("targetnamespace");
+    }
 
     /**
      * This method receives a file path and creates a directory out of it.
@@ -241,9 +268,9 @@ public class IOoperations {
             ex.printStackTrace();
             logger.severe(ex.getMessage());
         }
-
         return pageIdsMap;
     }
+
 
     /**
      * This function reads the DBpedia redirects file.
@@ -418,7 +445,6 @@ public class IOoperations {
             ex.printStackTrace();
             logger.severe(ex.getMessage());
         }
-
         return propertiesMap;
     }
 
@@ -430,7 +456,7 @@ public class IOoperations {
      *                 wild card queries
      * @return  true if file exists else false
      */
-    public boolean checkIfFileExist(String filePath,String fileName){
+    public boolean checkIfFileExists(String filePath, String fileName){
 
         boolean ifFileExist=false;
         String[] selectedFiles;
