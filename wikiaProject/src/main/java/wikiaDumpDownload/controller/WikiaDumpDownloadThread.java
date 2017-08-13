@@ -1,5 +1,6 @@
 package wikiaDumpDownload.controller;
 
+import com.sun.tools.javac.util.List;
 import org.apache.commons.lang3.StringUtils;
 import utils.IOoperations;
 
@@ -9,9 +10,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -133,7 +132,7 @@ public class WikiaDumpDownloadThread implements Runnable {
 
         for(String url : urls) {
 
-            if (isEnglishWiki(url)) downloadDump(url);
+            if (shouldLanguageBeDownloaded(url)) downloadDump(url);
 
         }
         logger.info("Download finished. Downloaded " + downloadedFiles + " of " + wikis + " wikis.");
@@ -230,15 +229,21 @@ public class WikiaDumpDownloadThread implements Runnable {
      * @param url
      * @return
      */
-    private boolean isEnglishWiki(String url) {
-        boolean isEnglishWiki = false;
-        String code = languageCodes.get(StringUtils.substringBetween(url,"http://", "."));
+    private boolean shouldLanguageBeDownloaded(String url) {
+        boolean languageWanted = false;
+        String prefix = StringUtils.substringBetween(url,"http://", ".");
+        String[] languageCodesToDownload = ResourceBundle.getBundle("config").getString("languages").split(",");
+        ArrayList<String> languages = new ArrayList<>(Arrays.asList(languageCodesToDownload));
 
-        if (code == null || code.equals("")) {
-            isEnglishWiki = true;
+        // english wiki
+        if (! languageCodes.containsKey(prefix)) {
+            languageWanted = true;
+        // other language than English wanted, specified in config.properties
+        } else if (languageCodes.containsKey(prefix) && languages.contains(prefix)) {
+            languageWanted = true;
         }
 
-        return isEnglishWiki;
+        return languageWanted;
     }
 
     /**
