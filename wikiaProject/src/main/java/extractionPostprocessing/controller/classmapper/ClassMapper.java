@@ -34,7 +34,7 @@ public abstract class ClassMapper {
         HashMap<String, String> result = new HashMap<String, String>();
 
         for (String resource : classesToMap) {
-            result.put(transformTemplateToClass(resource).replace("dbpedia.org", targetNamespace), mapSingleClass(resource));
+            result.put(transformTemplateToOntology(resource, true).replace("dbpedia.org", targetNamespace), mapSingleClass(resource));
         }
         return result;
     }
@@ -140,6 +140,7 @@ public abstract class ClassMapper {
         }
         return transformedTemplate;
     }
+
 
 }
 

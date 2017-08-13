@@ -56,6 +56,8 @@ public class MappingExecutor {
 
         if (root.isDirectory()) {
 
+            HashSet<String> classesForDefinition = new HashSet<String>();
+
             // loop over all wikis
             for (File directory : root.listFiles()) {
 
@@ -66,7 +68,6 @@ public class MappingExecutor {
                     WikiToMap wikiToMap = getMappingInformationOfWikiAndUpdateFiles(directory);
                     String targetNameSpace = ResourceBundle.getBundle("config").getString("targetnamespace") + "/" + directory.getName();
 
-
                     // increment the statistics
                     totalNumberOfClasses += wikiToMap.classesToMap.size();
                     totalNumberOfProperties += wikiToMap.propertiesToMap.size();
@@ -76,19 +77,24 @@ public class MappingExecutor {
                     propertyMapper.writePropertiesMappingsFile(directory, targetNameSpace, wikiToMap.propertiesToMap);
                     classMapper.writeClassMappingsFile(directory, targetNameSpace, wikiToMap.classesToMap);
 
-                    HashSet<String> classesForDefinition = new HashSet<String>();
+
                     Iterator iterator = wikiToMap.classesToMap.iterator();
 
                     while(iterator.hasNext()){
                         classesForDefinition.add( classMapper.transformTemplateToClass( (String) iterator.next()));
                     }
 
-                    // OutputOperations.printSet(classesForDefinition);
+                    OutputOperations.printSet(classesForDefinition);
                     // TODO Sam: Write classesForDefinition in extra File in appropriate format...
 
 
                 } // end of check whether file is a directory
             } // end of loop over files
+
+
+            // create the ontology file
+            OntologyCreator ontologyCreator = new OntologyCreator(classesForDefinition);
+            ontologyCreator.createOntologyOption();
 
 
             // output the statistics and write them into file
@@ -111,6 +117,7 @@ public class MappingExecutor {
 
         } // end of check whether PostProcessedWikis is a directory
     }
+
 
 
     /**
@@ -170,10 +177,8 @@ public class MappingExecutor {
                         if (!line.trim().toLowerCase().startsWith("#") || !line.trim().toLowerCase().startsWith("#")) {
                             // -> line is not a comment
 
-
                             // rewrite line for updating the file
                             contentOfNewFile.append(line.replaceAll("dbpedia.org", targetNameSpace) + "\n");
-
 
                             matcher = pattern.matcher(line);
 

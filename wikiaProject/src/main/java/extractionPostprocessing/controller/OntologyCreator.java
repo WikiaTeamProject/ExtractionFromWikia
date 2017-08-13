@@ -1,20 +1,15 @@
 package extractionPostprocessing.controller;
 
-import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
-import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.ontology.Ontology;
-import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.impl.NTripleWriter;
-import org.apache.jena.rdfxml.xmloutput.impl.BaseXMLWriter;
 import org.apache.jena.rdfxml.xmloutput.impl.Basic;
-import org.apache.jena.util.iterator.ExtendedIterator;
 import utils.IOoperations;
 
 import java.io.File;
-import java.io.PrintWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.HashSet;
 
 /**
@@ -37,36 +32,10 @@ public class OntologyCreator {
     }
 
 
-    public void createOntologyOption1(){
-
-        // still undecided what to do
-
-        /**
-         * Option 1: Manually concatenate an ontology.
-         * The output would look like http://downloads.dbpedia.org/2016-04/dbpedia_2016-04.nt
-         */
-
-        StringBuffer contentForFile = new StringBuffer();
-        String ontologyTag = "<http://" + targetNamespace + "/ontology/>";
-
-        // set type = ontology
-        String type = ontologyTag + " <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Ontology> .";
-        contentForFile.append(type);
-
-        // set vocabulary
-        String vocabulary = ontologyTag + " <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/vocommons/voaf#Vocabulary> .";
-        contentForFile.append(vocabulary);
-
-        IOoperations.createDirectory(rootDirectoryPath + "/DBkwikOntology");
-        File ontologyFile = new File(rootDirectoryPath + "/DBkwikOntology" + "ontology.nt");
-        IOoperations.writeContentToFile(ontologyFile, contentForFile.toString());
-
-    }
-
-    public void createOntologyOption2(){
-        /**
-         * Option 2: Use Apache Jena
-         */
+    /**
+     * Creates an ontology.nt file in <root>/DBkwikOntology.
+     */
+    public void createOntologyOption(){
 
         OntModel ontologyModel = ModelFactory.createOntologyModel();
         ontologyModel.setNsPrefix("dbkwik", "http://" + targetNamespace);
@@ -75,24 +44,46 @@ public class OntologyCreator {
         Ontology dbkwikOntology = ontologyModel.createOntology("http://" + targetNamespace + "/ontology/");
 
         // add a sample class
-        ontologyModel.createClass("http://" + targetNamespace + "/ontology/BasketballLeague" );
+        // ontologyModel.createClass("http://" + targetNamespace + "/ontology/BasketballLeague" );
 
-        NTripleWriter writer = new NTripleWriter();
-        writer.write(ontologyModel, System.out, null);
+        for(String classToAdd: classesForDefinition){
+
+            // remove tags (those are added by the jena framework)
+            classToAdd = classToAdd.replace(">", "");
+            classToAdd = classToAdd.replace("<", "");
+
+            // add class
+            ontologyModel.createClass(classToAdd );
+        }
+
+        NTripleWriter nTripleWriter = new NTripleWriter(); // NTriple writer
+        Basic basicWriter = new Basic(); // RDF writer
+
         // TODO: Find out what base is and whether we want to use it.
 
-        Basic writer2 = new Basic();
-        writer2.write(ontologyModel, System.out, null);
+        try {
+            IOoperations.createDirectory(rootDirectoryPath + "/DBkwikOntology");
+            FileOutputStream fileOutputStream = new FileOutputStream(new File(rootDirectoryPath + "/DBkwikOntology/ontology.nt"));
+
+            // file output
+            // writer2.write(ontologyModel, fileOutputStream, null); // RDF writer
+            nTripleWriter.write(ontologyModel, fileOutputStream, null); // NTriple writer
 
 
+            // command line output
+            basicWriter.write(ontologyModel, System.out, null);
+            nTripleWriter.write(ontologyModel, System.out, null);
 
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
     }
 
 
     public static void main(String[] args) {
         OntologyCreator oc = new OntologyCreator(new HashSet<String>());
-        oc.createOntologyOption2();
+        oc.createOntologyOption();
     }
 
 
