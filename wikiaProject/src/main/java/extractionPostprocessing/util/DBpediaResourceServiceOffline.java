@@ -244,7 +244,6 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
 
 
 
-
     /**
      * Returns a boolean indicating whether the specified property exists in DBpedia.
      * It ignores casing.
@@ -289,19 +288,19 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
      * into static object by calling IO function
      */
     private void loadOntologyClasses() {
-        logger.info("Loading ontology classes in memory. Please wait");
+        logger.info("Loading ontology classes in memory... Please wait.");
         try {
             IOoperations ioOps = new IOoperations();
             HashMap<String,String> ontologiesMap = ioOps.getOntologyClasses();
-            ontologiesClassMap=new HashMap<String,String>();
-            ontologiesPropertiesMap=new HashMap<String,String>();
+            ontologiesClassMap = new HashMap<String,String>();
+            ontologiesPropertiesMap = new HashMap<String,String>();
 
             if(ontologiesMap!=null){
-                for(String ontologyClass:ontologiesMap.keySet()){
+                for(String ontologyClass : ontologiesMap.keySet()){
 
-                    String resourceName=ontologyClass.substring(ontologyClass.lastIndexOf("\\")+1,ontologyClass.length());
+                    String resourceName = ontologyClass.substring(ontologyClass.lastIndexOf("\\")+1,ontologyClass.length());
 
-                   if(resourceName.length()>0 &&
+                   if(resourceName.length() > 0 &&
                            Character.isUpperCase(resourceName.charAt(0))){
 
                        ontologiesClassMap.put(ontologyClass.toLowerCase(),ontologyClass);
@@ -311,9 +310,9 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
                        ontologiesPropertiesMap.put(ontologyClass.toLowerCase(),ontologyClass);
                    }
 
+                } // end of loop over ontologies map
 
-                }
-            }
+            } // end of if ontologiesMap != null
 
         } catch (Exception e) {
             e.printStackTrace();

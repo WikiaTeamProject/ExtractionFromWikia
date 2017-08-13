@@ -84,8 +84,7 @@ public class MappingExecutor {
                         classesForDefinition.add( classMapper.transformTemplateToClass( (String) iterator.next()));
                     }
 
-                    OutputOperations.printSet(classesForDefinition);
-                    // TODO Sam: Write classesForDefinition in extra File in appropriate format...
+                    // OutputOperations.printSet(classesForDefinition);
 
 
                 } // end of check whether file is a directory
