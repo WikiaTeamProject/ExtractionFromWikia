@@ -175,7 +175,7 @@ public class Extractor {
 
                 if ((fileContents.indexOf("<sitename>") + 10) <=
                         fileContents.indexOf("</sitename>", fileContents.indexOf("<sitename>") + 10) - 1) {
-                    wikiName = (fileContents.substring(fileContents.indexOf("<sitename>") + 10, fileContents.indexOf("</sitename>", fileContents.indexOf("<sitename>") + 10) - 1)).trim().replace(" ", "_");
+                    wikiName = (fileContents.substring(fileContents.indexOf("<sitename>") + 10, fileContents.indexOf("</sitename>", fileContents.indexOf("<sitename>") + 10))).trim().replace(" ", "_");
                 }
                 else {
                     wikiName = "";
