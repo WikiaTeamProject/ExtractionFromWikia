@@ -298,7 +298,7 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
             if(ontologiesMap!=null){
                 for(String ontologyClass : ontologiesMap.keySet()){
 
-                    String resourceName = ontologyClass.substring(ontologyClass.lastIndexOf("\\")+1,ontologyClass.length());
+                    String resourceName = ontologyClass.substring(ontologyClass.lastIndexOf("/")+1,ontologyClass.length());
 
                    if(resourceName.length() > 0 &&
                            Character.isUpperCase(resourceName.charAt(0))){
