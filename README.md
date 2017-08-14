@@ -1,7 +1,7 @@
 # ExtractionFromWikia
 This is a student project of the Data and Web Science (DWS) group of the University of Mannheim.
 The overall goal is to create a knowledge graph out of the [fandom (a.k.a. Wikia) wiki farm](http://www.wikia.com) and link it to [DBpedia](http://wiki.dbpedia.org).<br/>
-The program implemented here determines all available wiki dumps on wikia, downloads them, mass-processes them using the [DBpedia Extraction Framework](https://github.com/dbpedia/extraction-framework), postprocesses the output and maps resources, properties and classes to DBpedia. 
+The program implemented here determines all available wiki dumps on wikia, downloads them, mass-processes them using the [DBpedia Extraction Framework](https://github.com/dbpedia/applications.extraction-framework), postprocesses the output and maps resources, properties and classes to DBpedia. 
 
 Furthermore, it provides functionality to compile various statistics. A [gold standard](./additionalFiles/evaluationFiles) for evaluating the performance of mappers including several mapping files is also available. 
 The resulting knowledge graph is published [online](http://dbkwik.webdatacommons.org/).
@@ -45,12 +45,12 @@ After successfully running the program, you will find the postprocessed wikis in
 ## Implementation Details
 
 ### Applications 
-This project includes several applications which can either be run in a combined way within the [single process](/wikiaProject/src/main/java/SingleProcessApplication.java) or each application by itself which requires some more knowledge.
+This project includes several applications which can either be run in a combined way within the [single process](/wikiaProject/src/main/java/applications.SingleProcessApplication.java) or each application by itself which requires some more knowledge.
 These are all existing applications including a short description:
- - [WikiaStatistics](./wikiaStatistics): Retrieving an overview of all Wikia wikis
- - [WikiaDumpDownload](./wikiaDumpDownload): Downloading existing wikis
- - [Extraction](./extraction): Extracting wikis with the DBpedia extraction framework
- - [ExtractionPostprocessing](./extractionPostprocessing): Creating one mapping file per wiki
+ - [WikiaStatistics](./applications.wikiaStatistics): Retrieving an overview of all Wikia wikis
+ - [WikiaDumpDownload](./applications.wikiaDumpDownload): Downloading existing wikis
+ - [Extraction](./applications.extraction): Extracting wikis with the DBpedia applications.extraction framework
+ - [ExtractionPostprocessing](./applications.extractionPostprocessing): Creating one mapping file per wiki
 
  To allow for a stable program, prerequisites are checked before running the actual process. Please check before running any process whether all mentioned prerequisites are fulfilled.
 

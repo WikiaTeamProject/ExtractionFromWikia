@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 public class CheckPrerequisitesTest {
 
     /**
-     * Making sure that there qre the required DBpedia files in the test directory
+     * Making sure that there are the required DBpedia files in the test directory
      */
     @Test
     public void checkPrerequisites(){

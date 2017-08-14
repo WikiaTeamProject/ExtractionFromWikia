@@ -51,7 +51,7 @@ public class ExtractionBz2 {
                 return false;
             }
 
-            // do the actual extraction
+            // do the actual applications.extraction
             FileInputStream in = new FileInputStream(pathToFileToExtract);
             FileOutputStream out = new FileOutputStream(extractedResultFile);
             BZip2CompressorInputStream bzIn = new BZip2CompressorInputStream(in);
