@@ -1,4 +1,4 @@
-#Applications
+# Applications
 Several applications are part of this project which deal with different implementation parts.
 This includes:
  - [WikiaStatistics](wikiaStatistics): Retrieving an overview of all Wikia wikis
