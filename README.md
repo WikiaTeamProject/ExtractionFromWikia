@@ -1,10 +1,14 @@
 # ExtractionFromWikia
-This is a student project of the Data and Web Science (DWS) group of the University of Mannheim. The overall goal is to create a knowledge graph out of the fandom (a.k.a. wikia) wiki farm and link it to DBpedia.<br/>
-The program implemented here determines all available wiki dumps on wikia, downloads them, mass-processes them using the <a href="https://github.com/dbpedia/extraction-framework">DBpedia Extraction Framework</a>, postprocesses the output and maps resources, properties and classes to DBpedia. Furthermore, it provides functionality to compile various statistics. A gold standard for evaluating the performance of mappers is also available (see <a href="https://github.com/WikiaTeamProject/ExtractionFromWikia/tree/master/additionalFiles/evaluationFiles">/additionalFiles/evaluationFiles</a>). The resulting knowledge graph is published on <a href="http://dbkwik.webdatacommons.org/">http://dbkwik.webdatacommons.org/</a>.
+This is a student project of the Data and Web Science (DWS) group of the University of Mannheim.
+The overall goal is to create a knowledge graph out of the [fandom (a.k.a. Wikia) wiki farm](http://www.wikia.com) and link it to [DBpedia](http://wiki.dbpedia.org).<br/>
+The program implemented here determines all available wiki dumps on wikia, downloads them, mass-processes them using the [DBpedia Extraction Framework](https://github.com/dbpedia/extraction-framework), postprocesses the output and maps resources, properties and classes to DBpedia. 
+
+Furthermore, it provides functionality to compile various statistics. A [gold standard](./additionalFiles/evaluationFiles) for evaluating the performance of mappers including several mapping files is also available. 
+The resulting knowledge graph is published [online](http://dbkwik.webdatacommons.org/).
 
 ## Goals of this Project
 The goal of this project is to create a linked open data dataset.
-The tools published here download all available wikis from wikia (a.k.a. fandom), extract them to create triples and map those triples to existing DBpedia resources. 
+The tools published here download all available wikis from Wikia (a.k.a. fandom), extract them to create triples and map those triples to existing DBpedia resources. 
 
 ## Technical Prerequisites
 There are some prerequisites that must be fulfilled in order to be able to run the program.
@@ -30,14 +34,25 @@ Go to the DBpedia download page, download the files listed below and decompress 
 - Rransitive Redirects (ttl) → `redirects`
 - Infobox Property Definitions (ttl) → `properties`
 
-You can choose whatever version you like, however, if you want to use the provided gold standard for evaluation, go for version 2016-10 (http://wiki.dbpedia.org/downloads-2016-10).
+You can choose whatever version you like, however, if you want to use the provided gold standard for evaluation, go for version [2016-10](http://wiki.dbpedia.org/downloads-2016-10).
 
-<todo: add more>
+Please copy the [sample properties file](./additionalFiles/configFile/config.properties) directly into the [resources folder](/wikiaProject/src/main/resources) and adjust it. 
+Have a look at the [detailed description](./additionalFiles/configFile/README.md) of all variables which need to be specified in the properties file.
 
 After successfully running the program, you will find the postprocessed wikis in `root_directory/postProcessedWikis`.
 
 
 ## Implementation Details
+
+### Applications 
+This project includes several applications which can either be run in a combined way within the [single process](/wikiaProject/src/main/java/SingleProcessApplication.java) or each application by itself which requires some more knowledge.
+These are all existing applications including a short description:
+ - [WikiaStatistics](./wikiaStatistics): Retrieving an overview of all Wikia wikis
+ - [WikiaDumpDownload](./wikiaDumpDownload): Downloading existing wikis
+ - [Extraction](./extraction): Extracting wikis with the DBpedia extraction framework
+ - [ExtractionPostprocessing](./extractionPostprocessing): Creating one mapping file per wiki
+
+ To allow for a stable program, prerequisites are checked before running the actual process. Please check before running any process whether all mentioned prerequisites are fulfilled.
 
 ### File Structure
 In the `config.properties` file, you specify a root directory. For a regular program run-through this is already sufficient. If you want to extend the coding or execute only parts of the complete chain of commands, you have to know about the file structure.

@@ -19,9 +19,6 @@ public class SingleProcessApplication {
      *  - Extracting wikis with the DBpedia extraction framework
      *  - Creating one mapping file per wiki
      *
-     *  Prerequisites:
-     *  - Please copy the config.properties file from the folder additionalFiles into wikiaProject > resources and adjust it
-     *
      * @param args
      */
     public static void main(String[] args) {
