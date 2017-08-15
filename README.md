@@ -48,10 +48,10 @@ src/main/java/applications/wikiaStatistics/
 ### Applications 
 This project includes several applications which can either be run in a combined way within the [single process](./wikiaProject/src/main/java/applications/SingleProcessApplication.java) or each application by itself which requires some more knowledge.
 These are all existing applications including a short description:
- - [WikiaStatistics](./wikiaProject/src/main/java/applications/wikiaStatistics): Retrieving an overview of all Wikia wikis
- - [WikiaDumpDownload](./wikiaProject/src/main/java/applications/wikiaDumpDownload/): Downloading existing wikis
- - [Extraction](./wikiaProject/src/main/java/applications/extraction/): Extracting wikis with the DBpedia applications.extraction framework
- - [ExtractionPostprocessing](./wikiaProject/src/main/java/applications/extractionPostprocessing): Creating one mapping file per wiki
+ - [WikiaStatistics](./wikiaProject/src/main/java/applications/wikiaStatistics): Retrieving an overview of all Wikia wikis.
+ - [WikiaDumpDownload](./wikiaProject/src/main/java/applications/wikiaDumpDownload/): Downloading existing wiki dumps from Wikia.
+ - [Extraction](./wikiaProject/src/main/java/applications/extraction/): Extracting wikis with the DBpedia applications.extraction framework.
+ - [ExtractionPostprocessing](./wikiaProject/src/main/java/applications/extractionPostprocessing): Creating one mapping file per wiki.
 
  To allow for a stable program, prerequisites are checked before running the actual process. Please check before running any process whether all mentioned prerequisites are fulfilled.
 
@@ -60,30 +60,32 @@ In the `config.properties` file, you specify a root directory. For a regular pro
 
 ```
 root_directory
-+---downloadedWikis
-|     +---7z
-|     +---gz
-|     +---decompressed
-+---dbPediaExtractionFormat
 +---resources
 |      +---pageids
 |      +---redirects
 |      +---ontology
 |      +---properties
++---downloadedWikis
+|     +---7z
+|     +---gz
+|     +---decompressed
++---dbPediaExtractionFormat
 +---postProcessedWikis
 +---statistics
++---DBkwikOntology
 ```
 
 The program performs a lot of file operations. All of those file operations are handled within the `root_directory` that you specify in the `config.properties` file.
-- The `downloadedWikis` directory contains plain dumps from wikia.
-     - The `7z` directory contains all wikis that were downloaded in the 7z format.
-     - The `gz` directory contains all wikis that were downloaded in the gz format.
-     - The `decompressed` directory contains all wikis from the `7z` and `gz` folder but in a decompressed format.
-- The `dbPediaExtractionFormat` contains the decompressed wiki dumps that are following a file structure required for the DBpedia extractor to work.
 - The `resources` directory contains different files from DBpedia. This folder requires user interaction: the user has to put the files in the directory (as specified in "How to execute the Program?").
    - The `pageids` directory should contain a TTL file with all page ids of DBpedia. This is required for some mappers to work.
    - The `redirects` directory should contain a TTL file with all redirects of DBpedia. This is required for some mappers to work.
    - The `ontology` directory should contain a TTL file with all ontologies of DBpedia. This is required for some mappers to work.
    - The `properties` mapper should contain a TTL file with all properties of DBpedia. This is required for some mappers to work.
+- The `downloadedWikis` directory contains plain dumps from wikia.
+     - The `7z` directory contains all wikis that were downloaded in the 7z format.
+     - The `gz` directory contains all wikis that were downloaded in the gz format.
+     - The `decompressed` directory contains all wikis from the `7z` and `gz` folder but in a decompressed format.
+- The `dbPediaExtractionFormat` contains the decompressed wiki dumps that are following a file structure required for the DBpedia extractor to work.
 - The `PostProcessedWikis` directory contains all wikis in their final postprocessed form. After successfully running the program, the user should find the final output here. 
 - The `statistics` directory contains various statistics files that are created throughout the process.
+- The `DBkwikOntology` directory contains the created ontology for all wikis.
