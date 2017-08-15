@@ -43,14 +43,15 @@ After successfully running the program, you will find the postprocessed wikis in
 
 
 ## Implementation Details
+src/main/java/applications/wikiaStatistics/
 
 ### Applications 
-This project includes several applications which can either be run in a combined way within the [single process](/wikiaProject/src/main/java/applications.SingleProcessApplication.java) or each application by itself which requires some more knowledge.
+This project includes several applications which can either be run in a combined way within the [single process](./wikiaProject/src/main/java/applications/SingleProcessApplication.java) or each application by itself which requires some more knowledge.
 These are all existing applications including a short description:
- - [WikiaStatistics](./applications.wikiaStatistics): Retrieving an overview of all Wikia wikis
- - [WikiaDumpDownload](./applications.wikiaDumpDownload): Downloading existing wikis
- - [Extraction](./applications.extraction): Extracting wikis with the DBpedia applications.extraction framework
- - [ExtractionPostprocessing](./applications.extractionPostprocessing): Creating one mapping file per wiki
+ - [WikiaStatistics](./wikiaProject/src/main/java/applications/wikiaStatistics): Retrieving an overview of all Wikia wikis
+ - [WikiaDumpDownload](./wikiaProject/src/main/java/applications/wikiaDumpDownload/): Downloading existing wikis
+ - [Extraction](./wikiaProject/src/main/java/applications/extraction/): Extracting wikis with the DBpedia applications.extraction framework
+ - [ExtractionPostprocessing](./wikiaProject/src/main/java/applications/extractionPostprocessing): Creating one mapping file per wiki
 
  To allow for a stable program, prerequisites are checked before running the actual process. Please check before running any process whether all mentioned prerequisites are fulfilled.
 
