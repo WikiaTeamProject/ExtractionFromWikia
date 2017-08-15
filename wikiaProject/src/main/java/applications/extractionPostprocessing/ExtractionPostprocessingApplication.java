@@ -8,6 +8,13 @@ import applications.extractionPostprocessing.controller.resourcemapper.ResourceM
 /**
  * This application will postprocess extracted wikia wikis.
  * Resource mappings are changed.
+ *
+ * Run this application with at least 10Gb of RAM.
+ * -Xmx10G
+ *
+ * In IntelliJ:
+ * Run → Edit Configurations → VM options: <enter:> -Xmx10G
+ *
  */
 public class ExtractionPostprocessingApplication {
 
