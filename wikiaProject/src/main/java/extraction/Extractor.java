@@ -40,6 +40,7 @@ public class Extractor {
     private String extractionDefaultPropertiesFilePath;
     private HashMap<String, WikiaWikiProperties> wikisPropertiesSet;
     private String pathToRootDirectory;
+    private HashMap<String,String> dumpURLsMapping;
 
     public Extractor() {
 
@@ -95,7 +96,7 @@ public class Extractor {
         try {
             String wikisFilePath =
                     ResourceBundle.getBundle("config").getString("pathToRootDirectory")
-                            + "//downloadedWikis//";
+                            + "//downloadedWikis//downloaded//";
             File downloadedWikisFolder = new File(wikisFilePath);
             Extraction7zip extractor7Zip = new Extraction7zip();
             ExtractionGZip extractorGZip = new ExtractionGZip();
@@ -146,10 +147,16 @@ public class Extractor {
             String languageCode = "";
             String wikiName = "";
             String wikiPath = wikiFilePath;
+            String wikiBaseURL;
             int lineNumber = 0;
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
             Date lastModifiedDate;
             long wikiSize;
+
+            if(dumpURLsMapping==null){
+                IOoperations io=new IOoperations();
+                dumpURLsMapping=io.readDumpsURL();
+            }
 
 
             File wikiFile = new File(wikiFilePath);
@@ -182,7 +189,15 @@ public class Extractor {
                 }
 
                 wikiSize = (wikiFile.length() / 1024);
-                wikiProperties = new WikiaWikiProperties(wikiName, languageCode, wikiPath, lastModifiedDate, wikiSize);
+
+                if(dumpURLsMapping.get(wikiFile.getName())!=null){
+                    wikiBaseURL=dumpURLsMapping.get(wikiFile.getName());
+                }
+                else
+                    wikiBaseURL="";
+
+
+                wikiProperties = new WikiaWikiProperties(wikiName, languageCode, wikiPath, lastModifiedDate, wikiSize,wikiBaseURL);
 
             }
             br.close();
@@ -471,6 +486,7 @@ public class Extractor {
 
         ExtractionBz2
                 bz2Extractor = new ExtractionBz2();
+        String wikiFolderName="";
 
         try {
 
@@ -491,7 +507,16 @@ public class Extractor {
 
                             WikiaWikiProperties properties = readWikiPropertiesFile(dateFolder.getAbsolutePath());
 
-                            File extractedFilesFolder = new File(postProcessedFilesDirectoryPath + "//" + properties.getWikiName());
+
+                            if(properties.getWikiBaseURL().equals("")){
+                                wikiFolderName=properties.getWikiName();
+                            }
+                            else{
+                                wikiFolderName=properties.getWikiBaseURL().substring(7,properties.getWikiBaseURL().length()-1);
+                            }
+
+
+                            File extractedFilesFolder = new File(postProcessedFilesDirectoryPath + "//" +wikiFolderName);
 
                             if (! extractedFilesFolder.exists()) {
                                 extractedFilesFolder.mkdirs();
@@ -502,7 +527,7 @@ public class Extractor {
                             for (File wikiFile : extractedFiles) {
                                 if (wikiFile.getName().endsWith(".bz2")) {
                                     bz2Extractor.extract(wikiFile.getAbsolutePath(),
-                                            postProcessedFilesDirectoryPath + "//" + properties.getWikiName());
+                                            postProcessedFilesDirectoryPath + "//" + wikiFolderName);
                                 }
                             }
                         }
@@ -535,6 +560,7 @@ public class Extractor {
             fileWriter.write("WikiName:" + wikiProperties.getWikiName() + newLineCharacter);
             fileWriter.write("LanguageCode:" + wikiProperties.getLanguageCode() + newLineCharacter);
             fileWriter.write("File Path:" + wikiProperties.getWikiPath() + newLineCharacter);
+            fileWriter.write("BaseURL:" + wikiProperties.getWikiBaseURL() + newLineCharacter);
 
             fileWriter.close();
 
@@ -581,6 +607,9 @@ public class Extractor {
 
                 } else if (key.toLowerCase().equals("languagecode")) {
                     wikiProperties.setLanguageCode(value);
+                }
+                else if (key.toLowerCase().equals("baseurl")) {
+                    wikiProperties.setWikiBaseURL(value); ;
                 }
             }
 
