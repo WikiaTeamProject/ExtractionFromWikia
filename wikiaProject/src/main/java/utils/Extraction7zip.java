@@ -128,7 +128,7 @@ public class Extraction7zip {
     /**
      * Receives a filepath of a 7zip file as input string and extracts it into the wikiaDumps/extracted7z folder
      * @param compressedFile 7Zip file to extract.
-     * @return true if extraction was successful, else false.
+     * @return true if applications.extraction was successful, else false.
      */
     public boolean extract7ZipFileIntoDesignatedFolder(File compressedFile) {
         assureDesignatedFunctionality();
@@ -138,7 +138,7 @@ public class Extraction7zip {
     /**
      * Extracts a 7zip file.
      * @param pathToFile Path to the file to be compressed.
-     * @return true if extraction was successful, else false.
+     * @return true if applications.extraction was successful, else false.
      */
     public boolean extract7ZipFileIntoDesignatedFolder(String pathToFile){
         assureDesignatedFunctionality();
