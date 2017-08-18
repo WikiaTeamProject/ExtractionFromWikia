@@ -481,4 +481,55 @@ public class IOoperations {
         }
         return ifFileExist;
     }
+
+
+    /**
+     *
+     * @return
+     */
+    public HashMap<String,String> readDumpsURL(){
+
+        HashMap<String,String> dumpURLs=new HashMap<String,String>();
+        String dumpsURLFilePath=rootDirectoryPath+"/wikiStatistics/wikiaOverviewDumpURLs.csv";
+
+
+        try{
+
+        File dumpsURLFile=new File(dumpsURLFilePath);
+
+        if(dumpsURLFile.exists()){
+
+            FileReader fileReader=new FileReader(dumpsURLFile);
+            BufferedReader bufferedReader=new BufferedReader(fileReader);
+            String fileLine;
+            boolean isHeaderRow=true;
+
+            while((fileLine=bufferedReader.readLine())!=null){
+
+                if(isHeaderRow){
+                    isHeaderRow=false;
+                    continue;
+                }
+
+                String[] dumpURLsMapping=fileLine.split(",");
+                String dumpFilePath=dumpURLsMapping[0].substring(0,dumpURLsMapping[0].lastIndexOf("."));
+                String dumpBaseURL=dumpURLsMapping[1];
+
+                dumpURLs.put(dumpFilePath ,dumpBaseURL);
+
+            }
+
+        }
+        else
+        {
+            logger.severe("Dumps URL file not present. Please check . . . .");
+        }
+
+       }
+       catch(Exception ex){
+
+        }
+
+        return dumpURLs;
+    }
 }
