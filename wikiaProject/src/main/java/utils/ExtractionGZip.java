@@ -117,7 +117,7 @@ public class ExtractionGZip
      *
      */
     public void extractAllGZipFilesIntoDesignatedFolder() {
-        String foldergz = downloadedDirectoryPath + "/gz/";
+        String foldergz = downloadedDirectoryPath + "/downloaded/gz/";
         File folder = new File(foldergz);
 
         for (File filegz : folder.listFiles()) {
