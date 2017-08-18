@@ -1,6 +1,5 @@
-package wikiaDumpDownload.controller;
+package applications.wikiaDumpDownload.controller;
 
-//import com.sun.tools.javac.util.List;
 import org.apache.commons.lang3.StringUtils;
 import utils.IOoperations;
 
