@@ -28,6 +28,3 @@
 
 # include templates
 !/wikiaProject/src/main/resources/files/templates/template_extraction_default.properties
-
-# include properties file for tests
-!/wikiaProject/src/test/resources/config.properties
