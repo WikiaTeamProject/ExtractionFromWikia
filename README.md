@@ -43,7 +43,6 @@ After successfully running the program, you will find the postprocessed wikis in
 
 
 ## Implementation Details
-src/main/java/applications/wikiaStatistics/
 
 ### Applications 
 This project includes several applications which can either be run in a combined way within the [single process](./wikiaProject/src/main/java/applications/SingleProcessApplication.java) or each application by itself which requires some more knowledge.
