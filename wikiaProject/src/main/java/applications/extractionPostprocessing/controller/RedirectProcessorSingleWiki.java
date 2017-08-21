@@ -5,6 +5,7 @@ import utils.IOoperations;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -162,6 +163,7 @@ public class RedirectProcessorSingleWiki {
 
                 String line;
                 Matcher matcher;
+                String targetnamespace = ResourceBundle.getBundle("config").getString("targetnamespace");
 
                 while ((line = reader.readLine()) != null) {
                     Pattern pattern = Pattern.compile("<[^<]*>");
@@ -171,15 +173,29 @@ public class RedirectProcessorSingleWiki {
 
                     matcher = pattern.matcher(line);
                     int index = 0;
+                    boolean isType = false;
+                    boolean appendLine = true;
 
                     while (matcher.find()) {
                         index++;
                         switch (index) {
                             // first and last tag replaced with redirect if one exists
-                            // (second match: "<some interlinking tag>" -> irrelevant for us
                             case 1:
-                            case 3:
                                 if (redirectsMap.containsKey(matcher.group())) {
+                                    // replace operation
+                                    line = line.replace(matcher.group(), getRedirect(matcher.group()));
+                                }
+                                break;
+                            // (second match: "<some interlinking tag>"
+                            // if it is of type rdf-schema#type, then only keep if last resource is our target namespace
+                            case 2:
+                                if (matcher.group().contains("rdf-syntax-ns#type"))
+                                    isType = true;
+                                break;
+                            case 3:
+                                if (isType && ! matcher.group().contains(targetnamespace)) {
+                                    appendLine = false;
+                                } else if (redirectsMap.containsKey(matcher.group())) {
                                     // replace operation
                                     line = line.replace(matcher.group(), getRedirect(matcher.group()));
                                 }
@@ -187,7 +203,8 @@ public class RedirectProcessorSingleWiki {
                         }
 
                     }
-                    newFileContent.append(line + "\n"); // the line break must be added
+                    if (appendLine)
+                        newFileContent.append(line + "\n"); // the line break must be added
                 }
                 reader.close();
             } catch (IOException ioe) {
