@@ -72,7 +72,6 @@ root_directory
 +---dbPediaExtractionFormat
 +---postProcessedWikis
 +---statistics
-+---DBkwikOntology
 ```
 
 The program performs a lot of file operations. All of those file operations are handled within the `root_directory` that you specify in the `config.properties` file.
@@ -88,4 +87,3 @@ The program performs a lot of file operations. All of those file operations are 
 - The `dbPediaExtractionFormat` contains the decompressed wiki dumps that are following a file structure required for the DBpedia extractor to work.
 - The `PostProcessedWikis` directory contains all wikis in their final postprocessed form. After successfully running the program, the user should find the final output here. 
 - The `statistics` directory contains various statistics files that are created throughout the process.
-- The `DBkwikOntology` directory contains the created ontology for all wikis.

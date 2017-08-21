@@ -92,7 +92,7 @@ public class MappingExecutor {
 
             // create the ontology file
             OntologyCreator ontologyCreator = new OntologyCreator(classesForDefinition);
-            ontologyCreator.createOntologyOption();
+            ontologyCreator.createOntology();
 
 
             // output the statistics and write them into file

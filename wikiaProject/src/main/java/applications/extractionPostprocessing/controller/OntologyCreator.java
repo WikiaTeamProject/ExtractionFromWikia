@@ -19,23 +19,26 @@ public class OntologyCreator {
 
 
     private HashSet<String> classesForDefinition; // contains all classes for which a definition is to be created
-    private String rootDirectoryPath;
-    private String targetNamespace;
+    private HashSet<String> propertiesForDefinition; // contains all classes for which a definition is to be created
+    private String pathToWiki;
+    private static String rootDirectoryPath = IOoperations.getRootDirectoryPath();
+    private static String targetNamespace = IOoperations.getTargetNamespace();
+
 
     /**
      * Constructor
      */
-    public OntologyCreator( HashSet<String> classesForDefinition){
+    public OntologyCreator( HashSet<String> classesForDefinition, HashSet<String> propertiesForDefinition, String pathToWiki){
         this.classesForDefinition = classesForDefinition;
-        this.rootDirectoryPath = IOoperations.getRootDirectoryPath();
-        this.targetNamespace = IOoperations.getTargetNamespace();
+        this.propertiesForDefinition = propertiesForDefinition;
+        this.pathToWiki = pathToWiki;
     }
 
 
     /**
      * Creates an ontology.nt file in <root>/DBkwikOntology.
      */
-    public void createOntologyOption(){
+    public void createOntology(){
 
         OntModel ontologyModel = ModelFactory.createOntologyModel();
         ontologyModel.setNsPrefix("dbkwik", "http://" + targetNamespace);
@@ -43,23 +46,26 @@ public class OntologyCreator {
         // add our ontology
         Ontology dbkwikOntology = ontologyModel.createOntology("http://" + targetNamespace + "/ontology/");
 
-        // add a sample class
-        // ontologyModel.createClass("http://" + targetNamespace + "/ontology/BasketballLeague" );
 
-        for(String classToAdd: classesForDefinition){
+        // add classes
+        for(String classToAdd : classesForDefinition){
 
-            // remove tags (those are added by the jena framework)
-            classToAdd = classToAdd.replace(">", "");
-            classToAdd = classToAdd.replace("<", "");
+            // remove tags (those are added by the jena framework) and add class
+            ontologyModel.createClass(removeTags(classToAdd));
 
-            // add class
-            ontologyModel.createClass(classToAdd );
+        }
+
+
+        // add properties
+        for(String propertyToAdd : propertiesForDefinition){
+
+            // remove tags (those are added by the jena framework) and add property
+            ontologyModel.createProperty(removeTags(propertyToAdd));
+
         }
 
         NTripleWriter nTripleWriter = new NTripleWriter(); // NTriple writer
         Basic basicWriter = new Basic(); // RDF writer
-
-        // TODO: Find out what base is and whether we want to use it.
 
         try {
             IOoperations.createDirectory(rootDirectoryPath + "/DBkwikOntology");
@@ -81,11 +87,16 @@ public class OntologyCreator {
     }
 
 
-    public static void main(String[] args) {
-        OntologyCreator oc = new OntologyCreator(new HashSet<String>());
-        oc.createOntologyOption();
+    /**
+     * Remove tags.
+     * @param sequenceWithTags
+     * @return
+     */
+    private String removeTags(String sequenceWithTags) {
+        sequenceWithTags = sequenceWithTags.replace(">", "");
+        sequenceWithTags = sequenceWithTags.replace("<", "");
+        return sequenceWithTags;
     }
-
 
 
 }
