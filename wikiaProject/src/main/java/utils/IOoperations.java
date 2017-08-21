@@ -190,13 +190,18 @@ public class IOoperations {
      * @param entitiesMapping A HashSet of Strings, each representing one line to be written to the mapping file.
      * @param pathToFileToBeWritten
      */
-    public static void writeMappingContentsToFile(HashMap<String, String> entitiesMapping, File pathToFileToBeWritten, String ontology) {
+    public static void writeMappingContentsToFile(HashMap<String, String> entitiesMapping, File pathToFileToBeWritten, String ontology, boolean includeNullMappings) {
 
         StringBuffer contentToWrite = new StringBuffer();
         Iterator iterator = entitiesMapping.entrySet().iterator();
 
         while(iterator.hasNext()){
             HashMap.Entry<String, String> entry = (HashMap.Entry<String, String>) iterator.next();
+
+            // exclude null mappings if includeNullMappings is false
+            if (! includeNullMappings && entry.getValue().equals("<null>"))
+                continue;
+
             contentToWrite.append(entry.getKey() + " " + ontology + " " + entry.getValue() + " .\n");
         }
 

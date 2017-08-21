@@ -43,10 +43,10 @@ public abstract class ResourceMapper {
      * @param targetNamespace The target namespace that shall be used.
      * @param resourcesToMap An array list of the resources for which the mapping shall be created.
      */
-    public void writeResourceMappingsFile(File directory, String targetNamespace, HashSet<String> resourcesToMap) {
+    public void writeResourceMappingsFile(File directory, String targetNamespace, HashSet<String> resourcesToMap, boolean includeNullMappings) {
         IOoperations.writeMappingContentsToFile(getResourceMappings(targetNamespace, resourcesToMap),
                 new File(directory.getAbsolutePath() + "/resourceMappings.ttl"),
-                "<http://www.w3.org/2002/07/owl#sameAs>");
+                "<http://www.w3.org/2002/07/owl#sameAs>", includeNullMappings);
     }
 
 }

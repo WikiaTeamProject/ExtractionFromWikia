@@ -52,6 +52,7 @@ public class MappingExecutor {
 
         String pathToRootDirectory = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/postProcessedWikis";
         File root = new File(pathToRootDirectory);
+        boolean includeNullMappings;
 
         if (root.isDirectory()) {
 
@@ -59,7 +60,6 @@ public class MappingExecutor {
 
             // loop over all wikis
             for (File directory : root.listFiles()) {
-
 
                 if (directory.isDirectory()) {
                     // we have a wiki file
@@ -72,10 +72,12 @@ public class MappingExecutor {
                     totalNumberOfProperties += wikiToMap.propertiesToMap.size();
                     totalNumberOfResources += wikiToMap.resourcesToMap.size();
 
-                    resourceMapper.writeResourceMappingsFile(directory, targetNameSpace, wikiToMap.resourcesToMap);
-                    propertyMapper.writePropertiesMappingsFile(directory, targetNameSpace, wikiToMap.propertiesToMap);
-                    classMapper.writeClassMappingsFile(directory, targetNameSpace, wikiToMap.classesToMap);
+                    // set whether null mappings should be included for evaluation
+                    includeNullMappings = Boolean.parseBoolean(ResourceBundle.getBundle("config").getString("includeNullMappings"));
 
+                    resourceMapper.writeResourceMappingsFile(directory, targetNameSpace, wikiToMap.resourcesToMap, includeNullMappings);
+                    propertyMapper.writePropertiesMappingsFile(directory, targetNameSpace, wikiToMap.propertiesToMap, includeNullMappings);
+                    classMapper.writeClassMappingsFile(directory, targetNameSpace, wikiToMap.classesToMap, includeNullMappings);
 
                     Iterator iterator = wikiToMap.classesToMap.iterator();
 

@@ -47,10 +47,10 @@ public abstract class ClassMapper {
      * @param targetNamespace The target namespace that shall be used.
      * @param classesToMap    An array list of the classes for which the mapping shall be created.
      */
-    public void writeClassMappingsFile(File directory, String targetNamespace, HashSet<String> classesToMap) {
+    public void writeClassMappingsFile(File directory, String targetNamespace, HashSet<String> classesToMap, boolean includeNullMappings) {
         IOoperations.writeMappingContentsToFile(getClassMappings(targetNamespace, classesToMap),
                 new File(directory.getAbsolutePath() + "/classMappings.ttl"),
-                "<http://www.w3.org/2002/07/owl#equivalentClass>");
+                "<http://www.w3.org/2002/07/owl#equivalentClass>", includeNullMappings);
     }
 
 

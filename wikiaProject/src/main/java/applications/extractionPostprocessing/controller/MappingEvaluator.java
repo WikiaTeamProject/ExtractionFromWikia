@@ -6,8 +6,11 @@ import java.util.*;
 import applications.extractionPostprocessing.model.EvaluationResultAllWikis;
 import applications.extractionPostprocessing.model.EvaluationResultSingleWiki;
 import applications.extractionPostprocessing.util.PostprocessingIOHandler;
+import utils.IOoperations;
 
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * After creating the mapping files using a mapper, the evaluation for that mapping can be performed using this class.
@@ -406,9 +409,14 @@ public class MappingEvaluator {
                 }
             }
 
+            // delete null mappings if they exist
+            if (dbPediaMappings.containsValue("<null>"))
+                deleteNullMappings(mappingFile);
+
         } catch (Exception ex) {
             logger.severe(ex.getMessage());
         }
+
 
         mappingsEvaluationResultSingleWiki = new EvaluationResultSingleWiki(falseNegatives, falsePositives, truePositives, trueNegatives);
         return mappingsEvaluationResultSingleWiki;
@@ -422,6 +430,32 @@ public class MappingEvaluator {
      */
     private static EvaluationResultSingleWiki evaluateMappingsForOneWiki(File wikiPath, EvaluationObjectSingleWiki evaluationObjectSingleWiki) {
         return evaluateMappingsForOneWiki(wikiPath.getAbsolutePath(), evaluationObjectSingleWiki);
+    }
+
+    /**
+     * Rewrite mappings file by deleting all included null mappings
+     * @param mappingFile
+     */
+    private static void deleteNullMappings(File mappingFile) {
+        String line;
+        StringBuffer content = new StringBuffer();
+
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(mappingFile))) {
+
+            while ((line = bufferedReader.readLine()) != null) {
+
+                // include everything except null mappings
+                if (! line.contains("<null>"))
+                    content.append(line);
+
+            }
+            bufferedReader.close();
+
+            IOoperations.updateFile(content.toString(), mappingFile);
+
+        } catch (IOException e) {
+            logger.severe(e.toString());
+        }
     }
 
 
