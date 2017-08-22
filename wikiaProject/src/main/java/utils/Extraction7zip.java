@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 public class Extraction7zip {
     private static Logger logger = Logger.getLogger(Extraction7zip.class.getName());
     private String directoryExtracted;
-    private static String downloadedDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/downloadedWikis";
+    private static String downloadedDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/downloadedWikis/";
 
 
     /**
@@ -151,7 +151,7 @@ public class Extraction7zip {
      */
     public void extractAll7ZipFilesIntoDesignatedFolder() {
         assureDesignatedFunctionality();
-        String folder7z = downloadedDirectoryPath + "/7z/";
+        String folder7z = downloadedDirectoryPath+"/downloaded/" + "/7z/";
         File folder = new File(folder7z);
 
         for (File file7z : folder.listFiles()) {

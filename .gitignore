@@ -20,14 +20,13 @@
 # exclude csv files
 *.csv
 
-# include config sample file
+# include config sample and test config file
 !/additionalFiles/configFile/config.properties
+!/wikiaProject/src/test/resources/config.properties
+
 
 # include language codes
 !/wikiaProject/src/main/resources/files/wikiaLanguageCodes.csv
 
 # include templates
 !/wikiaProject/src/main/resources/files/templates/template_extraction_default.properties
-
-# include properties file for tests
-!/wikiaProject/src/test/resources/config.properties

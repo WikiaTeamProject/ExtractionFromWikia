@@ -190,13 +190,18 @@ public class IOoperations {
      * @param entitiesMapping A HashSet of Strings, each representing one line to be written to the mapping file.
      * @param pathToFileToBeWritten
      */
-    public static void writeMappingContentsToFile(HashMap<String, String> entitiesMapping, File pathToFileToBeWritten, String ontology) {
+    public static void writeMappingContentsToFile(HashMap<String, String> entitiesMapping, File pathToFileToBeWritten, String ontology, boolean includeNullMappings) {
 
         StringBuffer contentToWrite = new StringBuffer();
         Iterator iterator = entitiesMapping.entrySet().iterator();
 
         while(iterator.hasNext()){
             HashMap.Entry<String, String> entry = (HashMap.Entry<String, String>) iterator.next();
+
+            // exclude null mappings if includeNullMappings is false
+            if (! includeNullMappings && entry.getValue().equals("<null>"))
+                continue;
+
             contentToWrite.append(entry.getKey() + " " + ontology + " " + entry.getValue() + " .\n");
         }
 
@@ -480,5 +485,56 @@ public class IOoperations {
             logger.severe(ex.getMessage());
         }
         return ifFileExist;
+    }
+
+
+    /**
+     *
+     * @return
+     */
+    public HashMap<String,String> readDumpsURL(){
+
+        HashMap<String,String> dumpURLs=new HashMap<String,String>();
+        String dumpsURLFilePath=rootDirectoryPath+"/wikiStatistics/wikiaOverviewDumpURLs.csv";
+
+
+        try{
+
+        File dumpsURLFile=new File(dumpsURLFilePath);
+
+        if(dumpsURLFile.exists()){
+
+            FileReader fileReader=new FileReader(dumpsURLFile);
+            BufferedReader bufferedReader=new BufferedReader(fileReader);
+            String fileLine;
+            boolean isHeaderRow=true;
+
+            while((fileLine=bufferedReader.readLine())!=null){
+
+                if(isHeaderRow){
+                    isHeaderRow=false;
+                    continue;
+                }
+
+                String[] dumpURLsMapping=fileLine.split(",");
+                String dumpFilePath=dumpURLsMapping[0].substring(0,dumpURLsMapping[0].lastIndexOf("."));
+                String dumpBaseURL=dumpURLsMapping[1];
+
+                dumpURLs.put(dumpFilePath ,dumpBaseURL);
+
+            }
+
+        }
+        else
+        {
+            logger.severe("Dumps URL file not present. Please check . . . .");
+        }
+
+       }
+       catch(Exception ex){
+
+        }
+
+        return dumpURLs;
     }
 }

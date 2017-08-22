@@ -11,15 +11,21 @@ public class WikiaWikiProperties {
     private String wikiPath;
     private Date lastModifiedDate;
     private long wikiSize;
+    private String wikiBaseURL;
 
     //Constructor
-    public WikiaWikiProperties(String wikiName,String languageCode,String wikiPath,Date lastModifiedDate,
-                               long wikiSize){
+    public WikiaWikiProperties(String wikiName,
+                               String languageCode,
+                               String wikiPath,
+                               Date lastModifiedDate,
+                               long wikiSize,
+                               String wikiBaseURL){
         this.wikiName=wikiName;
         this.languageCode=languageCode;
         this.wikiPath=wikiPath;
         this.lastModifiedDate=lastModifiedDate;
         this.wikiSize=wikiSize;
+        this.wikiBaseURL=wikiBaseURL;
     }
 
     //constructor with no arguments
@@ -37,6 +43,8 @@ public class WikiaWikiProperties {
 
     public long getWikiSize(){return this.wikiSize;}
 
+    public String getWikiBaseURL(){return this.wikiBaseURL;}
+
     public void setWikiName(String wikiName){this.wikiName=wikiName;}
 
     public void setLanguageCode(String languageCode){ this.languageCode=languageCode;}
@@ -46,4 +54,6 @@ public class WikiaWikiProperties {
     public  void setLastModifiedDate(Date modifiedDate){this.lastModifiedDate=modifiedDate;}
 
     public void setWikiSize(long wikiSize){this.wikiSize=wikiSize;}
+
+    public void setWikiBaseURL(String wikiBaseURL){this.wikiBaseURL=wikiBaseURL;}
 }

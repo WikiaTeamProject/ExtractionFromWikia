@@ -50,6 +50,7 @@ public class WikiaDumpDownloadThreadImpl  {
         String statisticsDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/wikiStatistics";
 
         ArrayList<String> filePaths = new ArrayList<String>();
+        ArrayList<String> dumpURLsFiles=new ArrayList<String>();
 
         int lowerIdLimit = 0;
         int upperIdLimit = 50000;
@@ -61,9 +62,12 @@ public class WikiaDumpDownloadThreadImpl  {
 
             String filePath = statisticsDirectoryPath + "/wikiaOverviewIndividualFiles/wikis_" + lowerIdLimit + "_to_" + upperIdLimit + ".csv";
             String dumpSizeFilePath = statisticsDirectoryPath + "/wikiaOverviewIndividualDumpSizes/dumpsSizes_" + lowerIdLimit + "_to_" + upperIdLimit + ".csv";
-            filePaths.add(dumpSizeFilePath);
+            String dumpURLsFilePath = statisticsDirectoryPath + "/wikiaOverviewIndividualDumpURLs/dumpsURL_" + lowerIdLimit + "_to_" + upperIdLimit + ".csv";
 
-            threads[i] = new Thread(new WikiaDumpDownloadThread(filePath, dumpSizeFilePath));
+            filePaths.add(dumpSizeFilePath);
+            dumpURLsFiles.add(dumpURLsFilePath);
+
+            threads[i] = new Thread(new WikiaDumpDownloadThread(filePath, dumpSizeFilePath,dumpURLsFilePath));
 
             lowerIdLimit += 50000;
             upperIdLimit += 50000;
@@ -85,6 +89,7 @@ public class WikiaDumpDownloadThreadImpl  {
         }
 
         mergeFiles(filePaths);
+        mergeDumpURLsFiles(dumpURLsFiles);
 
     }
 
@@ -167,6 +172,48 @@ public class WikiaDumpDownloadThreadImpl  {
         }
 
         return true;
+    }
+
+
+    private static void mergeDumpURLsFiles(ArrayList<String> dumpURLsFiles) {
+        String statisticsDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/wikiStatistics";
+
+        File resultFile = new File(statisticsDirectoryPath + "/wikiaOverviewDumpURLs.csv");
+        File f;
+        int fileNumber = 0;
+        BufferedReader bufferedReader;
+        String currentLine;
+        BufferedWriter bufferedWriter;
+
+        try {
+            bufferedWriter = new BufferedWriter(new FileWriter(resultFile));
+            for (String path : dumpURLsFiles) {
+                fileNumber++;
+                logger.info("Starting with file number " + fileNumber + ": " + path);
+                f = new File(path);
+                bufferedReader = new BufferedReader(new FileReader(f));
+
+                if (fileNumber == 1) {
+                    // read header
+                    while ((currentLine = bufferedReader.readLine()) != null) {
+                        bufferedWriter.write(currentLine + "\n");
+                    }
+                } else {
+                    // skip header line
+                    bufferedReader.readLine();
+                    while ((currentLine = bufferedReader.readLine()) != null) {
+                        bufferedWriter.write(currentLine + "\n");
+                    }
+                }
+
+            }
+
+            bufferedWriter.close();
+        } catch (IOException ioe) {
+            logger.severe(ioe.toString());
+        }
+
+        logger.info("Finished merging " + fileNumber + " files.");
     }
 
 }

@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import utils.IOoperations;
 
 /**
  * This class allows to extract various properties of wikis.
@@ -18,6 +19,8 @@ import java.util.logging.Logger;
 public class ExtractWikiProperties {
 
     private static Logger logger = Logger.getLogger(LanguageCodes.class.getName());
+
+    private HashMap<String,String> dumpURLsMapping;
 
     public WikiaWikiProperties extractPropertiesForaWiki(String wikiFilePath) {
 
@@ -31,10 +34,17 @@ public class ExtractWikiProperties {
             String languageCode = "";
             String wikiName="";
             String wikiPath=wikiFilePath;
+            String wikiBaseURL;
             int lineNumber = 0;
             SimpleDateFormat simpleDateFormat=new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
             Date lastModifiedDate;
             long wikiSize;
+
+
+            if(dumpURLsMapping==null){
+                IOoperations io=new IOoperations();
+                dumpURLsMapping=io.readDumpsURL();
+            }
 
 
             File wikiFile=new File(wikiFilePath);
@@ -62,7 +72,14 @@ public class ExtractWikiProperties {
 
                 wikiSize=(wikiFile.length()/1024);
 
-                wikiProperties=new WikiaWikiProperties(wikiName, languageCode,wikiPath,lastModifiedDate,wikiSize);
+
+                if(dumpURLsMapping.get(wikiFile.getName())!=null){
+                    wikiBaseURL=dumpURLsMapping.get(wikiFile.getName());
+                }
+                else
+                    wikiBaseURL="";
+
+                wikiProperties=new WikiaWikiProperties(wikiName, languageCode,wikiPath,lastModifiedDate,wikiSize,wikiBaseURL);
                 // wikiProperties = new WikiaWikiProperties(wikiName, languageCode, wikiPath);
 
             }
