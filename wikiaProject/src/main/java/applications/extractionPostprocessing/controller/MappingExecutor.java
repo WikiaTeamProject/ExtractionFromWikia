@@ -24,7 +24,6 @@ import java.util.regex.Pattern;
  */
 public class MappingExecutor {
 
-    private static Logger logger = Logger.getLogger(MappingExecutor.class.getName());
     private ResourceMapper resourceMapper;
     private PropertyMapper propertyMapper;
     private ClassMapper classMapper;
@@ -33,6 +32,9 @@ public class MappingExecutor {
     private int totalNumberOfResources = 0;
     private int totalNumberOfProperties = 0;
     private int totalNumberOfClasses = 0;
+
+    private static Logger logger = Logger.getLogger(MappingExecutor.class.getName());
+    private static String targetNamespace = ResourceBundle.getBundle("config").getString("targetnamespace");
 
 
     /**
@@ -56,6 +58,7 @@ public class MappingExecutor {
         if (root.isDirectory()) {
 
             HashSet<String> classesForDefinition = new HashSet<String>();
+            HashSet<String> propertiesForDefinition = new HashSet<String>();
 
             // loop over all wikis
             for (File directory : root.listFiles()) {
@@ -83,16 +86,18 @@ public class MappingExecutor {
                         classesForDefinition.add( classMapper.transformTemplateToClass( (String) iterator.next()));
                     }
 
-                    // OutputOperations.printSet(classesForDefinition);
+                    iterator= wikiToMap.propertiesToMap.iterator();
 
+                    while(iterator.hasNext()){
+                        propertiesForDefinition.add( ((String) iterator.next()).replace("dbpedia.org", targetNamespace) );
+                    }
+
+                    // create the ontology file
+                    OntologyCreator ontologyCreator = new OntologyCreator(classesForDefinition, propertiesForDefinition, directory);
+                    ontologyCreator.createOntology();
 
                 } // end of check whether file is a directory
             } // end of loop over files
-
-
-            // create the ontology file
-            OntologyCreator ontologyCreator = new OntologyCreator(classesForDefinition);
-            ontologyCreator.createOntology();
 
 
             // output the statistics and write them into file

@@ -17,26 +17,33 @@ import java.util.HashSet;
  */
 public class OntologyCreator {
 
-
     private HashSet<String> classesForDefinition; // contains all classes for which a definition is to be created
     private HashSet<String> propertiesForDefinition; // contains all classes for which a definition is to be created
-    private String pathToWiki;
+    private String pathToWikiDirectory;
+    private File wikiDirectory;
     private static String rootDirectoryPath = IOoperations.getRootDirectoryPath();
     private static String targetNamespace = IOoperations.getTargetNamespace();
-
 
     /**
      * Constructor
      */
-    public OntologyCreator( HashSet<String> classesForDefinition, HashSet<String> propertiesForDefinition, String pathToWiki){
+    public OntologyCreator( HashSet<String> classesForDefinition, HashSet<String> propertiesForDefinition, File wikiDirectory){
         this.classesForDefinition = classesForDefinition;
         this.propertiesForDefinition = propertiesForDefinition;
-        this.pathToWiki = pathToWiki;
+        this.wikiDirectory = wikiDirectory;
+        this.pathToWikiDirectory = wikiDirectory.getAbsolutePath();
+    }
+
+    /**
+     * Constructor
+     */
+    public OntologyCreator( HashSet<String> classesForDefinition, HashSet<String> propertiesForDefinition, String pathToWikiDirectory){
+        this(classesForDefinition,propertiesForDefinition, new File(pathToWikiDirectory) );
     }
 
 
     /**
-     * Creates an ontology.nt file in <root>/DBkwikOntology.
+     * Creates an ontology.nt file in wikiDirectory
      */
     public void createOntology(){
 
@@ -69,7 +76,7 @@ public class OntologyCreator {
 
         try {
             IOoperations.createDirectory(rootDirectoryPath + "/DBkwikOntology");
-            FileOutputStream fileOutputStream = new FileOutputStream(new File(rootDirectoryPath + "/DBkwikOntology/ontology.nt"));
+            FileOutputStream fileOutputStream = new FileOutputStream(new File(pathToWikiDirectory + "/ontology.nt"));
 
             // file output
             // writer2.write(ontologyModel, fileOutputStream, null); // RDF writer
@@ -97,6 +104,5 @@ public class OntologyCreator {
         sequenceWithTags = sequenceWithTags.replace("<", "");
         return sequenceWithTags;
     }
-
 
 }
