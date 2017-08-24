@@ -63,16 +63,19 @@ public class OntologyCreator {
         }
 
 
-        // add properties
+        // add properties - currently unclear whether that is intended
+        /*
         for(String propertyToAdd : propertiesForDefinition){
 
             // remove tags (those are added by the jena framework) and add property
             ontologyModel.createProperty(removeTags(propertyToAdd));
+            ontologyModel.createProperty("myTestProperty", "testNamespace");
 
         }
+        */
 
         NTripleWriter nTripleWriter = new NTripleWriter(); // NTriple writer
-        Basic basicWriter = new Basic(); // RDF writer
+        // Basic basicWriter = new Basic(); // RDF writer
 
         try {
             IOoperations.createDirectory(rootDirectoryPath + "/DBkwikOntology");
@@ -84,7 +87,7 @@ public class OntologyCreator {
 
 
             // command line output
-            basicWriter.write(ontologyModel, System.out, null);
+            // basicWriter.write(ontologyModel, System.out, null);
             nTripleWriter.write(ontologyModel, System.out, null);
 
         } catch (FileNotFoundException e) {
@@ -99,7 +102,7 @@ public class OntologyCreator {
      * @param sequenceWithTags
      * @return
      */
-    private String removeTags(String sequenceWithTags) {
+    private static  String removeTags(String sequenceWithTags) {
         sequenceWithTags = sequenceWithTags.replace(">", "");
         sequenceWithTags = sequenceWithTags.replace("<", "");
         return sequenceWithTags;
