@@ -173,8 +173,6 @@ public class RedirectProcessorSingleWiki {
 
                     matcher = pattern.matcher(line);
                     int index = 0;
-                    boolean isType = false;
-                    boolean appendLine = true;
 
                     while (matcher.find()) {
                         index++;
@@ -187,15 +185,9 @@ public class RedirectProcessorSingleWiki {
                                 }
                                 break;
                             // (second match: "<some interlinking tag>"
-                            // if it is of type rdf-schema#type, then only keep if last resource is our target namespace
-                            case 2:
-                                if (matcher.group().contains("rdf-syntax-ns#type"))
-                                    isType = true;
-                                break;
+                            // do not process
                             case 3:
-                                if (isType && ! matcher.group().contains(targetnamespace)) {
-                                    appendLine = false;
-                                } else if (redirectsMap.containsKey(matcher.group())) {
+                                if (redirectsMap.containsKey(matcher.group())) {
                                     // replace operation
                                     line = line.replace(matcher.group(), getRedirect(matcher.group()));
                                 }
@@ -203,7 +195,6 @@ public class RedirectProcessorSingleWiki {
                         }
 
                     }
-                    if (appendLine)
                         newFileContent.append(line + "\n"); // the line break must be added
                 }
                 reader.close();
