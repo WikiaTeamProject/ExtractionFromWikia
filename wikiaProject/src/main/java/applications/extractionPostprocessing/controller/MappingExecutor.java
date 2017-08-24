@@ -58,9 +58,6 @@ public class MappingExecutor {
 
         if (root.isDirectory()) {
 
-            HashSet<String> classesForDefinition = new HashSet<String>();
-            HashSet<String> propertiesForDefinition = new HashSet<String>();
-
             // loop over all wikis
             for (File directory : root.listFiles()) {
 
@@ -68,7 +65,10 @@ public class MappingExecutor {
                     // we have a wiki file
 
                     WikiToMap wikiToMap = getMappingInformationOfWikiAndUpdateFiles(directory);
-                    String targetNameSpace = ResourceBundle.getBundle("config").getString("targetnamespace") + "/" + directory.getName();
+                    String targetNameSpaceWithWikiDomain = ResourceBundle.getBundle("config").getString("targetnamespace") + "/" + directory.getName();
+
+                    HashSet<String> classesForDefinition = new HashSet<String>();
+                    HashSet<String> propertiesForDefinition = new HashSet<String>();
 
                     // increment the statistics
                     totalNumberOfClasses += wikiToMap.classesToMap.size();
@@ -78,20 +78,26 @@ public class MappingExecutor {
                     // set whether null mappings should be included for evaluation
                     includeNullMappings = Boolean.parseBoolean(ResourceBundle.getBundle("config").getString("includeNullMappings"));
 
-                    resourceMapper.writeResourceMappingsFile(directory, targetNameSpace, wikiToMap.resourcesToMap, includeNullMappings);
-                    propertyMapper.writePropertiesMappingsFile(directory, targetNameSpace, wikiToMap.propertiesToMap, includeNullMappings);
-                    classMapper.writeClassMappingsFile(directory, targetNameSpace, wikiToMap.classesToMap, includeNullMappings);
+                    resourceMapper.writeResourceMappingsFile(directory, targetNameSpaceWithWikiDomain, wikiToMap.resourcesToMap, includeNullMappings);
+                    propertyMapper.writePropertiesMappingsFile(directory, targetNameSpaceWithWikiDomain, wikiToMap.propertiesToMap, includeNullMappings);
+                    classMapper.writeClassMappingsFile(directory, targetNameSpaceWithWikiDomain, wikiToMap.classesToMap, includeNullMappings);
 
+                    // ontologies for ontology file
                     Iterator iterator = wikiToMap.classesToMap.iterator();
-
+                    String  classForOntologyFile = "";
                     while(iterator.hasNext()){
-                        classesForDefinition.add( classMapper.transformTemplateToClass( (String) iterator.next()));
+                        // conversion into ontology
+                        classForOntologyFile = ClassMapper.transformTemplateToOntology( (String) iterator.next() , targetNameSpaceWithWikiDomain, true);
+                        classesForDefinition.add( classForOntologyFile );
                     }
 
+                    // properties for ontology file
                     iterator= wikiToMap.propertiesToMap.iterator();
-
+                    String propertyForOntologyFile = "";
                     while(iterator.hasNext()){
-                        propertiesForDefinition.add( ((String) iterator.next()).replace("dbpedia.org", targetNamespace) );
+                        // conversion into correct target namespace
+                        propertyForOntologyFile = ((String) iterator.next()).replace("dbpedia.org", targetNameSpaceWithWikiDomain);
+                        propertiesForDefinition.add( propertyForOntologyFile );
                     }
 
                     // create the ontology file

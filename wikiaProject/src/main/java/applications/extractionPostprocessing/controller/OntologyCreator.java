@@ -38,7 +38,7 @@ public class OntologyCreator {
      * Constructor
      */
     public OntologyCreator( HashSet<String> classesForDefinition, HashSet<String> propertiesForDefinition, String pathToWikiDirectory){
-        this(classesForDefinition,propertiesForDefinition, new File(pathToWikiDirectory) );
+        this( classesForDefinition, propertiesForDefinition, new File(pathToWikiDirectory) );
     }
 
 
@@ -51,7 +51,7 @@ public class OntologyCreator {
         ontologyModel.setNsPrefix("dbkwik", "http://" + targetNamespace);
 
         // add our ontology
-        Ontology dbkwikOntology = ontologyModel.createOntology("http://" + targetNamespace + "/ontology/");
+        // Ontology dbkwikOntology = ontologyModel.createOntology("http://" + targetNamespace + "/" + wikiName + "/ontology/");
 
 
         // add classes

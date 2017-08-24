@@ -63,17 +63,17 @@ public abstract class ClassMapper {
      * @param templateToTransform
      * @return A string representing a class.
      */
-    public String transformTemplateToClass(String templateToTransform, String namespace) {
+    public static String transformTemplateToClass(String templateToTransform, String targetNamespace) {
 
         String transformedTemplate = templateToTransform;
 
 
-        if (namespace != null) {
-            // check whether entity is already transformed to target namespace
+        if (targetNamespace != null) {
+            // check whether entity is already transformed to target targetNamespace
             String namespaceDomain = ResourceBundle.getBundle("config").getString("targetnamespace");
             if (!templateToTransform.contains(namespaceDomain) && templateToTransform.contains("dbpedia.org")) {
-                // transform into target namespace
-                transformedTemplate = templateToTransform.replaceAll("dbpedia.org", namespace);
+                // transform into target targetNamespace
+                transformedTemplate = templateToTransform.replaceAll("dbpedia.org", targetNamespace);
             }
         }
 
@@ -100,7 +100,7 @@ public abstract class ClassMapper {
      * @param templateToTransform
      * @return
      */
-    public String transformTemplateToClass(String templateToTransform) {
+    public static String transformTemplateToClass(String templateToTransform) {
         return transformTemplateToClass(templateToTransform, null);
     }
 
@@ -115,7 +115,7 @@ public abstract class ClassMapper {
      * @param capitalize TRUE if character after /ontology/ should be capitalized. FALSE if it should be in lowercase.
      * @return A string representing a class.
      */
-    public String transformTemplateToOntology(String templateToTransform, boolean capitalize) {
+    public static String transformTemplateToOntology(String templateToTransform, boolean capitalize) {
 
         String transformedTemplate = templateToTransform;
 
@@ -141,6 +141,23 @@ public abstract class ClassMapper {
         return transformedTemplate;
     }
 
+
+    /**
+     * This method transforms a template entity into a class entity.
+     * Example: Target namespace: "dbkwik.webdatacommons.org/harrypotter"
+     * Input: <http://dbpedia.org/resource/Template:Speculation>
+     * Output: <http://dbkwik.webdatacommons.org/harrypotter/ontology/Speculation>
+     *
+     * @param templateToTransform
+     * @param targetNamespace The target namespace that shall be set.
+     * @param capitalize TRUE if character after /ontology/ should be capitalized. FALSE if it should be in lowercase.
+     * @return A string representing a class.
+     */
+    public static String transformTemplateToOntology(String templateToTransform, String targetNamespace, boolean capitalize) {
+        String result = transformTemplateToOntology(templateToTransform, capitalize);
+        result = result.replace("dbpedia.org", targetNamespace);
+        return result;
+    }
 
 }
 
