@@ -47,11 +47,37 @@ public class OntologyCreator {
      */
     public void createOntology(){
 
+        StringBuffer contentForOntologyFile = new StringBuffer();
+        String lineToAdd = "";
+
+        // add classes
+        for(String classToAdd : classesForDefinition){
+            lineToAdd = classToAdd + " <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .\n";
+            contentForOntologyFile.append(lineToAdd);
+        }
+
+        // add properties
+        for(String propertyToAdd : propertiesForDefinition){
+            lineToAdd = propertyToAdd + " <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .\n";
+            contentForOntologyFile.append(lineToAdd);
+        }
+
+        IOoperations.writeContentToFile(new File(pathToWikiDirectory + "/ontology.nt"), contentForOntologyFile.toString());
+
+    }
+
+
+    /**
+     * Creates an ontology.nt file in wikiDirectory.
+     */
+    @Deprecated
+    public void createOntologyWithJena(){
+
         OntModel ontologyModel = ModelFactory.createOntologyModel();
         ontologyModel.setNsPrefix("dbkwik", "http://" + targetNamespace);
 
         // add our ontology
-        // Ontology dbkwikOntology = ontologyModel.createOntology("http://" + targetNamespace + "/" + wikiName + "/ontology/");
+        // Ontology dbkwikOntology = ontologyModel.createOntologyWithJena("http://" + targetNamespace + "/" + wikiName + "/ontology/");
 
 
         // add classes
