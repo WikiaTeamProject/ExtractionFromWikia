@@ -163,9 +163,20 @@ public class RedirectProcessorSingleWiki {
 
                 String line;
                 Matcher matcher;
-                String targetnamespace = ResourceBundle.getBundle("config").getString("targetnamespace");
 
                 while ((line = reader.readLine()) != null) {
+
+                    if (! f.getName().contains("homepages.ttl")) {
+                        // replace wikipedia links with actual wiki links
+                        line = line.replace("en.wikipedia.org", wikiDirectory.getName() + ".wikia.com");
+
+                        // replace commons wikimedia links with actual wiki links to files
+                        if (line.contains("commons.wikimedia.org")) {
+                            line = line.replace("commons.wikimedia.org", wikiDirectory.getName() + ".wikia.com");
+                            line = line.replace("Special:FilePath/", "File:");
+                        }
+                    }
+
                     Pattern pattern = Pattern.compile("<[^<]*>");
                     // regex: <[^<]*>
                     // this regex captures everything between tags including the tags: <...>
@@ -177,6 +188,7 @@ public class RedirectProcessorSingleWiki {
 
                     while (matcher.find()) {
                         index++;
+
                         switch (index) {
                             // first and last tag replaced with redirect if one exists
                             case 1:
