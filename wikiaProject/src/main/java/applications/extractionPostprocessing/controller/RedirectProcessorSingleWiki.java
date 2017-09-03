@@ -173,6 +173,7 @@ public class RedirectProcessorSingleWiki {
 
                     matcher = pattern.matcher(line);
                     int index = 0;
+                    boolean isType = false, excludeLine = false;
 
                     while (matcher.find()) {
                         index++;
@@ -185,9 +186,15 @@ public class RedirectProcessorSingleWiki {
                                 }
                                 break;
                             // (second match: "<some interlinking tag>"
-                            // do not process
+                            // if it is of type rdf-schema#type, then only keep if last resource is dbpedia namespace
+                            case 2:
+                                if (matcher.group().contains("rdf-syntax-ns#type") && ! f.getName().contains("property-definitions.ttl"))
+                                    isType = true;
+                                break;
                             case 3:
-                                if (redirectsMap.containsKey(matcher.group())) {
+                                if (isType && ! matcher.group().contains("dbpedia.org") && ! matcher.group().contains("foaf/0.1/Document")) {
+                                    excludeLine = true;
+                                } else if (redirectsMap.containsKey(matcher.group())) {
                                     // replace operation
                                     line = line.replace(matcher.group(), getRedirect(matcher.group()));
                                 }
@@ -195,7 +202,9 @@ public class RedirectProcessorSingleWiki {
                         }
 
                     }
-                        newFileContent.append(line + "\n"); // the line break must be added
+                        if (! excludeLine) {
+                            newFileContent.append(line + "\n"); // the line break must be added
+                        }
                 }
                 reader.close();
             } catch (IOException ioe) {
