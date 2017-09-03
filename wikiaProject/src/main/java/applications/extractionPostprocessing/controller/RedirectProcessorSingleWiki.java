@@ -185,14 +185,15 @@ public class RedirectProcessorSingleWiki {
                                     line = line.replace(matcher.group(), getRedirect(matcher.group()));
                                 }
                                 break;
-                            // (second match: "<some interlinking tag>"
-                            // if it is of type rdf-schema#type, then only keep if last resource is dbpedia namespace
+                            // second match: "<some interlinking tag>"
+                            // if it is of type rdf-schema type, then only keep depending on object
                             case 2:
                                 if (matcher.group().contains("rdf-syntax-ns#type") && ! f.getName().contains("property-definitions.ttl"))
                                     isType = true;
                                 break;
                             case 3:
-                                if (isType && ! matcher.group().contains("dbpedia.org") && ! matcher.group().contains("foaf/0.1/Document")) {
+                                // only include specific objects
+                                if (isType && ! (matcher.group().contains("dbpedia.org") || matcher.group().contains("foaf/0.1/Document") || matcher.group().contains("core#Concept"))) {
                                     excludeLine = true;
                                 } else if (redirectsMap.containsKey(matcher.group())) {
                                     // replace operation
