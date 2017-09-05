@@ -40,12 +40,9 @@ public class WikiaDumpDownloadThread implements Runnable {
     private String dumpSizeFilePath;
     private static int totalNumberOfFilesProcessed = 0; // class counter to output progress
     private static int totalNumberOfFilesToBeProcessed = 0; // class variable
-
     private static final String[] REGEX = {"http:.*current\\.xml\\.gz", "http:.*current\\.xml\\.7z"}; // unmasked regex "http:.*current\.xml\.7z"
-
     private HashMap<String,String> dumpFilesURL;
     private String dumpURLsFilePath;
-
     private HashMap<String, String> languageCodes;
 
     /**
