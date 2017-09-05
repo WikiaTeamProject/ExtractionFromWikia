@@ -34,7 +34,11 @@ public class MessageLogger {
                            String message){
 
 
-        DOMConfigurator.configure("wikiaProject/src/main/resources/log4j.xml");
+        String log4jFileConfigFile=this.getClass().getClassLoader().getResource("log4j.xml").toString();
+
+
+        DOMConfigurator.configure(log4jFileConfigFile);
+
 
         String logMessage = module
                 + " - " + className + " - "+message;
