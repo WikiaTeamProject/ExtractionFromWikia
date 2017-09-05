@@ -12,12 +12,13 @@ import java.util.logging.Logger;
 
 
 /**
- * A class for helper methods.
+ * A class for helper methods concerning statistics.
+ * Resulting data is saved in <root>/statistics
  */
 public class WikiaStatisticsTools {
 
     private static Logger logger = Logger.getLogger(WikiaStatisticsTools.class.getName());
-    private static String statisticsDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/wikiStatistics";
+    private static String statisticsDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/statistics";
 
 
     /**

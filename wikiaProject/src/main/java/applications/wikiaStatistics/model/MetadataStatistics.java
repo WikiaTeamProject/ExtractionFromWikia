@@ -148,7 +148,7 @@ public class MetadataStatistics {
     public void writeResultToFile(String fileContents) {
 
         String directoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
-        String filePath = directoryPath + "/wikiStatistics/wikislanguages.csv";
+        String filePath = directoryPath + "/statistics/wikislanguages.csv";
 
         try{
             //Initialize file Writer Objects
