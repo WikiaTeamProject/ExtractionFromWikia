@@ -22,7 +22,7 @@ public class MetadataThreadImpl {
 
     public static void downloadWikiaMetadata() {
 
-        String statisticsDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/wikiStatistics";
+        String statisticsDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/statistics";
 
         // files will be saved in the newly created subdirectory
         IOoperations.createDirectory(statisticsDirectoryPath);

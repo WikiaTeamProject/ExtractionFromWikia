@@ -15,9 +15,10 @@ public class WikiaDumpDownloadThreadImpl  {
 
     private static Logger logger = Logger.getLogger(WikiaDumpDownloadThreadImpl.class.getName());
     private static Thread[] threads = new Thread[40];
+    private static String statisticsDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/statistics";
 
 //    public static void downloadWikiaDumps(int beginLine, int endLine) {
-//        String filePath = getFilePath();
+//        String filePath = getFilePathOfWikiaAllOverview();
 //
 //        Thread t1 = new Thread(new WikiaDumpDownloadThread(filePath, beginLine, endLine));
 //        t1.run();
@@ -25,7 +26,7 @@ public class WikiaDumpDownloadThreadImpl  {
 //    }
 //
 //    public static void downloadWikiaDumps(int amount) {
-//        String filePath = getFilePath();
+//        String filePath = getFilePathOfWikiaAllOverview();
 //
 //        // exclude header line (0)
 //        Thread t1 = new Thread(new WikiaDumpDownloadThread(filePath, 1, amount));
@@ -33,22 +34,28 @@ public class WikiaDumpDownloadThreadImpl  {
 //
 //    }
 
-    public static void downloadWikiaDumps() {
 
+    /**
+     *
+     */
+    public static void downloadWikiaDumps() {
         createThreads();
     }
 
-    private static String getFilePath() {
-        String statisticsDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/wikiStatistics";
+    /**
+     * Returns the file path of the file containing all wiki links.
+     * @return
+     */
+    private static String getFilePathOfWikiaAllOverview() {
         String filePath = statisticsDirectoryPath + "/wikiaAllOverview.csv";
-
         return filePath;
     }
 
 
+    /**
+     *
+     */
     private static void createThreads() {
-        String statisticsDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/wikiStatistics";
-
         ArrayList<String> filePaths = new ArrayList<String>();
         ArrayList<String> dumpURLsFiles=new ArrayList<String>();
 
@@ -93,9 +100,12 @@ public class WikiaDumpDownloadThreadImpl  {
 
     }
 
-    private static void mergeFiles(ArrayList<String> filePaths) {
-        String statisticsDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/wikiStatistics";
 
+    /**
+     * Merges individual files with wiki links created by the threads.
+     * @param filePaths
+     */
+    private static void mergeFiles(ArrayList<String> filePaths) {
         File resultFile = new File(statisticsDirectoryPath + "/wikiaOverviewDumpSizes.csv");
         File f;
         int fileNumber = 0;
@@ -134,6 +144,7 @@ public class WikiaDumpDownloadThreadImpl  {
         logger.info("Finished merging " + fileNumber + " files.");
     }
 
+
     /**
      * There are various prerequisites. To allow for a stable program, the prerequisites are checked in this method.
      *
@@ -162,7 +173,7 @@ public class WikiaDumpDownloadThreadImpl  {
             return false;
         }
 
-        String wikiAllOverview = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/wikiStatistics/wikiaAllOverview.csv";
+        String wikiAllOverview = getFilePathOfWikiaAllOverview();
         File wikiCSV = new File(wikiAllOverview);
 
         // check if wiki overview CSV file is already existing, if not create it
@@ -175,8 +186,11 @@ public class WikiaDumpDownloadThreadImpl  {
     }
 
 
+    /**
+     *
+     * @param dumpURLsFiles
+     */
     private static void mergeDumpURLsFiles(ArrayList<String> dumpURLsFiles) {
-        String statisticsDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/wikiStatistics";
 
         File resultFile = new File(statisticsDirectoryPath + "/wikiaOverviewDumpURLs.csv");
         File f;

@@ -59,7 +59,7 @@ public class WikiaDumpDownloadThread implements Runnable {
 
         // initialize static counter to display progress
         if (totalNumberOfFilesToBeProcessed == 0) {
-            String filePath = this.directoryPath + "/wikiStatistics/wikiaAllOverview.csv";
+            String filePath = this.directoryPath + "/statistics/wikiaAllOverview.csv";
             File f = new File(filePath);
 
             // make sure that the file exists
