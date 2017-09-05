@@ -392,17 +392,40 @@ public class Extractor {
             String downloadDirectoryForExtraction = ResourceBundle.getBundle("config").getString("pathToRootDirectory")
                     + "//dbPediaExtractionFormat//";
             String pathToExtractionFramework = ResourceBundle.getBundle("config").getString("dbPediaExtractorPath");
+<<<<<<< HEAD
             String dbPediaExtractorBatchFile = this.getClass().getClassLoader().getResource("dbpediaextraction.bat").toString();
+=======
+            String dbPediaExtractorBatchFile;
+>>>>>>> 0e81106db8ca20f0fce09c7b36a2e96dc490d346
             String DATE_FORMAT_NOW = "YYYYMMdd";
             Calendar calender = Calendar.getInstance();
             SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT_NOW);
             String current_date = dateFormatter.format(calender.getTime());
+<<<<<<< HEAD
             String date = "";
             String batchCommand = dbPediaExtractorBatchFile +" " + pathToExtractionFramework;
 
+=======
+            String date="";
+>>>>>>> 0e81106db8ca20f0fce09c7b36a2e96dc490d346
             CommandLine cmdLine = null;
             DefaultExecutor executor = null;
             IOoperations iOoperations = new IOoperations();
+
+
+            //Check operating system and trigger command accordingly
+            if(utils.OSDetails.isWindows()){
+                dbPediaExtractorBatchFile=this.getClass().getClassLoader().getResource("dbpediaextraction.bat").toString();
+            }
+            else if(utils.OSDetails.isUnix()){
+                dbPediaExtractorBatchFile=this.getClass().getClassLoader().getResource("dbpediaextraction.sh").toString();
+            }
+            else{
+                dbPediaExtractorBatchFile=this.getClass().getClassLoader().getResource("dbpediaextraction.sh").toString();
+            }
+
+            String batchCommand = dbPediaExtractorBatchFile +" " + pathToExtractionFramework;
+
 
             File downloadedWikisDirectory = new File(downloadDirectoryForExtraction);
             File[] languageCodesFolders = downloadedWikisDirectory.listFiles();
@@ -648,4 +671,5 @@ public class Extractor {
 
         return true;
     }
+
 }
