@@ -113,5 +113,5 @@ The program performs a lot of file operations. All of those file operations are 
 
 
 ### Code Quality and Unit Tests
-All tests can be found in the [Test Directory](.wikiaProject/src/test). Please note that the test coverage is not 100%.
+All tests can be found in the [Test Directory](./wikiaProject/src/test). Please note that the test coverage is not 100%.
 
