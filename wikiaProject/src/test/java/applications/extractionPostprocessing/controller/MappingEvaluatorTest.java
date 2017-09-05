@@ -3,6 +3,7 @@ package applications.extractionPostprocessing.controller;
 import applications.extractionPostprocessing.model.EvaluationResultAllWikis;
 import applications.extractionPostprocessing.model.EvaluationResultSingleWiki;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -24,6 +25,7 @@ public class MappingEvaluatorTest {
     }
 
     @Test
+    @Ignore
     public void evaluateAllMappings() throws Exception {
 
         EvaluationResultAllWikis result = MappingEvaluator.evaluateAllMappings(MappingEvaluator.EvaluationObjectAllWikis.RESOURCES, false);
@@ -57,6 +59,7 @@ public class MappingEvaluatorTest {
 
 
     @Test
+    @Ignore
     public void evaluateMappingsForOneWiki() throws Exception {
 
         // case 1

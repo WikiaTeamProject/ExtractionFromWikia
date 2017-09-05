@@ -14,7 +14,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *
  * This class includes general IO/File methods usable in all packages.
  */
 public class IOoperations {
@@ -38,22 +37,25 @@ public class IOoperations {
 
     /**
      * Returns the rootDirectoryPath as specified in config.properties.
+     *
      * @return
      */
-    public static String getRootDirectoryPath(){
+    public static String getRootDirectoryPath() {
         return rootDirectoryPath;
     }
 
     /**
      * Returns a File object to the rootDirectory as specified in config.properties.
+     *
      * @return
      */
-    public static File getRootDirectory(){
+    public static File getRootDirectory() {
         return new File(rootDirectoryPath);
     }
 
     /**
      * Returns the target namespace as specified in config.properties.
+     *
      * @return
      */
     public static String getTargetNamespace() {
@@ -82,6 +84,7 @@ public class IOoperations {
     /**
      * Returns an array list containing the statistics pages of all wikis.
      * Prerequisite: A wiki CSV file exists.
+     *
      * @param filePath
      * @return
      */
@@ -125,10 +128,11 @@ public class IOoperations {
 
     /**
      * This method returns the file name of a given path to a file.
+     *
      * @param path Path to a file.
      * @return File Name
      */
-    public static String getFileNameFromPath(String path){
+    public static String getFileNameFromPath(String path) {
 
         String regularExpressionToGetFileNameForwardSlash = "(?<=\\/)[^\\/]*$"; // plain: (?<=\/)[^\/]*$
         String regularExpressionToGetFileNameBackwardSlash = "(?<=\\\\)[^\\\\]*$"; // plain (?<=\\)[^\\]*$
@@ -152,10 +156,11 @@ public class IOoperations {
 
     /**
      * This method returns the file name of a given path to a file.
+     *
      * @param path Path to a file.
      * @return File Name
      */
-    public static String getFileNameFromPath(File path){
+    public static String getFileNameFromPath(File path) {
         System.out.println(path.getAbsolutePath());
         return getFileNameFromPath(path.getPath());
     }
@@ -163,10 +168,11 @@ public class IOoperations {
 
     /**
      * Overwrite file with content.
+     *
      * @param content Content to be written
-     * @param file File to be overwritten
+     * @param file    File to be overwritten
      */
-    public static void updateFile(String content, File file){
+    public static void updateFile(String content, File file) {
         logger.info("Updating file " + file.getName());
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
@@ -180,14 +186,15 @@ public class IOoperations {
         }
     }
 
-    public static void updateFile(String content, String filepath){
+    public static void updateFile(String content, String filepath) {
         updateFile(content, new File(filepath));
     }
 
 
     /**
      * Write the mappings file to the disk.
-     * @param entitiesMapping A HashSet of Strings, each representing one line to be written to the mapping file.
+     *
+     * @param entitiesMapping       A HashSet of Strings, each representing one line to be written to the mapping file.
      * @param pathToFileToBeWritten
      */
     public static void writeMappingContentsToFile(HashMap<String, String> entitiesMapping, File pathToFileToBeWritten, String ontology, boolean includeNullMappings) {
@@ -195,11 +202,11 @@ public class IOoperations {
         StringBuffer contentToWrite = new StringBuffer();
         Iterator iterator = entitiesMapping.entrySet().iterator();
 
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             HashMap.Entry<String, String> entry = (HashMap.Entry<String, String>) iterator.next();
 
             // exclude null mappings if includeNullMappings is false
-            if (! includeNullMappings && entry.getValue().equals("<null>"))
+            if (!includeNullMappings && entry.getValue().equals("<null>"))
                 continue;
 
             contentToWrite.append(entry.getKey() + " " + ontology + " " + entry.getValue() + " .\n");
@@ -226,17 +233,18 @@ public class IOoperations {
      * This function reads DBpedia pageids. pageIds file
      * Make sure that the folder "pageids" exists in the root directory
      * and that there is at least one page IDs file in the folder.
+     *
      * @return HashMap containing pageIds in lower case as key and actual
      * case is preserved as value
      */
-    public HashMap<String,String> getPageIDs(){
+    public HashMap<String, String> getPageIDs() {
         String pageIDsFilePath = rootDirectoryPath + "//resources//pageids//";
-        HashMap<String,String> pageIdsMap = new HashMap<String,String>();
+        HashMap<String, String> pageIdsMap = new HashMap<String, String>();
         FileReader fileReader;
         BufferedReader bufferedReader;
         String fileLine = "";
         int i = 1;
-        String fileLinePattern="<[^<]*> <[^<]*> \"[0-9]+\"[\\^][\\^]<[^<]*> [.]";
+        String fileLinePattern = "<[^<]*> <[^<]*> \"[0-9]+\"[\\^][\\^]<[^<]*> [.]";
 
         try {
 
@@ -255,15 +263,15 @@ public class IOoperations {
 
                         while ((fileLine = bufferedReader.readLine()) != null) {
 
-                            fileLine=fileLine.trim();
+                            fileLine = fileLine.trim();
 
-                            if((!fileLine.startsWith("#")) && fileLine.matches(fileLinePattern)) {
+                            if ((!fileLine.startsWith("#")) && fileLine.matches(fileLinePattern)) {
 
 
                                 String pageId =
                                         fileLine.substring(0, fileLine.indexOf(">") + 1);
 
-                                pageIdsMap.put(pageId.toLowerCase(),pageId);
+                                pageIdsMap.put(pageId.toLowerCase(), pageId);
                             }
                         }
                     }
@@ -280,16 +288,17 @@ public class IOoperations {
     /**
      * This function reads the DBpedia redirects file.
      * Make sure that the folder "redirects" exists in the root directory and that there is at least one redirect file in the folder.
+     *
      * @return HashMap containing redirects mapping
      */
-    public HashMap<String,String> getResourcesRedirects() {
+    public HashMap<String, String> getResourcesRedirects() {
 
         String redirectFilePath = rootDirectoryPath + "//resources//redirects//";
         HashMap redirectsMap = new HashMap<String, String>();
         FileReader fileReader;
         BufferedReader bufferedReader;
         String fileLine = "";
-        String fileLinePattern="<[^<]*> <[^<]*> <[^<]*> [.]";
+        String fileLinePattern = "<[^<]*> <[^<]*> <[^<]*> [.]";
         int i = 1;
         try {
 
@@ -308,9 +317,9 @@ public class IOoperations {
 
                         while ((fileLine = bufferedReader.readLine()) != null) {
 
-                            fileLine=fileLine.trim();
+                            fileLine = fileLine.trim();
 
-                            if((!fileLine.startsWith("#")) && fileLine.matches(fileLinePattern)) {
+                            if ((!fileLine.startsWith("#")) && fileLine.matches(fileLinePattern)) {
 
                                 String resourceLink =
                                         fileLine.substring(0, fileLine.indexOf(">") + 1).toLowerCase();
@@ -336,7 +345,8 @@ public class IOoperations {
 
     /**
      * A very simple file writer.
-     * @param file The file in which shall be written.
+     *
+     * @param file    The file in which shall be written.
      * @param content The content that shall be written.
      */
     public static void writeContentToFile(File file, String content) {
@@ -356,16 +366,17 @@ public class IOoperations {
      * This function reads DBpedia ontology classes from ontology file
      * Make sure that the folder "ontology" exists
      * in the root directory and that there is at least one ontology classes file in the folder.
+     *
      * @return HashMap containing ontology class in lower as key and actual
      * case is preserved as value
      */
-    public HashMap<String,String> getOntologyClasses(){
+    public HashMap<String, String> getOntologyClasses() {
         String ontologyFilePath = rootDirectoryPath + "//resources//ontology//";
-        HashMap<String,String> ontologiesMap = new HashMap<String,String>();
+        HashMap<String, String> ontologiesMap = new HashMap<String, String>();
         FileReader fileReader;
         BufferedReader bufferedReader;
         String fileLine = "";
-        String fileLinePattern= "<[^<]*> <[^<]*>.+";
+        String fileLinePattern = "<[^<]*> <[^<]*>.+";
         try {
 
             File ontologyDirectory = new File(ontologyFilePath);
@@ -383,13 +394,13 @@ public class IOoperations {
 
                         while ((fileLine = bufferedReader.readLine()) != null) {
 
-                            fileLine=fileLine.trim();
+                            fileLine = fileLine.trim();
 
-                            if((!fileLine.startsWith("#")) && fileLine.matches(fileLinePattern)) {
+                            if ((!fileLine.startsWith("#")) && fileLine.matches(fileLinePattern)) {
                                 String ontologyClass =
                                         fileLine.substring(0, fileLine.indexOf(">") + 1);
 
-                                ontologiesMap.put(ontologyClass,ontologyClass);
+                                ontologiesMap.put(ontologyClass, ontologyClass);
                             }
                         }
                     }
@@ -407,16 +418,17 @@ public class IOoperations {
     /**
      * This function reads list of properties
      * from dbpedia file
+     *
      * @return list of properties in HashMap the key contains property
      * in lower case and actual case is preserved as value
      */
-    public HashMap<String,String> getPropertiesSet(){
+    public HashMap<String, String> getPropertiesSet() {
         String propertiesFilePath = rootDirectoryPath + "//resources//properties//";
-        HashMap<String,String> propertiesMap = new HashMap<String,String>();
+        HashMap<String, String> propertiesMap = new HashMap<String, String>();
         FileReader fileReader;
         BufferedReader bufferedReader;
         String fileLine = "";
-        String fileLinePattern= "<[^<]*> <[^<]*>.+";
+        String fileLinePattern = "<[^<]*> <[^<]*>.+";
         try {
 
             File propertiesDirectory = new File(propertiesFilePath);
@@ -434,13 +446,13 @@ public class IOoperations {
 
                         while ((fileLine = bufferedReader.readLine()) != null) {
 
-                            fileLine=fileLine.trim();
+                            fileLine = fileLine.trim();
 
-                            if((!fileLine.startsWith("#")) && fileLine.matches(fileLinePattern)) {
+                            if ((!fileLine.startsWith("#")) && fileLine.matches(fileLinePattern)) {
                                 String property =
                                         fileLine.substring(0, fileLine.indexOf(">") + 1);
 
-                                propertiesMap.put(property.toLowerCase(),property);
+                                propertiesMap.put(property.toLowerCase(), property);
                             }
                         }
                     }
@@ -455,17 +467,16 @@ public class IOoperations {
 
 
     /**
-     *
      * @param filePath : Path where file needs to be searched
      * @param fileName : name of file to search ; function also accepts
      *                 wild card queries
-     * @return  true if file exists else false
+     * @return true if file exists else false
      */
-    public boolean checkIfFileExists(String filePath, String fileName){
+    public boolean checkIfFileExists(String filePath, String fileName) {
 
-        boolean ifFileExist=false;
+        boolean ifFileExist = false;
         String[] selectedFiles;
-        try{
+        try {
 
             DirectoryScanner scanner = new DirectoryScanner();
 
@@ -476,12 +487,11 @@ public class IOoperations {
 
             selectedFiles = scanner.getIncludedFiles();
 
-            if(selectedFiles.length>0)
-               ifFileExist=true;
+            if (selectedFiles.length > 0)
+                ifFileExist = true;
 
 
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             logger.severe(ex.getMessage());
         }
         return ifFileExist;
@@ -489,50 +499,46 @@ public class IOoperations {
 
 
     /**
-     *
      * @return
      */
-    public HashMap<String,String> readDumpsURL(){
+    public HashMap<String, String> readDumpsURL() {
 
-        HashMap<String,String> dumpURLs=new HashMap<String,String>();
-        String dumpsURLFilePath=rootDirectoryPath+"/wikiStatistics/wikiaOverviewDumpURLs.csv";
+        HashMap<String, String> dumpURLs = new HashMap<String, String>();
+        String dumpsURLDirectoryPath = rootDirectoryPath + "//statistics//wikiaOverviewIndividualDumpURLs";
 
+        try {
+            File dumpsURLFile = new File(dumpsURLDirectoryPath);
 
-        try{
+            if (dumpsURLFile.exists() && dumpsURLFile.isDirectory()) {
 
-        File dumpsURLFile=new File(dumpsURLFilePath);
+                for (File f : dumpsURLFile.listFiles()) {
+                    FileReader fileReader = new FileReader(f);
+                    BufferedReader bufferedReader = new BufferedReader(fileReader);
+                    String fileLine;
+                    boolean isHeaderRow = true;
 
-        if(dumpsURLFile.exists()){
+                    while ((fileLine = bufferedReader.readLine()) != null) {
 
-            FileReader fileReader=new FileReader(dumpsURLFile);
-            BufferedReader bufferedReader=new BufferedReader(fileReader);
-            String fileLine;
-            boolean isHeaderRow=true;
+                        if (isHeaderRow) {
+                            isHeaderRow = false;
+                            continue;
+                        }
 
-            while((fileLine=bufferedReader.readLine())!=null){
+                        String[] dumpURLsMapping = fileLine.split(",");
+                        String dumpFilePath = dumpURLsMapping[0].substring(0, dumpURLsMapping[0].lastIndexOf("."));
+                        String dumpBaseURL = dumpURLsMapping[1];
 
-                if(isHeaderRow){
-                    isHeaderRow=false;
-                    continue;
+                        dumpURLs.put(dumpFilePath, dumpBaseURL);
+                    }
+
                 }
 
-                String[] dumpURLsMapping=fileLine.split(",");
-                String dumpFilePath=dumpURLsMapping[0].substring(0,dumpURLsMapping[0].lastIndexOf("."));
-                String dumpBaseURL=dumpURLsMapping[1];
-
-                dumpURLs.put(dumpFilePath ,dumpBaseURL);
-
+            } else {
+                logger.severe("Dumps URL file not present. Please check ...");
             }
 
-        }
-        else
-        {
-            logger.severe("Dumps URL file not present. Please check . . . .");
-        }
-
-       }
-       catch(Exception ex){
-
+        } catch (Exception ex) {
+            logger.severe(ex.toString());
         }
 
         return dumpURLs;

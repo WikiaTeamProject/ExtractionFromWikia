@@ -27,7 +27,6 @@ public class WikiaDumpDownloadThread implements Runnable {
     private boolean downloadAllWikis; // indicates whether all wikis shall be downloadedFiles
     private int beginAtLine; // start processing the document at the specified line
     private int endAtLine;  // end processing the document at the specified line
-    private String pathToReadFrom; // filepath from which file will be read
 
     // internal variables
     private String directoryPath;
@@ -45,14 +44,56 @@ public class WikiaDumpDownloadThread implements Runnable {
     private String dumpURLsFilePath;
     private HashMap<String, String> languageCodes;
 
+    private ArrayList<String> urls;
+
     /**
-     * Main Constructor - main constructor for initialization -> private
+     *  Main Constructor - main constructor for general initialization (also without file) -> private
+     */
+    private WikiaDumpDownloadThread() {
+
+        this.directoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
+
+        this.downloadedFiles = 0;
+        this.wikis = 0;
+        this.buffer = new StringBuffer();
+
+        createTargetDirectories();
+
+        this.urlsNotWorking = new StringBuffer();
+
+        readWikiaLanguageCodes();
+
+        // files will be saved in the newly created subdirectory
+        String statisticsDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/statistics";
+        File file = new File(statisticsDirectoryPath);
+        if (! file.exists())
+            IOoperations.createDirectory(statisticsDirectoryPath);
+
+    }
+
+    /**
+     *   Constructor - constructor for initialization without file
+     */
+    public WikiaDumpDownloadThread(List<String> urls, String dumpSizeFilePath, String dumpURLsFilePath) {
+
+        this();
+
+        this.wikis = urls.size();
+        this.totalNumberOfFilesToBeProcessed = urls.size();
+        this.urls = new ArrayList<>(urls);
+        this.dumpSizeFilePath = dumpSizeFilePath;
+        this.dumpURLsFilePath = dumpURLsFilePath;
+
+    }
+
+    /**
+     *  Constructor - main constructor for initialization with file -> private
      * @param downloadAllWikis
      * @param pathToReadFrom
      */
     private WikiaDumpDownloadThread(boolean downloadAllWikis, String pathToReadFrom) {
 
-        this.directoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
+        this();
 
         // initialize static counter to display progress
         if (totalNumberOfFilesToBeProcessed == 0) {
@@ -74,21 +115,9 @@ public class WikiaDumpDownloadThread implements Runnable {
             }
         }
 
-        this.pathToReadFrom = pathToReadFrom;
         this.downloadAllWikis = downloadAllWikis;
-        this.downloadedFiles = 0;
-        this.wikis = 0;
-        this.buffer = new StringBuffer();
 
-        // create target directories if they do not exist yet
-        File dumps = IOoperations.createDirectory(directoryPath + "/downloadedWikis/");
-        File dumpsDownloaded = IOoperations.createDirectory(dumps.getPath() + "/downloaded");
-        dumpsDownloadedgz = IOoperations.createDirectory(dumpsDownloaded.getPath() + "/gz");
-        dumpsDownloaded7z = IOoperations.createDirectory(dumpsDownloaded.getPath() + "/7z");
-
-        this.urlsNotWorking = new StringBuffer();
-
-        readWikiaLanguageCodes();
+        this.urls = getUrls(pathToReadFrom);
     }
 
 
@@ -113,12 +142,12 @@ public class WikiaDumpDownloadThread implements Runnable {
      *
      * @param pathToReadFrom read the URLs from the specified file
      */
-    public WikiaDumpDownloadThread(String pathToReadFrom, String dumpSizeFilePath,String dumpURLsFilePath) {
+    public WikiaDumpDownloadThread(String pathToReadFrom, String dumpSizeFilePath, String dumpURLsFilePath) {
         this(true, pathToReadFrom);
         // beginning line is 1 (because of header line - 0)
         this.beginAtLine = 1;
         this.dumpSizeFilePath = dumpSizeFilePath;
-        this.dumpURLsFilePath=dumpURLsFilePath;
+        this.dumpURLsFilePath = dumpURLsFilePath;
     }
 
 
@@ -128,19 +157,18 @@ public class WikiaDumpDownloadThread implements Runnable {
      */
     public void run() {
 
-        ArrayList<String> urls = getUrls(pathToReadFrom);
 
-        for(String baseURL : urls) {
+        urls.forEach(url -> {
+            if (shouldLanguageBeDownloaded(url))
+                downloadDump(url);
+        });
 
-            String url= baseURL+ "wiki/Special:Statistics";
-
-            if (shouldLanguageBeDownloaded(url)) downloadDump(url,baseURL);
-
-        }
         logger.info("Download finished. Downloaded " + downloadedFiles + " of " + wikis + " wikis.");
 
-        saveSizeToFile();
-        saveDumpURLsToFile();
+        if (dumpSizeFilePath != null ) {
+            saveSizeToFile();
+            saveDumpURLsToFile();
+        }
 
         if (urlsNotWorking.length() == 0) {
             logger.info("No URLs that did not work after retries");
@@ -204,6 +232,14 @@ public class WikiaDumpDownloadThread implements Runnable {
         return urls;
     }
 
+    private void createTargetDirectories() {
+        // create target directories if they do not exist yet
+        File dumps = IOoperations.createDirectory(directoryPath + "/downloadedWikis/");
+        File dumpsDownloaded = IOoperations.createDirectory(dumps.getPath() + "/downloaded");
+        dumpsDownloadedgz = IOoperations.createDirectory(dumpsDownloaded.getPath() + "/gz");
+        dumpsDownloaded7z = IOoperations.createDirectory(dumpsDownloaded.getPath() + "/7z");
+    }
+
     /**
      * read wikiaLanguageCodes file into hashmap
      */
@@ -252,9 +288,9 @@ public class WikiaDumpDownloadThread implements Runnable {
     /**
      * Check if dump exists for wiki and save the file to the specified directory
      *
-     * @param url
+     * @param baseURL
      */
-    private void downloadDump(String url,String baseURL) {
+    private void downloadDump(String baseURL) {
         boolean foundDump = false;
         URL query;
         URLConnection connection;
@@ -262,6 +298,7 @@ public class WikiaDumpDownloadThread implements Runnable {
         String readLineFromURL;
         String pathToFileToDownload;
 
+        String url = baseURL + "/wiki/Special:Statistics";
 
         logger.info("Processing: " + url);
 
@@ -331,7 +368,7 @@ public class WikiaDumpDownloadThread implements Runnable {
      * This method will save the file to the directory wikiaDumps of the specified directory in config.properties
      * @param pathToRemoteFile the URL to the file
      */
-    private void getConnectionToRemoteFileAndSave(String pathToRemoteFile,String baseURL) {
+    private void getConnectionToRemoteFileAndSave(String pathToRemoteFile, String baseURL) {
         int retry = 0;
         boolean downloaded = false;
         URL url;
@@ -350,10 +387,8 @@ public class WikiaDumpDownloadThread implements Runnable {
                 buffer.append(pathToRemoteFile + ";" + (size / 1024) + "\n");
                 downloadedFiles++;
 
-                // comment in if you want do actually download the files
-                saveFile(connection, pathToRemoteFile,baseURL);
-
-
+                // comment in if you want to actually download the files
+                saveFile(connection, pathToRemoteFile, baseURL);
 
                 // closing streams
                 connection.getInputStream().close();
@@ -368,9 +403,8 @@ public class WikiaDumpDownloadThread implements Runnable {
             }
         }
 
-        if (!downloaded) {
+        if (! downloaded)
             urlsNotWorking.append(pathToRemoteFile);
-        }
 
     }
 
@@ -380,12 +414,11 @@ public class WikiaDumpDownloadThread implements Runnable {
      * @param connection
      * @param pathToRemoteFile
      */
-    private void saveFile(URLConnection connection, String pathToRemoteFile,String baseURL) {
+    private void saveFile(URLConnection connection, String pathToRemoteFile, String baseURL) {
         FileOutputStream fos;
         ReadableByteChannel rbc;
         File targetFile;
         InputStream inputStream = null;
-
 
         // use regex to get the correct file name (without / and so on)
         String fileName = "";
@@ -410,13 +443,12 @@ public class WikiaDumpDownloadThread implements Runnable {
             fos = new FileOutputStream(targetFile);
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 
-            if(dumpFilesURL==null){
-                dumpFilesURL=new HashMap<String,String>();
-            }
+            if (dumpFilesURL == null)
+                dumpFilesURL = new HashMap<String,String>();
 
             dumpFilesURL.put(targetFile.getName(),baseURL);
 
-           System.out.println("*******"+targetFile.getAbsolutePath()+" : "+baseURL);
+           System.out.println("*******" + targetFile.getAbsolutePath() + " : " + baseURL);
 
             fos.close();
             rbc.close();
@@ -434,7 +466,7 @@ public class WikiaDumpDownloadThread implements Runnable {
      */
     private void saveSizeToFile() {
         File file = new File(this.dumpSizeFilePath);
-        logger.info("Writing file " + file.getName());
+        logger.info("Writing file: " + file.getName());
 
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
@@ -453,23 +485,20 @@ public class WikiaDumpDownloadThread implements Runnable {
      * This function saves dumps base URLs into file
      */
     private void saveDumpURLsToFile() {
-        File dumpURLsFolder=new File(this.dumpURLsFilePath.substring(0,dumpURLsFilePath.lastIndexOf("/")));
+        File dumpURLsFolder = new File(this.dumpURLsFilePath.substring(0, dumpURLsFilePath.lastIndexOf("/")));
         File file = new File(this.dumpURLsFilePath);
-        try{
+        try {
 
-            if(!dumpURLsFolder.exists()){
+            if (! dumpURLsFolder.exists())
                 dumpURLsFolder.mkdir();
-            }
 
-
-            logger.info("Writing file " + file.getName());
-
+            logger.info("Writing file: " + file.getName());
 
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
             bufferedWriter.write("dump_file_path,base_url" + "\n");
 
-            for(String dumpPath:dumpFilesURL.keySet()){
-                bufferedWriter.write(dumpPath+","+dumpFilesURL.get(dumpPath)+"\n");
+            for (String dumpPath : dumpFilesURL.keySet()) {
+                bufferedWriter.write(dumpPath+"," + dumpFilesURL.get(dumpPath) + "\n");
             }
 
             bufferedWriter.close();
