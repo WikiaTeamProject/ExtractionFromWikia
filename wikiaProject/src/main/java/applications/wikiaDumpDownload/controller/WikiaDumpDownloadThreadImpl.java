@@ -36,7 +36,7 @@ public class WikiaDumpDownloadThreadImpl  {
 
 
     /**
-     *
+     * Start the process using threads.
      */
     public static void downloadWikiaDumps() {
         createThreads();
