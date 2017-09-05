@@ -6,7 +6,7 @@ tests run error-free but it is a good indicator that you did if they do not ;)
 
 ## Test Config File and Test Root
 Note that the tests do not use the config file of the actual program but have their own mock. 
-You can find it in the [test resources directory](.wikiaProject/src/test/resources). 
+You can find it in the [test resources directory](./resources). 
 In there, a dedicated root directory for tests is specified. <br/>
-All files required for tests are located in the [test_files directory](.wikiaProject/src/test/test_files). You will also find the mocked root directory there.
+All files required for tests are located in the [test_files directory](./test_files). You will also find the mocked root directory there.
 
