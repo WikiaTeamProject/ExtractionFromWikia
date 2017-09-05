@@ -2,7 +2,7 @@
 set dbPediaExtFrmwrkDir=%1
 echo "Echoing Variable value"
 echo %dbPediaExtFrmwrkDir%
-REM change directory to dbpedia extraction framwork directory
+REM change directory to dbpedia extraction framework directory
 cd %dbPediaExtFrmwrkDir%
 
 REM run extractor
