@@ -1,9 +1,10 @@
-@echo off
-set dbPediaExtFrmwrkDir=%1
+#!/bin/bash
+set dbPediaExtFrmwrkDir=$1
 echo "Echoing Variable value"
-echo %dbPediaExtFrmwrkDir%
-REM change directory to dbpedia extraction framwork directory
-cd %dbPediaExtFrmwrkDir%
+echo $dbPediaExtFrmwrkDir
 
-REM run extractor
-mvn scala:run "-Dlauncher=extraction" "-DaddArgs=extraction.default.properties"
+#change directory to dbpedia extraction framework directory
+cd $dbPediaExtFrmwrkDir
+
+# run extractor
+../run extraction extraction-config-file
