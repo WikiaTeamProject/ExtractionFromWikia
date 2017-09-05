@@ -512,7 +512,7 @@ public class Extractor {
                                 wikiFolderName=properties.getWikiName();
                             }
                             else{
-                                wikiFolderName=properties.getWikiBaseURL().substring(7,properties.getWikiBaseURL().length()-1);
+                                wikiFolderName=properties.getWikiBaseURL().substring(7,properties.getWikiBaseURL().indexOf("."));
                             }
 
 
