@@ -36,7 +36,7 @@ public class SingleProcessApplication {
 //        WikiaDumpDownloadThreadImpl.downloadWikiaDumps();
 
         // (2) download only list of urls
-        List<String> urls = Arrays.asList("http://harrypotter.wikia.com", "http://gameofthrones.wikia.com");
+        List<String> urls = Arrays.asList("http://gameofthrones.wikia.com");
         WikiaDumpDownloadThreadImpl.downloadWikiaDumps(urls);
 
         // run the DBpedia applications.extraction framework

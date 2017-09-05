@@ -406,13 +406,13 @@ public class Extractor {
 
             //Check operating system and trigger command accordingly
             if(utils.OSDetails.isWindows()){
-                dbPediaExtractorBatchFile=this.getClass().getClassLoader().getResource("dbpediaextraction.bat").toString();
+                dbPediaExtractorBatchFile = this.getClass().getClassLoader().getResource("dbpediaextraction.bat").toString();
             }
             else if(utils.OSDetails.isUnix()){
-                dbPediaExtractorBatchFile=this.getClass().getClassLoader().getResource("dbpediaextraction.sh").toString();
+                dbPediaExtractorBatchFile = this.getClass().getClassLoader().getResource("dbpediaextraction.sh").toString();
             }
             else{
-                dbPediaExtractorBatchFile=this.getClass().getClassLoader().getResource("dbpediaextraction.sh").toString();
+                dbPediaExtractorBatchFile = this.getClass().getClassLoader().getResource("dbpediaextraction.sh").toString();
             }
 
             String batchCommand = dbPediaExtractorBatchFile +" " + pathToExtractionFramework;
