@@ -23,7 +23,7 @@ There are some prerequisites that must be fulfilled in order to be able to run t
 - at least 100 gigabytes freely available disk space
 
 
-##About this Guide
+## About this Guide
 This file represents the main guide of the project. It comprises all information required to run the process but 
 will also give you guidance if you are interested in implementation details. You will find more `README.md` files 
 within some subfolders. Those describe implementation details. You do not have to read them if you are not interested
@@ -59,14 +59,13 @@ After successfully running the program, you will find the postprocessed wikis in
 
 ## Implementation Details
 
-###General Structure and Implementation Documentation
+### General Structure and Implementation Documentation
 The project is mainly implemented in Java. The main process is divided in sub-processes which are organized in folders 
 (= packages in Java). Within those folders you will find additional `README.md` files which further explain the 
 particular module from a technical perspective. It is not required to read those if you are not interested in the 
 implementation. Sometimes, packages contain an application which allow to execute only a module. If you are interested
 in executing only a part of the process, this will save you time but note that those applications usually require
 that you executed other applications beforehand at least once. All code is documented using JavaDoc.
-
 
 
 ### Applications 
@@ -114,5 +113,5 @@ The program performs a lot of file operations. All of those file operations are 
 
 
 ### Code Quality and Unit Tests
-All tests can be found in the [Test Directory](.wikiaProject/src/test). 
+All tests can be found in the [Test Directory](./wikiaProject/src/test). Please note that the test coverage is not 100%.
 
