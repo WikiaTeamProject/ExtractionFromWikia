@@ -40,7 +40,7 @@ public class Extractor {
     private String extractionDefaultPropertiesFilePath;
     private HashMap<String, WikiaWikiProperties> wikisPropertiesSet;
     private String pathToRootDirectory;
-    private HashMap<String,String> dumpURLsMapping;
+    private HashMap<String, String> dumpURLsMapping;
 
     public Extractor() {
 
@@ -153,9 +153,9 @@ public class Extractor {
             Date lastModifiedDate;
             long wikiSize;
 
-            if(dumpURLsMapping==null){
-                IOoperations io=new IOoperations();
-                dumpURLsMapping=io.readDumpsURL();
+            if (dumpURLsMapping == null) {
+                IOoperations io = new IOoperations();
+                dumpURLsMapping = io.readDumpsURL();
             }
 
 
@@ -164,7 +164,7 @@ public class Extractor {
             logger.info("Getting Properties for wiki: " + wikiFilePath);
 
             lastModifiedDate = simpleDateFormat.parse(simpleDateFormat.format(wikiFile.lastModified()));
-            System.out.println("Total Size:" + (wikiFile.length() / 1024) + " KB");
+            logger.info("Total Size: " + (wikiFile.length() / 1024) + " KB");
 
             FileReader fr = new FileReader(wikiFile);
 
@@ -183,21 +183,19 @@ public class Extractor {
                 if ((fileContents.indexOf("<sitename>") + 10) <=
                         fileContents.indexOf("</sitename>", fileContents.indexOf("<sitename>") + 10) - 1) {
                     wikiName = (fileContents.substring(fileContents.indexOf("<sitename>") + 10, fileContents.indexOf("</sitename>", fileContents.indexOf("<sitename>") + 10))).trim().replace(" ", "_");
-                }
-                else {
+                } else {
                     wikiName = "";
                 }
 
                 wikiSize = (wikiFile.length() / 1024);
 
-                if(dumpURLsMapping.get(wikiFile.getName())!=null){
-                    wikiBaseURL=dumpURLsMapping.get(wikiFile.getName());
-                }
-                else
-                    wikiBaseURL="";
+                if (dumpURLsMapping.get(wikiFile.getName()) != null) {
+                    wikiBaseURL = dumpURLsMapping.get(wikiFile.getName());
+                } else
+                    wikiBaseURL = "";
 
 
-                wikiProperties = new WikiaWikiProperties(wikiName, languageCode, wikiPath, lastModifiedDate, wikiSize,wikiBaseURL);
+                wikiProperties = new WikiaWikiProperties(wikiName, languageCode, wikiPath, lastModifiedDate, wikiSize, wikiBaseURL);
 
             }
             br.close();
@@ -234,7 +232,7 @@ public class Extractor {
             //get list of wikis in a folder
             File[] wikiFiles = wikisFilesFolder.listFiles();
 
-            System.out.println("Total Files :" + wikiFiles.length);
+            logger.info("Total Files: " + wikiFiles.length);
 
             for (File wikiFile : wikiFiles) {
 
@@ -290,9 +288,9 @@ public class Extractor {
 
             wikisPropertiesSet = extractPropertiesForAllWikis();
             String downloadDirectoryForExtraction = ResourceBundle.getBundle("config").getString("pathToRootDirectory")
-                            +"//dbPediaExtractionFormat//";
+                    + "//dbPediaExtractionFormat//";
             String wikiSourceFileName = ResourceBundle.getBundle("config").getString("wikiSourceFileName");
-            String[] languageCodestoExtract=ResourceBundle.getBundle("config").getString("languages").split(",");
+            String[] languageCodestoExtract = ResourceBundle.getBundle("config").getString("languages").split(",");
 
             WikiaWikiProperties wikiProperties = null;
             String languageCode;
@@ -308,7 +306,7 @@ public class Extractor {
 
             File extractionDirectory = new File(downloadDirectoryForExtraction);
 
-            if (! extractionDirectory.exists()) extractionDirectory.mkdir();
+            if (!extractionDirectory.exists()) extractionDirectory.mkdir();
 
             for (String wikiName : wikisPropertiesSet.keySet()) {
 
@@ -317,7 +315,7 @@ public class Extractor {
                 //Get properties
                 languageCode = wikiProperties.getLanguageCode();
 
-                if(Arrays.asList(languageCodestoExtract).contains(languageCode)){
+                if (Arrays.asList(languageCodestoExtract).contains(languageCode)) {
 
                     String siteName = wikiProperties.getWikiName();
                     wikiFilePath = wikiProperties.getWikiPath();
@@ -327,11 +325,13 @@ public class Extractor {
 
                     languageDirectory = new File(downloadDirectoryForExtraction + "/" + languageCode + "wiki_");
 
-                    if (!languageDirectory.exists()) languageDirectory.mkdir();
+                    if (! languageDirectory.exists())
+                        languageDirectory.mkdir();
 
                     dateDirectory = new File(downloadDirectoryForExtraction + "/" + languageCode + "wiki_" + "/" + index);
 
-                    if (!dateDirectory.exists()) dateDirectory.mkdir();
+                    if (! dateDirectory.exists())
+                        dateDirectory.mkdir();
 
                     copyFileFromOneDirectorytoAnotherDirectory(wikiFilePath, downloadDirectoryForExtraction + "/" + languageCode + "wiki_" + "/" + index + "/" +
                             languageCode + "wiki-" + currentDate + "-" + wikiSourceFileName);
@@ -360,7 +360,7 @@ public class Extractor {
             File sourceFile = new File(sourceFilePath);
             File targetFile = new File(targetFilePath);
 
-            if (! targetFile.exists()) targetFile.createNewFile();
+            if (!targetFile.exists()) targetFile.createNewFile();
 
             FileInputStream sourceFileInputStream = new FileInputStream(sourceFile);
             FileOutputStream targetFileOutputStream = new FileOutputStream(targetFile);
@@ -390,18 +390,19 @@ public class Extractor {
     public void callDbPediaExtractorToExtractFile() {
         try {
             String downloadDirectoryForExtraction = ResourceBundle.getBundle("config").getString("pathToRootDirectory")
-                             + "//dbPediaExtractionFormat//";
+                    + "//dbPediaExtractionFormat//";
             String pathToExtractionFramework = ResourceBundle.getBundle("config").getString("dbPediaExtractorPath");
-            String dbPediaExtractorBatchFile=this.getClass().getClassLoader().getResource("dbpediaextraction.bat").toString();
+            String dbPediaExtractorBatchFile = this.getClass().getClassLoader().getResource("dbpediaextraction.bat").toString();
             String DATE_FORMAT_NOW = "YYYYMMdd";
             Calendar calender = Calendar.getInstance();
             SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT_NOW);
             String current_date = dateFormatter.format(calender.getTime());
-            String date="";
+            String date = "";
             String batchCommand = dbPediaExtractorBatchFile +" " + pathToExtractionFramework;
+
             CommandLine cmdLine = null;
             DefaultExecutor executor = null;
-            IOoperations iOoperations=new IOoperations();
+            IOoperations iOoperations = new IOoperations();
 
             File downloadedWikisDirectory = new File(downloadDirectoryForExtraction);
             File[] languageCodesFolders = downloadedWikisDirectory.listFiles();
@@ -415,51 +416,50 @@ public class Extractor {
 
                     for (File wikiDirectory : dateFolders) {
 
-                        if(! iOoperations.checkIfFileExists(wikiDirectory.getAbsolutePath(),"*-complete")) {
+                        if (! iOoperations.checkIfFileExists(wikiDirectory.getAbsolutePath(), "*-complete")) {
 
-                        File[] wikiFiles = wikiDirectory.listFiles();
-                        String folderName = wikiDirectory.getAbsolutePath();
-                       // File[] filesToExtract = renamedFolder.listFiles();
+                            File[] wikiFiles = wikiDirectory.listFiles();
+                            String folderName = wikiDirectory.getAbsolutePath();
+                            // File[] filesToExtract = renamedFolder.listFiles();
 
-                        for (File fileForExtraction : wikiFiles) {
-                            if (fileForExtraction.getName().endsWith(".xml")) {
+                            for (File fileForExtraction : wikiFiles) {
+                                if (fileForExtraction.getName().endsWith(".xml")) {
 
-                                date=fileForExtraction.getName().substring (fileForExtraction.getName().indexOf("-") + 1,
-                                        fileForExtraction.getName().indexOf("-",fileForExtraction.getName().indexOf("-") + 1));
+                                    date = fileForExtraction.getName().substring(fileForExtraction.getName().indexOf("-") + 1,
+                                            fileForExtraction.getName().indexOf("-", fileForExtraction.getName().indexOf("-") + 1));
 
-                                File commonsWikiDirectory = new
-                                        File(downloadedWikisDirectory.getAbsoluteFile()
-                                        + "//commonswiki//" + date + "//");
+                                    File commonsWikiDirectory = new
+                                            File(downloadedWikisDirectory.getAbsoluteFile()
+                                            + "//commonswiki//" + date + "//");
 
-                                if (commonsWikiDirectory.exists()) {
-                                    commonsWikiDirectory.delete();
+                                    if (commonsWikiDirectory.exists()) {
+                                        commonsWikiDirectory.delete();
+                                    }
+
+                                    commonsWikiDirectory.mkdirs();
+
+                                    copyFileFromOneDirectorytoAnotherDirectory(
+                                            fileForExtraction.getAbsolutePath(),
+                                            commonsWikiDirectory.getAbsolutePath()
+                                                    + "//commonswiki-" + date + "-pages-current.xml");
                                 }
-
-                                commonsWikiDirectory.mkdirs();
-
-                                copyFileFromOneDirectorytoAnotherDirectory(
-                                        fileForExtraction.getAbsolutePath(),
-                                        commonsWikiDirectory.getAbsolutePath()
-                                                + "//commonswiki-" + date + "-pages-current.xml");
                             }
-                        }
 
                             File renamedFolder = new File(wikiDirectory.getParent() + "/" + date);
                             wikiDirectory.renameTo(renamedFolder);
 
-                        try {
-                            //call DBpedia extractor
-                            cmdLine = CommandLine.parse(batchCommand);
-                            executor = new DefaultExecutor();
-                            executor.setExitValue(0);
-                            int exitValue = executor.execute(cmdLine);
-                        }
-                        catch(Exception ex){
-                            logger.severe("DBpedia applications.extraction failed for this wiki!");
-                        }
+                            try {
+                                //call DBpedia extractor
+                                cmdLine = CommandLine.parse(batchCommand);
+                                executor = new DefaultExecutor();
+                                executor.setExitValue(0);
+                                int exitValue = executor.execute(cmdLine);
+                            } catch (Exception ex) {
+                                logger.severe("DBpedia extraction framework failed for this wiki!");
+                            }
 
-                        //rename folder to orignal name
-                        renamedFolder.renameTo(new File(folderName));
+                            //rename folder to orignal name
+                            renamedFolder.renameTo(new File(folderName));
                         }
                     }
 
@@ -475,7 +475,7 @@ public class Extractor {
 
     /**
      * This function extracts compressed files obtained from DBpedia extractor
-     * and moves to seperate directory for evaluation
+     * and moves to separate directory for mapping and evaluation
      */
     public void moveExtractFilesforEvaluation() {
 
@@ -483,22 +483,20 @@ public class Extractor {
                 pathToRootDirectory + "//dbPediaExtractionFormat";
 
         String postProcessedFilesDirectoryPath =
-                pathToRootDirectory +  "//postProcessedWikis";
+                pathToRootDirectory + "//postProcessedWikis";
 
-        ExtractionBz2
-                bz2Extractor = new ExtractionBz2();
-        String wikiFolderName="";
+        ExtractionBz2 bz2Extractor = new ExtractionBz2();
+        String wikiFolderName = "";
 
         try {
 
             File extractedWikiFolder = new File(downloadDirectoryForExtraction);
 
-
             //get list of wikis in a folder
             File[] listOfFolders = extractedWikiFolder.listFiles();
 
             for (File languageCodeFolder : listOfFolders) {
-                if (languageCodeFolder.isDirectory() && ! languageCodeFolder.getName().toLowerCase().equals("commonswiki")) {
+                if (languageCodeFolder.isDirectory() && !languageCodeFolder.getName().toLowerCase().equals("commonswiki")) {
 
                     File[] dateFolders = languageCodeFolder.listFiles();
 
@@ -508,22 +506,22 @@ public class Extractor {
 
                             WikiaWikiProperties properties = readWikiPropertiesFile(dateFolder.getAbsolutePath());
 
-
-                            if(properties.getWikiBaseURL().equals("")){
-                                wikiFolderName=properties.getWikiName();
+                            if (properties.getWikiBaseURL().equals("")) {
+                                wikiFolderName = properties.getWikiName();
+                            } else {
+                                // onlx keep name (xxx) of Url: http://xxx.wikia.com
+                                wikiFolderName = properties.getWikiBaseURL().substring(7, properties.getWikiBaseURL().length() - 10);
                             }
-                            else{
-                                wikiFolderName=properties.getWikiBaseURL().substring(7,properties.getWikiBaseURL().indexOf("."));
-                            }
 
-
-                            File extractedFilesFolder = new File(postProcessedFilesDirectoryPath + "//" +wikiFolderName);
+                            File extractedFilesFolder = new File(postProcessedFilesDirectoryPath + "//" + wikiFolderName);
 
                             if (! extractedFilesFolder.exists()) {
                                 extractedFilesFolder.mkdirs();
                             }
 
                             File[] extractedFiles = dateFolder.listFiles();
+
+                            logger.info("Moving files of " + wikiFolderName);
 
                             for (File wikiFile : extractedFiles) {
                                 if (wikiFile.getName().endsWith(".bz2")) {
@@ -608,9 +606,9 @@ public class Extractor {
 
                 } else if (key.toLowerCase().equals("languagecode")) {
                     wikiProperties.setLanguageCode(value);
-                }
-                else if (key.toLowerCase().equals("baseurl")) {
-                    wikiProperties.setWikiBaseURL(value); ;
+                } else if (key.toLowerCase().equals("baseurl")) {
+                    wikiProperties.setWikiBaseURL(value);
+                    ;
                 }
             }
 
@@ -635,14 +633,14 @@ public class Extractor {
         if (extractionFrameworkDirectory != null && extractionFrameworkDirectory.exists()) {
 
             // check whether specified path is a directory
-            if (!extractionFrameworkDirectory.isDirectory()) {
-                logger.severe("Filepath to DBpedia applications.extraction framework in config.properties is not a directory." +
+            if (! extractionFrameworkDirectory.isDirectory()) {
+                logger.severe("Filepath to DBpedia extraction framework in config.properties is not a directory." +
                         "Please link to the root directory.");
                 return false;
             }
 
         } else {
-            logger.severe("Filepath to DBpedia applications.extraction framework in config.properties does not exist. Please adjust it.");
+            logger.severe("Filepath to DBpedia extraction framework in config.properties does not exist. Please adjust it.");
             return false;
         }
 

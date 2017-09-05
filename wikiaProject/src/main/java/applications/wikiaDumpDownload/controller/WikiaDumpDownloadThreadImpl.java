@@ -5,13 +5,14 @@ import applications.wikiaStatistics.controller.MetadataThreadImpl;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 /**
  * This class represents the implementation of WikiaDumpDownloadThread threads.
  */
-public class WikiaDumpDownloadThreadImpl  {
+public class WikiaDumpDownloadThreadImpl {
 
     private static Logger logger = Logger.getLogger(WikiaDumpDownloadThreadImpl.class.getName());
     private static Thread[] threads = new Thread[40];
@@ -34,7 +35,6 @@ public class WikiaDumpDownloadThreadImpl  {
 //
 //    }
 
-
     /**
      * Start the process using threads.
      */
@@ -43,7 +43,33 @@ public class WikiaDumpDownloadThreadImpl  {
     }
 
     /**
+     *
+     * @param urls
+     */
+    public static void downloadWikiaDumps(List<String> urls) {
+
+        IOoperations.createDirectory(statisticsDirectoryPath);
+        IOoperations.createDirectory(statisticsDirectoryPath + "/wikiaOverviewIndividualDumpSizes");
+        IOoperations.createDirectory(statisticsDirectoryPath + "/wikiaOverviewIndividualDumpURLs");
+
+        String dumpSizeFilePath = statisticsDirectoryPath + "/wikiaOverviewIndividualDumpSizes/dumpsSizes.csv";
+        String dumpURLsFilePath = statisticsDirectoryPath + "/wikiaOverviewIndividualDumpURLs/dumpsURL.csv";
+
+        Thread thread = new Thread(new WikiaDumpDownloadThread(urls, dumpSizeFilePath, dumpURLsFilePath));
+        thread.start();
+
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        logger.info("Dump Download process finished.");
+    }
+
+    /**
      * Returns the file path of the file containing all wiki links.
+     *
      * @return
      */
     private static String getFilePathOfWikiaAllOverview() {
@@ -57,13 +83,14 @@ public class WikiaDumpDownloadThreadImpl  {
      */
     private static void createThreads() {
         ArrayList<String> filePaths = new ArrayList<String>();
-        ArrayList<String> dumpURLsFiles=new ArrayList<String>();
+        ArrayList<String> dumpURLsFiles = new ArrayList<String>();
 
         int lowerIdLimit = 0;
         int upperIdLimit = 50000;
 
+        IOoperations.createDirectory(statisticsDirectoryPath);
         IOoperations.createDirectory(statisticsDirectoryPath + "/wikiaOverviewIndividualDumpSizes");
-
+        IOoperations.createDirectory(statisticsDirectoryPath + "/wikiaOverviewIndividualDumpURLs");
 
         for (int i = 0; i < threads.length; i++) {
 
@@ -74,7 +101,7 @@ public class WikiaDumpDownloadThreadImpl  {
             filePaths.add(dumpSizeFilePath);
             dumpURLsFiles.add(dumpURLsFilePath);
 
-            threads[i] = new Thread(new WikiaDumpDownloadThread(filePath, dumpSizeFilePath,dumpURLsFilePath));
+            threads[i] = new Thread(new WikiaDumpDownloadThread(filePath, dumpSizeFilePath, dumpURLsFilePath));
 
             lowerIdLimit += 50000;
             upperIdLimit += 50000;
@@ -91,7 +118,7 @@ public class WikiaDumpDownloadThreadImpl  {
             logger.info("Dump Download process finished.");
             logger.info("Concatenating files...");
 
-        } catch(InterruptedException ie){
+        } catch (InterruptedException ie) {
             logger.severe(ie.toString());
         }
 
@@ -103,6 +130,7 @@ public class WikiaDumpDownloadThreadImpl  {
 
     /**
      * Merges individual files with wiki links created by the threads.
+     *
      * @param filePaths
      */
     private static void mergeFiles(ArrayList<String> filePaths) {
@@ -150,7 +178,7 @@ public class WikiaDumpDownloadThreadImpl  {
      *
      * @return
      */
-    public static boolean checkPrerequisites() {
+    public static boolean checkPrerequisites(boolean withFile) {
 
         // check whether config.properties file was copied
         if (ClassLoader.getSystemResource("config.properties") == null) {
@@ -161,14 +189,14 @@ public class WikiaDumpDownloadThreadImpl  {
         File file = new File(ResourceBundle.getBundle("config").getString("pathToRootDirectory"));
 
         // check whether the path to the root directory is really a directory
-        if (! file.isDirectory()) {
+        if (!file.isDirectory()) {
             logger.severe("Variable pathToRootDirectory in file config.properties is not a directory. Please adjust it.");
             return false;
         }
 
         String pathLanguageCodes = WikiaDumpDownloadThreadImpl.class.getClassLoader().getResource("files/wikiaLanguageCodes.csv").getPath();
         File languageCodes = new File(pathLanguageCodes);
-        if (! languageCodes.exists()) {
+        if (!languageCodes.exists()) {
             logger.severe("wikiaLanguageCodes.csv in resource directory does not exist.");
             return false;
         }
@@ -177,7 +205,7 @@ public class WikiaDumpDownloadThreadImpl  {
         File wikiCSV = new File(wikiAllOverview);
 
         // check if wiki overview CSV file is already existing, if not create it
-        if (! wikiCSV.exists()) {
+        if (!wikiCSV.exists() && withFile) {
             logger.info("File wikiaAllOverview.csv does not exist yet. Wikia metadata will first be downloaded.");
             MetadataThreadImpl.downloadWikiaMetadata();
         }
@@ -187,7 +215,6 @@ public class WikiaDumpDownloadThreadImpl  {
 
 
     /**
-     *
      * @param dumpURLsFiles
      */
     private static void mergeDumpURLsFiles(ArrayList<String> dumpURLsFiles) {

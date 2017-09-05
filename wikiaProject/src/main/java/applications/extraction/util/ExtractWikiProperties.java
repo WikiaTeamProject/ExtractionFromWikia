@@ -41,18 +41,18 @@ public class ExtractWikiProperties {
             long wikiSize;
 
 
-            if(dumpURLsMapping==null){
-                IOoperations io=new IOoperations();
-                dumpURLsMapping=io.readDumpsURL();
+            if (dumpURLsMapping == null) {
+                IOoperations io = new IOoperations();
+                dumpURLsMapping = io.readDumpsURL();
             }
 
 
-            File wikiFile=new File(wikiFilePath);
+            File wikiFile = new File(wikiFilePath);
 
-            logger.info("Getting Properties for wiki : " +wikiFilePath);
+            logger.info("Getting Properties for wiki: " +wikiFilePath);
 
             lastModifiedDate=simpleDateFormat.parse(simpleDateFormat.format(wikiFile.lastModified()));
-            System.out.println("Total Size:" + (wikiFile.length()/1024) + " KB");
+            logger.info("Total Size:" + (wikiFile.length()/1024) + " KB");
 
             FileReader fr = new FileReader(wikiFile);
 
@@ -72,14 +72,13 @@ public class ExtractWikiProperties {
 
                 wikiSize=(wikiFile.length()/1024);
 
-
-                if(dumpURLsMapping.get(wikiFile.getName())!=null){
-                    wikiBaseURL=dumpURLsMapping.get(wikiFile.getName());
+                if (dumpURLsMapping.get(wikiFile.getName()) != null) {
+                    wikiBaseURL = dumpURLsMapping.get(wikiFile.getName());
                 }
                 else
-                    wikiBaseURL="";
+                    wikiBaseURL = "";
 
-                wikiProperties=new WikiaWikiProperties(wikiName, languageCode,wikiPath,lastModifiedDate,wikiSize,wikiBaseURL);
+                wikiProperties  =new WikiaWikiProperties(wikiName, languageCode, wikiPath, lastModifiedDate, wikiSize, wikiBaseURL);
                 // wikiProperties = new WikiaWikiProperties(wikiName, languageCode, wikiPath);
 
             }
