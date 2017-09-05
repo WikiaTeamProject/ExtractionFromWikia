@@ -392,12 +392,13 @@ public class Extractor {
             String downloadDirectoryForExtraction = ResourceBundle.getBundle("config").getString("pathToRootDirectory")
                              + "//dbPediaExtractionFormat//";
             String pathToExtractionFramework = ResourceBundle.getBundle("config").getString("dbPediaExtractorPath");
+            String dbPediaExtractorBatchFile=this.getClass().getClassLoader().getResource("dbpediaextraction.bat").toString();
             String DATE_FORMAT_NOW = "YYYYMMdd";
             Calendar calender = Calendar.getInstance();
             SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT_NOW);
             String current_date = dateFormatter.format(calender.getTime());
             String date="";
-            String line = "dbpediaextraction.bat " + pathToExtractionFramework;
+            String batchCommand = dbPediaExtractorBatchFile +" " + pathToExtractionFramework;
             CommandLine cmdLine = null;
             DefaultExecutor executor = null;
             IOoperations iOoperations=new IOoperations();
@@ -448,7 +449,7 @@ public class Extractor {
 
                         try {
                             //call DBpedia extractor
-                            cmdLine = CommandLine.parse(line);
+                            cmdLine = CommandLine.parse(batchCommand);
                             executor = new DefaultExecutor();
                             executor.setExitValue(0);
                             int exitValue = executor.execute(cmdLine);
