@@ -13,7 +13,7 @@ import testOrchestration.CheckPrerequisitesTest;
  * Test class for {@link applications.extractionPostprocessing.util.DBpediaResourceServiceOffline DBpediaResourceServiceOnline}.
  * Make sure you allocate at least 8 gigabytes of RAM to the JVM.
  */
-@Ignore
+
 public class DBpediaResourceServiceOfflineTest {
 
     public static DBpediaResourceServiceOffline service = DBpediaResourceServiceOffline.getDBpediaResourceServiceOfflineObject();
