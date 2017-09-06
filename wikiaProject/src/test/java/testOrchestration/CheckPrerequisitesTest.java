@@ -17,7 +17,6 @@ public class CheckPrerequisitesTest {
      * Making sure that there are the required DBpedia files in the test directory
      */
     @Test
-    @Ignore
     public void checkPrerequisites(){
         String rootDirectory = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
 

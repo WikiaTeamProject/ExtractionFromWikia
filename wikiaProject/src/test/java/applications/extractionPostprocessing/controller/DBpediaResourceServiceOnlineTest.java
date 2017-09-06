@@ -9,8 +9,13 @@ import org.junit.Test;
 
 /**
  * Test class for {@link DBpediaResourceServiceOnline DBpediaResourceServiceOnline}.
+ * This test requires internet and connects to DBpedia during the test.
+ *
+ * This test works as of September 2017.
+ * If it fails, one reason can be that DBpedia received an update.
+ *
+ * Currently those test can be ignored because the SPARQL endpoint is not used.
  */
-
 public class DBpediaResourceServiceOnlineTest {
 
     public static DBpediaResourceServiceOnline service = new DBpediaResourceServiceOnline();
