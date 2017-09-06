@@ -5,7 +5,7 @@ import applications.extractionPostprocessing.model.EvaluationResultSingleWiki;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.io.File;
+import java.io.*;
 import java.util.ResourceBundle;
 
 import static org.junit.Assert.*;
@@ -73,6 +73,10 @@ public class MappingEvaluatorTest {
         assertEquals((1.0/9.0) * 100 + (2.0/3.0) * (4.0/6.0) * 100.0, result.weightedOverallRecallInPercent,  0.00000001);
         assertEquals((40.0/3.0) + (2.0/3.0) * (2.0/3.0) * 100, result.weightedOverallF1MeasureInPercent, 0.00000001);
 
+        // test whether there are null mappings
+        makeSureThereIsNoNullMappingInFile("./src/test/test_files/test_root/PostProcessedWikis/test_wiki_1");
+        makeSureThereIsNoNullMappingInFile("./src/test/test_files/test_root/PostProcessedWikis/test_wiki_2");
+
     }
 
 
@@ -88,6 +92,8 @@ public class MappingEvaluatorTest {
             assertTrue(false);
         }
     }
+
+
 
     @Test
     public void evaluateMappingsForOneWikiTest1() throws Exception {
@@ -109,6 +115,7 @@ public class MappingEvaluatorTest {
         assertTrue(result.getAccuracyInPercent() == (2.0/5) * 100);
         assertTrue(result.getF1MeasureInPercent() == ((2.0 * 0.5 * (1.0/3))/(0.5 + 1.0/3))*100); // = 40.0
 
+        makeSureThereIsNoNullMappingInFile("./src/test/test_files/evaluation_test/resourceMappings.ttl");
     }
 
 
@@ -131,6 +138,25 @@ public class MappingEvaluatorTest {
         assertTrue(result.getPrecisionInPercent() == (4.0/6) * 100);
         assertTrue(result.getAccuracyInPercent() == (6.0/10) * 100);
         assertTrue(result.getF1MeasureInPercent() == ((2.0 * (4.0/6) * (4.0/6))/((4.0/6) + (4.0/6)))*100); // = ( 2.0 / 3 ) * 100 = 66.66666667
+
+        makeSureThereIsNoNullMappingInFile("./src/test/test_files/test_root/PostProcessedWikis/test_wiki_2");
+    }
+
+
+    public static void makeSureThereIsNoNullMappingInFile(String pathToFile){
+        File f = new File(pathToFile);
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(f));
+
+            String line = "";
+            while((line = br.readLine()) != null){
+                assertFalse(line.contains(" <null> "));
+            }
+
+        } catch(IOException ioe){
+            ioe.printStackTrace();
+        }
 
     }
 

@@ -442,15 +442,28 @@ public class MappingEvaluator {
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(mappingFile))) {
 
+            String newLineCharacter = "";
+
+            // get newLineCharacter in a safe way
+            try {
+                newLineCharacter = ResourceBundle.getBundle("config").getString("newLineCharacter");
+            } catch (Exception e){
+                logger.severe(e.toString());
+                logger.severe("Could not find resource 'newLineCharacter'.");
+            }
+
+            if(newLineCharacter.isEmpty()){
+                newLineCharacter = "\n\r";
+            }
+
             while ((line = bufferedReader.readLine()) != null) {
 
                 // include everything except null mappings
                 if (! line.contains("<null>"))
-                    content.append(line);
+                    content.append(line + newLineCharacter);
 
             }
             bufferedReader.close();
-
             IOoperations.updateFile(content.toString(), mappingFile);
 
         } catch (IOException e) {
