@@ -90,7 +90,7 @@ public class MappingEvaluatorTest {
     }
 
     @Test
-    public void evaluateMappingsForOneWiki() throws Exception {
+    public void evaluateMappingsForOneWikiTest1() throws Exception {
 
         // case 1
 
@@ -109,13 +109,18 @@ public class MappingEvaluatorTest {
         assertTrue(result.getAccuracyInPercent() == (2.0/5) * 100);
         assertTrue(result.getF1MeasureInPercent() == ((2.0 * 0.5 * (1.0/3))/(0.5 + 1.0/3))*100); // = 40.0
 
+    }
+
+
+    @Test
+    public void evaluateMappingsForOneWikiTest2() throws Exception {
 
         // case 2
 
         // copy required files
         copyTestFilesForEvaluateAllMappings();
 
-        result = MappingEvaluator.evaluateMappingsForOneWiki("./src/test/test_files/test_root/PostProcessedWikis/test_wiki_2", MappingEvaluator.EvaluationObjectSingleWiki.RESOURCES);
+        EvaluationResultSingleWiki result = MappingEvaluator.evaluateMappingsForOneWiki("./src/test/test_files/test_root/PostProcessedWikis/test_wiki_2", MappingEvaluator.EvaluationObjectSingleWiki.RESOURCES);
         assertTrue(result.getFalseNegatives() == 2);
         assertTrue(result.getFalsePositives() == 2);
         assertTrue(result.getTruePositives() == 4);
@@ -128,4 +133,5 @@ public class MappingEvaluatorTest {
         assertTrue(result.getF1MeasureInPercent() == ((2.0 * (4.0/6) * (4.0/6))/((4.0/6) + (4.0/6)))*100); // = ( 2.0 / 3 ) * 100 = 66.66666667
 
     }
+
 }
