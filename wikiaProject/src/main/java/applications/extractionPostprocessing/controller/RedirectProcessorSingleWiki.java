@@ -89,7 +89,7 @@ public class RedirectProcessorSingleWiki {
                         case 1:
                             // first match: key
                             key = matcher.group();
-                            logger.info("Key: " + matcher.group());
+//                            logger.info("Key: " + matcher.group());
                             break;
                         // (second match: "<http://dbpedia.org/ontology/wikiPageRedirects>"
                         // always the same -> irrelevant for us
@@ -98,7 +98,7 @@ public class RedirectProcessorSingleWiki {
 
                             if (key != null && value != null) {
                                 // key and value found -> add to map and break while loop
-                                logger.info("Value:  " + matcher.group());
+//                                logger.info("Value:  " + matcher.group());
 
                                 redirectsMap.put(key, value);
                                 key = null;
