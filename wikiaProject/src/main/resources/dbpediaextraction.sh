@@ -1,10 +1,12 @@
 #!/bin/bash
-set dbPediaExtFrmwrkDir=$1
-echo "Echoing Variable value"
+dbPediaExtFrmwrkDir=$1
+extractionPropFile=$2
+
 echo $dbPediaExtFrmwrkDir
+echo $extractionPropFile
 
 #change directory to dbpedia extraction framework directory
 cd $dbPediaExtFrmwrkDir
 
 # run extractor
-../run extraction extraction-config-file
+../run extraction $extractionPropFile
