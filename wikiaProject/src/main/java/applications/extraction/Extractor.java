@@ -55,16 +55,16 @@ public class Extractor {
     public void extractAllWikis() {
 
         logger.info("Unarchiving all dumps");
-        unarchiveDownloadedDumps();
+        //unarchiveDownloadedDumps();
 
         logger.info("Creating folder structure for DBpedia extractor");
-        createDbpediaExtractionStructure();
+        //createDbpediaExtractionStructure();
 
         logger.info("Calling DBpediaExtractor");
         callDbPediaExtractorToExtractFile();
 
         logger.info("Moving files for evaluation");
-        moveExtractFilesforEvaluation();
+        //moveExtractFilesforEvaluation();
     }
 
 
@@ -398,10 +398,14 @@ public class Extractor {
             SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT_NOW);
             String current_date = dateFormatter.format(calender.getTime());
             String date = "";
+            String extractionPropertiesFile = this.getClass().getClassLoader().getResource("extraction.properties").getPath().toString();
 
             CommandLine cmdLine = null;
             DefaultExecutor executor = null;
             IOoperations iOoperations = new IOoperations();
+
+            logger.info("Generating extraction properties file : ");
+            iOoperations.generateExtractionProperties();
 
 
             //Check operating system and trigger command accordingly
@@ -415,7 +419,7 @@ public class Extractor {
                 dbPediaExtractorBatchFile = this.getClass().getClassLoader().getResource("dbpediaextraction.sh").getPath();
             }
 
-            String batchCommand = dbPediaExtractorBatchFile +" " + pathToExtractionFramework;
+            String batchCommand = dbPediaExtractorBatchFile +" " + pathToExtractionFramework+" " +  extractionPropertiesFile;
 
 
             File downloadedWikisDirectory = new File(downloadDirectoryForExtraction);
