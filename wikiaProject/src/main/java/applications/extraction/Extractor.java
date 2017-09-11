@@ -6,19 +6,17 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
-
+import loggingService.MessageLogger;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
+import org.apache.log4j.Priority;
 import utils.ExtractionBz2;
 import utils.ExtractionGZip;
 import utils.Extraction7zip;
 import utils.IOoperations;
-
 import java.io.PrintWriter;
 
 
@@ -35,12 +33,16 @@ import java.io.PrintWriter;
  */
 public class Extractor {
 
-    private static Logger logger = Logger.getLogger(Extractor.class.getName());
+    //private static Logger logger = Logger.getLogger(Extractor.class.getName());
     private static File extractionFrameworkDirectory;
     private String extractionDefaultPropertiesFilePath;
     private HashMap<String, WikiaWikiProperties> wikisPropertiesSet;
     private String pathToRootDirectory;
     private HashMap<String, String> dumpURLsMapping;
+    private static MessageLogger logger=new MessageLogger();
+    private static final String MODULE="Extraction";
+    private static final String CLASS="Extractor";
+
 
     public Extractor() {
 
@@ -54,37 +56,17 @@ public class Extractor {
 
     public void extractAllWikis() {
 
-        logger.info("Unarchiving all dumps");
-        //unarchiveDownloadedDumps();
+        logger.logMessage(Priority.INFO,MODULE,CLASS,"Unarchiving all dumps");
+        unarchiveDownloadedDumps();
 
-        logger.info("Creating folder structure for DBpedia extractor");
-        //createDbpediaExtractionStructure();
+        logger.logMessage(Priority.INFO,MODULE,CLASS,"Creating folder structure for DBpedia extractor");
+        createDbpediaExtractionStructure();
 
-        logger.info("Calling DBpediaExtractor");
+        logger.logMessage(Priority.INFO,MODULE,CLASS,"Calling DBpediaExtractor");
         callDbPediaExtractorToExtractFile();
 
-        logger.info("Moving files for evaluation");
-        //moveExtractFilesforEvaluation();
-    }
-
-
-    /**
-     * Method creates the required file structure for the applications.extraction.
-     */
-    private void createExtractionFileStructureForWiki(File wikiFile) {
-
-//        TODO: think about commons wiki
-
-    }
-
-    /**
-     * This method works just like {@link Extractor#createExtractionFileStructureForWiki(File)}
-     *
-     * @param pathToWiki
-     * @see Extractor#createExtractionFileStructureForWiki(File)
-     */
-    private void createExtractionFileStructureForWiki(String pathToWiki) {
-        createExtractionFileStructureForWiki(new File(pathToWiki));
+        logger.logMessage(Priority.INFO,MODULE,CLASS,"Moving files for evaluation");
+        moveExtractFilesforEvaluation();
     }
 
 
@@ -101,37 +83,27 @@ public class Extractor {
             Extraction7zip extractor7Zip = new Extraction7zip();
             ExtractionGZip extractorGZip = new ExtractionGZip();
 
+            logger.logMessage(Priority.DEBUG,MODULE,CLASS,"Downloaded Wikis Path : " + wikisFilePath);
+
             if (downloadedWikisFolder.isDirectory()) {
                 File[] downloadedWikisFormats = downloadedWikisFolder.listFiles();
                 for (File downloadedWikisFormat : downloadedWikisFormats) {
                     if (downloadedWikisFormat.isDirectory()) {
                         if (downloadedWikisFormat.getName().endsWith("7z")) {
+                            logger.logMessage(Priority.INFO,MODULE,CLASS,"Unarchiving files in 7z format");
                             extractor7Zip.extractAll7ZipFilesIntoDesignatedFolder();
                         } else if (downloadedWikisFormat.getName().endsWith("gz")) {
+
+                            logger.logMessage(Priority.INFO,MODULE,CLASS,"Unarchiving files in gz format");
                             extractorGZip.extractAllGZipFilesIntoDesignatedFolder();
                         }
-
-                        /*File[] downloadedWikis= downloadedWikisFormat.listFiles();
-                        for(File wikis:downloadedWikis){
-                            if(wikis.getName().endsWith(".gz")){
-
-                                extractionGZip.extractGzipFile(wikis.getAbsolutePath(),
-                                        wikis.getAbsolutePath());
-
-                            }
-                            else
-                            if(wikis.getName().endsWith(".7z")){
-                                extarctor7Zip.extract7ZipFile(wikis.getAbsolutePath(),
-                                        wikis.getParent());
-                            }
-                        }*/
                     }
                 }
             }
 
 
         } catch (Exception ex) {
-            logger.severe(ex.getMessage());
+            logger.logMessage(Priority.FATAL,MODULE,CLASS,ex.getMessage());
         }
     }
 
@@ -161,10 +133,11 @@ public class Extractor {
 
             File wikiFile = new File(wikiFilePath);
 
-            logger.info("Getting Properties for wiki: " + wikiFilePath);
+            logger.logMessage(Priority.INFO,MODULE,CLASS,"Getting Properties for wiki: " + wikiFilePath);
 
             lastModifiedDate = simpleDateFormat.parse(simpleDateFormat.format(wikiFile.lastModified()));
-            logger.info("Total Size: " + (wikiFile.length() / 1024) + " KB");
+
+            logger.logMessage(Priority.DEBUG,MODULE,CLASS,"Total Size: " + (wikiFile.length() / 1024) + " KB");
 
             FileReader fr = new FileReader(wikiFile);
 
@@ -202,8 +175,8 @@ public class Extractor {
             fr.close();
 
 
-        } catch (Exception exception) {
-            logger.log(Level.SEVERE, exception.getMessage());
+        } catch (Exception ex) {
+            logger.logMessage(Priority.FATAL,MODULE,CLASS,ex.getMessage());
         }
 
         return wikiProperties;
@@ -232,7 +205,7 @@ public class Extractor {
             //get list of wikis in a folder
             File[] wikiFiles = wikisFilesFolder.listFiles();
 
-            logger.info("Total Files: " + wikiFiles.length);
+            logger.logMessage(Priority.INFO,MODULE,CLASS,"Total Files: " + wikiFiles.length);
 
             for (File wikiFile : wikiFiles) {
 
@@ -246,36 +219,14 @@ public class Extractor {
                     }
 
                 } else {
-                    logger.severe("File is not valid XML : " + wikiFile.getName());
+                    logger.logMessage(Priority.FATAL,MODULE,CLASS,"File is not valid XML : " + wikiFile.getName());
                     break;
                 }
             }
 
-            /*
-            for(File formatFolder:listOfFolders){
-
-                if(formatFolder.isDirectory()) {
-
-                    File[] listOfFiles=formatFolder.listFiles();
-
-                    for (int i = 0; i < listOfFiles.length; i++) {
-
-                        if (listOfFiles[i].isFile() && listOfFiles[i].getName().endsWith(".xml")) {
-
-                            WikiaWikiProperties properties = extractPropertiesForaWiki(listOfFiles[i].getPath());
-
-                            if (wikiProperties != null) {
-                                wikiProperties.put(properties.getWikiName(), properties);
-                            }
-                        }
-                    }
-                }
-
-            }*/
-        } catch (Exception exception) {
-            logger.log(Level.SEVERE, exception.getMessage());
+        } catch (Exception ex) {
+            logger.logMessage(Priority.FATAL,MODULE,CLASS,ex.getMessage());
         }
-
         return wikiProperties;
     }
 
@@ -340,8 +291,8 @@ public class Extractor {
                 }
             }
 
-        } catch (Exception exception) {
-            logger.log(Level.SEVERE, exception.getMessage());
+        } catch (Exception ex) {
+            logger.logMessage(Priority.FATAL,MODULE,CLASS,ex.getMessage());
         }
 
     }
@@ -378,8 +329,8 @@ public class Extractor {
             sourceFileInputStream.close();
             targetFileOutputStream.close();
 
-        } catch (Exception exception) {
-            logger.log(Level.SEVERE, exception.getMessage());
+        } catch (Exception ex) {
+            logger.logMessage(Priority.FATAL,MODULE,CLASS,ex.getMessage());
         }
     }
 
@@ -404,7 +355,8 @@ public class Extractor {
             DefaultExecutor executor = null;
             IOoperations iOoperations = new IOoperations();
 
-            logger.info("Generating extraction properties file : ");
+            logger.logMessage(Priority.INFO,MODULE,CLASS,"Generating extraction properties file");
+
             iOoperations.generateExtractionProperties();
 
 
@@ -473,20 +425,18 @@ public class Extractor {
                                 executor.setExitValue(0);
                                 int exitValue = executor.execute(cmdLine);
                             } catch (Exception ex) {
-                                logger.severe("DBpedia extraction framework failed for this wiki!");
+                                logger.logMessage(Priority.ERROR,MODULE,CLASS,"DBpedia extraction framework failed for this wiki!");
                             }
 
                             //rename folder to orignal name
                             renamedFolder.renameTo(new File(folderName));
                         }
                     }
-
                     renamedLanguageCodeFolder.renameTo(languageCodeFolder);
                 }
             }
-
-        } catch (Exception exception) {
-            logger.log(Level.SEVERE, exception.getMessage());
+        } catch (Exception ex) {
+            logger.logMessage(Priority.FATAL,MODULE,CLASS,ex.getMessage());
         }
 
     }
@@ -539,7 +489,7 @@ public class Extractor {
 
                             File[] extractedFiles = dateFolder.listFiles();
 
-                            logger.info("Moving files of " + wikiFolderName);
+                            logger.logMessage(Priority.INFO,MODULE,CLASS,"Moving files of " + wikiFolderName);
 
                             for (File wikiFile : extractedFiles) {
                                 if (wikiFile.getName().endsWith(".bz2")) {
@@ -552,7 +502,7 @@ public class Extractor {
                 }
             }
         } catch (Exception ex) {
-            logger.severe(ex.getMessage());
+            logger.logMessage(Priority.FATAL,MODULE,CLASS,ex.getMessage());
         }
     }
 
@@ -572,7 +522,7 @@ public class Extractor {
         try {
             PrintWriter fileWriter = new PrintWriter(wikiFolderPath + "//" + downloadDirectoryForExtraction);
 
-            logger.info("Writing properties for wiki: " + wikiProperties.getWikiName());
+            logger.logMessage(Priority.INFO,MODULE,CLASS,"Writing properties for wiki: " + wikiProperties.getWikiName());
 
             fileWriter.write("WikiName:" + wikiProperties.getWikiName() + newLineCharacter);
             fileWriter.write("LanguageCode:" + wikiProperties.getLanguageCode() + newLineCharacter);
@@ -582,7 +532,7 @@ public class Extractor {
             fileWriter.close();
 
         } catch (Exception ex) {
-            logger.severe(ex.getMessage());
+            logger.logMessage(Priority.FATAL,MODULE,CLASS,ex.getMessage());
         }
     }
 
@@ -634,8 +584,7 @@ public class Extractor {
             fileReader.close();
 
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-            logger.severe(ex.getMessage());
+            logger.logMessage(Priority.FATAL,MODULE,CLASS,ex.getMessage());
         }
         return wikiProperties;
     }
@@ -652,13 +601,14 @@ public class Extractor {
 
             // check whether specified path is a directory
             if (! extractionFrameworkDirectory.isDirectory()) {
-                logger.severe("Filepath to DBpedia extraction framework in config.properties is not a directory." +
+                logger.logMessage(Priority.FATAL,MODULE,CLASS,"Filepath to DBpedia extraction framework in config.properties is not a directory." +
                         "Please link to the root directory.");
+
                 return false;
             }
 
         } else {
-            logger.severe("Filepath to DBpedia extraction framework in config.properties does not exist. Please adjust it.");
+            logger.logMessage(Priority.FATAL,MODULE,CLASS,"Filepath to DBpedia extraction framework in config.properties does not exist. Please adjust it.");
             return false;
         }
 
