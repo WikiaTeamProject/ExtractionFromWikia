@@ -4,10 +4,7 @@ import org.apache.tools.ant.DirectoryScanner;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -542,5 +539,43 @@ public class IOoperations {
         }
 
         return dumpURLs;
+    }
+
+
+    /**
+     * This methods generates extraction
+     * extraction properties file
+     * using template file
+     */
+    public void generateExtractionProperties(){
+        try{
+
+            String extractionPropertiesFilePath =
+                    this.getClass().getClassLoader().getResource("extraction.template.properties").getPath();
+
+           File templateFile=new File(extractionPropertiesFilePath);
+
+           FileInputStream templateFileStream=new FileInputStream(templateFile);
+
+           Properties extractionProperties=new Properties();
+
+           extractionProperties.load(templateFileStream);
+
+            templateFileStream.close();
+
+
+            extractionProperties.setProperty("base-dir",rootDirectoryPath+"/dbPediaExtractionFormat/");
+
+
+            FileOutputStream extractionPropertiesFile = new FileOutputStream(templateFile.getParentFile()+"//extraction.properties");
+
+            System.out.println(extractionPropertiesFilePath);
+            extractionProperties.store(extractionPropertiesFile, null);
+
+            extractionPropertiesFile.close();
+        }
+        catch(Exception ex){
+            logger.severe(ex.toString());
+        }
     }
 }
