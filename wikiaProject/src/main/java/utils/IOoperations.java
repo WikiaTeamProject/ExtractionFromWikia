@@ -504,15 +504,15 @@ public class IOoperations {
     public HashMap<String, String> readDumpsURL() {
 
         HashMap<String, String> dumpURLs = new HashMap<String, String>();
-        String dumpsURLDirectoryPath = rootDirectoryPath + "//statistics//wikiaOverviewIndividualDumpURLs";
-
+        //String dumpsURLDirectoryPath = rootDirectoryPath + "//statistics//wikiaOverviewIndividualDumpURLs";
+        String dumpsURLDirectoryPath=rootDirectoryPath + "//statistics//wikiaOverviewDumpURLs.csv";
         try {
             File dumpsURLFile = new File(dumpsURLDirectoryPath);
 
-            if (dumpsURLFile.exists() && dumpsURLFile.isDirectory()) {
-
-                for (File f : dumpsURLFile.listFiles()) {
-                    FileReader fileReader = new FileReader(f);
+            //if (dumpsURLFile.exists() && dumpsURLFile.isDirectory()) {
+            if (dumpsURLFile.exists()) {
+                //for (File f : dumpsURLFile.listFiles()) {
+                    FileReader fileReader = new FileReader(dumpsURLFile);
                     BufferedReader bufferedReader = new BufferedReader(fileReader);
                     String fileLine;
                     boolean isHeaderRow = true;
@@ -531,7 +531,7 @@ public class IOoperations {
                         dumpURLs.put(dumpFilePath, dumpBaseURL);
                     }
 
-                }
+                //}
 
             } else {
                 logger.severe("Dumps URL file not present. Please check ...");
