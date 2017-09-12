@@ -21,4 +21,12 @@ public class OSDetails {
     public static boolean isSolaris() {
         return (operatingSystem.indexOf("sunos") >= 0);
     }
+
+    public static String getNewLineCharacter(){
+        if(isWindows())
+            return "\r\n";
+        else
+            return "\n";
+
+    }
 }
