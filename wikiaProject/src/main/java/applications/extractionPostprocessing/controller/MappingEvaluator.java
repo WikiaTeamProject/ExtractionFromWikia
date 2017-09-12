@@ -7,6 +7,7 @@ import applications.extractionPostprocessing.model.EvaluationResultAllWikis;
 import applications.extractionPostprocessing.model.EvaluationResultSingleWiki;
 import applications.extractionPostprocessing.util.PostprocessingIOHandler;
 import loggingService.MessageLogger;
+import org.apache.log4j.Level;
 import org.apache.log4j.Priority;
 import utils.IOoperations;
 import utils.OSDetails;
@@ -17,9 +18,9 @@ import utils.OSDetails;
 public class MappingEvaluator {
 
     private static EvaluationResultSingleWiki mappingsEvaluationResultSingleWiki;
-    private static MessageLogger logger=new MessageLogger();
-    private static final String MODULE="ExtractionPostprocessing";
-    private static final String CLASS="MappingEvaluator";
+    private static MessageLogger logger = new MessageLogger();
+    private static final String MODULE = "ExtractionPostprocessing";
+    private static final String CLASS = "MappingEvaluator";
 
     /**
      * Enum indicating what shall be evaluated.
@@ -139,15 +140,15 @@ public class MappingEvaluator {
                             EvaluationResultSingleWiki evaluationResultSingleWikiProperties = evaluateMappingsForOneWiki(directory.getPath(), EvaluationObjectSingleWiki.PROPERTIES);
                             EvaluationResultSingleWiki evaluationResultSingleWikiResources = evaluateMappingsForOneWiki(directory.getPath(), EvaluationObjectSingleWiki.RESOURCES);
 
-                            if(evaluationResultSingleWikiClasses == null){
+                            if (evaluationResultSingleWikiClasses == null) {
                                 evaluationResultSingleWikiClasses = new EvaluationResultSingleWiki(0, 0, 0, 0);
                             }
 
-                            if(evaluationResultSingleWikiProperties == null){
+                            if (evaluationResultSingleWikiProperties == null) {
                                 evaluationResultSingleWikiProperties = new EvaluationResultSingleWiki(0, 0, 0, 0);
                             }
 
-                            if(evaluationResultSingleWikiResources == null) {
+                            if (evaluationResultSingleWikiResources == null) {
                                 evaluationResultSingleWikiResources = new EvaluationResultSingleWiki(0, 0, 0, 0);
                             }
 
@@ -178,7 +179,7 @@ public class MappingEvaluator {
                                 + "F1-Measure: " + evaluationResultSingleWiki.getF1MeasureInPercent() + "% (" + directory.getName() + ")\n"
                                 + "Number of Mannual Annotations: " + evaluationResultSingleWiki.getTotalMappings() + " (" + directory.getName() + ")\n";
 
-                        logger.logMessage(Priority.INFO,MODULE,CLASS,evaluationResultLine);
+                        logger.logMessage(Priority.INFO, MODULE, CLASS, evaluationResultLine);
 
                         aggregatedEvaluationResults.append(evaluationResultLine + "\n");
                         totalMappings += evaluationResultSingleWiki.getTotalMappings();
@@ -190,7 +191,7 @@ public class MappingEvaluator {
 
 
             if (evaluationResultSingleWikis.size() == 0) {
-                logger.logMessage(Priority.INFO,MODULE,CLASS,"No evaluation file was found. Make sure that there is at least one evaluation file within a wiki folder.");
+                logger.logMessage(Priority.INFO, MODULE, CLASS, "No evaluation file was found. Make sure that there is at least one evaluation file within a wiki folder.");
                 return null;
             }
 
@@ -233,7 +234,7 @@ public class MappingEvaluator {
 
         } else {
             // -> root is not a directory
-            logger.logMessage(Priority.FATAL,MODULE,CLASS,"pathToRootDirectory is not a directory!");
+            logger.logMessage(Priority.FATAL, MODULE, CLASS, "pathToRootDirectory is not a directory!");
         } // end of if(root.isDirectory())
 
         evaluationResultLine = "\nSummarized Evaluation Results\n" +
@@ -254,7 +255,7 @@ public class MappingEvaluator {
                 "Number of annotations: " + totalAnnotations;
 
 
-        logger.logMessage(Priority.INFO,MODULE,CLASS,evaluationResultLine);
+        logger.logMessage(Priority.INFO, MODULE, CLASS, evaluationResultLine);
 
         aggregatedEvaluationResults.append(evaluationResultLine + "\n");
 
@@ -267,7 +268,7 @@ public class MappingEvaluator {
                 bw.write(aggregatedEvaluationResults.toString());
                 bw.close();
             } catch (IOException ioe) {
-                logger.logMessage(Priority.FATAL,MODULE,CLASS,ioe.getMessage().toString());
+                logger.logMessage(Priority.FATAL, MODULE, CLASS, ioe.getMessage().toString());
             }
         }
 
@@ -333,47 +334,35 @@ public class MappingEvaluator {
 
         HashMap<String, String> dbPediaMappings;
         HashMap<String, String> manualMappings;
+        File manualMappingFile = null; // the gold standard file
 
         PostprocessingIOHandler postprocessingIoHandler = new PostprocessingIOHandler();
-        String manualMappingFileName = ResourceBundle.getBundle("config").getString("manualmappingfilename");
-
         File mappingFile = new File(wikiPath + "/" + dbPediaResourceMappingsFileName);
-        File manualMappingFile = new File(wikiPath + "/" + manualMappingFileName);
 
         if (!mappingFile.exists()) {
             // there is no generated mapping file
-            logger.logMessage(Priority.FATAL,MODULE,CLASS,"No generated mapping file for wiki " + wikiPath + "\nRun mapper before evaluating wiki.");
+            logger.logMessage(Priority.FATAL, MODULE, CLASS, "No generated mapping file for wiki " + wikiPath + "\nRun mapper before evaluating wiki.");
             return null;
         }
 
-        // if there is no manual mapping file with the name specified in the properties file use the file that ends
-        // with the specified name
-        if (!manualMappingFile.exists()) {
-            // check whether there is a file ending with the specified name
-            File directory = new File(wikiPath);
-            if (directory.isDirectory()) {
-                for (File f : directory.listFiles()) {
-                    if (f.getName().endsWith(manualMappingFileName)) {
-                        manualMappingFile = f;
-                    }
+
+        File directory = new File(wikiPath);
+        if (directory.isDirectory()) {
+
+            // look for a file ending with evaluation.ttl
+            for (File f : directory.listFiles()) {
+                if (f.getName().endsWith("evaluation.ttl")) {
+                    manualMappingFile = f;
                 }
-                if (manualMappingFile == null || !manualMappingFile.exists()) {
-                    // the manual mapping file does not exist
-                    // look for a file ending with evaluation.ttl
-                    for (File f : directory.listFiles()) {
-                        if (f.getName().endsWith("evaluation.ttl")) {
-                            manualMappingFile = f;
-                        }
-                    }
-                }
-            } else {
-                // wikiPath is not a directory
-                return null;
             }
-            if (!manualMappingFile.exists()) {
-                // no mapping file could be found
-                return null;
-            }
+        } else {
+            // wikiPath is not a directory
+            return null;
+        }
+
+        // return null if no mapping file could be found
+        if(manualMappingFile == null){
+            return null;
         }
 
         int truePositives = 0;
@@ -417,7 +406,8 @@ public class MappingEvaluator {
                 deleteNullMappings(mappingFile);
 
         } catch (Exception ex) {
-            logger.logMessage(Priority.FATAL,MODULE,CLASS,ex.getMessage());
+            logger.logMessage(Priority.FATAL, MODULE, CLASS, ex.getMessage());
+            logger.logMessage(Level.FATAL, MODULE, CLASS, ex.getMessage());
         }
 
 
@@ -437,6 +427,7 @@ public class MappingEvaluator {
 
     /**
      * Rewrite mappings file by deleting all included null mappings
+     *
      * @param mappingFile
      */
     private static void deleteNullMappings(File mappingFile) {
@@ -450,19 +441,19 @@ public class MappingEvaluator {
             // get newLineCharacter in a safe way
             try {
                 newLineCharacter = OSDetails.getNewLineCharacter();
-            } catch (Exception e){
-                logger.logMessage(Priority.FATAL,MODULE,CLASS,e.getMessage());
-                logger.logMessage(Priority.FATAL,MODULE,CLASS,"Could not find resource 'newLineCharacter'.");
+            } catch (Exception e) {
+                logger.logMessage(Priority.FATAL, MODULE, CLASS, e.getMessage());
+                logger.logMessage(Priority.FATAL, MODULE, CLASS, "Could not find resource 'newLineCharacter'.");
             }
 
-            if(newLineCharacter.isEmpty()){
+            if (newLineCharacter.isEmpty()) {
                 newLineCharacter = "\r\n";
             }
 
             while ((line = bufferedReader.readLine()) != null) {
 
                 // include everything except null mappings
-                if (! line.contains("<null>"))
+                if (!line.contains("<null>"))
                     content.append(line + newLineCharacter);
 
             }
@@ -470,7 +461,7 @@ public class MappingEvaluator {
             IOoperations.updateFile(content.toString(), mappingFile);
 
         } catch (IOException e) {
-            logger.logMessage(Priority.FATAL,MODULE,CLASS,e.getMessage());
+            logger.logMessage(Priority.FATAL, MODULE, CLASS, e.getMessage());
         }
     }
 
