@@ -1,5 +1,6 @@
 package applications.wikiaDumpDownload.controller;
 
+import loggingService.MessageLogger;
 import org.apache.commons.lang3.StringUtils;
 import utils.IOoperations;
 
@@ -10,9 +11,9 @@ import java.net.URLConnection;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.*;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.log4j.Level;
 
 
 /**
@@ -21,7 +22,11 @@ import java.util.regex.Pattern;
  */
 public class WikiaDumpDownloadThread implements Runnable {
 
-    private static final Logger logger = Logger.getLogger(WikiaDumpDownloadThread.class.getName());
+
+    private static MessageLogger logger=new MessageLogger();
+    private static final String MODULE="ExtractionPostprocessing";
+    private static final String CLASS="WikiaDumpDownloadThread";
+
 
     // variables with getters and setters
     private boolean downloadAllWikis; // indicates whether all wikis shall be downloadedFiles
@@ -110,7 +115,7 @@ public class WikiaDumpDownloadThread implements Runnable {
                     totalNumberOfFilesToBeProcessed = lnr.getLineNumber(); //Add 1 because line index starts at 0
                     lnr.close();
                 } catch (IOException ioe){
-                    logger.severe(ioe.toString());
+                    logger.logMessage(Level.FATAL,MODULE,CLASS,ioe.getMessage().toString());
                 }
             }
         }
@@ -163,7 +168,7 @@ public class WikiaDumpDownloadThread implements Runnable {
                 downloadDump(url);
         });
 
-        logger.info("Download finished. Downloaded " + downloadedFiles + " of " + wikis + " wikis.");
+        logger.logMessage(Level.INFO,MODULE,CLASS,"Download finished. Downloaded " + downloadedFiles + " of " + wikis + " wikis.");
 
         if (dumpSizeFilePath != null ) {
             saveSizeToFile();
@@ -171,9 +176,9 @@ public class WikiaDumpDownloadThread implements Runnable {
         }
 
         if (urlsNotWorking.length() == 0) {
-            logger.info("No URLs that did not work after retries");
+            logger.logMessage(Level.INFO,MODULE,CLASS,"No URLs that did not work after retries");
         } else {
-            logger.info("URLs that did not work for downloading after retries:\n" + urlsNotWorking.toString());
+            logger.logMessage(Level.INFO,MODULE,CLASS,"URLs that did not work for downloading after retries:\n" + urlsNotWorking.toString());
         }
     }
 
@@ -224,9 +229,9 @@ public class WikiaDumpDownloadThread implements Runnable {
             fileReader.close();
 
         } catch (FileNotFoundException fnfe) {
-            logger.severe(fnfe.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,fnfe.toString());
         } catch (IOException ioe) {
-            logger.severe(ioe.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,ioe.toString());
         }
 
         return urls;
@@ -258,7 +263,7 @@ public class WikiaDumpDownloadThread implements Runnable {
                     languageCodes.put(line[0], line[1]);
                 }
             } catch (IOException e) {
-                logger.severe(e.toString());
+                logger.logMessage(Level.FATAL,MODULE,CLASS,e.toString());
             }
         }
     }
@@ -300,7 +305,7 @@ public class WikiaDumpDownloadThread implements Runnable {
 
         String url = baseURL + "/wiki/Special:Statistics";
 
-        logger.info("Processing: " + url);
+        logger.logMessage(Level.INFO,MODULE,CLASS,"Processing: " + url);
 
         try {
 
@@ -322,7 +327,7 @@ public class WikiaDumpDownloadThread implements Runnable {
             }
 
             if (!foundDump) {
-                logger.info("No wikia dump exists for wiki: " + url);
+                logger.logMessage(Level.INFO,MODULE,CLASS,"No wikia dump exists for wiki: " + url);
                 buffer.append(url + ";-" + "\n");
             }
 
@@ -333,9 +338,11 @@ public class WikiaDumpDownloadThread implements Runnable {
 
 
         } catch (MalformedURLException murle) {
-            logger.severe(murle.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,
+                    murle.toString());
         } catch (IOException ioe) {
-            logger.severe(ioe.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,
+                    ioe.toString());
         }
     }
 
@@ -383,7 +390,8 @@ public class WikiaDumpDownloadThread implements Runnable {
                 url = new URL(pathToRemoteFile);
                 URLConnection connection = url.openConnection();
                 int size = connection.getContentLength();
-                logger.info("Size of file: " + (size / 1024) + " KB.");
+                logger.logMessage(Level.INFO,MODULE,CLASS,
+                        "Size of file: " + (size / 1024) + " KB.");
                 buffer.append(pathToRemoteFile + ";" + (size / 1024) + "\n");
                 downloadedFiles++;
 
@@ -397,9 +405,11 @@ public class WikiaDumpDownloadThread implements Runnable {
                 downloaded = true;
 
             } catch (MalformedURLException mue) {
-                logger.severe(mue.toString());
+                logger.logMessage(Level.FATAL,MODULE,CLASS,
+                        mue.toString());
             } catch (IOException ioe) {
-                logger.severe(ioe.toString());
+                logger.logMessage(Level.FATAL,MODULE,CLASS,
+                        ioe.toString());
             }
         }
 
@@ -434,7 +444,9 @@ public class WikiaDumpDownloadThread implements Runnable {
         } else {
             targetFile = new File(dumpsDownloadedgz.getPath() + "/" + fileName);
         }
-        logger.info("Writing file " + fileName);
+
+        logger.logMessage(Level.INFO,MODULE,CLASS,
+                "Writing file " + fileName);
 
 
         try {
@@ -454,11 +466,12 @@ public class WikiaDumpDownloadThread implements Runnable {
             rbc.close();
 
         } catch (FileNotFoundException fnfe) {
-            logger.severe(fnfe.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,
+                    fnfe.toString());
         } catch (IOException e) {
-            logger.severe(e.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,
+                    e.toString());
         }
-
     }
 
     /**
@@ -466,7 +479,8 @@ public class WikiaDumpDownloadThread implements Runnable {
      */
     private void saveSizeToFile() {
         File file = new File(this.dumpSizeFilePath);
-        logger.info("Writing file: " + file.getName());
+        logger.logMessage(Level.INFO,MODULE,CLASS,
+                "Writing file: " + file.getName());
 
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
@@ -475,7 +489,8 @@ public class WikiaDumpDownloadThread implements Runnable {
             bufferedWriter.close();
 
         } catch (IOException e) {
-            logger.severe(e.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,
+                    e.toString());
         }
 
     }
@@ -492,7 +507,8 @@ public class WikiaDumpDownloadThread implements Runnable {
             if (! dumpURLsFolder.exists())
                 dumpURLsFolder.mkdir();
 
-            logger.info("Writing file: " + file.getName());
+            logger.logMessage(Level.INFO,MODULE,CLASS,
+                    "Writing file: " + file.getName());
 
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
             bufferedWriter.write("dump_file_path,base_url" + "\n");
@@ -504,7 +520,8 @@ public class WikiaDumpDownloadThread implements Runnable {
             bufferedWriter.close();
 
         } catch (IOException e) {
-            logger.severe(e.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,
+                    e.toString());
         }
 
     }
