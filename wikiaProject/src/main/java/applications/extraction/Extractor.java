@@ -13,10 +13,8 @@ import loggingService.MessageLogger;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.log4j.Priority;
-import utils.ExtractionBz2;
-import utils.ExtractionGZip;
-import utils.Extraction7zip;
-import utils.IOoperations;
+import utils.*;
+
 import java.io.PrintWriter;
 
 
@@ -517,9 +515,12 @@ public class Extractor {
     public void createWikiPropertiesFile(String wikiFolderPath, WikiaWikiProperties wikiProperties) {
 
         String downloadDirectoryForExtraction = ResourceBundle.getBundle("config").getString("wikiPropertiesFileName");
-        String newLineCharacter = ResourceBundle.getBundle("config").getString("newLineCharacter");
+
 
         try {
+
+            String newLineCharacter = OSDetails.getNewLineCharacter();
+
             PrintWriter fileWriter = new PrintWriter(wikiFolderPath + "//" + downloadDirectoryForExtraction);
 
             logger.logMessage(Priority.INFO,MODULE,CLASS,"Writing properties for wiki: " + wikiProperties.getWikiName());
