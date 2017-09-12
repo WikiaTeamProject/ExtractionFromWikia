@@ -1,9 +1,10 @@
 package applications.extractionPostprocessing.util;
 
+import loggingService.MessageLogger;
+import org.apache.log4j.Priority;
 import utils.IOoperations;
 
 import java.io.File;
-import java.util.logging.Logger;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
@@ -19,7 +20,9 @@ import java.util.regex.Pattern;
  */
 public class PostprocessingIOHandler {
 
-    private static Logger logger = Logger.getLogger(PostprocessingIOHandler.class.getName());
+    private static MessageLogger logger=new MessageLogger();
+    private static final String MODULE="ExtractionPostprocessing";
+    private static final String CLASS="PostprocessingIOHandler";
 
 
     public static HashMap<String, String> getExtractorMappings(String pathName) {
@@ -76,7 +79,7 @@ public class PostprocessingIOHandler {
             bufferedReader.close();
             fileReader.close();
         } catch (Exception ex) {
-            logger.severe("Problem with file " +  fileName.getAbsolutePath() + "\nwith line: " + fileLine + ex.getMessage());
+            logger.logMessage(Priority.FATAL,MODULE,CLASS,"Problem with file " +  fileName.getAbsolutePath() + "\nwith line: " + fileLine + ex.getMessage());
         }
 
         return dbPediaExtractorMappings;
