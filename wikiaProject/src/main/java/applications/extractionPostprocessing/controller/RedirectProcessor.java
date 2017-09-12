@@ -1,5 +1,8 @@
 package applications.extractionPostprocessing.controller;
 
+import loggingService.MessageLogger;
+import org.apache.log4j.Priority;
+
 import java.io.File;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -9,7 +12,9 @@ import java.util.logging.Logger;
  */
 public class RedirectProcessor {
 
-    private static Logger logger = Logger.getLogger(RedirectProcessor.class.getName());
+    private static MessageLogger logger=new MessageLogger();
+    private static final String MODULE="ExtractionPostprocessing";
+    private static final String CLASS="RedirectProcessor";
 
 
     /**
@@ -30,7 +35,7 @@ public class RedirectProcessor {
                 }
             }
         } else {
-            logger.severe("Root Directory is not a directory. Aborting process.");
+            logger.logMessage(Priority.FATAL ,MODULE,CLASS,"Root Directory is not a directory. Aborting process.");
         }
     }
 
