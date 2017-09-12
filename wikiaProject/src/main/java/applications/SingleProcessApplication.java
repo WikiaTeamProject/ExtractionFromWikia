@@ -33,10 +33,10 @@ public class SingleProcessApplication {
         if (!WikiaDumpDownloadThreadImpl.checkPrerequisites(false)) return;
 
         // (1) metadata will be saved and all existing wikia dumps are downloaded
-//        WikiaDumpDownloadThreadImpl.downloadWikiaDumps();
+        //  WikiaDumpDownloadThreadImpl.downloadWikiaDumps();
 
         // (2) download only list of urls
-        List<String> urls = Arrays.asList("http://gameofthrones.wikia.com", "http://bakerstreet.wikia.com");
+        List<String> urls = Arrays.asList("http://americanfootballdatabase.wikia.com");
         WikiaDumpDownloadThreadImpl.downloadWikiaDumps(urls);
 
         // run the DBpedia extraction framework
