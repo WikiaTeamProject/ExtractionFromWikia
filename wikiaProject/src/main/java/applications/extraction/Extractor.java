@@ -340,7 +340,7 @@ public class Extractor {
         try {
             String downloadDirectoryForExtraction = ResourceBundle.getBundle("config").getString("pathToRootDirectory")
                     + "//dbPediaExtractionFormat//";
-            String pathToExtractionFramework = ResourceBundle.getBundle("config").getString("pathToExtractionFramework")+"/dump";
+            String pathToExtractionFramework = ResourceBundle.getBundle("config").getString("pathToExtractionFramework")+"/dump/";
             String dbPediaExtractorBatchFile;
             String DATE_FORMAT_NOW = "YYYYMMdd";
             Calendar calender = Calendar.getInstance();
