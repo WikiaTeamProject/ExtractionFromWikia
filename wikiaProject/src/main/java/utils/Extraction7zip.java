@@ -2,12 +2,14 @@ package utils;
 
 import java.io.File;
 import java.io.FileOutputStream;
+
+import loggingService.MessageLogger;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 
 import java.text.SimpleDateFormat;
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
+import org.apache.log4j.Level;
 
 
 /**
@@ -15,7 +17,9 @@ import java.util.logging.Logger;
  * There are methods specifically for the purpose of extracting to a certain folder (designated methods) as well as some more general purpose methods.
  */
 public class Extraction7zip {
-    private static Logger logger = Logger.getLogger(Extraction7zip.class.getName());
+    private static MessageLogger logger=new MessageLogger();
+    private static final String MODULE="Utils";
+    private static final String CLASS=Extraction7zip.class.getName();
     private String directoryExtracted;
     private static String downloadedDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/downloadedWikis/";
 
@@ -52,14 +56,14 @@ public class Extraction7zip {
 
             // make sure the file really is a .7z file:
             if(! (fileName.endsWith(".7z")) ){
-                logger.severe("Not a .7z file.");
+                logger.logMessage(Level.FATAL,MODULE,CLASS,"Not a .7z file.");
                 return false;
             }
 
             // make sure the target directory exists
             if(targetDirectory.exists()){
                 if(!targetDirectory.isDirectory()){
-                    logger.severe("Target directory not a directory.");
+                    logger.logMessage(Level.FATAL,MODULE,CLASS,"Target directory not a directory.");
                     return false;
                 }
             } else {
@@ -99,12 +103,12 @@ public class Extraction7zip {
             }
             sevenZFile.close();
 
-            logger.info("File saved: " + extractedFileName);
-            logger.info("The file was extracted successfully as " + extractedFile.getAbsolutePath() + ".");
+            logger.logMessage(Level.INFO,MODULE,CLASS,"File saved: " + extractedFileName);
+            logger.logMessage(Level.INFO,MODULE,CLASS,"The file was extracted successfully as " + extractedFile.getAbsolutePath() + ".");
             return true;
         }
         catch(Exception ex){
-            logger.severe("The file could not be downloaded. " + ex.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,"The file could not be downloaded. " + ex.toString());
             return false;
         }
     }
@@ -155,7 +159,7 @@ public class Extraction7zip {
         File folder = new File(folder7z);
 
         for (File file7z : folder.listFiles()) {
-            logger.info("Extraction for following 7z file is started: " + file7z.getAbsolutePath());
+            logger.logMessage(Level.INFO,MODULE,CLASS,"Extraction for following 7z file is started: " + file7z.getAbsolutePath());
             extract7ZipFileIntoDesignatedFolder(file7z.getAbsolutePath());
         }
     }
@@ -166,7 +170,7 @@ public class Extraction7zip {
     public void extractAll7ZipFilesIntoFolder(File extractFrom, File extractTo) {
 
         for (File file7z : extractFrom.listFiles()) {
-            logger.info("Extraction for following 7z file is started: " + file7z.getAbsolutePath());
+            logger.logMessage(Level.INFO,MODULE,CLASS,"Extraction for following 7z file is started: " + file7z.getAbsolutePath());
             extract7ZipFile(file7z.getAbsolutePath(), extractTo);
         }
 
