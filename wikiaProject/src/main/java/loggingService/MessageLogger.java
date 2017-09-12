@@ -34,7 +34,7 @@ public class MessageLogger {
                            String message){
 
 
-        String log4jFileConfigFile=this.getClass().getClassLoader().getResource("log4j.xml").toString();
+        String log4jFileConfigFile=this.getClass().getClassLoader().getResource("log4j.xml").getPath();
 
 
         DOMConfigurator.configure(log4jFileConfigFile);
