@@ -33,7 +33,7 @@ public class MappingExecutor {
 
     private static MessageLogger logger=new MessageLogger();
     private static final String MODULE="ExtractionPostprocessing";
-    private static final String CLASS="MappingEvaluator";
+    private static final String CLASS="MappingExecutor";
 
     private static String targetNamespace = ResourceBundle.getBundle("config").getString("targetnamespace");
 
