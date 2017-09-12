@@ -1,3 +1,2 @@
 <http://uni-mannheim.de/resource/Banana> <owl:As> <http://dbpedia.org/resource/Banana> .
-<http://uni-mannheim.de/resource/Banana_Fruit> <owl:As> <http://dbpedia.org/resource/Banana_Fruit> .
-
+<http://uni-mannheim.de/resource/Banana_Fruit> <owl:As> <http://dbpedia.org/resource/Banana_Fruit> .
