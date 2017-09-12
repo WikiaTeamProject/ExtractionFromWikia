@@ -3,6 +3,8 @@ package applications.wikiaStatistics.util;
 import applications.extraction.model.WikiaWikiProperties;
 import applications.extraction.Extractor;
 import applications.wikiaStatistics.model.MetadataStatistics;
+import utils.OSDetails;
+
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -165,7 +167,7 @@ public class WikiaStatisticsTools {
                 SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 
         String newLineCharacter =
-                ResourceBundle.getBundle("config").getString("newLineCharacter");
+                OSDetails.getNewLineCharacter();
 
         String staticsFileName=statisticsDirectoryPath+"//applications.wikiaStatistics.csv";
 
