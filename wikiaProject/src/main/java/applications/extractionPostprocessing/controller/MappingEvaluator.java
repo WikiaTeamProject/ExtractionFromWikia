@@ -11,10 +11,6 @@ import org.apache.log4j.Priority;
 import utils.IOoperations;
 import utils.OSDetails;
 
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * After creating the mapping files using a mapper, the evaluation for that mapping can be performed using this class.
  */
