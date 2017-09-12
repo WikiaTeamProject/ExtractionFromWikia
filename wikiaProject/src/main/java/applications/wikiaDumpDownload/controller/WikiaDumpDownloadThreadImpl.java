@@ -7,14 +7,18 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
+import loggingService.MessageLogger;
+import org.apache.log4j.Level;
 
 /**
  * This class represents the implementation of WikiaDumpDownloadThread threads.
  */
 public class WikiaDumpDownloadThreadImpl {
 
-    private static Logger logger = Logger.getLogger(WikiaDumpDownloadThreadImpl.class.getName());
+    private static MessageLogger logger=new MessageLogger();
+    private static final String MODULE="wikiDumpDOwnload";
+    private static final String CLASS="WikiaDumpDownloadThreadImpl";
+
     private static Thread[] threads = new Thread[40];
     private static String statisticsDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/statistics";
 
@@ -64,7 +68,7 @@ public class WikiaDumpDownloadThreadImpl {
             e.printStackTrace();
         }
 
-        logger.info("Dump Download process finished.");
+        logger.logMessage(Level.INFO,MODULE,CLASS,"Dump Download process finished.");
     }
 
     /**
@@ -115,11 +119,11 @@ public class WikiaDumpDownloadThreadImpl {
                 t.join();
             }
 
-            logger.info("Dump Download process finished.");
-            logger.info("Concatenating files...");
+            logger.logMessage(Level.INFO,MODULE,CLASS,"Dump Download process finished.");
+            logger.logMessage(Level.INFO,MODULE,CLASS,"Concatenating files...");
 
         } catch (InterruptedException ie) {
-            logger.severe(ie.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,ie.toString());
         }
 
         mergeFiles(filePaths);
@@ -145,7 +149,7 @@ public class WikiaDumpDownloadThreadImpl {
             bufferedWriter = new BufferedWriter(new FileWriter(resultFile));
             for (String path : filePaths) {
                 fileNumber++;
-                logger.info("Starting with file number " + fileNumber + ": " + path);
+                logger.logMessage(Level.INFO,MODULE,CLASS,"Starting with file number " + fileNumber + ": " + path);
                 f = new File(path);
                 bufferedReader = new BufferedReader(new FileReader(f));
 
@@ -166,10 +170,10 @@ public class WikiaDumpDownloadThreadImpl {
 
             bufferedWriter.close();
         } catch (IOException ioe) {
-            logger.severe(ioe.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,ioe.toString());
         }
 
-        logger.info("Finished merging " + fileNumber + " files.");
+        logger.logMessage(Level.INFO,MODULE,CLASS,"Finished merging " + fileNumber + " files.");
     }
 
 
@@ -182,7 +186,7 @@ public class WikiaDumpDownloadThreadImpl {
 
         // check whether config.properties file was copied
         if (ClassLoader.getSystemResource("config.properties") == null) {
-            logger.severe("Please copy the sample config.properties file from folder additionalFiles into resources and adjust it.");
+            logger.logMessage(Level.FATAL,MODULE,CLASS,"Please copy the sample config.properties file from folder additionalFiles into resources and adjust it.");
             return false;
         }
 
@@ -190,14 +194,14 @@ public class WikiaDumpDownloadThreadImpl {
 
         // check whether the path to the root directory is really a directory
         if (!file.isDirectory()) {
-            logger.severe("Variable pathToRootDirectory in file config.properties is not a directory. Please adjust it.");
+            logger.logMessage(Level.FATAL,MODULE,CLASS,"Variable pathToRootDirectory in file config.properties is not a directory. Please adjust it.");
             return false;
         }
 
         String pathLanguageCodes = WikiaDumpDownloadThreadImpl.class.getClassLoader().getResource("files/wikiaLanguageCodes.csv").getPath();
         File languageCodes = new File(pathLanguageCodes);
         if (!languageCodes.exists()) {
-            logger.severe("wikiaLanguageCodes.csv in resource directory does not exist.");
+            logger.logMessage(Level.FATAL,MODULE,CLASS,"wikiaLanguageCodes.csv in resource directory does not exist.");
             return false;
         }
 
@@ -206,7 +210,7 @@ public class WikiaDumpDownloadThreadImpl {
 
         // check if wiki overview CSV file is already existing, if not create it
         if (!wikiCSV.exists() && withFile) {
-            logger.info("File wikiaAllOverview.csv does not exist yet. Wikia metadata will first be downloaded.");
+            logger.logMessage(Level.INFO,MODULE,CLASS,"File wikiaAllOverview.csv does not exist yet. Wikia metadata will first be downloaded.");
             MetadataThreadImpl.downloadWikiaMetadata();
         }
 
@@ -230,7 +234,8 @@ public class WikiaDumpDownloadThreadImpl {
             bufferedWriter = new BufferedWriter(new FileWriter(resultFile));
             for (String path : dumpURLsFiles) {
                 fileNumber++;
-                logger.info("Starting with file number " + fileNumber + ": " + path);
+                logger.logMessage(Level.INFO,MODULE,CLASS,"Starting with file number " + fileNumber + ": " + path);
+
                 f = new File(path);
                 bufferedReader = new BufferedReader(new FileReader(f));
 
@@ -251,10 +256,9 @@ public class WikiaDumpDownloadThreadImpl {
 
             bufferedWriter.close();
         } catch (IOException ioe) {
-            logger.severe(ioe.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,ioe.toString());
         }
-
-        logger.info("Finished merging " + fileNumber + " files.");
+        logger.logMessage(Level.INFO,MODULE,CLASS,"Finished merging " + fileNumber + " files.");
     }
 
 }

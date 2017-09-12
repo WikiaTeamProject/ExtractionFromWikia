@@ -24,7 +24,7 @@ public class WikiaDumpDownloadThread implements Runnable {
 
 
     private static MessageLogger logger=new MessageLogger();
-    private static final String MODULE="ExtractionPostprocessing";
+    private static final String MODULE="wikiDumpDOwnload";
     private static final String CLASS="WikiaDumpDownloadThread";
 
 
