@@ -340,7 +340,7 @@ public class Extractor {
         try {
             String downloadDirectoryForExtraction = ResourceBundle.getBundle("config").getString("pathToRootDirectory")
                     + "//dbPediaExtractionFormat//";
-            String pathToExtractionFramework = ResourceBundle.getBundle("config").getString("dbPediaExtractorPath");
+            String pathToExtractionFramework = ResourceBundle.getBundle("config").getString("pathToExtractionFramework")+"/dump";
             String dbPediaExtractorBatchFile;
             String DATE_FORMAT_NOW = "YYYYMMdd";
             Calendar calender = Calendar.getInstance();
@@ -514,14 +514,11 @@ public class Extractor {
      */
     public void createWikiPropertiesFile(String wikiFolderPath, WikiaWikiProperties wikiProperties) {
 
-        String downloadDirectoryForExtraction = ResourceBundle.getBundle("config").getString("wikiPropertiesFileName");
-
-
         try {
 
             String newLineCharacter = OSDetails.getNewLineCharacter();
 
-            PrintWriter fileWriter = new PrintWriter(wikiFolderPath + "//" + downloadDirectoryForExtraction);
+            PrintWriter fileWriter = new PrintWriter(wikiFolderPath + "//wiki.prop");
 
             logger.logMessage(Priority.INFO,MODULE,CLASS,"Writing properties for wiki: " + wikiProperties.getWikiName());
 
@@ -546,13 +543,12 @@ public class Extractor {
      */
     public WikiaWikiProperties readWikiPropertiesFile(String wikiFolderPath) {
 
-        String wikiPropertiesFileName = ResourceBundle.getBundle("config").getString("wikiPropertiesFileName");
         WikiaWikiProperties wikiProperties = new WikiaWikiProperties();
 
         try {
 
             String fileLine = "";
-            FileReader fileReader = new FileReader(wikiFolderPath + "//" + wikiPropertiesFileName);
+            FileReader fileReader = new FileReader(wikiFolderPath + "//wiki.prop" );
 
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
