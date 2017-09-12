@@ -1,7 +1,7 @@
 package applications.extractionPostprocessing.util;
 
 import loggingService.MessageLogger;
-import org.apache.log4j.Priority;
+import org.apache.log4j.Level;
 import utils.IOoperations;
 
 import java.io.File;
@@ -79,7 +79,7 @@ public class PostprocessingIOHandler {
             bufferedReader.close();
             fileReader.close();
         } catch (Exception ex) {
-            logger.logMessage(Priority.FATAL,MODULE,CLASS,"Problem with file " +  fileName.getAbsolutePath() + "\nwith line: " + fileLine + ex.getMessage());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,"Problem with file " +  fileName.getAbsolutePath() + "\nwith line: " + fileLine + ex.getMessage());
         }
 
         return dbPediaExtractorMappings;

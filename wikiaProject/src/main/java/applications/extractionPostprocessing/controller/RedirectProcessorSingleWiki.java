@@ -1,14 +1,12 @@
 package applications.extractionPostprocessing.controller;
 
 import loggingService.MessageLogger;
-import org.apache.log4j.Priority;
+import org.apache.log4j.Level;
 import utils.IOoperations;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.ResourceBundle;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -54,7 +52,7 @@ public class RedirectProcessorSingleWiki {
 
         // make sure the directory actually is a directory
         if (!wikiDirectory.isDirectory() || wikiDirectory == null) {
-            logger.logMessage(Priority.FATAL,MODULE,CLASS,"Given directory does not lead to a directory. Use the corresponding setter method to set the correct path.");
+            logger.logMessage(Level.FATAL,MODULE,CLASS,"Given directory does not lead to a directory. Use the corresponding setter method to set the correct path.");
             return false;
         }
 
@@ -64,7 +62,7 @@ public class RedirectProcessorSingleWiki {
             if (f.getName().endsWith("-redirects.ttl")) {
                 // -> redirects file found
                 redirectFile = f;
-                logger.logMessage(Priority.INFO,MODULE,CLASS,"Reading from file " + f.getName());
+                logger.logMessage(Level.INFO,MODULE,CLASS,"Reading from file " + f.getName());
                 break;
             }
         }
@@ -75,7 +73,7 @@ public class RedirectProcessorSingleWiki {
             String line;
             Matcher matcher = null;
             while ((line = br.readLine()) != null) {
-                logger.logMessage(Priority.INFO,MODULE,CLASS,line);
+                logger.logMessage(Level.INFO,MODULE,CLASS,line);
                 Pattern pattern = Pattern.compile("<[^<]*>");
                 // regex: <[^<]*>
                 // this regex captures everything between tags including the tags: <...>
@@ -117,7 +115,7 @@ public class RedirectProcessorSingleWiki {
             br.close();
 
         } catch (IOException ioe) {
-            logger.logMessage(Priority.FATAL,MODULE,CLASS,ioe.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,ioe.toString());
             return false;
         }
         return true;
@@ -137,7 +135,7 @@ public class RedirectProcessorSingleWiki {
         if (redirectsMap.isEmpty()) {
             if (!this.readRedirects()) {
                 // redirects could not be read
-                logger.logMessage(Priority.FATAL,MODULE,CLASS,"DBpediaResourceServiceOffline could not be read.");
+                logger.logMessage(Level.FATAL,MODULE,CLASS,"DBpediaResourceServiceOffline could not be read.");
                 return false;
             }
         }
@@ -155,13 +153,13 @@ public class RedirectProcessorSingleWiki {
                 return true;
             }
 
-            logger.logMessage(Priority.INFO,MODULE,CLASS,"Skipped: " + name);
+            logger.logMessage(Level.INFO,MODULE,CLASS,"Skipped: " + name);
             return false;
         });
 
         for (File f : fileList) {
             // -> we are interested in the file
-            logger.logMessage(Priority.INFO,MODULE,CLASS,"Processing: " + f.getName());
+            logger.logMessage(Level.INFO,MODULE,CLASS,"Processing: " + f.getName());
 
             try {
                 reader = new BufferedReader(new FileReader(f));
@@ -226,12 +224,12 @@ public class RedirectProcessorSingleWiki {
                 }
                 reader.close();
             } catch (IOException ioe) {
-                logger.logMessage(Priority.FATAL,MODULE,CLASS,ioe.toString());
+                logger.logMessage(Level.FATAL,MODULE,CLASS,ioe.toString());
             }
 
             // write the new file content into the file if a change occurred
             File newFile = new File(f.getAbsolutePath());
-            logger.logMessage(Priority.INFO,MODULE,CLASS,"Re-Writing File: " + newFile.getName());
+            logger.logMessage(Level.INFO,MODULE,CLASS,"Re-Writing File: " + newFile.getName());
             IOoperations.writeContentToFile(newFile, newFileContent.toString());
 
             // delete the content after it was written
@@ -305,12 +303,12 @@ public class RedirectProcessorSingleWiki {
                 }
                 reader.close();
             } catch (IOException ioe) {
-                logger.logMessage(Priority.FATAL,MODULE,CLASS,ioe.toString());
+                logger.logMessage(Level.FATAL,MODULE,CLASS,ioe.toString());
             }
 
             // write the new file content into the file if a change occurred
             File newFile = new File(f.getAbsolutePath());
-            logger.logMessage(Priority.INFO,MODULE,CLASS,"Re-Writing File: " + newFile.getName());
+            logger.logMessage(Level.INFO,MODULE,CLASS,"Re-Writing File: " + newFile.getName());
             IOoperations.writeContentToFile(newFile, newFileContent.toString());
         }
     }
@@ -340,13 +338,13 @@ public class RedirectProcessorSingleWiki {
             }
 
             if (counter > 10) {
-                logger.logMessage(Priority.WARN,MODULE,CLASS,"Redirect processing was cancelled after 10 iterations. There is probably an infinite loop relation in the redirects file.");
+                logger.logMessage(Level.WARN,MODULE,CLASS,"Redirect processing was cancelled after 10 iterations. There is probably an infinite loop relation in the redirects file.");
                 changeOccurred = false;
             }
 
         } while (changeOccurred);
 
-        logger.logMessage(Priority.DEBUG,MODULE,CLASS,"Labels.ttl: redirect for " + input + " is " + value);
+        logger.logMessage(Level.DEBUG,MODULE,CLASS,"Labels.ttl: redirect for " + input + " is " + value);
 
         return value;
     }
@@ -361,8 +359,8 @@ public class RedirectProcessorSingleWiki {
         while (iterator.hasNext()) {
             entry = (HashMap.Entry) iterator.next();
 
-            logger.logMessage(Priority.INFO,MODULE,CLASS,"Key: " + entry.getKey());
-            logger.logMessage(Priority.INFO,MODULE,CLASS,"Value " + entry.getValue());
+            logger.logMessage(Level.INFO,MODULE,CLASS,"Key: " + entry.getKey());
+            logger.logMessage(Level.INFO,MODULE,CLASS,"Value " + entry.getValue());
         }
     }
 
@@ -380,7 +378,7 @@ public class RedirectProcessorSingleWiki {
 
         // make sure the directory actually is a directory
         if (!wikiDirectoryCandidate.isDirectory()) {
-            logger.logMessage(Priority.FATAL,MODULE,CLASS,"Given filePathToWiki does not lead to a directory.");
+            logger.logMessage(Level.FATAL,MODULE,CLASS,"Given filePathToWiki does not lead to a directory.");
             return false;
         } else {
             this.wikiDirectory = wikiDirectoryCandidate;
@@ -394,7 +392,7 @@ public class RedirectProcessorSingleWiki {
 
     public boolean setWikiDirectory(File wikiDirectory) {
         if (!wikiDirectory.isDirectory()) {
-            logger.logMessage(Priority.FATAL,MODULE,CLASS,"Given filePathToWiki does not lead to a directory.");
+            logger.logMessage(Level.FATAL,MODULE,CLASS,"Given filePathToWiki does not lead to a directory.");
             return false;
         } else {
             this.wikiDirectory = wikiDirectory;

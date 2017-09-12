@@ -6,7 +6,7 @@ import applications.extractionPostprocessing.controller.resourcemapper.ResourceM
 import applications.extractionPostprocessing.model.*;
 
 import loggingService.MessageLogger;
-import org.apache.log4j.Priority;
+import org.apache.log4j.Level;
 import utils.IOoperations;
 
 import java.io.*;
@@ -114,7 +114,7 @@ public class MappingExecutor {
                     "Total number of properties found: " + totalNumberOfProperties + "\n" +
                     "Total number of classes found: " + totalNumberOfClasses;
 
-            logger.logMessage(Priority.INFO,MODULE,CLASS,statisticsText);
+            logger.logMessage(Level.INFO,MODULE,CLASS,statisticsText);
 
             String pathToRoot = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
 
@@ -239,9 +239,9 @@ public class MappingExecutor {
             StringWriter stackTrace = new StringWriter();
             ioe.printStackTrace(new PrintWriter(stackTrace));
 
-            logger.logMessage(Priority.FATAL,MODULE,CLASS,ioe.getMessage().toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,ioe.getMessage().toString());
 
-            logger.logMessage(Priority.FATAL,MODULE,CLASS,stackTrace.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,stackTrace.toString());
         }
 
         return new WikiToMap(directoryOfWiki.getName(), resourcesToMap, propertiesToMap, classesToMap);

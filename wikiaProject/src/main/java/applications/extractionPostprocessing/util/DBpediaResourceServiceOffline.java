@@ -2,7 +2,7 @@ package applications.extractionPostprocessing.util;
 
 import applications.extractionPostprocessing.model.ResourceServiceResult;
 import loggingService.MessageLogger;
-import org.apache.log4j.Priority;
+import org.apache.log4j.Level;
 import utils.IOoperations;
 
 import java.io.PrintWriter;
@@ -125,7 +125,7 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
      * If the HashMap already exists, a reload takes place.
      */
     public void loadRedirects() {
-        logger.logMessage(Priority.INFO,MODULE,CLASS,"Loading redirects from file into memory. This may take a while.");
+        logger.logMessage(Level.INFO,MODULE,CLASS,"Loading redirects from file into memory. This may take a while.");
         try {
             IOoperations ioOps = new IOoperations();
             redirectsMap = ioOps.getResourcesRedirects();
@@ -133,8 +133,8 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
             StringWriter stackTrace = new StringWriter();
             e.printStackTrace(new PrintWriter(stackTrace));
 
-            logger.logMessage(Priority.FATAL,MODULE,CLASS,e.getMessage().toString());
-            logger.logMessage(Priority.FATAL,MODULE,CLASS,stackTrace.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,e.getMessage().toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,stackTrace.toString());
         }
     }
 
@@ -144,7 +144,7 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
      * If the HashSet already exists, a reload takes place.
      */
     private void loadPageIds() {
-        logger.logMessage(Priority.INFO,MODULE,CLASS,"Loading page ids from file into memory. This may take a while.");
+        logger.logMessage(Level.INFO,MODULE,CLASS,"Loading page ids from file into memory. This may take a while.");
         try {
             IOoperations ioOps = new IOoperations();
             this.pageIdsMap = ioOps.getPageIDs();
@@ -152,8 +152,8 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
             StringWriter stackTrace = new StringWriter();
             e.printStackTrace(new PrintWriter(stackTrace));
 
-            logger.logMessage(Priority.FATAL,MODULE,CLASS,e.getMessage().toString());
-            logger.logMessage(Priority.FATAL,MODULE,CLASS,stackTrace.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,e.getMessage().toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,stackTrace.toString());
 
         }
     }
@@ -300,7 +300,7 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
      * into static object by calling IO function
      */
     private void loadOntologyClasses() {
-        logger.logMessage(Priority.INFO,MODULE,CLASS,"Loading ontology classes in memory... Please wait.");
+        logger.logMessage(Level.INFO,MODULE,CLASS,"Loading ontology classes in memory... Please wait.");
 
         try {
             IOoperations ioOps = new IOoperations();
@@ -331,8 +331,8 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
             StringWriter stackTrace = new StringWriter();
             e.printStackTrace(new PrintWriter(stackTrace));
 
-            logger.logMessage(Priority.FATAL,MODULE,CLASS,e.getMessage().toString());
-            logger.logMessage(Priority.FATAL,MODULE,CLASS,stackTrace.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,e.getMessage().toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,stackTrace.toString());
         }
     }
 
@@ -342,7 +342,7 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
      * into static object by calling IO function
      */
     private void loadPropertiesSet() {
-        logger.logMessage(Priority.INFO,MODULE,CLASS,"Loading Properties Set in memory. Please wait");
+        logger.logMessage(Level.INFO,MODULE,CLASS,"Loading Properties Set in memory. Please wait");
         try {
             IOoperations ioOps = new IOoperations();
             propertiesMap = ioOps.getPropertiesSet();
@@ -350,8 +350,8 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
             StringWriter stackTrace = new StringWriter();
             e.printStackTrace(new PrintWriter(stackTrace));
 
-            logger.logMessage(Priority.FATAL,MODULE,CLASS,e.getMessage().toString());
-            logger.logMessage(Priority.FATAL,MODULE,CLASS,stackTrace.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,e.getMessage().toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,stackTrace.toString());
         }
     }
 

@@ -1,11 +1,10 @@
 package applications.extractionPostprocessing.controller;
 
 import loggingService.MessageLogger;
-import org.apache.log4j.Priority;
+import org.apache.log4j.Level;
 
 import java.io.File;
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
 
 /**
  * This class allows to process redirect files from all wikis in the root directory.
@@ -35,7 +34,7 @@ public class RedirectProcessor {
                 }
             }
         } else {
-            logger.logMessage(Priority.FATAL ,MODULE,CLASS,"Root Directory is not a directory. Aborting process.");
+            logger.logMessage(Level.FATAL ,MODULE,CLASS,"Root Directory is not a directory. Aborting process.");
         }
     }
 

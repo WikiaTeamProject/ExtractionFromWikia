@@ -7,7 +7,7 @@ import applications.extractionPostprocessing.model.EvaluationResultAllWikis;
 import applications.extractionPostprocessing.model.EvaluationResultSingleWiki;
 import applications.extractionPostprocessing.util.PostprocessingIOHandler;
 import loggingService.MessageLogger;
-import org.apache.log4j.Priority;
+import org.apache.log4j.Level;
 import utils.IOoperations;
 import utils.OSDetails;
 
@@ -178,7 +178,7 @@ public class MappingEvaluator {
                                 + "F1-Measure: " + evaluationResultSingleWiki.getF1MeasureInPercent() + "% (" + directory.getName() + ")\n"
                                 + "Number of Mannual Annotations: " + evaluationResultSingleWiki.getTotalMappings() + " (" + directory.getName() + ")\n";
 
-                        logger.logMessage(Priority.INFO,MODULE,CLASS,evaluationResultLine);
+                        logger.logMessage(Level.INFO,MODULE,CLASS,evaluationResultLine);
 
                         aggregatedEvaluationResults.append(evaluationResultLine + "\n");
                         totalMappings += evaluationResultSingleWiki.getTotalMappings();
@@ -190,7 +190,7 @@ public class MappingEvaluator {
 
 
             if (evaluationResultSingleWikis.size() == 0) {
-                logger.logMessage(Priority.INFO,MODULE,CLASS,"No evaluation file was found. Make sure that there is at least one evaluation file within a wiki folder.");
+                logger.logMessage(Level.INFO,MODULE,CLASS,"No evaluation file was found. Make sure that there is at least one evaluation file within a wiki folder.");
                 return null;
             }
 
@@ -233,7 +233,7 @@ public class MappingEvaluator {
 
         } else {
             // -> root is not a directory
-            logger.logMessage(Priority.FATAL,MODULE,CLASS,"pathToRootDirectory is not a directory!");
+            logger.logMessage(Level.FATAL,MODULE,CLASS,"pathToRootDirectory is not a directory!");
         } // end of if(root.isDirectory())
 
         evaluationResultLine = "\nSummarized Evaluation Results\n" +
@@ -254,7 +254,7 @@ public class MappingEvaluator {
                 "Number of annotations: " + totalAnnotations;
 
 
-        logger.logMessage(Priority.INFO,MODULE,CLASS,evaluationResultLine);
+        logger.logMessage(Level.INFO,MODULE,CLASS,evaluationResultLine);
 
         aggregatedEvaluationResults.append(evaluationResultLine + "\n");
 
@@ -267,7 +267,7 @@ public class MappingEvaluator {
                 bw.write(aggregatedEvaluationResults.toString());
                 bw.close();
             } catch (IOException ioe) {
-                logger.logMessage(Priority.FATAL,MODULE,CLASS,ioe.getMessage().toString());
+                logger.logMessage(Level.FATAL,MODULE,CLASS,ioe.getMessage().toString());
             }
         }
 
@@ -342,7 +342,7 @@ public class MappingEvaluator {
 
         if (!mappingFile.exists()) {
             // there is no generated mapping file
-            logger.logMessage(Priority.FATAL,MODULE,CLASS,"No generated mapping file for wiki " + wikiPath + "\nRun mapper before evaluating wiki.");
+            logger.logMessage(Level.FATAL,MODULE,CLASS,"No generated mapping file for wiki " + wikiPath + "\nRun mapper before evaluating wiki.");
             return null;
         }
 
@@ -417,7 +417,7 @@ public class MappingEvaluator {
                 deleteNullMappings(mappingFile);
 
         } catch (Exception ex) {
-            logger.logMessage(Priority.FATAL,MODULE,CLASS,ex.getMessage());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,ex.getMessage());
         }
 
 
@@ -451,8 +451,8 @@ public class MappingEvaluator {
             try {
                 newLineCharacter = OSDetails.getNewLineCharacter();
             } catch (Exception e){
-                logger.logMessage(Priority.FATAL,MODULE,CLASS,e.getMessage());
-                logger.logMessage(Priority.FATAL,MODULE,CLASS,"Could not find resource 'newLineCharacter'.");
+                logger.logMessage(Level.FATAL,MODULE,CLASS,e.getMessage());
+                logger.logMessage(Level.FATAL,MODULE,CLASS,"Could not find resource 'newLineCharacter'.");
             }
 
             if(newLineCharacter.isEmpty()){
@@ -470,7 +470,7 @@ public class MappingEvaluator {
             IOoperations.updateFile(content.toString(), mappingFile);
 
         } catch (IOException e) {
-            logger.logMessage(Priority.FATAL,MODULE,CLASS,e.getMessage());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,e.getMessage());
         }
     }
 
