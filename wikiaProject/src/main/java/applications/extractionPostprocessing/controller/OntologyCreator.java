@@ -56,11 +56,14 @@ public class OntologyCreator {
             contentForOntologyFile.append(lineToAdd);
         }
 
-        // add properties
+
+        /*
+        // add properties - currently not required
         for(String propertyToAdd : propertiesForDefinition){
             lineToAdd = propertyToAdd + " <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .\n";
             contentForOntologyFile.append(lineToAdd);
         }
+        */
 
         IOoperations.writeContentToFile(new File(pathToWikiDirectory + "/ontology.nt"), contentForOntologyFile.toString());
 

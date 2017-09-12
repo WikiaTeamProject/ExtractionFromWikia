@@ -144,7 +144,6 @@ public class MappingExecutor {
         //get list of extracted files in a folder
         File[] listOfFiles = directoryOfWiki.listFiles();
 
-        String mappingFileName = ResourceBundle.getBundle("config").getString("mappingfilename");
         String targetNameSpace = ResourceBundle.getBundle("config").getString("targetnamespace") + "/" + directoryOfWiki.getName();
 
         HashSet<String> resourcesToMap = new HashSet<>();
@@ -161,7 +160,9 @@ public class MappingExecutor {
                         listOfFiles[i].isFile()
                                 && listOfFiles[i].toString().endsWith(".ttl")
                                 && !listOfFiles[i].toString().endsWith("_evaluation.ttl") // do not use resources from the evaluation file
-                                && !listOfFiles[i].toString().endsWith(mappingFileName)   // do not use resources from the mapping file
+                                && !listOfFiles[i].toString().endsWith("resourceMappings.ttl") // do not use resources from the mapping file
+                                && !listOfFiles[i].toString().endsWith("propertyMappings.ttl") // do not use resources from the mapping file
+                                && !listOfFiles[i].toString().endsWith("classMappings.ttl") // do not use resources from the mapping file
                         ) {
 
                     String line = ""; // line to be read

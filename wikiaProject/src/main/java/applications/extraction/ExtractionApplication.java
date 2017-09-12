@@ -21,6 +21,5 @@ public class ExtractionApplication {
             //extract all wikis
             extractor.extractAllWikis();
         }
-
     }
 }
