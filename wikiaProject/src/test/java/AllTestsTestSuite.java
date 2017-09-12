@@ -8,6 +8,10 @@ import org.junit.runners.Suite;
 import testOrchestration.CheckPrerequisitesTest;
 import utils.IOoperationsTest;
 
+/**
+ * This suite should contain all tests and is here just for convenience.
+ */
+
 @RunWith(Suite.class)
 @Suite.SuiteClasses(
         {
