@@ -1,16 +1,20 @@
 package applications.wikiaDumpRequester.util;
 
+import loggingService.MessageLogger;
+
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.logging.Logger;
+import org.apache.log4j.Level;
 
 
 public class WikiaNewDumpRequest {
 
-    private static Logger logger = Logger.getLogger(WikiaNewDumpRequest.class.getName());
+    private static MessageLogger logger=new MessageLogger();
+    private static final String MODULE="wikiDumpRequester";
+    private static final String CLASS=WikiaNewDumpRequest.class.getName();
 
     /**
      * This method requests a dump for the given URL.
@@ -48,12 +52,12 @@ public class WikiaNewDumpRequest {
                 //debug code ends here
                 */
 
-            logger.info("HTTP Response Code : " + newDumpRequestConnection.getResponseCode() +
+            logger.logMessage(Level.INFO,MODULE,CLASS,"HTTP Response Code : " + newDumpRequestConnection.getResponseCode() +
                              "HTTP Response Message :  " + newDumpRequestConnection.getResponseMessage());
 
             requestMessage.close();
         } catch(MalformedURLException mue){
-            logger.severe(mue.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,mue.toString());
         }
     }
 
