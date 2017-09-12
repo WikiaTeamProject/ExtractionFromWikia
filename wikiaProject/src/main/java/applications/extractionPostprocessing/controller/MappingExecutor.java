@@ -5,16 +5,14 @@ import applications.extractionPostprocessing.controller.propertymapper.PropertyM
 import applications.extractionPostprocessing.controller.resourcemapper.ResourceMapper;
 import applications.extractionPostprocessing.model.*;
 
+import loggingService.MessageLogger;
+import org.apache.log4j.Priority;
 import utils.IOoperations;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,7 +31,10 @@ public class MappingExecutor {
     private int totalNumberOfProperties = 0;
     private int totalNumberOfClasses = 0;
 
-    private static Logger logger = Logger.getLogger(MappingExecutor.class.getName());
+    private static MessageLogger logger=new MessageLogger();
+    private static final String MODULE="ExtractionPostprocessing";
+    private static final String CLASS="MappingEvaluator";
+
     private static String targetNamespace = ResourceBundle.getBundle("config").getString("targetnamespace");
 
 
@@ -113,7 +114,7 @@ public class MappingExecutor {
                     "Total number of properties found: " + totalNumberOfProperties + "\n" +
                     "Total number of classes found: " + totalNumberOfClasses;
 
-            logger.info(statisticsText);
+            logger.logMessage(Priority.INFO,MODULE,CLASS,statisticsText);
 
             String pathToRoot = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
 
@@ -233,8 +234,13 @@ public class MappingExecutor {
             }// end of loop over all files of that particular wiki
 
         } catch (IOException ioe) {
-            logger.severe(ioe.toString());
-            ioe.printStackTrace();
+
+            StringWriter stackTrace = new StringWriter();
+            ioe.printStackTrace(new PrintWriter(stackTrace));
+
+            logger.logMessage(Priority.FATAL,MODULE,CLASS,ioe.getMessage().toString());
+
+            logger.logMessage(Priority.FATAL,MODULE,CLASS,stackTrace.toString());
         }
 
         return new WikiToMap(directoryOfWiki.getName(), resourcesToMap, propertiesToMap, classesToMap);
