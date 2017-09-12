@@ -7,6 +7,7 @@ import applications.extractionPostprocessing.model.EvaluationResultAllWikis;
 import applications.extractionPostprocessing.model.EvaluationResultSingleWiki;
 import applications.extractionPostprocessing.util.PostprocessingIOHandler;
 import utils.IOoperations;
+import utils.OSDetails;
 
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -446,7 +447,7 @@ public class MappingEvaluator {
 
             // get newLineCharacter in a safe way
             try {
-                newLineCharacter = ResourceBundle.getBundle("config").getString("newLineCharacter");
+                newLineCharacter = OSDetails.getNewLineCharacter();
             } catch (Exception e){
                 logger.severe(e.toString());
                 logger.severe("Could not find resource 'newLineCharacter'.");
