@@ -502,31 +502,31 @@ public class IOoperations {
 
         HashMap<String, String> dumpURLs = new HashMap<String, String>();
         //String dumpsURLDirectoryPath = rootDirectoryPath + "//statistics//wikiaOverviewIndividualDumpURLs";
-        String dumpsURLDirectoryPath=rootDirectoryPath + "//statistics//wikiaOverviewDumpURLs.csv";
+        String dumpsURLDirectoryPath = rootDirectoryPath + "//statistics//wikiaOverviewDumpURLs.csv";
         try {
             File dumpsURLFile = new File(dumpsURLDirectoryPath);
 
             //if (dumpsURLFile.exists() && dumpsURLFile.isDirectory()) {
             if (dumpsURLFile.exists()) {
                 //for (File f : dumpsURLFile.listFiles()) {
-                    FileReader fileReader = new FileReader(dumpsURLFile);
-                    BufferedReader bufferedReader = new BufferedReader(fileReader);
-                    String fileLine;
-                    boolean isHeaderRow = true;
+                FileReader fileReader = new FileReader(dumpsURLFile);
+                BufferedReader bufferedReader = new BufferedReader(fileReader);
+                String fileLine;
+                boolean isHeaderRow = true;
 
-                    while ((fileLine = bufferedReader.readLine()) != null) {
+                while ((fileLine = bufferedReader.readLine()) != null) {
 
-                        if (isHeaderRow) {
-                            isHeaderRow = false;
-                            continue;
-                        }
-
-                        String[] dumpURLsMapping = fileLine.split(",");
-                        String dumpFilePath = dumpURLsMapping[0].substring(0, dumpURLsMapping[0].lastIndexOf("."));
-                        String dumpBaseURL = dumpURLsMapping[1];
-
-                        dumpURLs.put(dumpFilePath, dumpBaseURL);
+                    if (isHeaderRow) {
+                        isHeaderRow = false;
+                        continue;
                     }
+
+                    String[] dumpURLsMapping = fileLine.split(",");
+                    String dumpFilePath = dumpURLsMapping[0].substring(0, dumpURLsMapping[0].lastIndexOf("."));
+                    String dumpBaseURL = dumpURLsMapping[1];
+
+                    dumpURLs.put(dumpFilePath, dumpBaseURL);
+                }
 
                 //}
 
@@ -547,34 +547,31 @@ public class IOoperations {
      * extraction properties file
      * using template file
      */
-    public void generateExtractionProperties(){
-        try{
+    public void generateExtractionProperties() {
+        try {
 
             String extractionPropertiesFilePath =
-                    this.getClass().getClassLoader().getResource("extraction.template.properties").getPath();
+                    this.getClass().getClassLoader().getResource("extraction.properties").getPath().toString();
 
-           File templateFile=new File(extractionPropertiesFilePath);
+            File templateFile = new File(extractionPropertiesFilePath);
 
-           FileInputStream templateFileStream=new FileInputStream(templateFile);
+            FileInputStream templateFileStream = new FileInputStream(templateFile);
 
-           Properties extractionProperties=new Properties();
+            Properties extractionProperties = new Properties();
 
-           extractionProperties.load(templateFileStream);
+            extractionProperties.load(templateFileStream);
 
             templateFileStream.close();
 
+            extractionProperties.setProperty("base-dir", rootDirectoryPath + "\\dbPediaExtractionFormat");
 
-            extractionProperties.setProperty("base-dir",rootDirectoryPath+"/dbPediaExtractionFormat/");
-
-
-            FileOutputStream extractionPropertiesFile = new FileOutputStream(templateFile.getParentFile()+"//extraction.properties");
+            FileOutputStream extractionPropertiesFile = new FileOutputStream(templateFile.getParentFile() + "//extraction.properties");
 
             System.out.println(extractionPropertiesFilePath);
             extractionProperties.store(extractionPropertiesFile, null);
 
             extractionPropertiesFile.close();
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             logger.severe(ex.toString());
         }
     }

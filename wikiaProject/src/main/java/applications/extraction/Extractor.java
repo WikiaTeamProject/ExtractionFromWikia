@@ -37,15 +37,15 @@ public class Extractor {
     private HashMap<String, WikiaWikiProperties> wikisPropertiesSet;
     private String pathToRootDirectory;
     private HashMap<String, String> dumpURLsMapping;
-    private static MessageLogger logger=new MessageLogger();
-    private static final String MODULE="Extraction";
-    private static final String CLASS="Extractor";
+    private static MessageLogger logger = new MessageLogger();
+    private static final String MODULE = "Extraction";
+    private static final String CLASS = "Extractor";
 
 
     public Extractor() {
 
         // get the path to the DBpedia applications.extraction framework
-        String filepath = ResourceBundle.getBundle("config").getString("pathToExtractionFramework");
+        String filepath = System.getProperty("user.dir") + "//lib//extraction-framework";
         extractionFrameworkDirectory = new File(filepath);
         extractionDefaultPropertiesFilePath = extractionFrameworkDirectory.getAbsolutePath()
                 + "\\dump\\applications.extraction.default.properties";
@@ -340,14 +340,14 @@ public class Extractor {
         try {
             String downloadDirectoryForExtraction = ResourceBundle.getBundle("config").getString("pathToRootDirectory")
                     + "//dbPediaExtractionFormat//";
-            String pathToExtractionFramework = ResourceBundle.getBundle("config").getString("pathToExtractionFramework")+"/dump/";
+            String pathToExtractionFramework = System.getProperty("user.dir") + "//lib//dbpedia-extraction-framework//dump";
             String dbPediaExtractorBatchFile;
             String DATE_FORMAT_NOW = "YYYYMMdd";
             Calendar calender = Calendar.getInstance();
             SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT_NOW);
             String current_date = dateFormatter.format(calender.getTime());
             String date = "";
-            String extractionPropertiesFile = this.getClass().getClassLoader().getResource("extraction.properties").getPath().toString();
+            String extractionPropertiesFile;
 
             CommandLine cmdLine = null;
             DefaultExecutor executor = null;
@@ -356,7 +356,7 @@ public class Extractor {
             logger.logMessage(Priority.INFO,MODULE,CLASS,"Generating extraction properties file");
 
             iOoperations.generateExtractionProperties();
-
+            extractionPropertiesFile = this.getClass().getClassLoader().getResource("extraction.properties").getPath().toString();
 
             //Check operating system and trigger command accordingly
             if(utils.OSDetails.isWindows()){

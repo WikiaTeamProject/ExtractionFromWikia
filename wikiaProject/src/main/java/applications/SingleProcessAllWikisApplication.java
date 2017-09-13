@@ -8,36 +8,27 @@ import applications.extractionPostprocessing.controller.propertymapper.PropertyM
 import applications.extractionPostprocessing.controller.resourcemapper.ResourceMapper_4_1;
 import applications.wikiaDumpDownload.controller.WikiaDumpDownloadThreadImpl;
 
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * This class combines all subapplications into one single process.
  */
-public class SingleProcessApplication {
+public class SingleProcessAllWikisApplication {
 
     /**
      * This main method runs all processes to retrieve mappings for all existing Wikia wikis.
-     * - Retrieving an overview of all Wikia wikis (1) or only a list (2)
+     * - Retrieving an overview of all existing Wikia wikis
      * - Downloading existing wikis
      * - Extracting wikis with the DBpedia applications.extraction framework
-     * - Creating one mapping file per wiki
+     * - Creating mapping files per wiki
      *
      * @param args
      */
     public static void main(String[] args) {
 
         // first check prerequisites for all processes
-        // for (1): call checkPrerequisites(true)
-        // for (2): call checkPrerequisites(false)
-        if (!WikiaDumpDownloadThreadImpl.checkPrerequisites(false)) return;
+        if (!WikiaDumpDownloadThreadImpl.checkPrerequisites(true)) return;
 
-        // (1) metadata will be saved and all existing wikia dumps are downloaded
-//        WikiaDumpDownloadThreadImpl.downloadWikiaDumps();
-
-        // (2) download only list of urls
-        List<String> urls = Arrays.asList("http://gameofthrones.wikia.com", "http://bakerstreet.wikia.com");
-        WikiaDumpDownloadThreadImpl.downloadWikiaDumps(urls);
+        // metadata will be saved and all existing wikia dumps are downloaded
+        WikiaDumpDownloadThreadImpl.downloadWikiaDumps();
 
         // run the DBpedia extraction framework
         Extractor extractor = new Extractor();

@@ -275,7 +275,7 @@ public class WikiaDumpDownloadThread implements Runnable {
         ArrayList<String> languages = new ArrayList<>(Arrays.asList(languageCodesToDownload));
 
         // english wiki
-        if (! languageCodes.containsKey(prefix)) {
+        if (! languageCodes.containsKey(prefix) && languages.contains("en")) {
             languageWanted = true;
         // other language than English wanted, specified in config.properties
         } else if (languageCodes.containsKey(prefix) && languages.contains(prefix)) {

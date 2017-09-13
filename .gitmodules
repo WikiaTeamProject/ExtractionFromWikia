@@ -1,0 +1,3 @@
+[submodule "lib/dbpedia-extraction-framework"]
+	path = lib/dbpedia-extraction-framework
+	url = https://github.com/WikiaTeamProject/extraction-framework.git

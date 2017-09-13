@@ -189,7 +189,7 @@ public class WikiaDumpDownloadThreadImpl {
         File file = new File(ResourceBundle.getBundle("config").getString("pathToRootDirectory"));
 
         // check whether the path to the root directory is really a directory
-        if (!file.isDirectory()) {
+        if (! file.isDirectory()) {
             logger.severe("Variable pathToRootDirectory in file config.properties is not a directory. Please adjust it.");
             return false;
         }

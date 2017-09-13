@@ -15,6 +15,7 @@ import testOrchestration.CheckPrerequisitesTest;
  * Important: The test assumes that all DBpedia files (ontology, pageids, redirects) are those of 2016-10.
  */
 
+@Ignore
 public class DBpediaResourceServiceOfflineTest {
 
     public static DBpediaResourceServiceOffline service = DBpediaResourceServiceOffline.getDBpediaResourceServiceOfflineObject();
