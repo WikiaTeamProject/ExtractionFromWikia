@@ -1,14 +1,14 @@
 package utils;
 
+import loggingService.MessageLogger;
 import org.apache.tools.ant.DirectoryScanner;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.log4j.Level;
 
 /**
  * This class includes general IO/File methods usable in all packages.
@@ -16,7 +16,9 @@ import java.util.regex.Pattern;
 public class IOoperations {
 
 
-    static Logger logger = Logger.getLogger(IOoperations.class.getName());
+    private static MessageLogger logger=new MessageLogger();
+    private static final String MODULE="Utils";
+    private static final String CLASS=IOoperations.class.getName();
     private static String rootDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
 
 
@@ -27,7 +29,7 @@ public class IOoperations {
      * @param targetFile
      */
     public static void mergeFiles(ArrayList<String> filePaths, String targetFile) {
-        logger.severe("!!! mergeFiles not implemented yet !!!");
+        logger.logMessage(Level.FATAL,MODULE,CLASS,"!!! mergeFiles not implemented yet !!!");
         // TODO: implement and use!
     }
 
@@ -170,15 +172,15 @@ public class IOoperations {
      * @param file    File to be overwritten
      */
     public static void updateFile(String content, File file) {
-        logger.info("Updating file " + file.getName());
+        logger.logMessage(Level.INFO,MODULE,CLASS,"Updating file " + file.getName());
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
             writer.write(content);
             writer.flush();
             writer.close();
         } catch (IOException e) {
-            logger.severe("Could not update file " + file.getName() + ".");
-            logger.severe(e.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,"Could not update file " + file.getName() + ".");
+            logger.logMessage(Level.FATAL,MODULE,CLASS,e.toString());
             e.printStackTrace();
         }
     }
@@ -221,7 +223,7 @@ public class IOoperations {
 
         } catch (Exception exception) {
             exception.printStackTrace();
-            logger.log(Level.SEVERE, exception.getMessage());
+            logger.logMessage(Level.FATAL,MODULE,CLASS, exception.getMessage());
         }
     }
 
@@ -247,7 +249,7 @@ public class IOoperations {
 
             File pageIdsDirectory = new File(pageIDsFilePath);
             if (!pageIdsDirectory.exists()) {
-                logger.severe("<root>/resources/pageids/ directory does not exist.");
+                logger.logMessage(Level.FATAL,MODULE,CLASS,"<root>/resources/pageids/ directory does not exist.");
             }
 
             if (pageIdsDirectory.isDirectory()) {
@@ -276,7 +278,7 @@ public class IOoperations {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.severe(ex.getMessage());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,ex.getMessage());
         }
         return pageIdsMap;
     }
@@ -301,7 +303,7 @@ public class IOoperations {
 
             File redirectsDirectory = new File(redirectFilePath);
             if (!redirectsDirectory.exists()) {
-                logger.severe("<root>/resources/redirects/ directory does not exist.");
+                logger.logMessage(Level.FATAL,MODULE,CLASS,"<root>/resources/redirects/ directory does not exist.");
             }
 
             if (redirectsDirectory.isDirectory()) {
@@ -333,7 +335,7 @@ public class IOoperations {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.severe(ex.getMessage());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,ex.getMessage());
         }
 
         return redirectsMap;
@@ -354,7 +356,7 @@ public class IOoperations {
             writer.flush();
             writer.close();
         } catch (IOException ioe) {
-            logger.severe(ioe.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,ioe.toString());
         }
 
     }
@@ -378,7 +380,7 @@ public class IOoperations {
 
             File ontologyDirectory = new File(ontologyFilePath);
             if (!ontologyDirectory.exists()) {
-                logger.severe("<root>/resources/ontology/ directory does not exist.");
+                logger.logMessage(Level.FATAL,MODULE,CLASS,"<root>/resources/ontology/ directory does not exist.");
             }
 
             if (ontologyDirectory.isDirectory()) {
@@ -405,7 +407,7 @@ public class IOoperations {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.severe(ex.getMessage());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,ex.getMessage());
         }
 
         return ontologiesMap;
@@ -430,7 +432,7 @@ public class IOoperations {
 
             File propertiesDirectory = new File(propertiesFilePath);
             if (!propertiesDirectory.exists()) {
-                logger.severe("<root>/resources/properties/ directory does not exist.");
+                logger.logMessage(Level.FATAL,MODULE,CLASS,"<root>/resources/properties/ directory does not exist.");
             }
 
             if (propertiesDirectory.isDirectory()) {
@@ -457,7 +459,7 @@ public class IOoperations {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.severe(ex.getMessage());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,ex.getMessage());
         }
         return propertiesMap;
     }
@@ -489,7 +491,7 @@ public class IOoperations {
 
 
         } catch (Exception ex) {
-            logger.severe(ex.getMessage());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,ex.getMessage());
         }
         return ifFileExist;
     }
@@ -531,11 +533,11 @@ public class IOoperations {
                 //}
 
             } else {
-                logger.severe("Dumps URL file not present. Please check ...");
+                logger.logMessage(Level.FATAL,MODULE,CLASS,"Dumps URL file not present. Please check ...");
             }
 
         } catch (Exception ex) {
-            logger.severe(ex.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,ex.toString());
         }
 
         return dumpURLs;
@@ -571,8 +573,10 @@ public class IOoperations {
             extractionProperties.store(extractionPropertiesFile, null);
 
             extractionPropertiesFile.close();
-        } catch (Exception ex) {
-            logger.severe(ex.toString());
+
+        }
+        catch(Exception ex){
+            logger.logMessage(Level.FATAL,MODULE,CLASS,ex.toString());
         }
     }
 }

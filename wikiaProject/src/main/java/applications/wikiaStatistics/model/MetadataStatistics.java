@@ -1,14 +1,15 @@
 package applications.wikiaStatistics.model;
 
 
+import loggingService.MessageLogger;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Level;
 
 import java.io.PrintWriter;
 
@@ -23,7 +24,9 @@ public class MetadataStatistics {
     private int numberOfArticles;
     private int numberOfPages;
 
-    private static Logger logger = Logger.getLogger(MetadataStatistics.class.getName());
+    private static MessageLogger logger=new MessageLogger();
+    private static final String MODULE="wikiaStatistics";
+    private static final String CLASS=MetadataStatistics.class.getName();
 
 
     /**
@@ -114,7 +117,7 @@ public class MetadataStatistics {
             }
 
         } catch (IOException ioe) {
-            logger.log(Level.SEVERE, "HashMap has not been initialized.", ioe);
+            logger.logMessage(Level.FATAL ,MODULE,CLASS,"HashMap has not been initialized." + ioe.toString());
         }
 
         return languageCounts;
@@ -162,7 +165,7 @@ public class MetadataStatistics {
         }
         catch(Exception exception){
 
-            logger.log(Level.SEVERE, exception.getMessage());
+            logger.logMessage(Level.FATAL ,MODULE,CLASS,exception.getMessage());
         }
     }
 

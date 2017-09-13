@@ -1,19 +1,23 @@
 package applications.wikiaStatistics.controller;
 
+import loggingService.MessageLogger;
 import utils.IOoperations;
 import applications.wikiaStatistics.util.WikiaStatisticsTools;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
+import org.apache.log4j.Level;
 
 /**
  * This class represents the implementation of MetadataThread threads.
  */
 public class MetadataThreadImpl {
 
-    private static Logger logger = Logger.getLogger(MetadataThreadImpl.class.getName());
+    private static MessageLogger logger=new MessageLogger();
+    private static final String MODULE="wikiaStatistics";
+    private static final String CLASS=MetadataThreadImpl.class.getName();
+
 
     private static Thread[] threads = new Thread[40];
     private static ArrayList<String> filePaths = new ArrayList<String>();
@@ -49,11 +53,11 @@ public class MetadataThreadImpl {
                 t.join();
             }
 
-            logger.info("Download process finished.");
-            logger.info("Concatenating files...");
+            logger.logMessage(Level.INFO,MODULE,CLASS,"Download process finished.");
+            logger.logMessage(Level.INFO,MODULE,CLASS,"Concatenating files...");
 
         } catch(InterruptedException ie){
-            logger.severe(ie.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,ie.toString());
         }
 
         WikiaStatisticsTools.mergeFiles(filePaths);
@@ -71,7 +75,7 @@ public class MetadataThreadImpl {
         // check whether the path to the root directory is really a directory
         if (file.isDirectory()) return true;
 
-        logger.severe("Variable pathToRootDirectory in file config.properties is not a directory.");
+        logger.logMessage(Level.FATAL,MODULE,CLASS,"Variable pathToRootDirectory in file config.properties is not a directory.");
         return false;
     }
 

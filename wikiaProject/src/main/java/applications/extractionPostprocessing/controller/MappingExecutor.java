@@ -5,16 +5,14 @@ import applications.extractionPostprocessing.controller.propertymapper.PropertyM
 import applications.extractionPostprocessing.controller.resourcemapper.ResourceMapper;
 import applications.extractionPostprocessing.model.*;
 
+import loggingService.MessageLogger;
+import org.apache.log4j.Level;
 import utils.IOoperations;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,7 +31,10 @@ public class MappingExecutor {
     private int totalNumberOfProperties = 0;
     private int totalNumberOfClasses = 0;
 
-    private static Logger logger = Logger.getLogger(MappingExecutor.class.getName());
+    private static MessageLogger logger=new MessageLogger();
+    private static final String MODULE="ExtractionPostprocessing";
+    private static final String CLASS="MappingExecutor";
+
     private static String targetNamespace = ResourceBundle.getBundle("config").getString("targetnamespace");
 
 
@@ -113,7 +114,7 @@ public class MappingExecutor {
                     "Total number of properties found: " + totalNumberOfProperties + "\n" +
                     "Total number of classes found: " + totalNumberOfClasses;
 
-            logger.info(statisticsText);
+            logger.logMessage(Level.INFO,MODULE,CLASS,statisticsText);
 
             String pathToRoot = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
 
@@ -143,7 +144,6 @@ public class MappingExecutor {
         //get list of extracted files in a folder
         File[] listOfFiles = directoryOfWiki.listFiles();
 
-        String mappingFileName = ResourceBundle.getBundle("config").getString("mappingfilename");
         String targetNameSpace = ResourceBundle.getBundle("config").getString("targetnamespace") + "/" + directoryOfWiki.getName();
 
         HashSet<String> resourcesToMap = new HashSet<>();
@@ -160,7 +160,9 @@ public class MappingExecutor {
                         listOfFiles[i].isFile()
                                 && listOfFiles[i].toString().endsWith(".ttl")
                                 && !listOfFiles[i].toString().endsWith("_evaluation.ttl") // do not use resources from the evaluation file
-                                && !listOfFiles[i].toString().endsWith(mappingFileName)   // do not use resources from the mapping file
+                                && !listOfFiles[i].toString().endsWith("resourceMappings.ttl") // do not use resources from the mapping file
+                                && !listOfFiles[i].toString().endsWith("propertyMappings.ttl") // do not use resources from the mapping file
+                                && !listOfFiles[i].toString().endsWith("classMappings.ttl") // do not use resources from the mapping file
                         ) {
 
                     String line = ""; // line to be read
@@ -233,8 +235,13 @@ public class MappingExecutor {
             }// end of loop over all files of that particular wiki
 
         } catch (IOException ioe) {
-            logger.severe(ioe.toString());
-            ioe.printStackTrace();
+
+            StringWriter stackTrace = new StringWriter();
+            ioe.printStackTrace(new PrintWriter(stackTrace));
+
+            logger.logMessage(Level.FATAL,MODULE,CLASS,ioe.getMessage().toString());
+
+            logger.logMessage(Level.FATAL,MODULE,CLASS,stackTrace.toString());
         }
 
         return new WikiToMap(directoryOfWiki.getName(), resourcesToMap, propertiesToMap, classesToMap);

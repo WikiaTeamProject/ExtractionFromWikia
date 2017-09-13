@@ -3,6 +3,7 @@ package applications.wikiaStatistics.util;
 import applications.extraction.model.WikiaWikiProperties;
 import applications.extraction.Extractor;
 import applications.wikiaStatistics.model.MetadataStatistics;
+import loggingService.MessageLogger;
 import utils.OSDetails;
 
 import java.io.*;
@@ -10,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
+import org.apache.log4j.Level;
 
 
 /**
@@ -19,8 +20,12 @@ import java.util.logging.Logger;
  */
 public class WikiaStatisticsTools {
 
-    private static Logger logger = Logger.getLogger(WikiaStatisticsTools.class.getName());
+
     private static String statisticsDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/statistics";
+    private static MessageLogger logger=new MessageLogger();
+    private static final String MODULE="wikiaStatistics";
+    private static final String CLASS=WikiaStatisticsTools.class.getName();
+
 
 
     /**
@@ -41,7 +46,7 @@ public class WikiaStatisticsTools {
             bufferedWriter = new BufferedWriter(new FileWriter(resultFile));
             for (String path : filePaths) {
                 fileNumber++;
-                logger.info("Starting with file number " + fileNumber + ": " + path);
+                logger.logMessage(Level.INFO,MODULE,CLASS,"Starting with file number " + fileNumber + ": " + path);
                 f = new File(path);
                 bufferedReader = new BufferedReader(new FileReader(f));
 
@@ -62,10 +67,10 @@ public class WikiaStatisticsTools {
 
             bufferedWriter.close();
         } catch (IOException ioe) {
-            logger.severe(ioe.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,ioe.toString());
         }
 
-        logger.info("Finished merging " + fileNumber + " files.");
+        logger.logMessage(Level.INFO,MODULE,CLASS,"Finished merging " + fileNumber + " files.");
     }
 
 
@@ -90,7 +95,7 @@ public class WikiaStatisticsTools {
             while ((readLine = bufferedReader.readLine()) != null) {
                 tokens = readLine.split(";");
 
-                logger.info("Processing: " + tokens[1]);
+                logger.logMessage(Level.INFO,MODULE,CLASS,"Processing: " + tokens[1]);
 
                 // count language codes, default english
 
@@ -117,7 +122,7 @@ public class WikiaStatisticsTools {
                         statistics.setNumberOfPages(statistics.getNumberOfPages() + Integer.parseInt(tokens[12]));
 
                     } catch (NumberFormatException ne) {
-                        logger.warning("Articles/pages of URL " + tokens[1] + " do not include an integer value.");
+                        logger.logMessage(Level.WARN,MODULE,CLASS,"Articles/pages of URL " + tokens[1] + " do not include an integer value.");
                     }
                 }
 
@@ -148,7 +153,7 @@ public class WikiaStatisticsTools {
             bufferedReader.close();
 
         } catch (IOException ioe) {
-            logger.severe(ioe.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,ioe.toString());
         }
 
         return statistics;
@@ -204,7 +209,7 @@ public class WikiaStatisticsTools {
             fileWriter.close();
         }
         catch(Exception ex){
-            logger.severe(ex.getMessage());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,ex.getMessage());
 
         }
     }

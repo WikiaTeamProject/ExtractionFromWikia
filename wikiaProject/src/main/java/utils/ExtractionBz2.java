@@ -1,21 +1,24 @@
 package utils;
 
+import loggingService.MessageLogger;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.log4j.Level;
 
 /**
  * This class can extract bz2 files.
  */
 public class ExtractionBz2 {
 
-    private static Logger logger = Logger.getLogger(ExtractionBz2.class.getName());
+    private static MessageLogger logger=new MessageLogger();
+    private static final String MODULE="Utils";
+    private static final String CLASS=ExtractionBz2.class.getName();
 
     /**
      * Extract one bz2 File.
@@ -65,8 +68,8 @@ public class ExtractionBz2 {
             return true;
 
         } catch (IOException ioe) {
-            logger.severe("A problem occurred. Common error: This method tries to extract a single file. If you want to extract all files in a directory use another method.");
-            logger.severe(ioe.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,"A problem occurred. Common error: This method tries to extract a single file. If you want to extract all files in a directory use another method.");
+            logger.logMessage(Level.FATAL,MODULE,CLASS,ioe.toString());
             return false;
         }
     }

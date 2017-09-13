@@ -54,8 +54,15 @@ You can choose whatever version you like, however, if you want to use the provid
 Please copy the [sample properties file](./additionalFiles/configFile/config.properties) directly into the [resources folder](/wikiaProject/src/main/resources) and adjust it. 
 Have a look at the [detailed description](./additionalFiles/configFile/README.md) of all variables which need to be specified in the properties file.
 
-After successfully running the program, you will find the postprocessed wikis in `root_directory/postProcessedWikis`.
+When everything is set up, you can execute the [single process application](./wikiaProject/src/main/java/applications/SingleProcessApplication.java). This application will get a list of all wikis, download all wikis according to the 
+languages specified in the configuration file, extract all wikis using the DBpedia Extraction Framework and postprocess
+all wikis. After successfully running the program, you will find the postprocessed wikis in `root_directory/postProcessedWikis`.
+You can find statistics created on-the-fly in `root_directory/statistics`.  
 
+
+## Common Problems
+TODO: Describe the most common problems and solutions here.
+TODO: Describe where to find log files.
 
 ## Implementation Details
 

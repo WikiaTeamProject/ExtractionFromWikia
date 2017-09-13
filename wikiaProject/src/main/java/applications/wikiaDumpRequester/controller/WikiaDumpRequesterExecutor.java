@@ -1,5 +1,6 @@
 package applications.wikiaDumpRequester.controller;
 
+import loggingService.MessageLogger;
 import utils.IOoperations;
 import applications.wikiaDumpRequester.model.WikiaUser;
 import applications.wikiaDumpRequester.util.WikiaNewDumpRequest;
@@ -8,12 +9,14 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
+import org.apache.log4j.Level;
 
 
 public class WikiaDumpRequesterExecutor {
 
-    private static Logger logger = Logger.getLogger(WikiaDumpRequesterExecutor.class.getName());
+    private static MessageLogger logger=new MessageLogger();
+    private static final String MODULE="wikiDumpRequester";
+    private static final String CLASS=WikiaDumpRequesterExecutor.class.getName();
     private static ArrayList<String> urlsThatDidNotWork;
 
 
@@ -35,14 +38,14 @@ public class WikiaDumpRequesterExecutor {
         String filepath = ResourceBundle.getBundle("credentials").getString("directory") + "/wikiaAllOverview.csv";
 
         // user output
-        logger.info("Credentials:\nUsername: " + ResourceBundle.getBundle("credentials").getString("username")
+        logger.logMessage(Level.INFO,MODULE,CLASS,"Credentials:\nUsername: " + ResourceBundle.getBundle("credentials").getString("username")
                          + "\nPassword: " + ResourceBundle.getBundle("credentials").getString("password"));
 
         WikiaNewDumpRequest requester = new WikiaNewDumpRequest();
         ArrayList<String> urls = IOoperations.getUrls(filepath);
 
         String token = user.getAccessToken();
-        logger.info("Token: " + token);
+        logger.logMessage(Level.INFO,MODULE,CLASS,"Token: " + token);
 
         urlsThatDidNotWork = new ArrayList<String>();
         int numberOfWikisProcessed = 0; // number of URLs that were processed
@@ -61,12 +64,12 @@ public class WikiaDumpRequesterExecutor {
                     // TODO:I do not know whether we need that or whether it helps!
                     Thread.sleep(25);
                 } catch (InterruptedException ie) {
-                    logger.severe(ie.toString());
+                    logger.logMessage(Level.FATAL,MODULE,CLASS,ie.toString());
                 }
 
             } catch (ConnectException ce) {
-                logger.severe("A ConnectException occurred. It will be handled...");
-                logger.info("Wait for a few seconds.");
+                logger.logMessage(Level.FATAL,MODULE,CLASS,"A ConnectException occurred. It will be handled...");
+                logger.logMessage(Level.INFO,MODULE,CLASS,"Wait for a few seconds.");
 
                 // not sure whether we need re-instantiation
                 user = null;
@@ -78,7 +81,7 @@ public class WikiaDumpRequesterExecutor {
                     Thread.sleep(60000);
 
                 } catch (InterruptedException ie) {
-                    logger.severe(ie.toString());
+                    logger.logMessage(Level.FATAL,MODULE,CLASS,ie.toString());
                 }
 
                 // re-instantiate objects, I am not sure, whether this helps
@@ -86,19 +89,19 @@ public class WikiaDumpRequesterExecutor {
                                   ResourceBundle.getBundle("credentials").getString("password"));
                 requester = new WikiaNewDumpRequest();
 
-                logger.info("Request a new access token...");
+                logger.logMessage(Level.INFO,MODULE,CLASS,"Request a new access token...");
                 token = user.getAccessToken();
 
-                logger.info("Continue with next URL.");
+                logger.logMessage(Level.INFO,MODULE,CLASS,"Continue with next URL.");
                 urlsThatDidNotWork.add(url);
             } catch (IOException ioe){
-                logger.severe(ioe.toString());
+                logger.logMessage(Level.FATAL,MODULE,CLASS,ioe.toString());
             }
 
             index++;
         } // end of loop through URLs
 
-        logger.info("Tokens for all URLs requested.");
+        logger.logMessage(Level.INFO,MODULE,CLASS,"Tokens for all URLs requested.");
         System.out.println("URLS that did not work:");
         for(String s : urlsThatDidNotWork){
             System.out.println(s);

@@ -1,10 +1,7 @@
-
-
-
 package loggingService;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
+import org.apache.log4j.Level;
 import org.apache.log4j.xml.DOMConfigurator;
 
 
@@ -28,7 +25,7 @@ public class MessageLogger {
      * @param message log message
      */
 
-    public void logMessage(Priority messagePriority,
+    public void logMessage(Level messagePriority,
                            String module,
                            String className,
                            String message){
@@ -44,19 +41,19 @@ public class MessageLogger {
                 + " - " + className + " - "+message;
 
 
-        if(messagePriority==Priority.DEBUG){
+        if(messagePriority==Level.DEBUG){
           LOGGER.debug(logMessage);
         }
-        else if(messagePriority==Priority.INFO){
+        else if(messagePriority==Level.INFO){
             LOGGER.info(logMessage);
         }
-        else if(messagePriority==Priority.WARN ){
+        else if(messagePriority==Level.WARN ){
             LOGGER.warn(logMessage);
         }
-        else if(messagePriority==Priority.ERROR){
+        else if(messagePriority==Level.ERROR){
             LOGGER.error(logMessage);
         }
-        else if(messagePriority==Priority.FATAL){
+        else if(messagePriority==Level.FATAL){
             LOGGER.fatal(logMessage);
         }
         else {

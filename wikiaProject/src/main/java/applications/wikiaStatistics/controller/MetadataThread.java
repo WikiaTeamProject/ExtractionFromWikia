@@ -1,6 +1,7 @@
 package applications.wikiaStatistics.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import loggingService.MessageLogger;
 import org.json.JSONObject;
 import applications.wikiaStatistics.model.ExpandedWikiaItem;
 
@@ -8,8 +9,7 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Level;
 
 /**
  * This class queries the wikia API from the lowerIdLimit up to the upperIdLimit.
@@ -37,7 +37,9 @@ public class MetadataThread implements Runnable {
 
         private ObjectMapper mapper;
 
-        private static Logger logger = Logger.getLogger(MetadataThread.class.getName());
+        private static MessageLogger logger=new MessageLogger();
+        private static final String MODULE="wikiaStatistics";
+        private static final String CLASS=MetadataThread.class.getName();
 
 
         /**
@@ -47,7 +49,6 @@ public class MetadataThread implements Runnable {
          * @param upperIdLimit Upper Limit of IDs up to which will be queried. Must be positive. Must be larger than 1.
          */
         public MetadataThread(String filePath, int lowerIdLimit, int upperIdLimit) {
-            logger.setLevel(Level.FINEST);
             this.lowerIdLimit = Math.min(1, Math.abs(lowerIdLimit)); // just to be sure that the parameter is legitimate
             startingID = lowerIdLimit;
             this.filepath = filePath;
@@ -74,7 +75,7 @@ public class MetadataThread implements Runnable {
                 bufferedWriter = new BufferedWriter(new FileWriter(new File(filepath)));
                 bufferedWriter.write(ExpandedWikiaItem.getHeader() + "\n"); // just the header line for the CSV file
             } catch (IOException e1) {
-                logger.severe(Thread.currentThread().getName() + ": The provided path for the file does not work.");
+                logger.logMessage(Level.FATAL,MODULE,CLASS,Thread.currentThread().getName() + ": The provided path for the file does not work.");
                 e1.printStackTrace();
                 return;
             }
@@ -87,7 +88,7 @@ public class MetadataThread implements Runnable {
                 startingID++; // increment startingID because the first ID was already used in the initial URL creation
                 startingIDbefore = startingID;
 
-                logger.info(Thread.currentThread().getName() + ": Iteration " + numberOfIterations + " Starting ID: " + startingID);
+                logger.logMessage(Level.INFO,MODULE,CLASS,Thread.currentThread().getName() + ": Iteration " + numberOfIterations + " Starting ID: " + startingID);
 
                 // there will always be 50 IDs in one query; 50 turned out to be very stable but I did not evaluate an optimal number. Higher would be better for performance. (jan)
                 while (startingID < startingIDbefore + 49) {
@@ -122,7 +123,7 @@ public class MetadataThread implements Runnable {
 
                     // the if is required to avoid null pointer exceptions
                     if (ids != null) {
-                        logger.info(Thread.currentThread().getName() + ": Number of Wikis: " + ids.length + " in iteration: " + numberOfIterations++);
+                        logger.logMessage(Level.INFO,MODULE,CLASS,Thread.currentThread().getName() + ": Number of Wikis: " + ids.length + " in iteration: " + numberOfIterations++);
 
                         for (String id : ids) {
                             // map json string with infos of one wiki to java object
@@ -133,16 +134,16 @@ public class MetadataThread implements Runnable {
                     }
 
                 } catch (MalformedURLException mue) {
-                    logger.severe(mue.toString());
+                    logger.logMessage(Level.FATAL,MODULE,CLASS,mue.toString());
                 } catch (IOException ioe) {
-                    logger.severe(ioe.toString());
+                    logger.logMessage(Level.FATAL,MODULE,CLASS,ioe.toString());
                 }
 
             }
             try {
                 bufferedWriter.close();
             } catch (IOException e1) {
-                logger.severe(Thread.currentThread().getName() + ": Something went wrong when closing the BufferedWriter.");
+                logger.logMessage(Level.FATAL,MODULE,CLASS,Thread.currentThread().getName() + ": Something went wrong when closing the BufferedWriter.");
             }
         }
 

@@ -1,6 +1,6 @@
 package applications.wikiaDumpRequester.model;
 
-import applications.wikiaStatistics.util.WikiaStatisticsTools;
+import loggingService.MessageLogger;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -8,7 +8,7 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
+import org.apache.log4j.Level;
 
 /**
  * A class to represent Wikia User Entity
@@ -17,7 +17,9 @@ public class WikiaUser {
 
     private String userName;
     private String userPassword;
-    private static Logger logger = Logger.getLogger(WikiaStatisticsTools.class.getName());
+    private static MessageLogger logger=new MessageLogger();
+    private static final String MODULE="wikiDumpRequester";
+    private static final String CLASS=WikiaUser.class.getName();
 
 
     public WikiaUser(String userName, String userPassword){
@@ -75,7 +77,7 @@ public class WikiaUser {
                 responseMessage+= responseMessageLine;
             }
 
-            logger.info(responseMessage);
+            logger.logMessage(Level.INFO,MODULE,CLASS,responseMessage);
 
             //parse response message to get access token
             userAccessToken = responseMessage.substring(responseMessage.indexOf(":") + 2, responseMessage.indexOf(",") - 1);
@@ -86,7 +88,7 @@ public class WikiaUser {
             responseMessageReader.close();
         }
         catch(Exception ex) {
-            logger.severe(ex.toString());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,ex.toString());
         }
 
         return userAccessToken;

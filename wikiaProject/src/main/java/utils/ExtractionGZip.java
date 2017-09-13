@@ -1,18 +1,22 @@
 package utils;
 
+import loggingService.MessageLogger;
+
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.zip.GZIPInputStream;
 import java.io.File;
+import org.apache.log4j.Level;
 
 /**
  * Created by Samresh Kumar on 6/26/2017.
  */
 public class ExtractionGZip
 {
-    private static Logger logger = Logger.getLogger(ExtractionGZip.class.getName());
+    private static MessageLogger logger=new MessageLogger();
+    private static final String MODULE="Utils";
+    private static final String CLASS=ExtractionGZip.class.getName();
     private static String downloadedDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/downloadedWikis";
     private String directoryExtracted;
 
@@ -68,7 +72,7 @@ public class ExtractionGZip
 
         }
         catch(Exception ex){
-            logger.severe(ex.getMessage());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,ex.getMessage());
         }
 
     }
@@ -107,7 +111,7 @@ public class ExtractionGZip
 
         }
         catch(Exception ex){
-            logger.severe(ex.getMessage());
+            logger.logMessage(Level.FATAL,MODULE,CLASS,ex.getMessage());
         }
     }
 
@@ -121,7 +125,7 @@ public class ExtractionGZip
         File folder = new File(foldergz);
 
         for (File filegz : folder.listFiles()) {
-            logger.info("Extraction for following gz file is started: " + filegz.getAbsolutePath());
+            logger.logMessage(Level.INFO,MODULE,CLASS,"Extraction for following gz file is started: " + filegz.getAbsolutePath());
             extractGzipFile(filegz.getAbsolutePath(),
                     this.directoryExtracted);
         }
