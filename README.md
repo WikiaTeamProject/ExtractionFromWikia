@@ -31,14 +31,19 @@ in the implementation. This guide also contains links to directories or other we
 where the discussed subject is located. 
 
 
-## Import Project into IntelliJ
-This section describes how to import this program into IntelliJ so that you are able to run it. Note that it is also possible to use other IDEs for which the process is not explained though.
+## Import Project into IntelliJ IDE
+This section describes how to import this program into IntelliJ so that you are able to run it. Note that it is also possible to use other IDEs for which the process is not explained though. However, this exemplary guide should enable you to set up the project in a general way.
 
 TODO: add additional steps <br />
 
-Nex, you have to load the DBpedia extractor. Therefore, execute in the command line:
+Next, you have to load the DBpedia extractor. Therefore, execute in the command line:
 ```
 git submodule update --init
+```
+After successfully executing the command, you should find files in `lib/dbpedia-extraction-framework`.
+Now you have to build the DBpedia Extraction Framework. Navigate into `lib/dbpedia-extraction-framework` and execute the following command in the command line:
+```
+mvn clean install
 ```
 
 ## How to execute the Program?
