@@ -553,7 +553,7 @@ public class IOoperations {
         try {
 
             String extractionPropertiesFilePath =
-                    this.getClass().getClassLoader().getResource("extraction.properties").getPath().toString();
+                    this.getClass().getClassLoader().getResource("extraction.template.properties").getPath().toString();
 
             File templateFile = new File(extractionPropertiesFilePath);
 
