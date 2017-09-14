@@ -45,7 +45,7 @@ public class Extractor {
     public Extractor() {
 
         // get the path to the DBpedia applications.extraction framework
-        String filepath = System.getProperty("user.dir") + "//lib//extraction-framework";
+        String filepath = System.getProperty("user.dir") + "//lib//dbpedia-extraction-framework";
         extractionFrameworkDirectory = new File(filepath);
         extractionDefaultPropertiesFilePath = extractionFrameworkDirectory.getAbsolutePath()
                 + "\\dump\\applications.extraction.default.properties";
