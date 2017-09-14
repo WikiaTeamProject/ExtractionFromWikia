@@ -31,6 +31,16 @@ in the implementation. This guide also contains links to directories or other we
 where the discussed subject is located. 
 
 
+## Import Project into IntelliJ
+This section describes how to import this program into IntelliJ so that you are able to run it. Note that it is also possible to use other IDEs for which the process is not explained though.
+
+TODO: add additional steps <br />
+
+Nex, you have to load the DBpedia extractor. Therefore, execute in the command line:
+```
+git submodule update --init
+```
+
 ## How to execute the Program?
 Create the following directory structure (you can name `root_directory` whatever you like, but the other directory 
 names have to match):
