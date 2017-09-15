@@ -176,7 +176,7 @@ public class MappingExecutor {
 
                     // regex to find tags
                     Matcher matcher = null;
-                    Pattern pattern = Pattern.compile("<[^<]*>");
+                    Pattern pattern = Pattern.compile("<[^<>]*>");
                     // regex: <[^<]*>
                     // this regex captures everything between tags including the tags: <...>
                     // there are three tags in every line
