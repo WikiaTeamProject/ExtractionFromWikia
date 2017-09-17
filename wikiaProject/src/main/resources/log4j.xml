@@ -10,7 +10,7 @@
         <param name="bufferedIO" value="true"/>
         <param name="bufferSize" value="1024"/>
         <!-- For Tomcat -->
-        <param name="file" value="/logs/wikiaLogs.log" />
+        <param name="file" value="${rootDirectory}/logs/wikiaLogs.log" />
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern"
                    value="%d{yyyy-MM-dd HH:mm:ss} - %-5p - %m%n" />

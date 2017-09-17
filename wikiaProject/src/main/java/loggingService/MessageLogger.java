@@ -1,9 +1,12 @@
 package loggingService;
 
+import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
+import org.apache.log4j.RollingFileAppender;
 import org.apache.log4j.xml.DOMConfigurator;
 
+import java.util.ResourceBundle;
 
 
 /**
@@ -16,11 +19,13 @@ public class MessageLogger {
 
     public static Logger LOGGER;
     String log4jFileConfigFile=this.getClass().getClassLoader().getResource("log4j.xml").getPath();
+    private static String pathToRootDirectory = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
 
     /**
      * Constructor for class Message Logger
      */
     public MessageLogger(){
+        System.setProperty("rootDirectory", pathToRootDirectory);
         DOMConfigurator.configure(log4jFileConfigFile);
         LOGGER = Logger.getLogger("wikia.logger");
     }
@@ -43,6 +48,8 @@ public class MessageLogger {
 
         String logMessage = module
                 + " - " + className + " - "+message;
+
+
 
 
         if(messagePriority==Level.DEBUG){
