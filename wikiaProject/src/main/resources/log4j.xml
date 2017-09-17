@@ -5,8 +5,10 @@
 
     <appender name="fileAppender" class="org.apache.log4j.RollingFileAppender">
         <param name="append" value="true" />
-        <param name="maxFileSize" value="10KB" />
+        <param name="maxFileSize" value="10MB" />
         <param name="maxBackupIndex" value="10" />
+        <param name="bufferedIO" value="true"/>
+        <param name="bufferSize" value="1024"/>
         <!-- For Tomcat -->
         <param name="file" value="/logs/wikiaLogs.log" />
         <layout class="org.apache.log4j.PatternLayout">
@@ -14,10 +16,15 @@
                    value="%d{yyyy-MM-dd HH:mm:ss} - %-5p - %m%n" />
         </layout>
     </appender>
-
-    <root>
+    <appender name="consoleAppender" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                   value="%d{yyyy-MM-dd HH:mm:ss} - %-5p - %m%n" />
+        </layout>
+    </appender>
+    <logger name="wikia.logger">
         <level value="INFO" />
         <appender-ref ref="fileAppender" />
-    </root>
-
+        <appender-ref ref="consoleAppender" />
+    </logger>
 </log4j:configuration>
