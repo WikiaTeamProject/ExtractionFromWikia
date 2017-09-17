@@ -53,11 +53,11 @@ public class WikiaDumpDownloadThreadImpl {
     public static void downloadWikiaDumps(List<String> urls) {
 
         IOoperations.createDirectory(statisticsDirectoryPath);
-        IOoperations.createDirectory(statisticsDirectoryPath + "/wikiaOverviewIndividualDumpSizes");
-        IOoperations.createDirectory(statisticsDirectoryPath + "/wikiaOverviewIndividualDumpURLs");
+        IOoperations.createDirectory(statisticsDirectoryPath + "//wikiaOverviewIndividualDumpSizes");
+        IOoperations.createDirectory(statisticsDirectoryPath + "//wikiaOverviewIndividualDumpURLs");
 
-        String dumpSizeFilePath = statisticsDirectoryPath + "/wikiaOverviewIndividualDumpSizes/dumpsSizes.csv";
-        String dumpURLsFilePath = statisticsDirectoryPath + "/wikiaOverviewIndividualDumpURLs/dumpsURL.csv";
+        String dumpSizeFilePath = statisticsDirectoryPath + "//wikiaOverviewDumpSizes.csv";
+        String dumpURLsFilePath = statisticsDirectoryPath + "//wikiaOverviewDumpURLs.csv";
 
         Thread thread = new Thread(new WikiaDumpDownloadThread(urls, dumpSizeFilePath, dumpURLsFilePath));
         thread.start();
