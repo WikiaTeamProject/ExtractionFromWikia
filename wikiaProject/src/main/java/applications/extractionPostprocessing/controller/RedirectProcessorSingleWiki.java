@@ -20,7 +20,7 @@ public class RedirectProcessorSingleWiki {
     private HashMap<String, String> redirectsMap = new HashMap<>();
     private static MessageLogger logger=new MessageLogger();
     private static final String MODULE="ExtractionPostprocessing";
-    private static final String CLASS="RedirectProcessorSingleWiki";
+    private static final String CLASS=RedirectProcessorSingleWiki.class.getName();
     private File wikiDirectory;
 
 

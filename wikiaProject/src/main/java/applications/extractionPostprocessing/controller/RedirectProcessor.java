@@ -13,7 +13,7 @@ public class RedirectProcessor {
 
     private static MessageLogger logger=new MessageLogger();
     private static final String MODULE="ExtractionPostprocessing";
-    private static final String CLASS="RedirectProcessor";
+    private static final String CLASS=RedirectProcessor.class.getName();
 
 
     /**

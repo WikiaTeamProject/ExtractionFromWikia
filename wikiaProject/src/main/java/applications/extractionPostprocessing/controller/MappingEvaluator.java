@@ -19,7 +19,7 @@ public class MappingEvaluator {
     private static EvaluationResultSingleWiki mappingsEvaluationResultSingleWiki;
     private static MessageLogger logger = new MessageLogger();
     private static final String MODULE = "ExtractionPostprocessing";
-    private static final String CLASS = "MappingEvaluator";
+    private static final String CLASS = MappingEvaluator.class.getName();
 
     /**
      * Enum indicating what shall be evaluated.
