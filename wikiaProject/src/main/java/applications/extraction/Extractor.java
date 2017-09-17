@@ -39,7 +39,7 @@ public class Extractor {
     private HashMap<String, String> dumpURLsMapping;
     private static MessageLogger logger = new MessageLogger();
     private static final String MODULE = "Extraction";
-    private static final String CLASS = "Extractor";
+    private static final String CLASS = Extractor.class.getName();
 
 
     public Extractor() {
