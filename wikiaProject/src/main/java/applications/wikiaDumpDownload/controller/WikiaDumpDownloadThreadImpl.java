@@ -17,7 +17,7 @@ public class WikiaDumpDownloadThreadImpl {
 
     private static MessageLogger logger=new MessageLogger();
     private static final String MODULE="wikiDumpDOwnload";
-    private static final String CLASS="WikiaDumpDownloadThreadImpl";
+    private static final String CLASS=WikiaDumpDownloadThreadImpl.class.getName();
 
     private static Thread[] threads = new Thread[40];
     private static String statisticsDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/statistics";
