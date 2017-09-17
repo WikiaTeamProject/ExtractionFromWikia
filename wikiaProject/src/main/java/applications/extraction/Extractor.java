@@ -434,6 +434,7 @@ public class Extractor {
                 }
             }
         } catch (Exception ex) {
+            ex.printStackTrace();
             logger.logMessage(Level.FATAL,MODULE,CLASS,ex.getMessage());
         }
 

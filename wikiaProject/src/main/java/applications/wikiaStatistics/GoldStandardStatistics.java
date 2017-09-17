@@ -14,7 +14,7 @@ import java.util.ResourceBundle;
 public class GoldStandardStatistics {
 
     public static void main(String[] args) {
-        String path = "C:\\Users\\D060249\\IdeaProjects\\ExtractionFromWikia\\additionalFiles\\evaluationFiles";
+        String path = "C:\\Users\\D060249\\Documents\\Mannheim\\Semester 2\\Team Project\\Evaluation Files";
         GoldStandardStatistics goldStandardStatistics = new GoldStandardStatistics(path);
         goldStandardStatistics.printGoldStandardStatistics();
         goldStandardStatistics.writeGoldStandardStatisticsIntoFile();
@@ -69,8 +69,8 @@ public class GoldStandardStatistics {
 
                         line = line.toLowerCase();
 
-                        if (!line.startsWith("#") || line.equals("") || line.equals(" ") || line.equals("\n")) {
-                            // -> line is not a comment
+                        if (! (line.startsWith("#") || line.equals("") || line.equals(" ") || line.equals("\n")) ) {
+                            // -> line is not a comment, nor empty
 
                             if (line.contains("/resource/")) {
                                 if (line.contains("<null>")) {
@@ -84,7 +84,7 @@ public class GoldStandardStatistics {
                                 } else {
                                     numberOfPropertiesMappingToDBpedia++;
                                 }
-                            } else if (line.contains("/class/")) {
+                            } else if (line.contains("/ontology/")) {
                                 if (line.contains("<null>")) {
                                     numberOfClassesMappingToNull++;
                                 } else {

@@ -204,6 +204,9 @@ public class IOoperations {
         while (iterator.hasNext()) {
             HashMap.Entry<String, String> entry = (HashMap.Entry<String, String>) iterator.next();
 
+            if (entry.getValue() == null)
+                continue;
+
             // exclude null mappings if includeNullMappings is false
             if (!includeNullMappings && entry.getValue().equals("<null>"))
                 continue;

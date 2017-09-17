@@ -68,6 +68,7 @@ public class RedirectProcessorSingleWiki {
         }
 
         try {
+
             BufferedReader br = new BufferedReader(new FileReader(redirectFile));
 
             String line;

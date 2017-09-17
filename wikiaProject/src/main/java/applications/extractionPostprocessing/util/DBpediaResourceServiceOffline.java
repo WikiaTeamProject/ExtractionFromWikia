@@ -230,7 +230,7 @@ public class DBpediaResourceServiceOffline extends DBpediaResourceService {
         }
 
         if(ontologiesPropertiesMap.get(property)!=null){
-            ontologyPropertyValue = ontologiesClassMap.get(property);
+            ontologyPropertyValue = ontologiesPropertiesMap.get(property);
         }
         else ontologyPropertyValue="<null>";
 
