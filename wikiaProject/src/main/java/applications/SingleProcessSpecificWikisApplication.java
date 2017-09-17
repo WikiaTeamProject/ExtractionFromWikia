@@ -31,7 +31,7 @@ public class SingleProcessSpecificWikisApplication {
         if (! WikiaDumpDownloadThreadImpl.checkPrerequisites(false)) return;
 
         // download specified list of urls (list urls in brackets)
-        List<String> urls = Arrays.asList("http://gameofthrones.wikia.com");
+        List<String> urls = Arrays.asList("http://harrypotter.wikia.com");
         WikiaDumpDownloadThreadImpl.downloadWikiaDumps(urls);
 
         // run the DBpedia extraction framework

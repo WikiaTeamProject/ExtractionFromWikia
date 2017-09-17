@@ -289,6 +289,8 @@ public class RedirectProcessorSingleWiki {
                             // second match: <http://www.w3.org/2000/01/rdf-schema#label>
                             case 2:
                                 if ((!redirectsMap.containsKey(key) && redirectsMap.containsValue(key)) || (redirect != null && key == redirect)) {
+                                    // keeping the prefLabel also as rdf-schema
+                                    newFileContent.append(line + "\n");
                                     // replace tag with skos:prefLabel <http://www.w3.org/2004/02/skos/core#prefLabel>
                                     line = line.replace(matcher.group(), "<http://www.w3.org/2004/02/skos/core#prefLabel>");
 
