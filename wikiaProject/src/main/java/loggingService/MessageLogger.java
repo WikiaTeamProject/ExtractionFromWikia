@@ -14,10 +14,19 @@ import org.apache.log4j.xml.DOMConfigurator;
 **/
 public class MessageLogger {
 
-    public static final Logger LOGGER = Logger.getLogger("fileAppender");
+    public static Logger LOGGER;
+    String log4jFileConfigFile=this.getClass().getClassLoader().getResource("log4j.xml").getPath();
+
+    /**
+     * Constructor for class Message Logger
+     */
+    public MessageLogger(){
+        DOMConfigurator.configure(log4jFileConfigFile);
+        LOGGER = Logger.getLogger("wikia.logger");
+    }
 
 
-/**
+    /**
      *
      * @param messagePriority priority message (DEBUG,INFO,WARN,ERROR,FATAL)
      * @param module name of package
@@ -30,11 +39,6 @@ public class MessageLogger {
                            String className,
                            String message){
 
-
-        String log4jFileConfigFile=this.getClass().getClassLoader().getResource("log4j.xml").getPath();
-
-
-        DOMConfigurator.configure(log4jFileConfigFile);
 
 
         String logMessage = module
