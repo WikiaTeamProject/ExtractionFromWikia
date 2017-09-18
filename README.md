@@ -79,7 +79,7 @@ You can find statistics created on-the-fly in `root_directory/statistics`.
 TODO: Describe the most common problems and solutions here.
 TODO: Describe where to find log files.
 
-It might be helpful to refer to the log files when encountering a problem. In this project, [Apache Log4j](https://logging.apache.org/log4j/2.x/) is used. You can adapt the logging behavior to your requirements by editing the [log4j.xml](./wikiaProject/src/main/resources/log4j.xml) configuration file.
+It might be helpful to refer to the log files when encountering a problem. In this project, [Apache Log4j](https://logging.apache.org/log4j/2.x/) is used. You can adapt the logging behavior to your requirements by editing the [log4j.xml](./wikiaProject/src/main/resources/log4j.xml) configuration file. By default, log files are written into `<root_directory>/logs`. You will additionally get a console output.
 
 ## Implementation Details
 
@@ -116,6 +116,7 @@ root_directory
 |     +---7z
 |     +---gz
 |     +---decompressed
++---logs
 +---dbPediaExtractionFormat
 +---postProcessedWikis
 +---statistics
@@ -131,7 +132,8 @@ The program performs a lot of file operations. All of those file operations are 
      - The `7z` directory contains all wikis that were downloaded in the 7z format.
      - The `gz` directory contains all wikis that were downloaded in the gz format.
      - The `decompressed` directory contains all wikis from the `7z` and `gz` folder but in a decompressed format.
-- The `dbPediaExtractionFormat` contains the decompressed wiki dumps that are following a file structure required for the DBpedia extractor to work.
+- The `logs` directory contains logs that are written during runtime.      
+- The `dbPediaExtractionFormat` folder contains the decompressed wiki dumps that are following a file structure required for the DBpedia extractor to work.
 - The `PostProcessedWikis` directory contains all wikis in their final postprocessed form. After successfully running the program, the user should find the final output here. 
 - The `statistics` directory contains various statistics files that are created throughout the process.
 
