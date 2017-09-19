@@ -1,4 +1,4 @@
-# http://pokemongo.wikia.com/special:statistics
+# http://pokemon.wikia.com/special:statistics
 <http://dbkwik.webdatacommons.org/pokemongo/resource/Gyarados> <http://www.w3.org/2002/07/owl#sameAs> <http://dbpedia.org/page/Gyarados> .
 <http://dbkwik.webdatacommons.org/pokemongo/resource/Nidoking> <http://www.w3.org/2002/07/owl#sameAs> <null> .
 <http://dbkwik.webdatacommons.org/pokemongo/resource/Ledian> <http://www.w3.org/2002/07/owl#sameAs> <null> .
