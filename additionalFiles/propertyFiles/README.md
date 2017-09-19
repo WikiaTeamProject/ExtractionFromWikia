@@ -1,13 +1,21 @@
-This is a sample config file. It has two sections. You should have a look at section
-`To be Specified by User`. This section contains default values but also requires
-your input for a regular program run (like parameter `pathToRootDirectory` for
-example). Please adapt the parameters to your needs and copy the file into the 
-`wikiaProject/src/main/resources` folder before running the program.<br/>
-Section `To be Specified by Expert` contains parameters which all have default values
-assigned to them.
-If you do not want to change the standard behavior of the program, you do not have to do any
-edits in this section.
-<br/><br/>
+# Property Files
+
+This folder contains a sample credentials and config file. Each file has two sections. You should have a look at section `To be Specified by User`. 
+This section contains default values but also requires your input for a regular program run (like parameter `pathToRootDirectory` for example). Please adapt the parameters to your needs and copy the file into the `wikiaProject/src/main/resources` folder before running the program.<br/>
+Section `To be Specified by Expert` contains parameters which all have default values assigned to them.
+If you do not want to change the standard behavior of the program, you do not have to do any edits in this section.<br/><br/>
+
+## Credentials.Properties File
+
+### To be Specified by User
+`username` & `password`<br/>
+These variables represent the credentials for Wikia. If you do not have a Wikia user yet, you need to create one on the Wikia web page.
+
+### To be Specified by Expert
+`accessTokenURL`<br/>
+This variable represents the access token to login to Wikia. Please do not change it.
+
+## Config.Properties File
 
 ### To be Specified by User
 

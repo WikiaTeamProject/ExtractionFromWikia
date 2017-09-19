@@ -66,8 +66,8 @@ Go to the DBpedia download page, download the files listed below and decompress 
 
 You can choose whatever version you like, however, if you want to use the provided gold standard for evaluation, go for version [2016-10](http://wiki.dbpedia.org/downloads-2016-10).
 
-Please copy the [sample properties file](./additionalFiles/configFile/config.properties) directly into the [resources folder](/wikiaProject/src/main/resources) and adjust it. 
-Have a look at the [detailed description](./additionalFiles/configFile/README.md) of all variables which need to be specified in the properties file.
+Please copy the [sample properties file](additionalFiles/propertyFiles/config.properties) directly into the [resources folder](/wikiaProject/src/main/resources) and adjust it. 
+Have a look at the [detailed description](additionalFiles/propertyFiles/README.md) of all variables which need to be specified in the properties file.
 
 When everything is set up, you can execute the [single process application](./wikiaProject/src/main/java/applications/SingleProcessApplication.java). This application will get a list of all wikis, download all wikis according to the 
 languages specified in the configuration file, extract all wikis using the DBpedia Extraction Framework and postprocess

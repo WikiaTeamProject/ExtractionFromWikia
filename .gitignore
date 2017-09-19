@@ -21,7 +21,7 @@ config.properties
 *.csv
 
 # include config sample and test config file
-!/additionalFiles/configFile/config.properties
+!/additionalFiles/propertyFiles/config.properties
 !/wikiaProject/src/test/resources/config.properties
 
 
