@@ -6,6 +6,7 @@ package applications.extractionPostprocessing.controller.resourcemapper;
  * - maps files to <null>
  * - maps all other resources to dbpedia resources (same name)
  */
+@Deprecated
 public class ResourceMapper_2 extends ResourceMapper {
 
     @Override

@@ -7,6 +7,7 @@ import applications.extractionPostprocessing.util.DBpediaResourceServiceOffline;
  * It looks up whether the property exists in dbpedia and maps to it if it exists.
  * Otherwise it maps to <null>.
  */
+@Deprecated
 public class PropertyMapper_2 extends PropertyMapper {
 
     @Override

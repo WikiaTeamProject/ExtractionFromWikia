@@ -9,6 +9,7 @@ import applications.extractionPostprocessing.model.ResourceServiceResult;
  * - checks whether a resource exists before mapping it (using SPARQL)
  * - does not map lists
  */
+@Deprecated
 public class ResourceMapper_4 extends ResourceMapper {
 
     @Override

@@ -151,7 +151,6 @@ public class MappingEvaluator {
                                 evaluationResultSingleWikiResources = new EvaluationResultSingleWiki(0, 0, 0, 0);
                             }
 
-
                             // aggregate
                             falseNegatives = evaluationResultSingleWikiClasses.getFalseNegatives() + evaluationResultSingleWikiProperties.getFalseNegatives() +
                                     evaluationResultSingleWikiResources.getFalseNegatives();
@@ -261,7 +260,8 @@ public class MappingEvaluator {
 
         if (persistResult) {
             // persist evaluation results to evaluation file:
-            File evaluationFile = new File(pathToRootDirectory + "/" + evaluationObjectAllWikis.toString() + "_" + "evaluation_results.txt");
+            IOoperations.createDirectory(pathToRootDirectory + "/statistics");
+            File evaluationFile = new File(pathToRootDirectory + "/statistics/" + evaluationObjectAllWikis.toString() + "_" + "evaluation_results.txt");
             try {
                 BufferedWriter bw = new BufferedWriter(new FileWriter(evaluationFile));
                 bw.write(aggregatedEvaluationResults.toString());
@@ -408,7 +408,6 @@ public class MappingEvaluator {
             logger.logMessage(Level.FATAL,MODULE,CLASS,ex.getMessage());
         }
 
-
         mappingsEvaluationResultSingleWiki = new EvaluationResultSingleWiki(falseNegatives, falsePositives, truePositives, trueNegatives);
         return mappingsEvaluationResultSingleWiki;
     }
@@ -461,6 +460,5 @@ public class MappingEvaluator {
             logger.logMessage(Level.FATAL,MODULE,CLASS,e.getMessage());
         }
     }
-
 
 }
