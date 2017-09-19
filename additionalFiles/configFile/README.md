@@ -22,8 +22,6 @@ intermediate files from the program operations. It has to be specified, otherwis
 program will not run. Please refer to our [main guide](./../../README.md) for more
 information about how to set up the root directory.<br/>
 
-<todo: describe extraction path variable after refactoring>
-
 `Languages`<br/>
 This variable is used while creating DBpedia folder structure for the extraction. 
 It extracts wikis only the language is defined in this variable. Possible values are, 
@@ -35,7 +33,8 @@ given separated by comma, e.g. `en,fr`.<br/><br/>
 
 `includeNullMappings`
 This parameter defines whether resources, classes & properties that are not linked 
-to DBpedia shall be explicitly mapped to null. The standard value is false.
+to DBpedia shall be explicitly mapped to null. The standard value is false. You should
+set it to true if you want to evaluate wikis.
 
 `wikiSourceFileName`
 This parameter allows you to define the source file name of a wiki for the DBpedia
