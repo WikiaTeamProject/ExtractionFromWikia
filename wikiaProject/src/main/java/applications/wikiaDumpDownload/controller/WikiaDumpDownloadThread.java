@@ -328,7 +328,7 @@ public class WikiaDumpDownloadThread implements Runnable {
 
             if (!foundDump) {
                 logger.logMessage(Level.INFO,MODULE,CLASS,"No wikia dump exists for wiki: " + url);
-                buffer.append(url + ";-" + "\n");
+//                buffer.append(url + ";-" + "\n");
             }
 
             System.out.println(++totalNumberOfFilesProcessed + " out of " + totalNumberOfFilesToBeProcessed + " processed.");
@@ -392,7 +392,7 @@ public class WikiaDumpDownloadThread implements Runnable {
                 int size = connection.getContentLength();
                 logger.logMessage(Level.INFO,MODULE,CLASS,
                         "Size of file: " + (size / 1024) + " KB.");
-                buffer.append(pathToRemoteFile + ";" + (size / 1024) + "\n");
+
                 downloadedFiles++;
 
                 // comment in if you want to actually download the files
@@ -403,6 +403,7 @@ public class WikiaDumpDownloadThread implements Runnable {
 
                 // successfully downloadedFiles - do not retry
                 downloaded = true;
+                buffer.append(pathToRemoteFile + ";" + (size / 1024) + "\n");
 
             } catch (MalformedURLException mue) {
                 logger.logMessage(Level.FATAL,MODULE,CLASS,
