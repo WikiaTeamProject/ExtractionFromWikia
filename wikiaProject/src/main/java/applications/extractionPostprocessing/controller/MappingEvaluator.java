@@ -109,10 +109,11 @@ public class MappingEvaluator {
         int totalMappings = 0;
         int totalAnnotations = 0;
         ArrayList<EvaluationResultSingleWiki> evaluationResultSingleWikis = new ArrayList<>();
-        String pathToRootDirectory = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/postProcessedWikis";
+        String pathToPostprocessedWikis = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/postProcessedWikis";
+        String pathToRootDirectory = ResourceBundle.getBundle("config").getString("pathToRootDirectory");
         StringBuffer aggregatedEvaluationResults = new StringBuffer();
         String evaluationResultLine = "";
-        File root = new File(pathToRootDirectory);
+        File root = new File(pathToPostprocessedWikis);
 
         if (root.isDirectory()) {
             for (File directory : root.listFiles()) {
@@ -232,7 +233,7 @@ public class MappingEvaluator {
 
         } else {
             // -> root is not a directory
-            logger.logMessage(Level.FATAL,MODULE,CLASS,"pathToRootDirectory is not a directory!");
+            logger.logMessage(Level.FATAL,MODULE,CLASS,"pathToPostprocessedWikis is not a directory!");
         } // end of if(root.isDirectory())
 
         evaluationResultLine = "\nSummarized Evaluation Results\n" +
@@ -261,7 +262,9 @@ public class MappingEvaluator {
         if (persistResult) {
             // persist evaluation results to evaluation file:
             IOoperations.createDirectory(pathToRootDirectory + "/statistics");
-            File evaluationFile = new File(pathToRootDirectory + "/statistics/" + evaluationObjectAllWikis.toString() + "_" + "evaluation_results.txt");
+            IOoperations.createDirectory(pathToRootDirectory + "/statistics/evaluation");
+
+            File evaluationFile = new File(pathToRootDirectory + "/statistics/evaluation/" + evaluationObjectAllWikis.toString() + "_" + "evaluation_results.txt");
             try {
                 BufferedWriter bw = new BufferedWriter(new FileWriter(evaluationFile));
                 bw.write(aggregatedEvaluationResults.toString());
