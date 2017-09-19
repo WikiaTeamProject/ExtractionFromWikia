@@ -279,8 +279,12 @@ public class WikiaDumpDownloadThread implements Runnable {
         String[] languageCodesToDownload = ResourceBundle.getBundle("config").getString("languages").split(",");
         ArrayList<String> languages = new ArrayList<>(Arrays.asList(languageCodesToDownload));
 
+        //all languages
+        if(languages.contains("@downloaded")){
+            languageWanted = true;
+        }
         // english wiki
-        if (! languageCodes.containsKey(prefix) && languages.contains("en")) {
+        else if (! languageCodes.containsKey(prefix) && languages.contains("en")) {
             languageWanted = true;
         // other language than English wanted, specified in config.properties
         } else if (languageCodes.containsKey(prefix) && languages.contains(prefix)) {

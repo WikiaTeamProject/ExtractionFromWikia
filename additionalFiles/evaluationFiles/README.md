@@ -1,4 +1,7 @@
-These are the files used as a gold standard to evaluate mappers. They are not required to run the program but can be used to evaluate new (self-created) mappers. 
+These are the files used as a gold standard to evaluate mappers. They are not required 
+to run the program but can be used to evaluate new (self-created) mappers.  The dumps
+used to create this gold standard are also available in this project 
+(see folder [goldStandardDumps](../goldStandardDumps)).
 
 The gold-standard is using DBpedia as of 2016-10.
 If you want to contribute, download the corresponding files from <a href="http://wiki.dbpedia.org/downloads-2016-10">here</a>.

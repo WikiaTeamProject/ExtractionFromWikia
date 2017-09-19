@@ -76,10 +76,16 @@ You can find statistics created on-the-fly in `root_directory/statistics`.
 
 
 ## Common Problems
-TODO: Describe the most common problems and solutions here.
-TODO: Describe where to find log files.
-
-It might be helpful to refer to the log files when encountering a problem. In this project, [Apache Log4j](https://logging.apache.org/log4j/2.x/) is used. You can adapt the logging behavior to your requirements by editing the [log4j.xml](./wikiaProject/src/main/resources/log4j.xml) configuration file. By default, log files are written into `<root_directory>/logs`. You will additionally get a console output.
+- Verify that you have downloaded all required files and have placed them correctly
+in the resources folder. <br/>
+- Verify that you have placed the properties file in the resource directory and
+that you have configured it correctly. <br/>
+- It might be helpful to refer to the log files when encountering a problem. 
+In this project, [Apache Log4j](https://logging.apache.org/log4j/2.x/) is used. 
+You can adapt the logging behavior to your requirements by editing the 
+[log4j.xml](./wikiaProject/src/main/resources/log4j.xml) configuration file. 
+By default, log files are written into `<root_directory>/logs`. You will additionally 
+get a console output.
 
 ## Implementation Details
 
