@@ -15,29 +15,13 @@ import org.apache.log4j.Level;
  */
 public class WikiaDumpDownloadThreadImpl {
 
-    private static MessageLogger logger=new MessageLogger();
-    private static final String MODULE="wikiDumpDOwnload";
-    private static final String CLASS=WikiaDumpDownloadThreadImpl.class.getName();
+    private static MessageLogger logger = new MessageLogger();
+    private static final String MODULE = "wikiDumpDownload";
+    private static final String CLASS = WikiaDumpDownloadThreadImpl.class.getName();
 
     private static Thread[] threads = new Thread[40];
     private static String statisticsDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/statistics";
 
-//    public static void downloadWikiaDumps(int beginLine, int endLine) {
-//        String filePath = getFilePathOfWikiaAllOverview();
-//
-//        Thread t1 = new Thread(new WikiaDumpDownloadThread(filePath, beginLine, endLine));
-//        t1.run();
-//
-//    }
-//
-//    public static void downloadWikiaDumps(int amount) {
-//        String filePath = getFilePathOfWikiaAllOverview();
-//
-//        // exclude header line (0)
-//        Thread t1 = new Thread(new WikiaDumpDownloadThread(filePath, 1, amount));
-//        t1.run();
-//
-//    }
 
     /**
      * Start the process using threads.
@@ -53,8 +37,6 @@ public class WikiaDumpDownloadThreadImpl {
     public static void downloadWikiaDumps(List<String> urls) {
 
         IOoperations.createDirectory(statisticsDirectoryPath);
-        IOoperations.createDirectory(statisticsDirectoryPath + "//wikiaOverviewIndividualDumpSizes");
-        IOoperations.createDirectory(statisticsDirectoryPath + "//wikiaOverviewIndividualDumpURLs");
 
         String dumpSizeFilePath = statisticsDirectoryPath + "//wikiaOverviewDumpSizes.csv";
         String dumpURLsFilePath = statisticsDirectoryPath + "//wikiaOverviewDumpURLs.csv";

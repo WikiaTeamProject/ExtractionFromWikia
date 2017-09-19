@@ -20,15 +20,13 @@ public class WikiaDumpDownloadApplication {
     public static void main(String[] args) {
 
         // download list of urls
-        List<String> urls = Arrays.asList("http://harrypotter.wikia.com", "http://gameofthrones.wikia.com");
-        WikiaDumpDownloadThreadImpl.downloadWikiaDumps(urls);
+//        List<String> urls = Arrays.asList("http://harrypotter.wikia.com", "http://gameofthrones.wikia.com");
+//        WikiaDumpDownloadThreadImpl.downloadWikiaDumps(urls);
 
         // download all available wikis
-//        if (WikiaDumpDownloadThreadImpl.checkPrerequisites()) {
-//            WikiaDumpDownloadThreadImpl.downloadWikiaDumps();
-//        }
-
-
+        if (WikiaDumpDownloadThreadImpl.checkPrerequisites(true)) {
+            WikiaDumpDownloadThreadImpl.downloadWikiaDumps();
+        }
 
     }
 
