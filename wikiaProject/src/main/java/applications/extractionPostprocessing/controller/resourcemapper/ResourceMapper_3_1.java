@@ -8,6 +8,7 @@ import applications.extractionPostprocessing.model.ResourceServiceResult;
  * - automatically maps files to <null>
  * - checks whether a resource exists on DBpedia before mapping it (using HashMap lookup)
  */
+@Deprecated
 public class ResourceMapper_3_1 extends ResourceMapper{
 
     @Override

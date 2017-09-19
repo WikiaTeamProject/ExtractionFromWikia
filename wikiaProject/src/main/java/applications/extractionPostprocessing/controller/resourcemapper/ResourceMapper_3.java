@@ -9,6 +9,7 @@ import applications.extractionPostprocessing.model.ResourceServiceResult;
  * - automatically maps files to <null>
  * - checks whether a resource exists on DBpedia before mapping it (using SPARQL)
  */
+@Deprecated
 public class ResourceMapper_3 extends ResourceMapper {
 
     @Override

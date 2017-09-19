@@ -5,6 +5,7 @@ import applications.extractionPostprocessing.util.DBpediaResourceServiceOffline;
 /**
  * THE OUTPUT OF THIS MAPPER IS INCORRECT.
  */
+@Deprecated
 public class ClassMapper_3 extends ClassMapper {
 
     @Override
