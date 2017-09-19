@@ -558,6 +558,8 @@ public class IOoperations {
             String extractionPropertiesFilePath =
                     this.getClass().getClassLoader().getResource("extraction.template.properties").getPath().toString();
 
+            String languagesToExtract = ResourceBundle.getBundle("config").getString("languages");
+
             File templateFile = new File(extractionPropertiesFilePath);
 
             FileInputStream templateFileStream = new FileInputStream(templateFile);
@@ -568,7 +570,11 @@ public class IOoperations {
 
             templateFileStream.close();
 
+            //set base directory to root directory where dump files resides
             extractionProperties.setProperty("base-dir", rootDirectoryPath + "\\dbPediaExtractionFormat");
+
+            //set language code(s) from config file
+            extractionProperties.setProperty("languages", languagesToExtract);
 
             FileOutputStream extractionPropertiesFile = new FileOutputStream(templateFile.getParentFile() + "//extraction.properties");
 
