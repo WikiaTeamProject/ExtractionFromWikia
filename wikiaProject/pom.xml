@@ -8,6 +8,10 @@
     <artifactId>wikiaProject</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <modules>
+
+    </modules>
+
     <build>
         <plugins>
             <plugin>
