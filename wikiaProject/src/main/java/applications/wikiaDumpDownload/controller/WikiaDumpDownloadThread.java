@@ -279,12 +279,9 @@ public class WikiaDumpDownloadThread implements Runnable {
         String[] languageCodesToDownload = ResourceBundle.getBundle("config").getString("languages").split(",");
         ArrayList<String> languages = new ArrayList<>(Arrays.asList(languageCodesToDownload));
 
-        //all languages
-        if(languages.contains("@downloaded")){
-            languageWanted = true;
-        }
+
         // english wiki
-        else if (! languageCodes.containsKey(prefix) && languages.contains("en")) {
+        if (! languageCodes.containsKey(prefix) && languages.contains("en")) {
             languageWanted = true;
         // other language than English wanted, specified in config.properties
         } else if (languageCodes.containsKey(prefix) && languages.contains(prefix)) {
@@ -332,7 +329,7 @@ public class WikiaDumpDownloadThread implements Runnable {
 
             if (!foundDump) {
                 logger.logMessage(Level.INFO,MODULE,CLASS,"No wikia dump exists for wiki: " + url);
-                buffer.append(url + ";-" + "\n");
+//                buffer.append(url + ";-" + "\n");
             }
 
             System.out.println(++totalNumberOfFilesProcessed + " out of " + totalNumberOfFilesToBeProcessed + " processed.");
@@ -396,7 +393,7 @@ public class WikiaDumpDownloadThread implements Runnable {
                 int size = connection.getContentLength();
                 logger.logMessage(Level.INFO,MODULE,CLASS,
                         "Size of file: " + (size / 1024) + " KB.");
-                buffer.append(pathToRemoteFile + ";" + (size / 1024) + "\n");
+
                 downloadedFiles++;
 
                 // comment in if you want to actually download the files
@@ -407,6 +404,7 @@ public class WikiaDumpDownloadThread implements Runnable {
 
                 // successfully downloadedFiles - do not retry
                 downloaded = true;
+                buffer.append(pathToRemoteFile + ";" + (size / 1024) + "\n");
 
             } catch (MalformedURLException mue) {
                 logger.logMessage(Level.FATAL,MODULE,CLASS,

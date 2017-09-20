@@ -21,7 +21,8 @@ This variable represents the access token to login to Wikia. Please do not chang
 
 `targetnamespace`<br/>
 This variable contains the namespace (i.e., domain) you would like to set for your project. 
-For our project we chose `dbkwik.webdatacommons.org`.
+For our project we chose `dbkwik.webdatacommons.org`. If you want to set another domain name
+this is the place to do it. Do not add `http://` or a slash at the end to your domain.
 <br/>
 
 `pathToRootDirectory`<br/>
