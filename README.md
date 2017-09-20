@@ -32,9 +32,9 @@ where the discussed subject is located.
 
 
 ## Import Project into IntelliJ IDE
-This section describes how to import this program into IntelliJ so that you are able to run it. Note that it is also possible to use other IDEs for which the process is not explained though. However, this exemplary guide should enable you to set up the project in a general way.
-
-TODO: add additional steps <br />
+This section describes how to import this program into IntelliJ so that you are able to run it. 
+Note that it is also possible to use other IDEs for which the process is not explained though. 
+However, this exemplary guide should enable you to set up the project in a general way.
 
 Next, you have to load the DBpedia extractor. Therefore, execute in the command line:
 ```
@@ -47,8 +47,8 @@ mvn clean install
 ```
 
 ## How to execute the Program?
-Create the following directory structure (you can name `root_directory` whatever you like, but the other directory 
-names have to match):
+Create the following directory structure (you can name `root_directory` whatever you like, 
+but the other directory names have to match):
 ```
 root_directory
 +---resources
@@ -77,9 +77,11 @@ You can find statistics created on-the-fly in `root_directory/statistics`.
 
 ## Common Problems
 - Verify that you have downloaded all required files and have placed them correctly
-in the resources folder. <br/>
+in the resources folder. 
 - Verify that you have placed the properties file in the resource directory and
-that you have configured it correctly. <br/>
+that you have configured it correctly. 
+- A common mistake is that the wikis which shall be processed are in a language
+that is not specified in the properties file.
 - It might be helpful to refer to the log files when encountering a problem. 
 In this project, [Apache Log4j](https://logging.apache.org/log4j/2.x/) is used. 
 You can adapt the logging behavior to your requirements by editing the 
