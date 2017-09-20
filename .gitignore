@@ -14,8 +14,8 @@
 /wikiaProject/src/main/resources/files/wikiaOverviewIndividualFiles/*
 
 # exclude the properties file for reasons of security (passwords etc.)
-config.properties
 /wikiaProject/src/main/resources/config.properties
+/wikiaProject/src/main/resources/credentials.properties
 
 # exclude csv files
 *.csv
