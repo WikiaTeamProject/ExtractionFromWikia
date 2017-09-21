@@ -213,7 +213,7 @@ public class Extractor {
 
                     if (wikiProperties != null) {
                         //wikiProperties.put(properties.getWikiName(), properties);
-                        wikiProperties.put(properties.getWikiPath().substring(properties.getWikiPath().lastIndexOf("\\", properties.getWikiPath().length())), properties);
+                        wikiProperties.put(properties.getWikiPath().substring(properties.getWikiPath().lastIndexOf("/", properties.getWikiPath().length())), properties);
                     }
 
                 } else {

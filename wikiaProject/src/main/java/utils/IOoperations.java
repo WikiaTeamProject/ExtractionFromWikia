@@ -571,7 +571,7 @@ public class IOoperations {
             templateFileStream.close();
 
             //set base directory to root directory where dump files resides
-            extractionProperties.setProperty("base-dir", rootDirectoryPath + "\\dbPediaExtractionFormat");
+            extractionProperties.setProperty("base-dir", rootDirectoryPath + "//dbPediaExtractionFormat");
 
             //set language code(s) from config file
             extractionProperties.setProperty("languages", languagesToExtract);
