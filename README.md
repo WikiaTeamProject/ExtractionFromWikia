@@ -17,7 +17,7 @@ map those triples to existing DBpedia resources.
 
 ## Technical Prerequisites
 There are some prerequisites that must be fulfilled in order to be able to run the program.
-- Java has to be installed
+- Java, Maven and Git have to be installed
 - internet connectivity has to be available throughout the whole process 
 - at least 8 gigabytes of RAM have to be allocated to the JVM
 - at least 100 gigabytes freely available disk space
@@ -31,20 +31,12 @@ in the implementation. This guide also contains links to directories or other we
 where the discussed subject is located. 
 
 
-## Import Project into IntelliJ IDE
-This section describes how to import this program into IntelliJ so that you are able to run it. 
-Note that it is also possible to use other IDEs for which the process is not explained though. 
-However, this exemplary guide should enable you to set up the project in a general way.
-
-Next, you have to load the DBpedia extractor. Therefore, execute in the command line:
-```
-git submodule update --init
-```
-After successfully executing the command, you should find files in `lib/dbpedia-extraction-framework`.
-Now you have to build the DBpedia Extraction Framework. Navigate into `lib/dbpedia-extraction-framework` and execute the following command in the command line:
+## Setup the Project 
+This project is set-up as a maven project. After cloning the project into your local workspace, you only have to execute:
 ```
 mvn clean install
 ```
+
 
 ## How to execute the Program?
 Create the following directory structure (you can name `root_directory` whatever you like, 
@@ -78,10 +70,10 @@ You can find statistics created on-the-fly in `root_directory/statistics`.
 ## Common Problems
 - Verify that you have downloaded all required files and have placed them correctly
 in the resources folder. 
-- Verify that you have placed the properties file in the resource directory and
-that you have configured it correctly. 
+- Verify that you have placed the [config.properties](./additionalFiles/propertyFiles/config.properties) file in the resource directory and that you have specified the variables (root directory etc.) correctly (see [here](./additionalFiles/propertyFiles/README.md)). 
 - A common mistake is that the wikis which shall be processed are in a language
-that is not specified in the properties file.
+that is not specified in the properties file. Note that only one language can be specified and processed
+at a time.
 - It might be helpful to refer to the log files when encountering a problem. 
 In this project, [Apache Log4j](https://logging.apache.org/log4j/2.x/) is used. 
 You can adapt the logging behavior to your requirements by editing the 
