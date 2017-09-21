@@ -238,7 +238,7 @@ public class RedirectProcessorSingleWiki {
 
             // delete the content after it was written
             newFileContent = new StringBuffer();
-        }
+        } // end of   for (File f : fileList)
 
         return true;
     }
