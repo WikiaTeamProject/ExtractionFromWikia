@@ -8,6 +8,7 @@ import java.io.*;
 /**
  * This method test class RedirectProcessorSingleWiki.
  */
+@Ignore
 public class RedirectProcessorSingleWikiTest {
 
     private static final String TEST_DIRECTORY_PATH = "./src/test/test_files/redirect_processor_test";
