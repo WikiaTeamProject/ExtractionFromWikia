@@ -8,12 +8,10 @@ import java.io.*;
 /**
  * This method test class RedirectProcessorSingleWiki.
  */
-@Ignore
 public class RedirectProcessorSingleWikiTest {
 
     private static final String TEST_DIRECTORY_PATH = "./src/test/test_files/redirect_processor_test";
     private static final String COPY_OF_TEST_DIRECTORY_PATH = "./src/test/test_files/redirect_processor_test_2";
-
 
     /**
      * This method sets up the test environment, i.e. copies required files for executing the methods.
@@ -64,7 +62,6 @@ public class RedirectProcessorSingleWikiTest {
     /**
      * This method deletes the copied files for the test.
      */
-
     @AfterClass
     public static void cleanup(){
         try {
@@ -80,6 +77,5 @@ public class RedirectProcessorSingleWikiTest {
             System.out.println(ioe.toString());
         }
     }
-
 
 }
