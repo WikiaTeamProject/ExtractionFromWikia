@@ -74,6 +74,8 @@ in the resources folder.
 - A common mistake is that the wikis which shall be processed are in a language
 that is not specified in the properties file. Note that only one language can be specified and processed
 at a time.
+- If the DBpedia extractor does not seem to work, check whether the files were loaded and whether the project is built (can be found in `lib` directory).
+- If the DBpedia extractor does not seem to work but all files are there, check whether the shell file in the `class` directory has execution rights (this problem only affects linux and mac).
 - It might be helpful to refer to the log files when encountering a problem. 
 In this project, [Apache Log4j](https://logging.apache.org/log4j/2.x/) is used. 
 You can adapt the logging behavior to your requirements by editing the 
