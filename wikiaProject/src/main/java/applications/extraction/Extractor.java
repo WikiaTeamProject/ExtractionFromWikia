@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import loggingService.MessageLogger;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.Executor;
 import org.apache.log4j.Level;
 import utils.*;
 
@@ -357,6 +358,8 @@ public class Extractor {
 
             iOoperations.generateExtractionProperties();
             extractionPropertiesFile = this.getClass().getClassLoader().getResource("extraction.properties").getPath().toString();
+            Executor persmissionExecutor = new DefaultExecutor();
+
 
             //Check operating system and trigger command accordingly
             if(utils.OSDetails.isWindows()){
@@ -364,9 +367,15 @@ public class Extractor {
             }
             else if(utils.OSDetails.isUnix()){
                 dbPediaExtractorBatchFile = this.getClass().getClassLoader().getResource("dbpediaextraction.sh").getPath();
+
+                // granting execution rights
+                persmissionExecutor.execute(CommandLine.parse("chmod 777 " + dbPediaExtractorBatchFile));
             }
             else{
                 dbPediaExtractorBatchFile = this.getClass().getClassLoader().getResource("dbpediaextraction.sh").getPath();
+
+                // granting execution rights
+                persmissionExecutor.execute(CommandLine.parse("chmod 777 " + dbPediaExtractorBatchFile));
             }
 
             String batchCommand = dbPediaExtractorBatchFile +" " + pathToExtractionFramework+" " +  extractionPropertiesFile;
@@ -424,6 +433,7 @@ public class Extractor {
                                 int exitValue = executor.execute(cmdLine);
                             } catch (Exception ex) {
                                 logger.logMessage(Level.ERROR,MODULE,CLASS,"DBpedia extraction framework failed for this wiki!");
+                                ex.printStackTrace();
                             }
 
                             //rename folder to orignal name
