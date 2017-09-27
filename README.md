@@ -32,7 +32,7 @@ where the discussed subject is located.
 
 
 ## Setup the Project 
-This project is set-up as a maven project. After cloning the project into your local workspace, you have to execute in the highest project folder:
+This project is set-up as a maven project. After cloning the project into your local workspace, you have to execute in the top-level project folder:
 ```
 mvn clean install
 ```
