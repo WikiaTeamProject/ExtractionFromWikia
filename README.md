@@ -32,10 +32,11 @@ where the discussed subject is located.
 
 
 ## Setup the Project 
-This project is set-up as a maven project. After cloning the project into your local workspace, you only have to execute:
+This project is set-up as a maven project. After cloning the project into your local workspace, you have to execute in the highest project folder:
 ```
 mvn clean install
 ```
+You have to run the same command in `/lib/dbpedia-extraction-framework`.
 
 
 ## How to execute the Program?
