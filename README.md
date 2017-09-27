@@ -19,7 +19,7 @@ map those triples to existing DBpedia resources.
 There are some prerequisites that must be fulfilled in order to be able to run the program.
 - Java, Maven and Git have to be installed
 - internet connectivity has to be available throughout the whole process 
-- at least 8 gigabytes of RAM have to be allocated to the JVM
+- at least 12 gigabytes of RAM have to be allocated to the JVM
 - at least 100 gigabytes freely available disk space
 
 

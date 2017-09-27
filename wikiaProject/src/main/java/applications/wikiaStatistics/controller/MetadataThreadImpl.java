@@ -23,7 +23,10 @@ public class MetadataThreadImpl {
     private static ArrayList<String> filePaths = new ArrayList<String>();
 
 
-
+    /**
+     * Compile metadata about the wikis.
+     * The result can be found in <root>/statistics
+     */
     public static void downloadWikiaMetadata() {
 
         String statisticsDirectoryPath = ResourceBundle.getBundle("config").getString("pathToRootDirectory") + "/statistics";
@@ -61,8 +64,8 @@ public class MetadataThreadImpl {
         }
 
         WikiaStatisticsTools.mergeFiles(filePaths);
-
     }
+
 
     /**
      * There are various prerequisites. To allow for a stable program, the prerequisites are checked in this method.

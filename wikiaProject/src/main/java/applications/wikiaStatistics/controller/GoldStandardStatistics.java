@@ -1,4 +1,4 @@
-package applications.wikiaStatistics;
+package applications.wikiaStatistics.controller;
 
 import utils.IOoperations;
 import java.io.BufferedReader;
@@ -12,13 +12,6 @@ import java.util.ResourceBundle;
  * This class allows to calculate and to persist statistics about the gold standard.
  */
 public class GoldStandardStatistics {
-
-    public static void main(String[] args) {
-        String path = "C:\\Users\\D060249\\Documents\\Mannheim\\Semester 2\\Team Project\\Evaluation Files";
-        GoldStandardStatistics goldStandardStatistics = new GoldStandardStatistics(path);
-        goldStandardStatistics.printGoldStandardStatistics();
-        goldStandardStatistics.writeGoldStandardStatisticsIntoFile();
-    }
 
     // path to directory where all evaluation files are located
     File evaluationDirectory;

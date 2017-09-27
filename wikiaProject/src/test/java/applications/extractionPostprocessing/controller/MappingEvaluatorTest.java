@@ -3,6 +3,7 @@ package applications.extractionPostprocessing.controller;
 import applications.extractionPostprocessing.model.EvaluationResultAllWikis;
 import applications.extractionPostprocessing.model.EvaluationResultSingleWiki;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.*;
@@ -14,6 +15,7 @@ import static org.junit.Assert.*;
  * Test class for {@link MappingEvaluator MappingEvaluator}.
  * The test also covers some functionality of {@Link applications.extractionPostprocessing.model.EvaluationResultSingleWiki EvaluationResultSingleWiki}.
  */
+@Ignore
 public class MappingEvaluatorTest {
 
 
