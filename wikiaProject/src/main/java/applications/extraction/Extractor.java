@@ -20,19 +20,10 @@ import java.io.PrintWriter;
 
 
 /**
- * This class will perform the applications.extraction of the previously downloaded wikis.
- * <p>
- * Prerequisites
- * - DBpedia Extraction Framework is available on the machine.
- *
- * @see <a href="https://github.com/dbpedia/extraction-framework">https://github.com/dbpedia/extraction-framework</a>
- * - The DBpedia applications.extraction framework was successfully built.
- * - The wikia wikis that shall be extracted were already downloaded and can be found in
- * /src/main/resources/files/wikiDumps.downloaded
+ * This class will perform the extraction of the previously downloaded wikis.
  */
 public class Extractor {
 
-    //private static Logger logger = Logger.getLogger(Extractor.class.getName());
     private static File extractionFrameworkDirectory;
     private String extractionDefaultPropertiesFilePath;
     private HashMap<String, WikiaWikiProperties> wikisPropertiesSet;
@@ -547,7 +538,7 @@ public class Extractor {
 
 
     /**
-     * This function read properties of wiki
+     * This function reads properties of wiki
      *
      * @param wikiFolderPath - path of directory where wiki is present
      * @return properties of respective wiki (wiki name, language)
@@ -595,34 +586,6 @@ public class Extractor {
             logger.logMessage(Level.FATAL,MODULE,CLASS,ex.getMessage());
         }
         return wikiProperties;
-    }
-
-    /**
-     * There are various prerequisites. To allow for a stable program, the prerequisites are checked in this method.
-     *
-     * @return
-     */
-    public static boolean checkPrerequisites() {
-
-        // check if path to DBpedia applications.extraction framework is valid
-        if (extractionFrameworkDirectory != null && extractionFrameworkDirectory.exists()) {
-
-            // check whether specified path is a directory
-            if (! extractionFrameworkDirectory.isDirectory()) {
-                logger.logMessage(Level.FATAL,MODULE,CLASS,"Filepath to DBpedia extraction framework in config.properties is not a directory." +
-                        "Please link to the root directory.");
-
-                return false;
-            }
-
-        } else {
-            logger.logMessage(Level.FATAL,MODULE,CLASS,"Filepath to DBpedia extraction framework in config.properties does not exist. Please adjust it.");
-            return false;
-        }
-
-        // TODO (optional): Check if some wikis were downloaded
-
-        return true;
     }
 
 }

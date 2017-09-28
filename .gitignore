@@ -30,3 +30,6 @@
 
 # include templates
 !/wikiaProject/src/main/resources/files/templates/template_extraction_default.properties
+
+# exclude logs in test environment
+/wikiaProject/src/test/test_files/test_root/logs
