@@ -100,7 +100,7 @@ that you executed other applications beforehand at least once. All code is docum
 ### DBpedia Extraction Framework
 The [DBpedia Extraction Framework](https://github.com/dbpedia/extraction-framework) used in our project to process dumps is a [forked version](https://github.com/WikiaTeamProject/extraction-framework) of the latest release. 
 The forked version is included as a submodule into our project. 
-Note that the semantic mappings for the English language were deleted in the [mappings file](/lib/dbpedia-extraction-framework/mappings/Mapping_en.xml). If you want to process wikis different than English and also exclude the semantic mappings, then perform the changes in folder `lib/dbpedia-extraction-framework/mappings` for the selected language code.
+Note that the semantic mappings for the English language were deleted in the mappings file(`/lib/dbpedia-extraction-framework/mappings/Mapping_en.xml`). If you want to process wikis different than English and also exclude the semantic mappings, then perform the changes in folder `lib/dbpedia-extraction-framework/mappings` for the selected language code.
 
 ### Applications 
 This project includes several applications which can either be run in a combined way within the [single process](./wikiaProject/src/main/java/applications/SingleProcessAllWikisApplication.java) or each application by itself which requires some more knowledge.
