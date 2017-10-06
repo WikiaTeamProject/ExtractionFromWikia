@@ -30,16 +30,7 @@ within some subfolders. Those describe implementation details. You do not have t
 in the implementation. This guide also contains links to directories or other webpages so that you can find the place 
 where the discussed subject is located. 
 
-
-## Setup the Project 
-This project is set-up as a Maven project. After cloning the project into your local workspace, execute the following command in the top-level project folder to install all dependencies:
-```
-mvn clean install
-```
-You have to run the same command in the `/lib/dbpedia-extraction-framework` directory.
-
-
-## How to execute the Program?
+## Preparations
 Create the following directory structure (you can name `root_directory` whatever you like, 
 but the other directory names have to match):
 ```
@@ -62,7 +53,19 @@ You can choose whatever version you like, however, if you want to use the provid
 Please copy the [sample properties file](additionalFiles/propertyFiles/config.properties) directly into the [resources folder](/wikiaProject/src/main/resources) and adjust it. 
 Have a look at the [detailed description](additionalFiles/propertyFiles/README.md) of all variables which need to be specified in the properties file.
 
-When everything is set up, you can execute the [single process application](./wikiaProject/src/main/java/applications/SingleProcessAllWikisApplication.java). This application will get a list of all wikis, download all wikis according to the 
+## Setup the Project 
+This project is set-up as a Maven project. After cloning the project into your local workspace, execute the following command in the top-level project folder to install all dependencies:
+```
+mvn clean install
+```
+You have to run the same command in the `/lib/dbpedia-extraction-framework` directory.
+
+## How to Execute the Program?
+When everything is set up, you can execute the [single process application](./wikiaProject/src/main/java/applications/SingleProcessAllWikisApplication.java) by running the following command:
+```
+mvn exec:java -Dexec.mainClass="applications.SingleProcessAllWikisApplication"
+```
+This application will get a list of all wikis, download all wikis according to the 
 languages specified in the configuration file, extract all wikis using the DBpedia Extraction Framework and postprocess
 all wikis. After successfully running the program, you will find the postprocessed wikis in `root_directory/postProcessedWikis`.
 You can find statistics created on-the-fly in `root_directory/statistics`.

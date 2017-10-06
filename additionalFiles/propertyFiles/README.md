@@ -1,6 +1,9 @@
 # Property Files
 
-This folder contains a sample credentials and config file. Each file has two sections. You should have a look at section `To be Specified by User`. 
+This folder contains a sample credentials and config file. 
+Please note that the credentials file is only needed when running the [dump requester](../../wikiaProject/src/main/java/applications/wikiaDumpRequester/WikiaDumpRequesterApplication.java) which is currently deprecated.
+
+Each file has two sections. You should have a look at section `To be Specified by User`. 
 This section contains default values but also requires your input for a regular program run (like parameter `pathToRootDirectory` for example). Please adapt the parameters to your needs and copy the file into the `wikiaProject/src/main/resources` folder before running the program.<br/>
 Section `To be Specified by Expert` contains parameters which all have default values assigned to them.
 If you do not want to change the standard behavior of the program, you do not have to do any edits in this section.<br/><br/>

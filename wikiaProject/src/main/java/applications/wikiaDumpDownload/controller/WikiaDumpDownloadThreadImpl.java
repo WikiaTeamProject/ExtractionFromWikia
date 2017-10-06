@@ -167,7 +167,7 @@ public class WikiaDumpDownloadThreadImpl {
     public static boolean checkPrerequisites(boolean withFile) {
 
         // check whether config.properties file was copied
-        if (ClassLoader.getSystemResource("config.properties") == null) {
+        if (WikiaDumpDownloadThreadImpl.class.getClassLoader().getResource("config.properties") == null) {
             logger.logMessage(Level.FATAL,MODULE,CLASS,"Please copy the sample config.properties file from folder additionalFiles into resources and adjust it.");
             return false;
         }

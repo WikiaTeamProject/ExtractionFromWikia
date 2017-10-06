@@ -10,7 +10,7 @@ public class WikiaDumpRequesterApplication {
 
     public static void main(String[] args) {
 
-        WikiaDumpRequesterExecutor.requestDumpsForAllWikis(51000); // +185,800
+        WikiaDumpRequesterExecutor.requestDumpsForAllWikis();
 
     }
 
