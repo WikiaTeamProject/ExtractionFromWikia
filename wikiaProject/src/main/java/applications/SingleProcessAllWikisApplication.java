@@ -28,7 +28,7 @@ public class SingleProcessAllWikisApplication {
         if (!WikiaDumpDownloadThreadImpl.checkPrerequisites(true)) return;
 
         // metadata will be saved and all existing wikia dumps are downloaded
-        //WikiaDumpDownloadThreadImpl.downloadWikiaDumps();
+        WikiaDumpDownloadThreadImpl.downloadWikiaDumps();
 
         // run the DBpedia extraction framework
         Extractor extractor = new Extractor();
